@@ -1,5 +1,5 @@
 # Prova Finale Ingegneria del Software 2019
-## Gruppo AM00
+## Gruppo AM45
 
 - ###   10538950    Giulio Antonio Abbo ([@poligiulio](https://github.com/poligiulio))<br>giulioantonio.abbo@mail.polimi.it
 - ###   10539533    Silvio Attolini ([@SilvioAttolini](https://github.com/SilvioAttolini))<br>silvio.attolini@mail.polimi.it
