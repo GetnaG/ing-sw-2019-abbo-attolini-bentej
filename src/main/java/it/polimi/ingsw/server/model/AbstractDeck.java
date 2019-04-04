@@ -1,10 +1,8 @@
-
-import java.util.*;
-
+package it.polimi.ingsw.server.model;
 /**
  * 
  */
-public abstract class AbstractDeck extends AbstractDeck {
+public abstract class AbstractDeck  {
 
     /**
      * Default constructor
@@ -15,9 +13,11 @@ public abstract class AbstractDeck extends AbstractDeck {
     /**
      * @return
      */
+    /* TODO absbtract deck
     public AbstractCard drawCard() {
         // TODO implement here
         return null;
     }
+    */
 
 }

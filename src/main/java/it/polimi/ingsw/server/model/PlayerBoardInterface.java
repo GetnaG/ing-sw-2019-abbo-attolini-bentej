@@ -1,4 +1,4 @@
-
+package it.polimi.ingsw.server.model;
 import java.util.*;
 
 /**
@@ -9,7 +9,8 @@ public interface PlayerBoardInterface {
     /**
      * 
      */
-    private List<Player> damage;
+    //TODO ugly workaround
+    public List<Player> damage = null;
 
 
 

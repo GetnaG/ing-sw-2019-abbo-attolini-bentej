@@ -1,5 +1,8 @@
+package it.polimi.ingsw.server.controller;
+import it.polimi.ingsw.server.model.*;
 
-import java.util.*;
+
+import java.util.List;
 
 /**
  * 
@@ -86,7 +89,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     /**
      * 
      */
-    private void scoreBoard() {
+    public void scoreBoard() {
         // TODO implement here
     }
 
@@ -118,20 +121,17 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         // TODO implement here
     }
 
-    /**
-     * 
-     */
-    public void scoreBoard() {
-        // TODO implement here
-    }
+
 
     /**
      * @return
      */
+
     public List<Damageable> getKilled() {
         // TODO implement here
         return null;
     }
+
 
     /**
      * 

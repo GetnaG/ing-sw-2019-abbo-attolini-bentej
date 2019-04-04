@@ -1,3 +1,5 @@
+package it.polimi.ingsw.server.model;
+import it.polimi.ingsw.server.controller.*;
 
 import java.util.*;
 
@@ -9,7 +11,8 @@ public interface ToClientInterface {
     /**
      * 
      */
-    private SuspensionListener listener;
+    //TODO ugly workaround
+    public SuspensionListener listener = null;
 
     /**
      * @param options 
@@ -75,6 +78,6 @@ public interface ToClientInterface {
      * @param options 
      * @return
      */
-    public PowerupCard askUseTagback(List<PowerupCard options);
+    public PowerupCard askUseTagback(List<PowerupCard> options);
 
 }

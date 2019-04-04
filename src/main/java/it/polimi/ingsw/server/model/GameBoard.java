@@ -1,4 +1,4 @@
-
+package it.polimi.ingsw.server.model;
 import java.util.*;
 
 /**
@@ -78,7 +78,7 @@ public class GameBoard implements ReplaceListener {
      * @param sameDirection 
      * @return
      */
-    public List<AbstractSquares> getValidDestinations(AbstractSquare start, int maxDistance, boolean sameDirection) {
+    public List<AbstractSquare> getValidDestinations(AbstractSquare start, int maxDistance, boolean sameDirection) {
         // TODO implement here
         return null;
     }

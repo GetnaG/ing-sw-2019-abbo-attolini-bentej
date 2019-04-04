@@ -1,5 +1,5 @@
-
-import java.util.*;
+package it.polimi.ingsw.server.model;
+import it.polimi.ingsw.server.controller.Spawn;
 
 /**
  * 
@@ -10,6 +10,26 @@ public class SpawnSquare extends AbstractSquare {
      * Default constructor
      */
     public SpawnSquare() {
+    }
+
+    @Override
+    public void northType() {
+
+    }
+
+    @Override
+    public void southType() {
+
+    }
+
+    @Override
+    public void eastType() {
+
+    }
+
+    @Override
+    public void westType() {
+
     }
 
     /**

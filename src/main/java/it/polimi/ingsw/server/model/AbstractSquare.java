@@ -1,5 +1,5 @@
-
-import java.util.*;
+package it.polimi.ingsw.server.model;
+import java.util.List;
 
 /**
  * 
@@ -35,28 +35,28 @@ public abstract class AbstractSquare {
     /**
      * 
      */
-    private void northType;
+    public abstract void northType();
 
     /**
      * 
      */
-    private void southType;
+    public abstract void southType();
 
     /**
      * 
      */
-    private void eastType;
+    public abstract void eastType();
 
     /**
      * 
      */
-    private void westType;
+    public abstract void westType();
 
 
     /**
      * 
      */
-    private ReplaceListener replacer;
+    protected ReplaceListener replacer;
 
     /**
      * @param destination 

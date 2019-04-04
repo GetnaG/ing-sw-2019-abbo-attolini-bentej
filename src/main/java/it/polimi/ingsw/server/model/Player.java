@@ -1,4 +1,5 @@
-
+package it.polimi.ingsw.server.model;
+import it.polimi.ingsw.server.controller.*;
 import java.util.*;
 
 /**
@@ -182,7 +183,7 @@ public class Player implements Damageable {
     /**
      * @param weapon
      */
-    public void reload(WeaponCards weapon) {
+    public void reload(WeaponCard weapon) {
         // TODO implement here
     }
 

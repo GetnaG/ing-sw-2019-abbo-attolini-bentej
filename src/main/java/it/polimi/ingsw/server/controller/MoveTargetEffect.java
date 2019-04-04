@@ -1,5 +1,5 @@
-
-import java.util.*;
+package it.polimi.ingsw.server.controller;
+import it.polimi.ingsw.server.model.AbstractEffect;
 
 /**
  * 
@@ -40,7 +40,7 @@ public class MoveTargetEffect extends AbstractEffect {
     /**
      * 
      */
-    private void onlyFromVisibleSquare;
+    private boolean onlyFromVisibleSquare;
 
     /**
      * 

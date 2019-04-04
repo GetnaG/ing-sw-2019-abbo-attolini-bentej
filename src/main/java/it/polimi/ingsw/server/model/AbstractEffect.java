@@ -1,5 +1,6 @@
-
-import java.util.*;
+package it.polimi.ingsw.server.model;
+import it.polimi.ingsw.server.controller.*;
+import java.util.List;
 
 /**
  * 
@@ -49,7 +50,7 @@ public class AbstractEffect implements EffectInterface {
      * @param alredyTargeted 
      * @return
      */
-    public List<Damageable> runEffect(void subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
+    public List<Damageable> runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
         // TODO implement here
         return null;
     }

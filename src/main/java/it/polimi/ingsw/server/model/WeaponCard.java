@@ -1,5 +1,8 @@
+package it.polimi.ingsw.server.model;
 
-import java.util.*;
+import it.polimi.ingsw.server.controller.EffectInterface;
+
+import java.util.List;
 
 /**
  * 
