@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model;
 import java.util.List;
 
 /**
- * 
+ *  defines the structure of a square
  */
 public abstract class AbstractSquare {
 
@@ -64,6 +64,18 @@ public abstract class AbstractSquare {
      */
     public int distance(AbstractSquare destination) {
         // TODO implement here
+        /*
+            int dist
+               destination.x
+               destination.y
+               distx = abs(destination.x - this.x)
+               disty = abs(destination.y - this.y)
+               dist = max(distx, disty)   -- when calculating distance to shoot
+               dist = distx + disty   -- when calculating steps
+               return dist
+
+
+         */
         return 0;
     }
 
@@ -72,6 +84,9 @@ public abstract class AbstractSquare {
      */
     public List<AbstractCard> getGrabbables() {
         // TODO implement here
+        /*
+
+         */
         return null;
     }
 
@@ -81,6 +96,10 @@ public abstract class AbstractSquare {
      */
     public boolean checkVisible(AbstractSquare destination) {
         // TODO implement here
+        /*
+        check: dist = 1
+
+         */
         return false;
     }
 
