@@ -2,7 +2,7 @@ package it.polimi.ingsw.server.model;
 import java.util.List;
 
 /**
- * 
+ * This class represents a common template for any Track.
  */
 public abstract class AbstractTrack {
 
@@ -14,32 +14,29 @@ public abstract class AbstractTrack {
 
 
     /**
+     * @param
+     * @return an int representing the skulls left
+     */
+    public abstract int getSkullsLeft() ;
+
+    /**
+     * This method is used to score the Killshot Track.
+     * @param
+     *
+     * @return void
+     */
+    public abstract void score() ;
+
+    /**
+     * Adding Token to the Track.
+     * @param tokens Player who did the kill. If overkilled, the list must contain the same player two times.
      * @return
      */
-    public int getSkullsLeft() {
-        // TODO implement here
-        return 0;
-    }
+    public abstract void addTokens(List<Player> tokens);
 
     /**
-     * 
+     * Removing the leftmost skull.
      */
-    public void score() {
-        // TODO implement here
-    }
-
-    /**
-     * @param tokens
-     */
-    public void addTokens(List<Player> tokens) {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    public void removeSkull() {
-        // TODO implement here
-    }
+    public abstract void removeSkull() ;
 
 }

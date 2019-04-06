@@ -30,5 +30,6 @@ class AbstractEffectTest {
 
     @Test
     void getDecorated() {
+        fail(" Keep Calm : It is just not implemented");
     }
 }

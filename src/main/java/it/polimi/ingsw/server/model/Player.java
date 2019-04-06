@@ -7,16 +7,37 @@ import java.util.*;
  */
 public class Player implements Damageable {
 
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     /**
      * Default constructor
      */
+    public Player(String nickname) {
+        this.nickname = nickname;
+    }
+
     public Player() {
+
     }
 
     /**
      * 
      */
     private String nickname;
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
 
     /**
      * 
