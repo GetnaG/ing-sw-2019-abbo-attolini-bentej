@@ -8,25 +8,19 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class AbstractEffectTest {
 
-    @BeforeEach
-    void setUp() {
-    }
-
-    @AfterEach
-    void tearDown() {
-    }
 
     @Test
     void getAddictionalCost() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void runEffect() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
-    @Test
-    void getName() {
-    }
 
     @Test
     void getDecorated() {

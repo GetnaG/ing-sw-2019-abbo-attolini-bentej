@@ -18,5 +18,7 @@ class RoomTest {
 
     @Test
     void getColorRes() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 }

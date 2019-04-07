@@ -9,6 +9,8 @@ class PowerGloveRocketFistTest {
 
     @BeforeEach
     void setUp() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @AfterEach

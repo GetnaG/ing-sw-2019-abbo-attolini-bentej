@@ -6,12 +6,6 @@ import java.util.List;
  */
 public abstract class AbstractTrack {
 
-    /**
-     * Default constructor
-     */
-    public AbstractTrack() {
-    }
-
 
     /**
      * @param
@@ -21,6 +15,7 @@ public abstract class AbstractTrack {
 
     /**
      * This method is used to score the Killshot Track.
+     * Must be called from outside when {@code}skullsLeft is 0.
      * @param
      *
      * @return void

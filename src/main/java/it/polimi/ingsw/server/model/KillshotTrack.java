@@ -37,6 +37,7 @@ public class KillshotTrack extends AbstractTrack {
 
     /**
      * This method is used to score the Killshot Track.
+     * Must be called from outside when {@code}skullsLeft is 0.
      * @return void
      */
     @Override
@@ -58,8 +59,7 @@ public class KillshotTrack extends AbstractTrack {
             }
         }
 
-        List<Player> chart = kills.entrySet().stream().
-                                                            sorted((e1,e2)->
+        List<Player> chart = kills.entrySet().stream().sorted((e1,e2)->
                                                             {
                                                                 if(e1.getValue().compareTo(e2.getValue())!=0)
                                                                     return e2.getValue()-e1.getValue();
@@ -70,6 +70,10 @@ public class KillshotTrack extends AbstractTrack {
                                                             .collect(Collectors.toList());
 
         // chart is ordered so we just have set score according to the rules
+        scoreChart(chart);
+    }
+
+    static void scoreChart(List<Player> chart) {
         int points = -1;
         for( Player p : chart){
             switch(points){

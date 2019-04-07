@@ -13,5 +13,7 @@ class TurretTrackTest {
 
     @AfterEach
     void tearDown() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 }

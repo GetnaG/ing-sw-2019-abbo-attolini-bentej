@@ -10,4 +10,7 @@ public class TargetChainEffect extends TargetEffect {
     public TargetChainEffect() {
     }
 
+    public void failingMethod(){
+
+    }
 }

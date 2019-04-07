@@ -18,17 +18,25 @@ class AmmoBoxTest {
 
     @Test
     void addAmmo() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void addAmmo1() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void checkPrice() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void pay() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 }

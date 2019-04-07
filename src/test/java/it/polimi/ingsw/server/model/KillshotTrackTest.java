@@ -57,12 +57,6 @@ class KillshotTrackTest {
         assertEquals(8, bob.getScore());
         assertEquals(6,charlie.getScore());
         assertEquals(4,alice.getScore());
-
-
-
-
-
-
     }
 
 

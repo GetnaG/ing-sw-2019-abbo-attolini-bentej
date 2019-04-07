@@ -3,14 +3,20 @@ import it.polimi.ingsw.server.model.*;
 import java.util.*;
 
 /**
- * 
+ * This class is used in Domination Mode. It represents a spawn/flag which a player can control.
  */
 public class Spawn implements Damageable {
+
+    /**
+     * Tokens of Players that hitted the spawn in Domination mode.
+     */
+    private List<Player> tokens;
 
     /**
      * Default constructor
      */
     public Spawn() {
+        tokens = new ArrayList<>();
     }
 
 
@@ -20,10 +26,11 @@ public class Spawn implements Damageable {
     private AmmoCube color;
 
     /**
-     * @param shooters
+     * This function
+     * @param shooters represents a player token(s)
      */
     public void giveDamage(List<Player> shooters) {
-        // TODO implement here
+        tokens.addAll(new ArrayList<>(shooters));
     }
 
     /**
@@ -69,6 +76,10 @@ public class Spawn implements Damageable {
     public Player getOverkillPlayer() {
         // TODO implement here
         return null;
+    }
+
+    public List<Player> getTokens() {
+        return tokens;
     }
 
 }

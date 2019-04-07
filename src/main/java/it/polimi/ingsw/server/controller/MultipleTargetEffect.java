@@ -15,4 +15,11 @@ public class MultipleTargetEffect extends TargetEffect {
      */
     private boolean sameDirection;
 
+    public boolean isSameDirection() {
+        return sameDirection;
+    }
+
+    public void setSameDirection(boolean sameDirection) {
+        this.sameDirection = sameDirection;
+    }
 }

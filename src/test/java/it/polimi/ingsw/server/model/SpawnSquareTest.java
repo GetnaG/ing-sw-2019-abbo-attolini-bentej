@@ -18,21 +18,31 @@ class SpawnSquareTest {
 
     @Test
     void northType() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void southType() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void eastType() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void westType() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void getColor() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 }

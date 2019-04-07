@@ -11,4 +11,7 @@ public class TurretController extends DeathmatchController {
     public TurretController() {
     }
 
+    public void failingMethod(){
+
+    }
 }

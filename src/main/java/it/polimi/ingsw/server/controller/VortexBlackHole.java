@@ -11,4 +11,8 @@ public class VortexBlackHole extends MoveTargetEffect {
     public VortexBlackHole() {
     }
 
+    public void failingMethod(){
+
+    }
+
 }

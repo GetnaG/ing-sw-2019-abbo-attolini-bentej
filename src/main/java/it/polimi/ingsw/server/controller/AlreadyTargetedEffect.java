@@ -20,4 +20,8 @@ public class AlreadyTargetedEffect extends TargetEffect {
      */
     public boolean onlyLast;
 
+    public void aFailingMethod(){
+
+    }
+
 }
