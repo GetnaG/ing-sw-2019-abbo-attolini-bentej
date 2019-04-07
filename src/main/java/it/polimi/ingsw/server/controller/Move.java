@@ -10,4 +10,8 @@ public class Move extends MoveSelfEffect {
     public Move() {
     }
 
+    @Override
+    public void failingMethod() {
+
+    }
 }

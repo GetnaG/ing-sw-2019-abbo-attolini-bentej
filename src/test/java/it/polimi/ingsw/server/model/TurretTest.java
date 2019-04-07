@@ -18,9 +18,12 @@ class TurretTest {
 
     @Test
     void setCommendeer() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 
     @Test
     void getCommandeer() {
+        fail(" Keep Calm : It is just not implemented");
     }
 }

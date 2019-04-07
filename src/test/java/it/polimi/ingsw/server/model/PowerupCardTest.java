@@ -18,5 +18,7 @@ class PowerupCardTest {
 
     @Test
     void getEffect() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 }

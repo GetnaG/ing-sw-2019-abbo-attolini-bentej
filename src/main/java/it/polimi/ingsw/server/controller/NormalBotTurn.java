@@ -10,4 +10,7 @@ public class NormalBotTurn extends NormalTurn {
     public NormalBotTurn() {
     }
 
+    public void failingMethod(){
+
+    }
 }

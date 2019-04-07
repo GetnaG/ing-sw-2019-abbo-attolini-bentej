@@ -32,4 +32,35 @@ public class SquareEffect extends AbstractEffect {
      */
     private boolean onlyVisibleSquare;
 
+    public boolean isOnlyShooterSquare() {
+        return onlyShooterSquare;
+    }
+
+    public void setOnlyShooterSquare(boolean onlyShooterSquare) {
+        this.onlyShooterSquare = onlyShooterSquare;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+    }
+
+    public int getRestrictTargetNumber() {
+        return restrictTargetNumber;
+    }
+
+    public void setRestrictTargetNumber(int restrictTargetNumber) {
+        this.restrictTargetNumber = restrictTargetNumber;
+    }
+
+    public boolean isOnlyVisibleSquare() {
+        return onlyVisibleSquare;
+    }
+
+    public void setOnlyVisibleSquare(boolean onlyVisibleSquare) {
+        this.onlyVisibleSquare = onlyVisibleSquare;
+    }
 }

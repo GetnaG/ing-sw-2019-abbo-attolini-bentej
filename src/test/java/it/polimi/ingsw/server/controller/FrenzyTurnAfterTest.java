@@ -18,5 +18,7 @@ class FrenzyTurnAfterTest {
 
     @Test
     void startTurn() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 }

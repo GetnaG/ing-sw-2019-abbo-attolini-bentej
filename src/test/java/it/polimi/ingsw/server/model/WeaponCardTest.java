@@ -18,5 +18,7 @@ class WeaponCardTest {
 
     @Test
     void getPossibleSequences() {
+        fail(" Keep Calm : It is just not implemented");
+
     }
 }

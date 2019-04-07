@@ -11,4 +11,8 @@ public class DominationController extends DeathmatchController {
     public DominationController() {
     }
 
+    public void failingMethod(){
+
+    }
+
 }

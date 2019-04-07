@@ -17,4 +17,8 @@ public class MoveSelfEffect extends AbstractEffect {
      */
     private int maxDistance;
 
+    public void failingMethod(){
+
+    }
+
 }
