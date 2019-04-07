@@ -64,7 +64,7 @@ public class KillshotTrack extends AbstractTrack {
                                                                 if(e1.getValue().compareTo(e2.getValue())!=0)
                                                                     return e2.getValue()-e1.getValue();
                                                                 // we have a tie. The first killer wins
-                                                                else return orderedKills.indexOf(e2) - orderedKills.indexOf(e1);
+                                                                else return orderedKills.indexOf(e1) - orderedKills.indexOf(e2);
                                                             })
                                                             .map( x -> x.getKey())
                                                             .collect(Collectors.toList());
@@ -97,6 +97,7 @@ public class KillshotTrack extends AbstractTrack {
                     p.setScore(p.getScore()+points);
                     points = 1;
                     break;
+                default:     
             }
 
         }

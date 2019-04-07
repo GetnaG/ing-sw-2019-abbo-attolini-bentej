@@ -1,8 +1,6 @@
 package it.polimi.ingsw.server.model;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -21,42 +19,40 @@ class KillshotTrackTest {
         List<Player> hit = new ArrayList<>();
 
 
-        Player alice = new Player("Alice");
+        Player alice = new Player("A");
         int times = 2;
-
+        hit = new ArrayList<>();
+        hit.add(alice);
         for(int i = 0; i<times;i++){
-            hit.add(alice);
             kt.removeSkull();
             kt.addTokens(hit);
-            hit = new ArrayList<>();
         }
 
-        Player bob = new Player("Bob");
+        Player bob = new Player("B");
         times = 3;
+        hit = new ArrayList<>();
+        hit.add(bob);
         for(int i = 0; i<times;i++){
-            hit.add(bob);
             kt.removeSkull();
             kt.addTokens(hit);
-            hit = new ArrayList<>();
         }
 
 
-        Player charlie = new Player("Charlie");
+        Player charlie = new Player("C");
 
         times = 3;
+        hit = new ArrayList<>();
+        hit.add(charlie);
         for(int i = 0; i<times;i++){
-            hit.add(charlie);
             kt.removeSkull();
             kt.addTokens(hit);
-            hit = new ArrayList<>();
         }
-
 
         kt.score();
 
+        assertEquals(4, alice.getScore());
         assertEquals(8, bob.getScore());
-        assertEquals(6,charlie.getScore());
-        assertEquals(4,alice.getScore());
+        assertEquals(6, charlie.getScore());
     }
 
 

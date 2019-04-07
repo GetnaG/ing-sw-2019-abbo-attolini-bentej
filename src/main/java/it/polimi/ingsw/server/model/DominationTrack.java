@@ -67,27 +67,17 @@ public class DominationTrack extends AbstractTrack {
 
         Map<Player,Integer> spawnHits =  new HashMap<>();
 
-        //TODO Refactor these three loops.
+        for (Player p : firstSpawn.getTokens())
+            spawnHits.merge(p,1,Integer::sum);
 
-        for (Player p : firstSpawn.getTokens()){
-            if(spawnHits.get(p) == null)
-                spawnHits.put(p,1);
-            else spawnHits.put(p,spawnHits.get(p)+1);
-        }
-        for (Player p : secondSpawn.getTokens()){
-            if(spawnHits.get(p) == null)
-                spawnHits.put(p,1);
-            else spawnHits.put(p,spawnHits.get(p)+1);
-        }
-        for (Player p : thirdSpawn.getTokens()) {
-            if(spawnHits.get(p) == null)
-                spawnHits.put(p,1);
-            else spawnHits.put(p,spawnHits.get(p)+1);
-        }
+        for (Player p : secondSpawn.getTokens())
+            spawnHits.merge(p,1,Integer::sum);
+        for (Player p : thirdSpawn.getTokens())
+            spawnHits.merge(p,1,Integer::sum);
 
         List<Player> chart = spawnHits.entrySet().stream()
                 .sorted((e1,e2) -> e2.getValue().compareTo(e1.getValue()))
-                .map( x -> x.getKey())
+                .map( Map.Entry::getKey)
                 .collect(Collectors.toList());
 
         // chart is ordered so we just have set score according to the rules
@@ -129,7 +119,7 @@ public class DominationTrack extends AbstractTrack {
     private  void addPoints(List<Player> playersSamePosition) {
         for (Player p : playersSamePosition)
             p.setScore(p.getScore()+ points);
-        // 8 -> 6 -> 4 -> 2 -> 1
+        // 8 -> 6 -> 4 -> 2 -> 1 There is an unconventional use of the break statement.
         switch (points) {
             case 8 :
                 points = 6;
