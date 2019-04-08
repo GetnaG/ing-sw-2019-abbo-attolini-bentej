@@ -7,22 +7,30 @@ import java.util.*;
 public class Room {
 
     /**
-     * Default constructor
+     *
      */
-    public Room() {
-    }
+    private Set<AbstractSquare> squares;
 
 
     /**
-     * 
+     * Default constructor
      */
-    private Set<AbstractSquare> squares;
+    public Room(/*list<AbstractSquare> s*/) {   //la lista s contiene tutti i quadrati della configurazione scelta per giocare
+        /*
+                for each AbstractSquare x in s:     //raggruppo quadrati con lo stesso colore -> voglio room rossa, room blu...
+                    squares.color[x] = String
+         */
+    }
+
 
     /**
      * @return
      */
     public String getColorRes() {
         // TODO implement here
+        /*
+        return color
+         */
         return "";
     }
 

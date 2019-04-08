@@ -13,7 +13,7 @@ public abstract class AbstractSquare {
     }
 
     /*
-    private String color;
+    //private String color;
     private int x ( 0 <= x <= 3)
     private int y ( 0 <= y <= 2)
      */
@@ -118,7 +118,7 @@ public abstract class AbstractSquare {
         if( this.color = destination.color )
             return 1;
         else{
-                AbstractSquare adjacent
+                AbstractSquare adjacent, support
 
                 if(this.northType != wall)
                  adjacent.x = this.x;   adjacent.y = this.y + 1;
