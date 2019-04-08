@@ -13,7 +13,7 @@ public abstract class AbstractSquare {
     }
 
     /*
-    private int color;
+    private String color;
     private int x ( 0 <= x <= 3)
     private int y ( 0 <= y <= 2)
      */
@@ -66,7 +66,7 @@ public abstract class AbstractSquare {
 
     /*
     *
-    * public int getColor(AbstractSquare sq){
+    * public String getColor(AbstractSquare sq){
     *   return sq.color;
     *   }
     *
