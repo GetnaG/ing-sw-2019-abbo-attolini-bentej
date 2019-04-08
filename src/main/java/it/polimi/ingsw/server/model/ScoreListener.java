@@ -25,6 +25,7 @@ public interface ScoreListener {
      * scored.
      *
      * @param killed the {@code Damageable} to be scored
+     * @throws NullPointerException if {@code killed} is null
      */
     void addKilled(Damageable killed);
 
