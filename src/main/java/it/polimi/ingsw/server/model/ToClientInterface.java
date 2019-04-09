@@ -1,5 +1,10 @@
 package it.polimi.ingsw.server.model;
 import it.polimi.ingsw.server.controller.*;
+import it.polimi.ingsw.server.controller.effects.Action;
+import it.polimi.ingsw.server.controller.effects.EffectInterface;
+import it.polimi.ingsw.server.model.board.AbstractSquare;
+import it.polimi.ingsw.server.model.cards.PowerupCard;
+import it.polimi.ingsw.server.model.cards.WeaponCard;
 
 import java.util.*;
 

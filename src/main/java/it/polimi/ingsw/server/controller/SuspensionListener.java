@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
-import it.polimi.ingsw.server.model.Player;
+
+import it.polimi.ingsw.server.model.player.Player;
 
 /**
  * 

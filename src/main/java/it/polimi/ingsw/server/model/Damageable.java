@@ -1,5 +1,9 @@
 package it.polimi.ingsw.server.model;
 
+import it.polimi.ingsw.server.controller.ScoreListener;
+import it.polimi.ingsw.server.model.board.AbstractSquare;
+import it.polimi.ingsw.server.model.player.Player;
+
 import java.util.List;
 
 /**
