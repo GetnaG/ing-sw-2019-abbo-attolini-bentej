@@ -6,7 +6,7 @@ import java.util.List;
  */
 public abstract class AbstractSquare {
 
-    private String color;
+    private Color color;
     private Room room;
 
     private AbstractSquare north;
@@ -15,7 +15,7 @@ public abstract class AbstractSquare {
     private AbstractSquare west;
 
     // -- Border : { Wall, Door, Corridor} <- Set when creating the map
-    private String northBorder;
+    private Border northBorder;
     private String southBorder;
     private String eastBorder;
     private String westBorder;
@@ -27,13 +27,13 @@ public abstract class AbstractSquare {
      * Default constructor
      */
     public AbstractSquare() {
-        color="";
+        color=Color.ANY;
         room=null;
         north=null;
         south=null;
         east=null;
         west=null;
-        northBorder="";
+        northBorder=null;
         southBorder="";
         eastBorder="";
         westBorder="";
@@ -56,7 +56,9 @@ public abstract class AbstractSquare {
         if( this.room == destination.room )
             return true;
         else{
-                if(!this.northBorder.equals("wall")){
+                if(this.northBorder==Border.DOOR){
+                    if(this.north.room==destination.room)
+                        return true;
 
                 }
 

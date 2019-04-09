@@ -10,6 +10,8 @@ public class Room {
      *
      */
     private Set<AbstractSquare> squares;
+    private Room room;
+    private Color color;
 
 
     /**
@@ -26,12 +28,8 @@ public class Room {
     /**
      * @return
      */
-    public String getColorRes() {
-        // TODO implement here
-        /*
-        return color
-         */
-        return "";
+    public Color getColorRes() {
+       return room.color;
     }
 
 }
