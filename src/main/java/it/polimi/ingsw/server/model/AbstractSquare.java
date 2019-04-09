@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server.model;
-import java.util.List;
 
 /**
  *  defines the structure of a square
  */
 public abstract class AbstractSquare {
 
-    //private Color color;
-    private Room room;
+
+    private Room room;  //-- group squares by color
 
     private AbstractSquare north;
     private AbstractSquare south;
@@ -16,9 +15,9 @@ public abstract class AbstractSquare {
 
     // -- Border : { Wall, Door, Corridor} <- Set when creating the map
     private Border northBorder;
-    private String southBorder;
-    private String eastBorder;
-    private String westBorder;
+    private Border southBorder;
+    private Border eastBorder;
+    private Border westBorder;
 
     protected ReplaceListener replacer;
 
@@ -27,23 +26,22 @@ public abstract class AbstractSquare {
      * Default constructor
      */
     public AbstractSquare() {
-       // color=Color.ANY;
         room=null;
         north=null;
         south=null;
         east=null;
         west=null;
         northBorder=null;
-        southBorder="";
-        eastBorder="";
-        westBorder="";
+        southBorder=null;
+        eastBorder=null;
+        westBorder=null;
     }
 
     /**
      * implemented by TurretSquare and SpawnSquare
      * @return in TurretSquare is AmmoCard, in SpawnSquare is List<WeaponCard>
      */
-    public List<AbstractCard> getGrabbables() {
+    public AbstractCard getGrabbables() {
         return null;
     }
 
@@ -55,6 +53,7 @@ public abstract class AbstractSquare {
 
         if( this.room == destination.room )
             return true;
+
         else{
                 if(this.northBorder==Border.DOOR){
                     if(this.north.room==destination.room)
@@ -62,37 +61,31 @@ public abstract class AbstractSquare {
 
                 }
 
+                if(this.southBorder==Border.DOOR){
+                      if(this.south.room==destination.room)
+                          return true;
+                }
 
-        }
-               /* AbstractSquare adjacent, support
-
-                if(this.northType != wall)
-                 adjacent.x = this.x;   adjacent.y = this.y + 1;
-                    adjacent.color = getColor(adjacent);
-                   if( adjacent.color = destination.color ) return 1;
-
-                 if(this.southType != wall)
-                 adjacent.x = this.x    adjacent.y = this.y - 1
-                   adjacent.color = getColor(adjacent);
-                   if( adjacent.color = destination.color ) return 1
-
-                 if(this.eastType != wall)
-                 adjacent.y = this.y    adjacent.x = this.x + 1
-                    adjacent.color = getColor(adjacent);
-                   if( adjacent.color = destination.color ) return 1
-
-                 if(this.westType != wall)
-                 adjacent.y = this.y    adjacent.x = this.x - 1
-                    adjacent.color = getColor(adjacent);
-                   if( adjacent.color = destination.color ) return 1
-
-
-                   //non devo fare subito il return ma devo fare l'or tra tutti isVisible e restituire quello
+                 if(this.eastBorder==Border.DOOR){
+                     if(this.east.room==destination.room)
+                         return true;
                  }
-          default: return 0;
 
-         */
+                 if(this.westBorder==Border.DOOR){
+                     if(this.west.room==destination.room)
+                          return true;
+                 }
+        }
+
         return false;
     }
 
+
+    public Room getRoom() {
+        return room;
+    }
+
+
 }
+
+//gameboard ha lista di room, ogni room ha una lista di squares, raggruppati dal colore

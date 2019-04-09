@@ -7,6 +7,7 @@ import it.polimi.ingsw.server.controller.Spawn;
 public class SpawnSquare extends AbstractSquare {
 
 
+
     private WeaponMarket market;
     private Spawn spawn;
 
@@ -17,12 +18,20 @@ public class SpawnSquare extends AbstractSquare {
     }
 
 
-    /**
-     * @return
-     */
-    public AmmoCube getColor() {
-        // TODO implement here
-        return null;
+    public WeaponMarket getMarket() {
+        return market;
+    }
+
+    public void setMarket(WeaponMarket market) {
+        this.market = market;
+    }
+
+    public Spawn getSpawn() {
+        return spawn;
+    }
+
+    public void setSpawn(Spawn spawn) {
+        this.spawn = spawn;
     }
 
 }
