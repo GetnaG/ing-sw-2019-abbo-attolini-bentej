@@ -6,7 +6,7 @@ import java.util.List;
  */
 public abstract class AbstractSquare {
 
-    private Color color;
+    //private Color color;
     private Room room;
 
     private AbstractSquare north;
@@ -27,7 +27,7 @@ public abstract class AbstractSquare {
      * Default constructor
      */
     public AbstractSquare() {
-        color=Color.ANY;
+       // color=Color.ANY;
         room=null;
         north=null;
         south=null;
