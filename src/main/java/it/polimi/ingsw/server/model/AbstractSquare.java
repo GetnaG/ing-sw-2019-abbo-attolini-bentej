@@ -6,119 +6,63 @@ import java.util.List;
  */
 public abstract class AbstractSquare {
 
+    private String color;
+    private Room room;
+
+    private AbstractSquare north;
+    private AbstractSquare south;
+    private AbstractSquare east;
+    private AbstractSquare west;
+
+    // -- Border : { Wall, Door, Corridor} <- Set when creating the map
+    private String northBorder;
+    private String southBorder;
+    private String eastBorder;
+    private String westBorder;
+
+    protected ReplaceListener replacer;
+
+
     /**
      * Default constructor
      */
     public AbstractSquare() {
-    }
-
-    /*
-    //private String color;
-    private int x ( 0 <= x <= 3)
-    private int y ( 0 <= y <= 2)
-     */
-
-    /**
-     * 
-     */
-    //private AbstractSquare north;
-    //  -> private Border northBorder;   -- Border : { Wall, Door, Corridor} <- Set when creating the map
-
-    /**
-     * 
-     */
-   // private AbstractSquare south;
-
-    /**
-     * 
-     */
-   // private AbstractSquare east;
-
-    /**
-     * 
-     */
-    //private AbstractSquare west;
-
-    /**
-     * 
-     */
-    public abstract void northType();
-    /*
-        public abstract Border northType(AbstractSquare){
-            return this.northBorder;
-     */
-
-    /**
-     * 
-     */
-    public abstract void southType();
-
-    /**
-     * 
-     */
-    public abstract void eastType();
-
-    /**
-     * 
-     */
-    public abstract void westType();
-
-
-    /*
-    *
-    * public String getColor(AbstractSquare sq){
-    *   return sq.color;
-    *   }
-    *
-     */
-
-    /**
-     * 
-     */
-    protected ReplaceListener replacer;
-
-    /**
-     * @param destination 
-     * @return
-     */
-    public int distance(AbstractSquare destination) {
-        // TODO implement here
-        /*
-            int dist
-               destination.x
-               destination.y
-               distx = abs(destination.x - this.x)
-               disty = abs(destination.y - this.y)
-               dist = distx + disty
-               return dist
-
-
-         */
-        return 0;
+        color="";
+        room=null;
+        north=null;
+        south=null;
+        east=null;
+        west=null;
+        northBorder="";
+        southBorder="";
+        eastBorder="";
+        westBorder="";
     }
 
     /**
-     * @return
+     * implemented by TurretSquare and SpawnSquare
+     * @return in TurretSquare is AmmoCard, in SpawnSquare is List<WeaponCard>
      */
     public List<AbstractCard> getGrabbables() {
-        // TODO implement here
-        /*
-
-         */
         return null;
     }
 
     /**
      * @param destination 
-     * @return
+     * @return 1 if the destination square is visible from the calling square, 0 otherwise
      */
     public boolean checkVisible(AbstractSquare destination) {
-        // TODO implement here
-        /*
-        if( this.color = destination.color )
-            return 1;
+
+        if( this.room == destination.room )
+            return true;
         else{
-                AbstractSquare adjacent, support
+                if(!this.northBorder.equals("wall")){
+
+                }
+
+
+        }
+               /* AbstractSquare adjacent, support
 
                 if(this.northType != wall)
                  adjacent.x = this.x;   adjacent.y = this.y + 1;
