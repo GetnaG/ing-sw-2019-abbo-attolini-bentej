@@ -13,9 +13,6 @@ public abstract class AbstractCard {
     /**
      * @return
      */
-    public String getResName() {
-        // TODO implement here
-        return "";
-    }
+    public abstract String getResName() ;
 
 }

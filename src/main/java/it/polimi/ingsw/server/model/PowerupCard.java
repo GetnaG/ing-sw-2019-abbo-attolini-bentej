@@ -14,6 +14,14 @@ public class PowerupCard extends AbstractCard {
     }
 
     /**
+     * @return
+     */
+    @Override
+    public String getResName() {
+        return null;
+    }
+
+    /**
      * 
      */
     private boolean usableAsAction;

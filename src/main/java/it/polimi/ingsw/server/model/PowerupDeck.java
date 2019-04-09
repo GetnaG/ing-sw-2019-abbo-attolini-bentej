@@ -11,4 +11,13 @@ public class PowerupDeck extends AbstractDeck {
     }
 
 
+    /**
+     * Drawing a card
+     *
+     * @return a Card
+     */
+    @Override
+    public AbstractCard drawCard() {
+        return null;
+    }
 }
