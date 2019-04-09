@@ -4,20 +4,13 @@ package it.polimi.ingsw.server.model;
  */
 public abstract class AbstractDeck  {
 
-    /**
-     * Default constructor
-     */
-    public AbstractDeck() {
-    }
 
     /**
-     * @return
+     * Drawing a card
+     * @return a card
      */
-    /* TODO absbtract deck
-    public AbstractCard drawCard() {
-        // TODO implement here
-        return null;
-    }
-    */
+
+    public abstract AbstractCard drawCard() ;
+
 
 }

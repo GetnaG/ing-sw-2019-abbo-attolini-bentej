@@ -11,5 +11,8 @@ public class WeaponDeck extends AbstractDeck {
     }
 
 
-
+    @Override
+    public AbstractCard drawCard() {
+        return null;
+    }
 }

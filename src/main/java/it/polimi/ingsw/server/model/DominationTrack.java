@@ -67,8 +67,11 @@ public class DominationTrack extends AbstractTrack {
 
         Map<Player,Integer> spawnHits =  new HashMap<>();
 
+
         for (Player p : firstSpawn.getTokens())
             spawnHits.merge(p,1,Integer::sum);
+
+
 
         for (Player p : secondSpawn.getTokens())
             spawnHits.merge(p,1,Integer::sum);

@@ -5,7 +5,10 @@ import java.util.stream.Collectors;
 
 
 /**
- * This class represents the Killshot Track used in a normal deathmatch.
+ * This class represents the Killshot Track used in a normal game.
+ * It contains the skulls and the player's tokens.
+ *
+ * @author Fahed Ben Tej
  */
 public class KillshotTrack extends AbstractTrack {
 
@@ -14,15 +17,24 @@ public class KillshotTrack extends AbstractTrack {
      */
     private int skullsLeft;
     /**
-     * tokenTrack represents the 8 spaces where skulls are placed.
+     * tokenTrack represents the 8 spaces where tokens are placed.
      */
     private List<List<Player>> tokenTrack;
 
     /**
-     * Default constructor : Initializing
+     * Creates a KillShots track with 8 skulls.
      */
     public KillshotTrack() {
         skullsLeft = 8;
+        tokenTrack = new ArrayList<>();
+
+    }
+
+    /**
+     * Creates a KillShots track with the given number of skulls.
+     */
+    public KillshotTrack(int skullsLeft) {
+        this.skullsLeft = skullsLeft;
         tokenTrack = new ArrayList<>();
 
     }
@@ -37,7 +49,7 @@ public class KillshotTrack extends AbstractTrack {
 
     /**
      * This method is used to score the Killshot Track.
-     * Must be called from outside when {@code}skullsLeft is 0.
+     * Must be called from outside when {@code skullsLeft} is 0.
      * @return void
      */
     @Override
@@ -59,14 +71,15 @@ public class KillshotTrack extends AbstractTrack {
             }
         }
 
-        List<Player> chart = kills.entrySet().stream().sorted((e1,e2)->
+        List<Player> chart = kills.entrySet().stream().sorted(
+                                                    (e1,e2)->
                                                             {
                                                                 if(e1.getValue().compareTo(e2.getValue())!=0)
                                                                     return e2.getValue()-e1.getValue();
                                                                 // we have a tie. The first killer wins
                                                                 else return orderedKills.indexOf(e1) - orderedKills.indexOf(e2);
                                                             })
-                                                            .map( x -> x.getKey())
+                                                            .map(Map.Entry::getKey)
                                                             .collect(Collectors.toList());
 
         // chart is ordered so we just have set score according to the rules
