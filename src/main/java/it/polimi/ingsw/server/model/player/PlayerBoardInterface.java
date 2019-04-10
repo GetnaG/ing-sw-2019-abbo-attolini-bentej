@@ -1,37 +1,96 @@
 package it.polimi.ingsw.server.model.player;
-import java.util.*;
+
+import java.util.List;
 
 /**
- * 
+ * This class handles damage and marks for the {@link Player}.
+ * This keeps track of the damage, marks, skulls, and scores the players
+ * accordingly.
+ *
+ * @author Abbo Giulio A.
+ * @see Player
  */
 public interface PlayerBoardInterface {
 
     /**
-     * 
+     * Checks if the first adrenaline action is unlocked.
+     * For example in a normal turn this would mean that at least three damages
+     * were registered since last {@code resetDamage}.
+     *
+     * @return true if the first adrenaline action is available
      */
-    //TODO ugly workaround
-    public List<Player> damage = null;
-
-
+    boolean isAdr1Unlocked();
 
     /**
-     * @return
+     * Checks if the second adrenaline action is unlocked.
+     * For example in a normal turn this would mean that at least six damages
+     * were registered since last {@code resetDamage}.
+     *
+     * @return true if the second adrenaline action is available
      */
-    public boolean isAdr1Unlocked();
+    boolean isAdr2Unlocked();
 
     /**
-     * @return
+     * Checks if the player is dead.
+     * A player is dead after he has received damage that counts as a kill shot.
+     *
+     * @return true if the player is dead
      */
-    public boolean isAdr2Unlocked();
+    boolean isDead();
 
     /**
-     * @return
+     * Adds one damage point for each element of the {@code shooters} list.
+     * Damage exceeding overkill is discarded.
+     *
+     * @param shooters a {@linkplain List} containing those who are dealing the
+     *                 damage
+     * @throws NullPointerException if {@code shooters} is null
      */
-    public boolean isDead();
+    void addDamage(List<Player> shooters);
 
     /**
-     * @return
+     * Adds one mark point for each elements of the {@code shooters} list.
+     * Marks that are not applicable are wasted.
+     *
+     * @param shooters a {@linkplain List} containing those who are dealing
+     *                 the marks
+     * @throws NullPointerException if {@code shooters} is null
      */
-    public int getScoreAndAddSkull();
+    void addMarks(List<Player> shooters);
 
+    /**
+     * Calculates the score based on the number of damage points registered.
+     * For each player who has dealt damage since last {@code resetDamage}, this
+     * calculates how many points he has done and adds them to his score.
+     */
+    void score();
+
+    /**
+     * Adds a skull to the player board: next scoring will be less valuable.
+     */
+    void addSkull();
+
+    /**
+     * Brings the damage back to zero.
+     * If there are any adrenaline actions unlocked, they get locked again.
+     */
+    void resetDamage();
+
+    /**
+     * Returns the {@linkplain Player} who dealt the kill shot damage.
+     * This can be useful for final scoring.
+     *
+     * @return the {@linkplain Player} who dealt the kill shot damage or null
+     * if not applicable
+     */
+    Player getKillshot();
+
+    /**
+     * Returns the {@linkplain Player} who dealt the over kill damage.
+     * This can be useful for final scoring and for revenge marks.
+     *
+     * @return the {@linkplain Player} who dealt the kill shot damage or null
+     * if not applicable
+     */
+    Player getOverkill();
 }

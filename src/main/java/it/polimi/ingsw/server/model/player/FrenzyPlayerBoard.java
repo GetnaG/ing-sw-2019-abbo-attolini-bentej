@@ -1,46 +1,58 @@
 package it.polimi.ingsw.server.model.player;
 
+import java.util.List;
+
 /**
  * 
  */
 public class FrenzyPlayerBoard implements PlayerBoardInterface {
-
-    /**
-     * Default constructor
-     */
-    public FrenzyPlayerBoard() {
-    }
-
-    /**
-     * @return
-     */
+    @Override
     public boolean isAdr1Unlocked() {
-        // TODO implement here
         return false;
     }
 
-    /**
-     * @return
-     */
+    @Override
     public boolean isAdr2Unlocked() {
-        // TODO implement here
         return false;
     }
 
-    /**
-     * @return
-     */
+    @Override
     public boolean isDead() {
-        // TODO implement here
         return false;
     }
 
-    /**
-     * @return
-     */
-    public int getScoreAndAddSkull() {
-        // TODO implement here
-        return 0;
+    @Override
+    public void addDamage(List<Player> shooters) {
+
     }
 
+    @Override
+    public void addMarks(List<Player> shooters) {
+
+    }
+
+    @Override
+    public void score() {
+
+    }
+
+    @Override
+    public void addSkull() {
+
+    }
+
+    @Override
+    public void resetDamage() {
+
+    }
+
+    @Override
+    public Player getKillshot() {
+        return null;
+    }
+
+    @Override
+    public Player getOverkill() {
+        return null;
+    }
 }
