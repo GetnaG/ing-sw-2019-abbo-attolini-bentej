@@ -95,4 +95,8 @@ public class HandManager {
         // TODO implement here
     }
 
+    public void removeWeapon(WeaponCard weapon) {
+
+    }
+
 }
