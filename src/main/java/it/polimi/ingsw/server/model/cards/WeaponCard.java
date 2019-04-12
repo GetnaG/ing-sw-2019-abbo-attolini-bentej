@@ -9,19 +9,24 @@ import java.util.List;
  * 
  */
 public class WeaponCard extends AbstractCard {
-
+    private String resName;
     /**
      * Default constructor
      */
     public WeaponCard() {
     }
 
+    public WeaponCard(String resName) {
+        this.resName = resName;
+    }
+
+
     /**
      * @return
      */
     @Override
     public String getResName() {
-        return null;
+        return resName;
     }
 
     /**

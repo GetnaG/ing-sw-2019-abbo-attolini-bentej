@@ -76,13 +76,10 @@ public class AmmoBox {
      * AmmoCube {@code cube} must be of type {@code BLUE}, {@code RED} or
      * {@code YELLOW}, an {@code ANY} type can not be added.
      *
-     * @param   cube
-     *          the cube to be added to the {@code AmmoBox}
-     * @throws IllegalArgumentException
-     *          if {@code cube} is of type {@code ANY}
+     * @param cube the cube to be added to the {@code AmmoBox}
+     * @throws IllegalArgumentException if {@code cube} is of type {@code ANY}
      */
     public void addAmmo(AmmoCube cube) {
-        //TODO check null?
         switch (cube) {
             case BLUE:
                 if (checkApplicable(blue))
@@ -108,10 +105,8 @@ public class AmmoBox {
      * All cubes must be of type {@code BLUE}, {@code RED} or {@code YELLOW},
      * an {@code ANY} type can not be added.
      *
-     * @param   cubes
-     *          the {@linkplain List} of {@linkplain AmmoCube}s to be added
-     * @throws IllegalArgumentException
-     *          if a {@code cube} is of type {@code ANY}
+     * @param cubes the {@linkplain List} of {@linkplain AmmoCube}s to be added
+     * @throws IllegalArgumentException if a {@code cube} is of type {@code ANY}
      */
     public void addAmmo(List<AmmoCube> cubes) {
         for (AmmoCube cube : cubes) {
@@ -133,8 +128,7 @@ public class AmmoBox {
      * Checks if there are enough {@linkplain AmmoCube}s to pay the {@code
      * price}.
      *
-     * @param   price
-     *          a {@linkplain List} of cubes to be checked
+     * @param price a {@linkplain List} of cubes to be checked
      * @return true if there are more cubes than in the {@code price} list
      */
     public boolean checkPrice(List<AmmoCube> price) {
@@ -151,11 +145,9 @@ public class AmmoBox {
      * what color to use.
      * This first checks if there are enough cubes to pay the {@code price}.
      *
-     * @param   price
-     *          a {@linkplain List} of cubes to be payed
-     * @throws IllegalArgumentException
-     *          if a {@code cube} is of type {@code ANY} or there are not
-     *          enough cubes
+     * @param price a {@linkplain List} of cubes to be payed
+     * @throws IllegalArgumentException if a {@code cube} is of type {@code
+     * ANY} or there are not enough cubes
      */
     public void pay(List<AmmoCube> price) {
         if (price.contains(AmmoCube.ANY))
