@@ -19,7 +19,6 @@ public class Player implements Damageable {
     private int score;
     private boolean firstPlayer;
     private String figureRes;
-    private ScoreListener scorer;
     private ToClientInterface toClient;
     private HandManager hand;
     private AmmoBox ammoBox;
@@ -29,16 +28,15 @@ public class Player implements Damageable {
     private Action adren2;
 
     public Player(String nickname) {
-        this(nickname, false, null, null, null, null);
+        this(nickname, false, null, null, null);
     }
 
     public Player(String nickname, boolean firstPlayer, String figureRes,
-                  ScoreListener scorer, ToClientInterface toClient,
+                  ToClientInterface toClient,
                   PlayerBoardInterface playerBoard) {
         this.nickname = nickname;
         this.firstPlayer = firstPlayer;
         this.figureRes = figureRes;
-        this.scorer = scorer;
         this.toClient = toClient;
         this.playerBoard = playerBoard;
 

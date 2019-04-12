@@ -7,6 +7,7 @@ import java.util.List;
  */
 public class NormalPlayerBoard implements PlayerBoardInterface {
 
+    //add score listener and notify when dies
     @Override
     public boolean isAdr1Unlocked() {
         return false;
