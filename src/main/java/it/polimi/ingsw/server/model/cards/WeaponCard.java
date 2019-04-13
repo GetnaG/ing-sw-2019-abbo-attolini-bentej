@@ -43,4 +43,8 @@ public class WeaponCard extends AbstractCard {
         return null;
     }
 
+
+    public List<AmmoCube> getCost() {
+        return cost;
+    }
 }

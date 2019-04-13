@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
+import java.io.CharArrayReader;
 import java.util.*;
 
 /**
@@ -26,6 +27,8 @@ public class Player implements Damageable {
     private Action adren1;
     private Action adren2;
 
+    //si scorer quando muore
+
     public Player(String nickname) {
         this(nickname, false, null, null, null);
     }
@@ -43,7 +46,7 @@ public class Player implements Damageable {
         hand = new HandManager();
         ammoBox = new AmmoBox();
 
-        //FIXME: maybe take from a json as "default adrenaline actions"?
+        //TODO: maybe take from a json as "default adrenaline actions"?
         adren1 = new Action();
         adren2 = new Action();
     }
@@ -51,6 +54,7 @@ public class Player implements Damageable {
     @Override
     public void giveDamage(List<Player> shooters) {
         playerBoard.addDamage(shooters);
+
     }
 
     @Override
@@ -115,8 +119,11 @@ public class Player implements Damageable {
     }
 
     public boolean canAfford(WeaponCard card, boolean buying) {
-        //TODO
-        return true;
+        if (card.getCost().isEmpty())
+            return true;
+        return ammoBox.checkPrice((buying) ?
+                card.getCost().subList(1, card.getCost().size()) :
+                card.getCost());
     }
 
     public List<PowerupCard> canAffordWithPowerup(WeaponCard card,
@@ -173,9 +180,20 @@ public class Player implements Damageable {
         return score;
     }
 
+    /**
+     *
+     * @param score
+     * @deprecated use {@link Player#addScore(int)} instead
+     */
     @Deprecated
     public void setScore(int score) {
         this.score = score;
+    }
+
+
+
+    public void addScore(int score) {
+        this.score += score;
     }
 
     public boolean isFirstPlayer() {

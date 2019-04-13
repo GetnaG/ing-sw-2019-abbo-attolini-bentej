@@ -53,7 +53,7 @@ public interface Damageable {
 
     /**
      * Changes the position of this entity to the {@code newPosition}.
-     * The {@code newPosition} must be a valid {@linkplain AbstractSquare}.
+     * The {@code newPosition} must be a valid {@linkplain Square}.
      *
      * @param newPosition the new position of this entity
      * @throws NullPointerException if {@code newPosition} is null
