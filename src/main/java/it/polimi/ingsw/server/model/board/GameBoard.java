@@ -9,6 +9,7 @@ import java.util.*;
 
 /**
  * Represents the Game Board used in the game. It contains all the information about the configuration of the rooms, the decks used and the mode in which the Game is played.
+ * @author Fahed Ben Tej
  */
 public class GameBoard implements ReplaceListener {
 
@@ -23,6 +24,18 @@ public class GameBoard implements ReplaceListener {
      * Powerup Deck used during the game.
      */
     private PowerupDeck powerupDeck;
+
+    /**
+     * Discarded Powerup Cards.
+     */
+    private List<PowerupCard> discardedPowerups;
+
+
+    /**
+     * Discarded Ammo Cards.
+     */
+    private List<PowerupCard> discardedAmmos;
+
 
 
     /**
@@ -53,6 +66,10 @@ public class GameBoard implements ReplaceListener {
         powerupDeck = new PowerupDeck();
         weaponDeck = new WeaponDeck();
         ammoDeck = new AmmoDeck();
+
+        //Discarded cards
+        discardedPowerups = new ArrayList<>();
+        discardedAmmos = new ArrayList<>();
     }
 
     /**
@@ -81,34 +98,43 @@ public class GameBoard implements ReplaceListener {
     }
 
     /**
-     * @param color 
-     * @return
+     * Finds the {@code Square} which contains the {@code Spawn} of the given {@code Color}
+     * @param color the color of the spawn to find
+     * @return a {@code Square} which contains the {@code Spawn} of the given {@code Color}
      */
     public Square findSpawn(AmmoCube color) {
-        // TODO implement here
+
         return null;
     }
 
     /**
-     * @param start 
-     * @param maxDistance 
-     * @param sameDirection 
-     * @return
+     * Gets all the valid squares in which a player can move. The {@code sameDirection} flag is used to specify the constraint of moving in only one direction.
+     * @param start  starting square
+     * @param maxDistance  maximum moves square-to-square permitted
+     * @param sameDirection flag used to specify the constraint of moving in only one direction.
+     * @return all the squares in which a player can move
      */
     public List<Square> getValidDestinations(Square start, int maxDistance, boolean sameDirection) {
-        // TODO implement here
+
+        //List<Square> validDestinations = new ArrayList<>();
+       // if (maxDistance == 0) return validDestinations;
+
         return null;
     }
 
     /**
-     * @param tokens
+     * Used to insert tokens in the Track.
+     * @param tokens the player who did the kill. If there's an overkill, {@code tokens} must contain two times the same player.
+     *              In case of 3+ kills, they are counted as 2. If tokens is empty, no kill is counted.
+     *
      */
-    public void addTokensAndRemoveSkull(List<Player> tokens) {
+    public void addTokensAndRemoveSkull (List<Player> tokens) {
         // TODO implement here
     }
 
     /**
-     * @return
+     * Checks whether Final Frenzy is triggered.
+     * @return boolean indicating whether Final Frenzy is triggered.
      */
     public boolean checkFinalFrenzy() {
         // TODO implement here
@@ -116,27 +142,30 @@ public class GameBoard implements ReplaceListener {
     }
 
     /**
-     * 
+     * Scores the track.
      */
     public void scoreBoard() {
         // TODO implement here
     }
 
     /**
-     * @param usedCard
+     * Inserts an Ammo Card in the {@code discardedAmmos} set.
+     * @param usedCard the discarded Ammo Card.
      */
     public void putAmmoCard(AmmoCard usedCard) {
         // TODO implement here
     }
 
     /**
-     * @param usedCard
+     * Inserts an Powerup Card in the {@code discardedPowerups} set.
+     * @param usedCard the discarded Powerup Card.
      */
     public void putPowerupCard(PowerupCard usedCard) {
         // TODO implement here
     }
 
     /**
+     *
      * @param toBeReplaced
      */
     public void addTurretSquare(TurretSquare toBeReplaced) {

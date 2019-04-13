@@ -69,20 +69,31 @@ public class KillshotTrack extends AbstractTrack {
                 if(!orderedKills.contains(p))
                     orderedKills.add(p);
 
-                kills.put(p,kills.get(p)+1);
+                int currentKills = kills.get(p);
+                kills.put(p, currentKills+1);
             }
         }
 
-        List<Player> chart = kills.entrySet().stream().sorted(
-                                                    (e1,e2)->
-                                                            {
-                                                                if(e1.getValue().compareTo(e2.getValue())!=0)
-                                                                    return e2.getValue()-e1.getValue();
-                                                                // we have a tie. The first killer wins
-                                                                else return orderedKills.indexOf(e1) - orderedKills.indexOf(e2);
-                                                            })
-                                                            .map(Map.Entry::getKey)
-                                                            .collect(Collectors.toList());
+        //Comparing two players according in decreasing order according to number of kills. In case of a tie, the player who did a kill first wins.
+
+        Comparator<Player> chartComparator = new Comparator<Player>() {
+            @Override
+            public int compare(Player p1, Player p2) {
+                Integer p1Kills = kills.get(p1);
+                Integer p2Kills = kills.get(p2);
+
+                if(p1Kills.compareTo(p2Kills) != 0)
+                    return p2Kills.compareTo(p1Kills);
+                else {
+                    // the player who did a kills first wins
+                    return orderedKills.indexOf(p1) - orderedKills.indexOf(p2);
+                }
+            }
+        };
+
+        List<Player> chart = orderedKills.stream()
+                                                    .sorted(chartComparator::compare)
+                                                    .collect(Collectors.toList());
 
         // chart is ordered so we just have set score according to the rules
         scoreChart(chart);
