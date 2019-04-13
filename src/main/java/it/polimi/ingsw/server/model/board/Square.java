@@ -3,17 +3,17 @@ package it.polimi.ingsw.server.model.board;
 import it.polimi.ingsw.server.model.cards.AbstractCard;
 
 /**
- *  defines the structure of a square
+ *  Defines the structure of a square
  */
-public abstract class AbstractSquare {
+public class Square {
 
 
     private Room room;  //-- group squares by color
 
-    private AbstractSquare north;
-    private AbstractSquare south;
-    private AbstractSquare east;
-    private AbstractSquare west;
+    private Square north;
+    private Square south;
+    private Square east;
+    private Square west;
 
     // -- Border : { Wall, Door, Corridor} <- Set when creating the map
     private Border northBorder;
@@ -27,7 +27,7 @@ public abstract class AbstractSquare {
     /**
      * Default constructor
      */
-    public AbstractSquare() {
+    public Square() {
         room=null;
         north=null;
         south=null;
@@ -51,7 +51,7 @@ public abstract class AbstractSquare {
      * @param destination 
      * @return 1 if the destination square is visible from the calling square, 0 otherwise
      */
-    public boolean checkVisible(AbstractSquare destination) {
+    public boolean checkVisible(Square destination) {
 
         if( this.room == destination.room )
             return true;

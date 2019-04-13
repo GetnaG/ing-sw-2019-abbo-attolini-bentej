@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.model;
 
 import it.polimi.ingsw.server.controller.ScoreListener;
-import it.polimi.ingsw.server.model.board.AbstractSquare;
+import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.List;
@@ -45,11 +45,11 @@ public interface Damageable {
     void giveMark(List<Player> shooters);
 
     /**
-     * Returns the {@linkplain AbstractSquare} on which the entity is standing.
+     * Returns the {@linkplain Square} on which the entity is standing.
      *
      * @return the position of the {@code Damageable}; null if not spawned yet
      */
-    AbstractSquare getPosition();
+    Square getPosition();
 
     /**
      * Changes the position of this entity to the {@code newPosition}.
@@ -58,7 +58,7 @@ public interface Damageable {
      * @param newPosition the new position of this entity
      * @throws NullPointerException if {@code newPosition} is null
      */
-    void setPosition(AbstractSquare newPosition);
+    void setPosition(Square newPosition);
 
     /**
      * Gives points to those who damaged this entity and resets the damage.

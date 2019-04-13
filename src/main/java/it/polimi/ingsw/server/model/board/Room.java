@@ -7,15 +7,15 @@ import java.util.*;
 public class Room {
 
     private Color color;
-    private List<AbstractSquare> squares;
+    private List<Square> squares;
 
 
-    public Room(Color c, List<AbstractSquare> s ) {
+    public Room(Color c, List<Square> s ) {
             color=c;
 
     }
 
-    public void setSquares(List<AbstractSquare> squares) {
+    public void setSquares(List<Square> squares) {
         this.squares = squares;
     }
 

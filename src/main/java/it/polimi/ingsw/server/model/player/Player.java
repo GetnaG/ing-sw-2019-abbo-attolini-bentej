@@ -1,11 +1,10 @@
 package it.polimi.ingsw.server.model.player;
 
 import it.polimi.ingsw.server.ToClientInterface;
-import it.polimi.ingsw.server.controller.ScoreListener;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.*;
-import it.polimi.ingsw.server.model.board.AbstractSquare;
+import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
@@ -23,7 +22,7 @@ public class Player implements Damageable {
     private HandManager hand;
     private AmmoBox ammoBox;
     private PlayerBoardInterface playerBoard;
-    private AbstractSquare position;
+    private Square position;
     private Action adren1;
     private Action adren2;
 
@@ -60,12 +59,12 @@ public class Player implements Damageable {
     }
 
     @Override
-    public AbstractSquare getPosition() {
+    public Square getPosition() {
         return position;
     }
 
     @Override
-    public void setPosition(AbstractSquare newPosition) {
+    public void setPosition(Square newPosition) {
         position = newPosition;
     }
 

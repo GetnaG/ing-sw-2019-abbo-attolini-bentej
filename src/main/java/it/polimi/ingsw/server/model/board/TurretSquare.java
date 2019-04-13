@@ -6,7 +6,7 @@ import it.polimi.ingsw.server.model.cards.AmmoCard;
 /**
  * 
  */
-public class TurretSquare extends AbstractSquare {
+public class TurretSquare extends Square {
 
 
     private AmmoCard ammoCard;

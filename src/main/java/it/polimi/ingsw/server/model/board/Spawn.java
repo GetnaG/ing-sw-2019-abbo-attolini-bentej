@@ -47,7 +47,7 @@ public class Spawn implements Damageable {
     /**
      * @return
      */
-    public AbstractSquare getPosition() {
+    public Square getPosition() {
         // TODO implement here
         return null;
     }
@@ -55,7 +55,7 @@ public class Spawn implements Damageable {
     /**
      * @param newPosition
      */
-    public void setPosition(AbstractSquare newPosition) {
+    public void setPosition(Square newPosition) {
         // TODO implement here
     }
 

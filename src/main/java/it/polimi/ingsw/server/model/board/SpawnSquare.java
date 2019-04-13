@@ -3,7 +3,7 @@ package it.polimi.ingsw.server.model.board;
 /**
  * 
  */
-public class SpawnSquare extends AbstractSquare {
+public class SpawnSquare extends Square {
 
 
 

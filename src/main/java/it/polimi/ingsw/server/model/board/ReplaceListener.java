@@ -17,7 +17,7 @@ import java.util.List;
  * The replacing is triggered with {@code replaceAll}.
  *
  * @author Abbo Giulio A.
- * @see AbstractSquare
+ * @see Square
  * @see WeaponCard
  * @see AmmoCard
  */
@@ -50,7 +50,7 @@ public interface ReplaceListener {
      * @throws NullPointerException if a parameter is null
      * @throws IllegalArgumentException if location does not have a weapon shop
      */
-    void replaceDiscardedWeapons(AbstractSquare location,
+    void replaceDiscardedWeapons(Square location,
                                  List<WeaponCard> weapons);
 
     /**

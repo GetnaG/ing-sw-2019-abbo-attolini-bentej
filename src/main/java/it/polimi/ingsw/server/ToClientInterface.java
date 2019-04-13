@@ -2,7 +2,7 @@ package it.polimi.ingsw.server;
 import it.polimi.ingsw.server.controller.*;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
-import it.polimi.ingsw.server.model.board.AbstractSquare;
+import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
@@ -41,7 +41,7 @@ public interface ToClientInterface {
      * @param options 
      * @return
      */
-    public AbstractSquare chooseDestination(List<AbstractSquare> options);
+    public Square chooseDestination(List<Square> options);
 
     /**
      * @param options 
