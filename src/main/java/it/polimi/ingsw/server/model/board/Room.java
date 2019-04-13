@@ -23,4 +23,7 @@ public class Room {
        return this.color;
     }
 
+    public List<Square> getSquares(){
+        return null;
+    }
 }
