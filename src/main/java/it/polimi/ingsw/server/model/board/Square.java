@@ -134,23 +134,23 @@ public class Square {
             return true;
 
         else{
-                if(this.northBorder==Border.DOOR){
+                if(this.northBorder!=Border.DOOR){
                     if(this.north.room==destination.room)
                         return true;
 
                 }
 
-                if(this.southBorder==Border.DOOR){
+                if(this.southBorder!=Border.DOOR){
                       if(this.south.room==destination.room)
                           return true;
                 }
 
-                 if(this.eastBorder==Border.DOOR){
+                 if(this.eastBorder!=Border.DOOR){
                      if(this.east.room==destination.room)
                          return true;
                  }
 
-                 if(this.westBorder==Border.DOOR){
+                 if(this.westBorder!=Border.DOOR){
                      if(this.west.room==destination.room)
                           return true;
                  }

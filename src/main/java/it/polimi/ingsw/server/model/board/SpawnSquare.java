@@ -5,8 +5,6 @@ package it.polimi.ingsw.server.model.board;
  */
 public class SpawnSquare extends Square {
 
-
-
     private WeaponMarket market;
     private Spawn spawn;
 

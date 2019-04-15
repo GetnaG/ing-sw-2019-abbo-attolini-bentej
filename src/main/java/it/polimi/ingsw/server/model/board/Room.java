@@ -26,6 +26,6 @@ public class Room {
     }
 
     public List<Square> getSquares(){
-        return null;
+        return squares;
     }
 }
