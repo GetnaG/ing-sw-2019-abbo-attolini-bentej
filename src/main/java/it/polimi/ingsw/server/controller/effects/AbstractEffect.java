@@ -1,11 +1,11 @@
 package it.polimi.ingsw.server.controller.effects;
 
-import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -75,6 +75,11 @@ public abstract class AbstractEffect implements EffectInterface {
     public EffectInterface getDecorated() {
         // TODO implement here
         return null;
+    }
+
+    public List<AmmoCube> getCost() {
+        //TODO implement cost
+        return new ArrayList<>();
     }
 
 }

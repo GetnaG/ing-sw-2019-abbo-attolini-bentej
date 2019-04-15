@@ -16,6 +16,9 @@ public class WeaponCard extends AbstractCard {
     public WeaponCard() {
     }
 
+    public WeaponCard(List<AmmoCube> cost) {
+        this.cost = cost;
+    }
     public WeaponCard(String resName) {
         this.resName = resName;
     }

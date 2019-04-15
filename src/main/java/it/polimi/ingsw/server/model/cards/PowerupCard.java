@@ -11,7 +11,8 @@ public class PowerupCard extends AbstractCard {
     /**
      * Default constructor
      */
-    public PowerupCard() {
+    public PowerupCard(AmmoCube color) {
+        this.cube = color;
     }
 
     /**
@@ -51,4 +52,7 @@ public class PowerupCard extends AbstractCard {
         return null;
     }
 
+    public AmmoCube getCube() {
+        return cube;
+    }
 }

@@ -14,8 +14,8 @@ public interface PlayerBoardInterface {
 
     /**
      * Checks if the first adrenaline action is unlocked.
-     * For example in a normal turn this would mean that at least three damages
-     * were registered since last {@code resetDamage}.
+     * This depends on the amount of damage added since last
+     * {@linkplain #resetDamage()}.
      *
      * @return true if the first adrenaline action is available
      */
@@ -23,8 +23,8 @@ public interface PlayerBoardInterface {
 
     /**
      * Checks if the second adrenaline action is unlocked.
-     * For example in a normal turn this would mean that at least six damages
-     * were registered since last {@code resetDamage}.
+     * This depends on the amount of damage added since last
+     * {@linkplain #resetDamage()}.
      *
      * @return true if the second adrenaline action is available
      */
@@ -60,7 +60,8 @@ public interface PlayerBoardInterface {
 
     /**
      * Calculates the score based on the number of damage points registered.
-     * For each player who has dealt damage since last {@code resetDamage}, this
+     * For each player who has dealt damage since last
+     * {@linkplain #resetDamage()}, this
      * calculates how many points he has done and adds them to his score.
      */
     void score();
@@ -93,4 +94,12 @@ public interface PlayerBoardInterface {
      * if not applicable
      */
     Player getOverkill();
+
+    /**
+     * Returns the marks that this boars has.
+     * Used when changing board.
+     *
+     * @return the marks this board has.
+     */
+    List<Player> getMarks();
 }

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -132,22 +133,22 @@ class AmmoBoxTest {
         List<AmmoCube> list = new ArrayList<>();
         list.add(AmmoCube.ANY);
 
-        /*from empty AmmoBox*/
+        /*From empty AmmoBox*/
         assertThrows(IllegalArgumentException.class,
                 () -> testBox.addAmmo(list));
 
-        /*no action is taken*/
+        /*No action is taken*/
         assertEquals(0, testBox.getBlue());
         assertEquals(0, testBox.getRed());
         assertEquals(0, testBox.getYellow());
 
-        /*if list and AmmoBox contain other elements*/
+        /*If list and AmmoBox contain other elements*/
         list.add(AmmoCube.YELLOW);
 
         assertThrows(IllegalArgumentException.class,
                 () -> normalBox.addAmmo(list));
 
-        /*no action is taken*/
+        /*No action is taken*/
         assertEquals(3, normalBox.getBlue());
         assertEquals(3, normalBox.getRed());
         assertEquals(1, normalBox.getYellow());
@@ -174,21 +175,21 @@ class AmmoBoxTest {
     /*Testing ok case, not enough case and ANY*/
     @Test
     void checkPrice_normal() {
-        /*not enough*/
+        /*Not enough*/
         assertFalse(emptyBox.checkPrice(normalList));
 
-        /*just enough*/
+        /*Just enough*/
         assertTrue(normalBox.checkPrice(normalList));
 
-        /*enough*/
+        /*Enough*/
         normalBox.addAmmo(AmmoCube.YELLOW);
         assertTrue(normalBox.checkPrice(normalList));
 
-        /*just enough with ANY*/
+        /*Just enough with ANY*/
         normalList.add(AmmoCube.ANY);
         assertTrue(normalBox.checkPrice(normalList));
 
-        /*not enough with ANY*/
+        /*Not enough with ANY*/
         normalList.add(AmmoCube.ANY);
         assertFalse(normalBox.checkPrice(normalList));
 
@@ -200,12 +201,12 @@ class AmmoBoxTest {
 
     /*Testing not enough cubes*/
     @Test
-    void pay_not_enough() {
-        /*empty*/
+    void pay_notEnough() {
+        /*Empty*/
         assertThrows(IllegalArgumentException.class,
                 () -> emptyBox.pay(normalList));
 
-        /*not enough*/
+        /*Not enough*/
         normalList.add(AmmoCube.YELLOW);
         assertThrows(IllegalArgumentException.class,
                 () -> normalBox.pay(normalList));
@@ -243,5 +244,95 @@ class AmmoBoxTest {
         assertEquals(0, normalBox.getBlue());
         assertEquals(0, normalBox.getRed());
         assertEquals(0, normalBox.getYellow());
+    }
+
+    /*Testing null parameter*/
+    @Test
+    void getMissing_null() {
+        assertThrows(NullPointerException.class,
+                () -> normalBox.getMissing(null));
+
+        /*Checking that it does not modify anything*/
+        assertEquals(3, normalBox.getBlue());
+        assertEquals(3, normalBox.getRed());
+        assertEquals(1, normalBox.getYellow());
+    }
+
+    /*Testing empty parameter*/
+    @Test
+    void getMissing_empty() {
+        Map<AmmoCube, Integer> missing =
+                normalBox.getMissing(new ArrayList<>());
+        assertEquals(0, missing.get(AmmoCube.BLUE));
+        assertEquals(0, missing.get(AmmoCube.RED));
+        assertEquals(0, missing.get(AmmoCube.YELLOW));
+        assertEquals(0, missing.get(AmmoCube.ANY));
+
+
+        /*Checking that it does not modify anything*/
+        assertEquals(3, normalBox.getBlue());
+        assertEquals(3, normalBox.getRed());
+        assertEquals(1, normalBox.getYellow());
+    }
+
+    /*Testing when there are more cubes than required*/
+    @Test
+    void getMissing_enough() {
+        normalBox.addAmmo(AmmoCube.YELLOW);
+
+        Map<AmmoCube, Integer> missing =
+                normalBox.getMissing(normalList);
+        assertEquals(0, missing.get(AmmoCube.BLUE));
+        assertEquals(0, missing.get(AmmoCube.RED));
+        assertEquals(0, missing.get(AmmoCube.YELLOW));
+        assertEquals(0, missing.get(AmmoCube.ANY));
+
+
+        /*Checking that it does not modify anything*/
+        assertEquals(3, normalBox.getBlue());
+        assertEquals(3, normalBox.getRed());
+        assertEquals(2, normalBox.getYellow());
+    }
+
+    /*Testing when there are as many cubes as required*/
+    @Test
+    void getMissing_justEnough() {
+        normalBox.addAmmo(AmmoCube.YELLOW);
+        normalList.add(AmmoCube.ANY);
+
+        /*Added YELLOW to the box and ANY to the cost, should even out*/
+        Map<AmmoCube, Integer> missing =
+                normalBox.getMissing(normalList);
+        assertEquals(0, missing.get(AmmoCube.BLUE));
+        assertEquals(0, missing.get(AmmoCube.RED));
+        assertEquals(0, missing.get(AmmoCube.YELLOW));
+        assertEquals(0, missing.get(AmmoCube.ANY));
+
+
+        /*Checking that it does not modify anything*/
+        assertEquals(3, normalBox.getBlue());
+        assertEquals(3, normalBox.getRed());
+        assertEquals(2, normalBox.getYellow());
+    }
+
+    /*Testing when there are not enough cubes*/
+    @Test
+    void getMissing_notEnough() {
+        normalList.add(AmmoCube.YELLOW);
+        normalList.add(AmmoCube.ANY);
+
+        /*Should be missing a YELLOW and a ANY*/
+        Map<AmmoCube, Integer> missing =
+                normalBox.getMissing(normalList);
+        assertEquals(0, missing.get(AmmoCube.BLUE));
+        assertEquals(0, missing.get(AmmoCube.RED));
+        assertEquals(1, missing.get(AmmoCube.YELLOW));
+        assertEquals(1, missing.get(AmmoCube.ANY));
+
+
+        /*Checking that it does not modify anything*/
+        assertEquals(3, normalBox.getBlue());
+        assertEquals(3, normalBox.getRed());
+        assertEquals(1, normalBox.getYellow());
     }
 }
