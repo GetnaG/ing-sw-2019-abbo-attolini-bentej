@@ -50,8 +50,7 @@ public interface ReplaceListener {
      * @throws NullPointerException if a parameter is null
      * @throws IllegalArgumentException if location does not have a weapon shop
      */
-    void replaceDiscardedWeapons(Square location,
-                                 List<WeaponCard> weapons);
+    void replaceDiscardedWeapons(Square location, List<WeaponCard> weapons);
 
     /**
      * Replaces all the missing cards on the squares.

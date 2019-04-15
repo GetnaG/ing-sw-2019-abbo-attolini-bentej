@@ -18,14 +18,6 @@ public class WeaponMarket {
     }
 
 
-    /**
-     * 
-     */
-    private WeaponCard[] cards;
-
-    /**
-     * @return
-     */
     public List<WeaponCard> getCards() {
         return weaponCards;
     }
@@ -35,6 +27,22 @@ public class WeaponMarket {
      */
     public void addCard(WeaponCard weaponCard){
         
+    }
+
+    public void removeCardFromMarket(WeaponCard w){
+        /*
+        if w is in weaponcards
+            remove w
+         */
+    }
+
+    public WeaponCard pickWeaponFromList(){
+        /*
+        the player chooses a card to pick
+        this.removeCardFromMarket(weapon);
+         */
+       // return weapon;
+        return null;
     }
 
 }

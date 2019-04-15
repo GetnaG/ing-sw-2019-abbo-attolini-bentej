@@ -12,9 +12,13 @@ import java.util.*;
 public class Spawn implements Damageable {
 
     /**
-     * Tokens of Players that hitted the spawn in Domination mode.
+     * Tokens of Players that hit the spawn in Domination mode.
      */
     private List<Player> tokens;
+    /**
+     *
+     */
+    private AmmoCube color;
 
     /**
      * Default constructor
@@ -24,10 +28,7 @@ public class Spawn implements Damageable {
     }
 
 
-    /**
-     * 
-     */
-    private AmmoCube color;
+
 
     /**
      * This function
