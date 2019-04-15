@@ -37,12 +37,12 @@ public enum AmmoCube {
 
     /**
      * Counts the number of blue ammo cubes in the provided list.
-     * That is, returns the number of elements {@code AmmoCube.BLUE} in the
+     * That is, returns the number of elements {@linkplain AmmoCube#BLUE} in the
      * {@code toCount} list.
      *
      * @param toCount the {@linkplain List} containing the elements to count
-     * @throws NullPointerException if {@code toCount} is null
      * @return the number of {@code AmmoCube.BLUE} elements in the list
+     * @throws NullPointerException if {@code toCount} is null
      */
     public static int countBlue(List<AmmoCube> toCount) {
         return Collections.frequency(toCount, BLUE);
@@ -50,12 +50,12 @@ public enum AmmoCube {
 
     /**
      * Counts the number of yellow ammo cubes in the provided list.
-     * That is, returns the number of elements {@code AmmoCube.YELLOW} in the
+     * That is, returns the number of elements {@linkplain AmmoCube#YELLOW} in the
      * {@code toCount} list.
      *
      * @param toCount the {@linkplain List} containing the elements to count
-     * @throws NullPointerException if {@code toCount} is null
      * @return the number of {@code AmmoCube.YELLOW} elements in the list
+     * @throws NullPointerException if {@code toCount} is null
      */
     public static int countYellow(List<AmmoCube> toCount) {
         return Collections.frequency(toCount, YELLOW);
@@ -63,12 +63,12 @@ public enum AmmoCube {
 
     /**
      * Counts the number of red ammo cubes in the provided list.
-     * That is, returns the number of elements {@code AmmoCube.RED} in the
+     * That is, returns the number of elements {@linkplain AmmoCube#RED} in the
      * {@code toCount} list.
      *
      * @param toCount the {@linkplain List} containing the elements to count
-     * @throws NullPointerException if {@code toCount} is null
      * @return the number of {@code AmmoCube.RED} elements in the list
+     * @throws NullPointerException if {@code toCount} is null
      */
     public static int countRed(List<AmmoCube> toCount) {
         return Collections.frequency(toCount, RED);
@@ -76,13 +76,13 @@ public enum AmmoCube {
 
     /**
      * Counts the number of {@code ANY} ammo cubes in the provided list.
-     * That is, returns the number of elements {@code AmmoCube.ANY} in the
+     * That is, returns the number of elements {@linkplain AmmoCube#ANY} in the
      * {@code toCount} list. Blue, red and yellow cubes do not count as
      * {@code ANY} cubes.
      *
      * @param toCount the {@linkplain List} containing the elements to count
-     * @throws NullPointerException if {@code toCount} is null
      * @return the number of {@code AmmoCube.ANY} elements in the list
+     * @throws NullPointerException if {@code toCount} is null
      */
     public static int countAny(List<AmmoCube> toCount) {
         return Collections.frequency(toCount, ANY);

@@ -1,11 +1,15 @@
 package it.polimi.ingsw.server.model.player;
 
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -27,10 +31,10 @@ class HandManagerTest {
 
     @BeforeEach
     void setUp() {
-        APowerup = new PowerupCard();
-        BPowerup = new PowerupCard();
-        CPowerup = new PowerupCard();
-        DPowerup = new PowerupCard();
+        APowerup = new PowerupCard(AmmoCube.BLUE);
+        BPowerup = new PowerupCard(AmmoCube.RED);
+        CPowerup = new PowerupCard(AmmoCube.RED);
+        DPowerup = new PowerupCard(AmmoCube.YELLOW);
         AWeapon = new WeaponCard("A");
         BWeapon = new WeaponCard("B");
         CWeapon = new WeaponCard("C");
@@ -117,7 +121,7 @@ class HandManagerTest {
 
     /*Testing if the card is not in the hand*/
     @Test
-    void removePowerup_not_present() {
+    void removePowerup_notPresent() {
         assertThrows(IllegalArgumentException.class,
                 () -> normalHand.removePowerup(CPowerup));
 
@@ -149,7 +153,7 @@ class HandManagerTest {
 
     /*Testing if the card is not in the hand*/
     @Test
-    void removeWeapon_not_present() {
+    void removeWeapon_notPresent() {
         assertThrows(IllegalArgumentException.class,
                 () -> normalHand.removeWeapon(CWeapon));
 
@@ -203,7 +207,7 @@ class HandManagerTest {
 
     /*Testing card already unloaded or not in hand*/
     @Test
-    void unload_already_unloaded() {
+    void unload_alreadyUnloaded() {
         assertThrows(IllegalArgumentException.class,
                 () -> normalHand.unload(BWeapon));
         assertThrows(IllegalArgumentException.class,
@@ -233,7 +237,7 @@ class HandManagerTest {
 
     /*Testing card already loaded or not in hand*/
     @Test
-    void reload_already_loaded() {
+    void reload_alreadyLoaded() {
         assertThrows(IllegalArgumentException.class,
                 () -> normalHand.reload(AWeapon));
         assertThrows(IllegalArgumentException.class,
@@ -241,5 +245,53 @@ class HandManagerTest {
 
         assertTrue(normalHand.getLoadedWeapons().contains(AWeapon));
         assertTrue(normalHand.getUnloadedWeapons().contains(BWeapon));
+    }
+
+    /*Testing null parameter*/
+    @Test
+    void getPowerupsForPaying_null() {
+        assertThrows(NullPointerException.class,
+                () -> normalHand.getPowerupForPaying(null));
+
+        assertTrue(normalHand.getLoadedWeapons().contains(AWeapon));
+        assertTrue(normalHand.getUnloadedWeapons().contains(BWeapon));
+    }
+
+    /*Testing with an empty cost*/
+    @Test
+    void getPowerupsForPaying_empty() {
+        assertThrows(IllegalArgumentException.class,
+                () -> normalHand.getPowerupForPaying(new HashMap<>()));
+
+        assertTrue(normalHand.getLoadedWeapons().contains(AWeapon));
+        assertTrue(normalHand.getUnloadedWeapons().contains(BWeapon));
+    }
+
+    /*Testing normal behaviour*/
+    @Test
+    void getPowerupsForPaying_normal() {
+        Map<AmmoCube, Integer> cost = new EnumMap<>(AmmoCube.class);
+
+        /*Cube not present*/
+        cost.put(AmmoCube.YELLOW, 1);
+        assertTrue(normalHand.getPowerupForPaying(cost).isEmpty());
+
+        /*One of the cubes not present*/
+        cost.put(AmmoCube.BLUE, 1);
+        assertTrue(normalHand.getPowerupForPaying(cost).isEmpty());
+
+        /*Cubes ok*/
+        cost.clear();
+        cost.put(AmmoCube.BLUE, 1);
+
+        assertEquals(1, normalHand.getPowerupForPaying(cost).size());
+        assertTrue(normalHand.getPowerupForPaying(cost).contains(APowerup));
+
+        /*Type ANY*/
+        cost.put(AmmoCube.ANY, 1);
+
+        assertEquals(2, normalHand.getPowerupForPaying(cost).size());
+        assertTrue(normalHand.getPowerupForPaying(cost).contains(APowerup));
+        assertTrue(normalHand.getPowerupForPaying(cost).contains(BPowerup));
     }
 }
