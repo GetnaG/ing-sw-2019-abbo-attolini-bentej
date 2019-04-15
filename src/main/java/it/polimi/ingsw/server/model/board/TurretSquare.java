@@ -16,24 +16,28 @@ public class TurretSquare extends Square {
      * Default constructor
      */
     public TurretSquare(AmmoCard a, Turret t) {
+        super();
         ammoCard=a;
         turret=t; //->turret mode non active <-> turret = null
+    }
+
+
+    //returns the reference
+    public AmmoCard getAmmoCard() {
+        return ammoCard;
+    }
+
+    //returns the reference and calls replacer
+    public AmmoCard removeAmmoCard(){
+        replacer.addTurretSquare(this);   // -- is implemented by the replacer
+        AmmoCard tmp = ammoCard;
+        ammoCard = null;
+        return tmp;
     }
 
 
     public void setAmmoCard(AmmoCard ammoCard) {
         this.ammoCard = ammoCard;
     }
-
-
-    //getGrabbables -> replace listener
-    @Override
-    public AbstractCard getGrabbables() {
-        replacer.addTurretSquare(this);
-        return ammoCard;
-    }
-
-
-
 
 }
