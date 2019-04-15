@@ -23,6 +23,81 @@ public class Square {
 
     protected ReplaceListener replacer;
 
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public Square getNorth() {
+        return north;
+    }
+
+    public void setNorth(Square north) {
+        this.north = north;
+    }
+
+    public Square getSouth() {
+        return south;
+    }
+
+    public void setSouth(Square south) {
+        this.south = south;
+    }
+
+    public Square getEast() {
+        return east;
+    }
+
+    public void setEast(Square east) {
+        this.east = east;
+    }
+
+    public Square getWest() {
+        return west;
+    }
+
+    public void setWest(Square west) {
+        this.west = west;
+    }
+
+    public Border getNorthBorder() {
+        return northBorder;
+    }
+
+    public void setNorthBorder(Border northBorder) {
+        this.northBorder = northBorder;
+    }
+
+    public Border getSouthBorder() {
+        return southBorder;
+    }
+
+    public void setSouthBorder(Border southBorder) {
+        this.southBorder = southBorder;
+    }
+
+    public Border getEastBorder() {
+        return eastBorder;
+    }
+
+    public void setEastBorder(Border eastBorder) {
+        this.eastBorder = eastBorder;
+    }
+
+    public Border getWestBorder() {
+        return westBorder;
+    }
+
+    public void setWestBorder(Border westBorder) {
+        this.westBorder = westBorder;
+    }
+
+    public ReplaceListener getReplacer() {
+        return replacer;
+    }
+
+    public void setReplacer(ReplaceListener replacer) {
+        this.replacer = replacer;
+    }
 
     /**
      * Default constructor
@@ -37,7 +112,9 @@ public class Square {
         southBorder=null;
         eastBorder=null;
         westBorder=null;
+        replacer = null;
     }
+
 
     /**
      * implemented by TurretSquare and SpawnSquare
@@ -89,5 +166,3 @@ public class Square {
 
 
 }
-
-//gameboard ha lista di room, ogni room ha una lista di squares, raggruppati dal colore

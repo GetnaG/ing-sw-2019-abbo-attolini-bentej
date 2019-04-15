@@ -11,8 +11,10 @@ public class Room {
 
 
     public Room(Color c, List<Square> s ) {
-            color=c;
-
+            for(Square sq: squares)
+            {
+                sq.getRoom().color=c;
+            }
     }
 
     public void setSquares(List<Square> squares) {
