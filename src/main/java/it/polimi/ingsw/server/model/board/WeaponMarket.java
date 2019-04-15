@@ -9,6 +9,8 @@ import java.util.*;
  */
 public class WeaponMarket {
 
+    private List<WeaponCard> weaponCards;
+
     /**
      * Default constructor
      */
@@ -25,8 +27,14 @@ public class WeaponMarket {
      * @return
      */
     public List<WeaponCard> getCards() {
-        // TODO implement here
-        return null;
+        return weaponCards;
+    }
+
+    /**
+     * Adds card to market. If market is full, no card is added.
+     */
+    public void addCard(WeaponCard weaponCard){
+        
     }
 
 }

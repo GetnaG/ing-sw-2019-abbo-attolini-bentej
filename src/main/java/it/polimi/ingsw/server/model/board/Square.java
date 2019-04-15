@@ -1,14 +1,17 @@
 package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.cards.AbstractCard;
+import it.polimi.ingsw.server.model.cards.AmmoCard;
 
 /**
- *  Defines the structure of a square
+ *  Defines the structure of a square.
  */
 public class Square {
 
 
     private Room room;  //-- group squares by color
+    private AmmoCard ammoCard;
+
 
     private Square north;
     private Square south;
@@ -17,6 +20,8 @@ public class Square {
 
     // -- Border : { Wall, Door, Corridor} <- Set when creating the map
     private Border northBorder;
+
+
     private Border southBorder;
     private Border eastBorder;
     private Border westBorder;
@@ -162,6 +167,10 @@ public class Square {
 
     public Room getRoom() {
         return room;
+    }
+
+    public void setGrabbable (AmmoCard ammoCard) {
+        this.ammoCard = ammoCard;
     }
 
 

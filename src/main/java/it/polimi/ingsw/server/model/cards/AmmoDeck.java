@@ -25,14 +25,14 @@ public class AmmoDeck extends AbstractDeck {
     }
 
     /**
-     * Drawing a random Ammo Card from the deck.
+     * Drawing a random Ammo Card from the deck. If the deck is empty re-shuffles the deck. This means that will always return an Ammo Card.
      * @return a card from the deck
      * @throws AgainstRulesException if deck is empty
      */
     @Override
     public AmmoCard drawCard() {
         if (deck.isEmpty())
-             ;
+            shuffleDeck();
 
         AmmoCard  drawnCard = deck.get(deck.size() -1 ) ;
         deck.remove(drawnCard);

@@ -121,7 +121,7 @@ public class DominationTrack extends AbstractTrack {
      */
     private  void addPoints(List<Player> playersSamePosition) {
         for (Player p : playersSamePosition)
-            p.setScore(p.getScore()+ points);
+            p.addScore(points);
         // 8 -> 6 -> 4 -> 2 -> 1 There is an unconventional use of the break statement.
         switch (points) {
             case 8 :
@@ -170,5 +170,12 @@ public class DominationTrack extends AbstractTrack {
 
     }
 
+    /**
+     * Gets game mode.
+     */
+    @Override
+    public String getGameMode(){
+        return "Domination";
+    }
 
 }

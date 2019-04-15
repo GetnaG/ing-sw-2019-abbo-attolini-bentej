@@ -37,4 +37,9 @@ public abstract class AbstractTrack {
      */
     public abstract void removeSkull() ;
 
+    /**
+     * Gets game mode.
+     */
+    public abstract String getGameMode();
+
 }

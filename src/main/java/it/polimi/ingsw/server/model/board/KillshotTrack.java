@@ -147,7 +147,16 @@ public class KillshotTrack extends AbstractTrack {
      */
     @Override
     public void removeSkull() {
-        skullsLeft = skullsLeft - 1;
+        if (skullsLeft > 0)
+            skullsLeft = skullsLeft - 1;
+    }
+
+    /**
+     * Gets game mode.
+     */
+    @Override
+    public String getGameMode(){
+        return "Deathmatch";
     }
 
 }

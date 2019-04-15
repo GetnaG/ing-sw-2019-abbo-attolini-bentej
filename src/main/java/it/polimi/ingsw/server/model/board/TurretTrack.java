@@ -78,5 +78,13 @@ public class TurretTrack extends AbstractTrack {
         return ammoCards;
     }
 
+    /**
+     * Gets game mode.
+     */
+    @Override
+    public String getGameMode(){
+        return "Turret";
+    }
+
 
 }

@@ -34,7 +34,20 @@ public class GameBoard implements ReplaceListener {
     /**
      * Discarded Ammo Cards.
      */
-    private List<PowerupCard> discardedAmmos;
+    private List<AmmoCard> discardedAmmos;
+
+    /**
+     * Contains all the squares where a new Ammo Card is needed.
+     */
+    List<Square> squareNewAmmoCard;
+
+    /**
+     * Contains all the squares where a new Weapon Card is needed.
+     */
+    List<SpawnSquare> squareNewWeaponCard;
+
+
+
 
 
 
@@ -54,7 +67,7 @@ public class GameBoard implements ReplaceListener {
     private AbstractTrack track;
 
     /**
-     * Construct a GameBoard using the {@track} which defines the mode and the {@code configuration} of the rooms .
+     * Construct a GameBoard using the {@code track} which defines the mode and the {@code configuration} of the rooms .
      * @param track defines the mode in which the game will be played. {@see KillshotTrack} {@see DominationTrack} {@see TurretTrack}
      * @param configuration defines the rooms which compose the boards. Note that rooms are composed squares.
      */
@@ -70,7 +83,14 @@ public class GameBoard implements ReplaceListener {
         //Discarded cards
         discardedPowerups = new ArrayList<>();
         discardedAmmos = new ArrayList<>();
+
+        //Squares where there's a card needed to be replaced
+        squareNewAmmoCard = new ArrayList<>();
+        squareNewWeaponCard = new ArrayList<>();
+
     }
+
+
 
     /**
      * Gets a random Ammo Card from the Ammo Deck. Note that Ammo Card can always be drawn. {@see AmmoDeck}
@@ -112,24 +132,96 @@ public class GameBoard implements ReplaceListener {
      * @param start  starting square
      * @param maxDistance  maximum moves square-to-square permitted
      * @param sameDirection flag used to specify the constraint of moving in only one direction.
-     * @return all the squares in which a player can move
+     * @return all the squares in which a player can move. The {@code start} square is excluded.
      */
     public List<Square> getValidDestinations(Square start, int maxDistance, boolean sameDirection) {
 
-        //List<Square> validDestinations = new ArrayList<>();
-       // if (maxDistance == 0) return validDestinations;
+        List<Square> validDestinations = new ArrayList<>();
 
-        return null;
+        if (maxDistance == 0)
+            return validDestinations;
+
+
+        if(sameDirection) {
+            Square curSquare = start;
+            int curDistance = maxDistance;
+            // North direction Squares
+            while (curSquare.getNorthBorder() != Border.WALL){
+                validDestinations.add(curSquare);
+                curSquare = curSquare.getNorth();
+                curDistance = curDistance -1;
+            }
+
+            // East direction Squares
+            while (curSquare.getEastBorder() != Border.WALL){
+                validDestinations.add(curSquare);
+                curSquare = curSquare.getEast();
+                curDistance = curDistance -1;
+            }
+
+            // South direction Squares
+            while (curSquare.getSouthBorder() != Border.WALL){
+                validDestinations.add(curSquare);
+                curSquare = curSquare.getSouth();
+                curDistance = curDistance -1;
+            }
+
+            // West direction Squares
+            while (curSquare.getWestBorder() != Border.WALL){
+                validDestinations.add(curSquare);
+                curSquare = curSquare.getWest();
+                curDistance = curDistance -1;
+            }
+
+            return validDestinations;
+        } else {
+            // Get all squares in the radius defined by maxDistance
+            radiusValidDestinations(start,maxDistance,validDestinations);
+
+            return validDestinations;
+
+        }
+
+
+
+    }
+
+    /**
+     * Helper method for {@link GameBoard#getValidDestinations(Square, int, boolean)}.
+     * This method uses recursion to find the valid destinations.
+     */
+    private void radiusValidDestinations(Square start, int maxDistance, List<Square> alreadyVisitedSquares){
+
+        if(maxDistance == 0) return;
+
+        if(start.getNorthBorder() != Border.WALL){
+            alreadyVisitedSquares.add(start.getNorth());
+            radiusValidDestinations(start.getNorth(), maxDistance-1, alreadyVisitedSquares);
+        }
+        if(start.getEastBorder() != Border.WALL){
+            alreadyVisitedSquares.add(start.getEast());
+            radiusValidDestinations(start.getEast(), maxDistance-1, alreadyVisitedSquares);
+        }
+        if(start.getSouthBorder() != Border.WALL){
+            alreadyVisitedSquares.add(start.getSouth());
+            radiusValidDestinations(start.getSouth(), maxDistance-1, alreadyVisitedSquares);
+        }
+        if(start.getWestBorder() != Border.WALL){
+            alreadyVisitedSquares.add(start.getWest());
+            radiusValidDestinations(start.getWest(), maxDistance-1, alreadyVisitedSquares);
+        }
+
     }
 
     /**
      * Used to insert tokens in the Track.
      * @param tokens the player who did the kill. If there's an overkill, {@code tokens} must contain two times the same player.
-     *              In case of 3+ kills, they are counted as 2. If tokens is empty, no kill is counted.
+     *              In case of 3+ kills, they are counted as 2. If list {@code tokens} is empty, no kill is counted.
      *
      */
     public void addTokensAndRemoveSkull (List<Player> tokens) {
-        // TODO implement here
+        track.removeSkull();
+        track.addTokens(tokens);
     }
 
     /**
@@ -137,15 +229,16 @@ public class GameBoard implements ReplaceListener {
      * @return boolean indicating whether Final Frenzy is triggered.
      */
     public boolean checkFinalFrenzy() {
-        // TODO implement here
-        return false;
+        return track.getSkullsLeft() == 0;
     }
+
+
 
     /**
      * Scores the track.
      */
     public void scoreBoard() {
-        // TODO implement here
+        track.score();
     }
 
     /**
@@ -153,7 +246,8 @@ public class GameBoard implements ReplaceListener {
      * @param usedCard the discarded Ammo Card.
      */
     public void putAmmoCard(AmmoCard usedCard) {
-        // TODO implement here
+        discardedAmmos.add(usedCard);
+
     }
 
     /**
@@ -161,26 +255,31 @@ public class GameBoard implements ReplaceListener {
      * @param usedCard the discarded Powerup Card.
      */
     public void putPowerupCard(PowerupCard usedCard) {
-        // TODO implement here
+        discardedPowerups.add(usedCard);
     }
 
     /**
-     *
-     * @param toBeReplaced
+     * When an Ammo Card is grabbed from a Square, it is replaced  at the end of the turn.
+     * This method stores the squares where there is an Ammo Card to be replaced.
+     * @param toBeReplaced the square where there is an Ammo Card to be replaced.
+     * The method {@link GameBoard#replaceAll} actually takes care of replacing the Ammo Card at the end of turn.
      */
     public void addTurretSquare(TurretSquare toBeReplaced) {
-        // TODO implement here
+        squareNewAmmoCard.add(toBeReplaced);
     }
 
     /**
-     * @param toBeReplaced
+     * When a Weapon Card is grabbed from a Spawn Square, it is replaced at the end of the turn.
+     * This method stores the Spawn Squares where there is a Weapon Card to be replaced.
+     * @param toBeReplaced SpawnSquare where there's a Weapon to be replaced.
+     * The method {@link GameBoard#replaceAll} actually takes care of replacing the Weapon Card at the end of turn.
      */
     public void addSpawnSquare(SpawnSquare toBeReplaced) {
-        // TODO implement here
+        squareNewWeaponCard.add(toBeReplaced);
     }
 
     /**
-     * @param location 
+     * @param location
      * @param weapons
      */
     public void replaceDiscardedWeapons(Square location, List<WeaponCard> weapons) {
@@ -188,10 +287,21 @@ public class GameBoard implements ReplaceListener {
     }
 
     /**
-     * 
+     * Replaces all the Ammo Cards and Weapon Cards grabbed during the game with new Cards.
      */
     public void replaceAll() {
-        // TODO implement here
+
+        //Replacing Ammo Cards
+        for(Square s : squareNewAmmoCard)
+            s.setGrabbable(ammoDeck.drawCard());
+        //Replacing Weapon Card
+        for (SpawnSquare s : squareNewWeaponCard)
+            if (weaponDeck.cardsLeft() !=0){
+                try{
+                    s.getMarket().addCard(weaponDeck.drawCard());
+                }catch(AgainstRulesException e) {}
+            }
+
     }
 
 
