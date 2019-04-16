@@ -14,7 +14,7 @@ public class SpawnSquare extends Square {
     /**
      * Default constructor
      */
-    public SpawnSquare(WeaponMarket w) {  //spe non c'è più la sottoclasse turretsquare ma turret diventa un attributo di square??
+    public SpawnSquare(WeaponMarket w) {
         market = w;
         spawn = null;
     }
@@ -25,10 +25,8 @@ public class SpawnSquare extends Square {
     }
 
     public WeaponCard pickWeapon(){
-        WeaponCard w/* = new WeaponCard()*/;
-        w = market.pickWeaponFromList();
+        WeaponCard w = market.pickWeaponFromList();
         super.replacer.replaceDiscardedWeapons(this, market.getCards()); //not sure on the second argument
-        super.replacer.replaceAll();
         return w;
     }
 
@@ -52,7 +50,7 @@ public class SpawnSquare extends Square {
             return AmmoCube.RED;
         if (c == Color.YELLOW)
             return AmmoCube.YELLOW;
-        return AmmoCube.ANY; //no io metterei che dà errore
+        return AmmoCube.ANY; // this option should not even exist
     }
 
 }

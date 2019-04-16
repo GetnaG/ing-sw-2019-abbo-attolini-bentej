@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.cards.WeaponCard;
+import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.*;
 
@@ -14,7 +15,8 @@ public class WeaponMarket {
     /**
      * Default constructor
      */
-    public WeaponMarket() {
+    public WeaponMarket(List<WeaponCard> weaponCards) {
+        this.weaponCards = weaponCards;
     }
 
 
@@ -26,23 +28,49 @@ public class WeaponMarket {
      * Adds card to market. If market is full, no card is added.
      */
     public void addCard(WeaponCard weaponCard){
-        
+        for(WeaponCard i: weaponCards)
+        {
+            if(i==null){
+                i = weaponCard;
+            }
+        }
     }
+
 
     public void removeCardFromMarket(WeaponCard w){
-        /*
-        if w is in weaponcards
-            remove w
-         */
+        int pos = 0;
+        for(WeaponCard i: weaponCards)
+        {
+            if(i.equals(w))
+            {
+                weaponCards.set(pos, null);
+            }
+
+            /*
+            else throw: error: weapon not found
+             */
+
+        }
     }
 
-    public WeaponCard pickWeaponFromList(){
+    /**
+     * @return null is returned if the player can't afford to pay the cost to pick the selected weapon
+     * alternative solution: filter the weapon to show to the player
+     */
+
+    public WeaponCard pickWeaponFromList(){  //pick weapon from filtered list???
         /*
-        the player chooses a card to pick
+        the player chooses a card to pick  // among the filtered market
+        WeaponCard weapon = player...
+                */
+        WeaponCard weapon = new WeaponCard();// -- remove this line after defining the method player.pickWeapon
+
+       /*
+       check: is the selected weapon available to the player? is he able to pay the cost?
+        */
+
         this.removeCardFromMarket(weapon);
-         */
-       // return weapon;
-        return null;
+        return weapon;
     }
 
 }
