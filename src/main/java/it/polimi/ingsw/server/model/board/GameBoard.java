@@ -145,29 +145,32 @@ public class GameBoard implements ReplaceListener {
             Square curSquare = start;
             int curDistance = maxDistance;
             // North direction Squares
-            while (curSquare.getNorthBorder() != Border.WALL){
-                validDestinations.add(curSquare);
+            while (curSquare.getNorthBorder() != Border.WALL  && curDistance>0){
+                validDestinations.add(curSquare.getNorth());
                 curSquare = curSquare.getNorth();
                 curDistance = curDistance -1;
             }
-
+            curSquare = start;
+            curDistance = maxDistance;
             // East direction Squares
-            while (curSquare.getEastBorder() != Border.WALL){
-                validDestinations.add(curSquare);
+            while (curSquare.getEastBorder() != Border.WALL && curDistance>0){
+                validDestinations.add(curSquare.getEast());
                 curSquare = curSquare.getEast();
                 curDistance = curDistance -1;
             }
-
+            curSquare = start;
+            curDistance = maxDistance;
             // South direction Squares
-            while (curSquare.getSouthBorder() != Border.WALL){
-                validDestinations.add(curSquare);
+            while (curSquare.getSouthBorder() != Border.WALL  && curDistance>0){
+                validDestinations.add(curSquare.getSouth());
                 curSquare = curSquare.getSouth();
                 curDistance = curDistance -1;
             }
-
+            curSquare = start;
+            curDistance = maxDistance;
             // West direction Squares
-            while (curSquare.getWestBorder() != Border.WALL){
-                validDestinations.add(curSquare);
+            while (curSquare.getWestBorder() != Border.WALL  && curDistance>0){
+                validDestinations.add(curSquare.getWest());
                 curSquare = curSquare.getWest();
                 curDistance = curDistance -1;
             }
@@ -176,6 +179,7 @@ public class GameBoard implements ReplaceListener {
         } else {
             // Get all squares in the radius defined by maxDistance
             radiusValidDestinations(start,maxDistance,validDestinations);
+            validDestinations.remove(start);
 
             return validDestinations;
 
@@ -193,19 +197,27 @@ public class GameBoard implements ReplaceListener {
 
         if(maxDistance == 0) return;
 
-        if(start.getNorthBorder() != Border.WALL){
+        if(start.getNorthBorder() != Border.WALL && maxDistance>0 ){
+            if (alreadyVisitedSquares.contains(start.getNorth()))
+                return;
             alreadyVisitedSquares.add(start.getNorth());
             radiusValidDestinations(start.getNorth(), maxDistance-1, alreadyVisitedSquares);
         }
-        if(start.getEastBorder() != Border.WALL){
+        if(start.getEastBorder() != Border.WALL && maxDistance>0){
+            if (alreadyVisitedSquares.contains(start.getEast()))
+                return;
             alreadyVisitedSquares.add(start.getEast());
             radiusValidDestinations(start.getEast(), maxDistance-1, alreadyVisitedSquares);
         }
-        if(start.getSouthBorder() != Border.WALL){
+        if(start.getSouthBorder() != Border.WALL && maxDistance>0){
+            if (alreadyVisitedSquares.contains(start.getSouth()))
+                return;
             alreadyVisitedSquares.add(start.getSouth());
             radiusValidDestinations(start.getSouth(), maxDistance-1, alreadyVisitedSquares);
         }
-        if(start.getWestBorder() != Border.WALL){
+        if(start.getWestBorder() != Border.WALL && maxDistance>0){
+            if (alreadyVisitedSquares.contains(start.getWest()))
+                return;
             alreadyVisitedSquares.add(start.getWest());
             radiusValidDestinations(start.getWest(), maxDistance-1, alreadyVisitedSquares);
         }
