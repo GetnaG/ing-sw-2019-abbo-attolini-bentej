@@ -8,13 +8,18 @@ public class Room {
 
     private Color color;
     private List<Square> squares;
+    private SpawnSquare spawnSquare;
 
 
-    public Room(Color c, List<Square> s ) {
-            for(Square sq: squares)
-            {
-                sq.getRoom().color=c;
-            }
+    public Room( List<Square> squares, SpawnSquare spawnSquare ) {
+
+        this.squares = squares;
+        this.spawnSquare = spawnSquare;
+    }
+
+    public Room( List<Square> squares ) {
+        this.squares = squares;
+        spawnSquare = null;
     }
 
     public void setSquares(List<Square> squares) {
@@ -27,5 +32,13 @@ public class Room {
 
     public List<Square> getSquares(){
         return squares;
+    }
+
+    public boolean hasSpawnSquare() {
+        return spawnSquare != null;
+    }
+
+    public SpawnSquare getSpawnSquare() {
+        return spawnSquare;
     }
 }

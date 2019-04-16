@@ -9,8 +9,9 @@ import it.polimi.ingsw.server.model.cards.AmmoCard;
 public class Square {
 
 
-    private Room room;  //-- group squares by color
+    private Room room;  //-- group sqr
     private AmmoCard ammoCard;
+    private Color color;
 
 
     private Square north;
@@ -25,6 +26,7 @@ public class Square {
     private Border southBorder;
     private Border eastBorder;
     private Border westBorder;
+
 
     protected ReplaceListener replacer;
 
@@ -118,6 +120,22 @@ public class Square {
         eastBorder=null;
         westBorder=null;
         replacer = null;
+    }
+    /**
+     * Default constructor
+     */
+    public Square(Color color) {
+        room=null;
+        north=null;
+        south=null;
+        east=null;
+        west=null;
+        northBorder=null;
+        southBorder=null;
+        eastBorder=null;
+        westBorder=null;
+        replacer = null;
+        this.color = color;
     }
 
 

@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Represents the Game Board used in the game. It contains all the information about the configuration of the rooms, the decks used and the mode in which the Game is played.
@@ -45,11 +46,6 @@ public class GameBoard implements ReplaceListener {
      * Contains all the squares where a new Weapon Card is needed.
      */
     List<SpawnSquare> squareNewWeaponCard;
-
-
-
-
-
 
     /**
      * Weapon Deck used during the game.
@@ -123,8 +119,11 @@ public class GameBoard implements ReplaceListener {
      * @return a {@code Square} which contains the {@code Spawn} of the given {@code Color}
      */
     public Square findSpawn(AmmoCube color) {
-
-        return null;
+        List<Room> spawnRoom =  configuration.stream()
+                                                     .filter(Room::hasSpawnSquare)
+                                                     .filter(x-> x.getSpawnSquare().getColor() == color)
+                                                     .collect(Collectors.toList());
+        return spawnRoom.get(0).getSpawnSquare();
     }
 
     /**
