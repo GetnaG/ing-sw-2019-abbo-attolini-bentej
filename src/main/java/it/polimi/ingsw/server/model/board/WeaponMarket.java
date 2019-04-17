@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.cards.WeaponCard;
+import it.polimi.ingsw.server.model.cards.WeaponDeck;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.*;
@@ -26,13 +27,16 @@ public class WeaponMarket {
 
     /**
      * Adds card to market. If market is full, no card is added.
+     * @param weaponcard
      */
-    public void addCard(WeaponCard weaponCard){
+    public void addCard(WeaponCard weaponcard){
+        int pos = 0;
         for(WeaponCard i: weaponCards)
         {
             if(i==null){
-                i = weaponCard;
+                weaponCards.set(pos, weaponcard);
             }
+            pos++;
         }
     }
 

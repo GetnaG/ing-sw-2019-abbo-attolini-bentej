@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.server.model.AgainstRulesException;
-
 import java.util.List;
 
 /**

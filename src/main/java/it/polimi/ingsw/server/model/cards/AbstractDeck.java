@@ -16,7 +16,7 @@ public abstract class AbstractDeck  {
     /**
      * Drawing a a random card from the deck.
      * @return a card from the deck
-     * @throws an AgainstRulesException if deck is empty
+     * @throws  AgainstRulesException if deck is empty
      */
 
     public abstract AbstractCard drawCard() throws AgainstRulesException;
