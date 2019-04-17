@@ -1,16 +1,13 @@
 package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.cards.AmmoCard;
-import it.polimi.ingsw.server.model.cards.WeaponCard;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class TurretSquareTest {
 
     @Test
+    @Disabled
     void removeAmmoCard() {
         TurretSquare testTS = new TurretSquare(new AmmoCard(), null);
         Square listener = new Square();

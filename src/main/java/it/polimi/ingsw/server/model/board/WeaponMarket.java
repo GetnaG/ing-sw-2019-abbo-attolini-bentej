@@ -1,10 +1,8 @@
 package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.cards.WeaponCard;
-import it.polimi.ingsw.server.model.cards.WeaponDeck;
-import it.polimi.ingsw.server.model.player.Player;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 
@@ -18,6 +16,10 @@ public class WeaponMarket {
      */
     public WeaponMarket(List<WeaponCard> weaponCards) {
         this.weaponCards = weaponCards;
+    }
+
+    public WeaponMarket() {
+
     }
 
 

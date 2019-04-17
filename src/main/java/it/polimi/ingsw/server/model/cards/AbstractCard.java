@@ -7,16 +7,12 @@ package it.polimi.ingsw.server.model.cards;
  * {@code WeaponCard}
  */
 public abstract class AbstractCard {
-
-    /**
-     * Default constructor
-     */
-    public AbstractCard() {
-    }
+    private String resourceId;
 
     /**
      * @return
      */
-    public abstract String getResName() ;
-
+    public String getId() {
+        return resourceId;
+    }
 }

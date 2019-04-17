@@ -25,14 +25,6 @@ public class WeaponCard extends AbstractCard {
 
 
     /**
-     * @return
-     */
-    @Override
-    public String getResName() {
-        return resName;
-    }
-
-    /**
      * 
      */
     private List<AmmoCube> cost;
