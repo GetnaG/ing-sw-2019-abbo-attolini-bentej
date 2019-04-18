@@ -190,8 +190,8 @@ class PlayerTest {
     /*Testing adding a powerup card*/
     @Test
     void addPowerup() {
-        PowerupCard card1 = new PowerupCard("card1", AmmoCube.BLUE);
-        PowerupCard card2 = new PowerupCard("card2", AmmoCube.RED);
+        PowerupCard card1 = new PowerupCard("card1", "Effect", AmmoCube.BLUE);
+        PowerupCard card2 = new PowerupCard("card2", "Effect", AmmoCube.RED);
 
         AHandManager.addPowerup(card1);
 
@@ -205,8 +205,8 @@ class PlayerTest {
     /*Testing removing a powerup*/
     @Test
     void removePowerup() {
-        PowerupCard card1 = new PowerupCard("card1", AmmoCube.BLUE);
-        PowerupCard card2 = new PowerupCard("card2", AmmoCube.RED);
+        PowerupCard card1 = new PowerupCard("card1", "Effect", AmmoCube.BLUE);
+        PowerupCard card2 = new PowerupCard("card2", "Effect", AmmoCube.RED);
 
         AHandManager.addPowerup(card1);
         AHandManager.addPowerup(card2);
@@ -221,8 +221,8 @@ class PlayerTest {
     /*Testing if the powerups are added to the player*/
     @Test
     void getAllPowerup() {
-        PowerupCard card1 = new PowerupCard("card1", AmmoCube.BLUE);
-        PowerupCard card2 = new PowerupCard("card2", AmmoCube.RED);
+        PowerupCard card1 = new PowerupCard("card1", "Effect", AmmoCube.BLUE);
+        PowerupCard card2 = new PowerupCard("card2", "Effect", AmmoCube.RED);
 
         AHandManager.addPowerup(card1);
         AHandManager.addPowerup(card2);
@@ -235,7 +235,7 @@ class PlayerTest {
     /*Testing if a card is added to the powerups*/
     @Test
     void getNumOfPowerups() {
-        AHandManager.addPowerup(new PowerupCard("test card", AmmoCube.RED));
+        AHandManager.addPowerup(new PowerupCard("test card", "Effect", AmmoCube.RED));
 
         assertEquals(1, APlayer.getNumOfPowerups());
     }
@@ -256,7 +256,7 @@ class PlayerTest {
     /*Testing normal behaviour*/
     @Test
     void canAffordWithPowerups_normal() {
-        PowerupCard card = new PowerupCard("card test", AmmoCube.BLUE);
+        PowerupCard card = new PowerupCard("card test", "Effect", AmmoCube.BLUE);
         AHandManager.addPowerup(card);
         AAmmoBox.addAmmo(AmmoCube.YELLOW);
 
@@ -272,7 +272,7 @@ class PlayerTest {
     /*Testing with cubes ANY*/
     @Test
     void canAffordWithPowerups_ANY() {
-        PowerupCard card = new PowerupCard("card test", AmmoCube.BLUE);
+        PowerupCard card = new PowerupCard("card test", "Effect", AmmoCube.BLUE);
         AHandManager.addPowerup(card);
         AAmmoBox.addAmmo(AmmoCube.YELLOW);
 
@@ -302,7 +302,7 @@ class PlayerTest {
     void buy_moreCubes() {
         WeaponCard card = new WeaponCard("Weapon",
                 Arrays.asList(AmmoCube.BLUE, AmmoCube.RED));
-        PowerupCard powerup = new PowerupCard("powerup", AmmoCube.RED);
+        PowerupCard powerup = new PowerupCard("powerup", "Effect", AmmoCube.RED);
         AAmmoBox.addAmmo(AmmoCube.BLUE);
         AHandManager.addPowerup(powerup);
 

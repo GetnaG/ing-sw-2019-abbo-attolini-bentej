@@ -28,10 +28,10 @@ class HandManagerTest {
 
     @BeforeEach
     void setUp() {
-        APowerup = new PowerupCard("Ap", AmmoCube.BLUE);
-        BPowerup = new PowerupCard("Bp", AmmoCube.RED);
-        CPowerup = new PowerupCard("Cp", AmmoCube.RED);
-        DPowerup = new PowerupCard("Dp", AmmoCube.YELLOW);
+        APowerup = new PowerupCard("Ap", "Effect", AmmoCube.BLUE);
+        BPowerup = new PowerupCard("Bp", "Effect", AmmoCube.RED);
+        CPowerup = new PowerupCard("Cp", "Effect", AmmoCube.RED);
+        DPowerup = new PowerupCard("Dp", "Effect", AmmoCube.YELLOW);
         AWeapon = new WeaponCard("A", Collections.emptyList());
         BWeapon = new WeaponCard("B", Collections.emptyList());
         CWeapon = new WeaponCard("C", Collections.emptyList());

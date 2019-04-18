@@ -1,0 +1,34 @@
+[
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": true,
+    "effectId": "tagback grenade",
+    "cube": "BLUE",
+    "resourceId": "AD_powerups_IT_022"
+  },
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": true,
+    "effectId": "tagback grenade",
+    "cube": "RED",
+    "resourceId": "AD_powerups_IT_023"
+  },
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": true,
+    "effectId": "tagback grenade",
+    "cube": "YELLOW",
+    "resourceId": "AD_powerups_IT_024"
+  },
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": true,
+    "usableOnReceivingDamage": false,
+    "effectId": "targeting scope",
+    "cube": "BLUE",
+    "resourceId": "AD_powerups_IT_025"
+  }
+]
