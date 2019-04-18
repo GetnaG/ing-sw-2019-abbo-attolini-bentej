@@ -9,9 +9,6 @@ package it.polimi.ingsw.server.model.cards;
 public abstract class AbstractCard {
     private String resourceId;
 
-    /**
-     * @return
-     */
     public String getId() {
         return resourceId;
     }

@@ -3,16 +3,32 @@ package it.polimi.ingsw.server.persistency;
 import java.util.List;
 
 /**
- * Descrizione.
- * <p>
- * Dettagli.
+ * Implementing classes will handle loading and retrieving objects from file.
  *
  * @author Abbo Giulio A.
  */
-public interface BasicLoader {
-    Object get(String id);
+public interface BasicLoader<T> {
+    /**
+     * Returns the first object with a matching {@code id} ignoring case.
+     *
+     * @param id the identifier of the requested object
+     * @return the first object found with the requested {@code id}
+     * @throws java.util.NoSuchElementException if no match is found
+     */
+    T get(String id);
 
-    List<Object> getAll();
+    /**
+     * Returns all the object loaded.
+     *
+     * @return all the object loaded
+     */
+    List<T> getAll();
 
-    List<Object> getAll(String id);
+    /**
+     * Returns all the objects with a matching {@code id} ignoring case.
+     *
+     * @param id the identifier of the requested objects
+     * @return all the objects found with the requested {@code id}
+     */
+    List<T> getAll(String id);
 }

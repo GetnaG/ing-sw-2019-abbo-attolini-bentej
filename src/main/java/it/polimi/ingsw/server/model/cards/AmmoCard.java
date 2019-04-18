@@ -10,13 +10,18 @@ import java.util.List;
  */
 public class AmmoCard extends AbstractCard {
     private AmmoCube[] cubes;
-    private PowerupCard powerup;
+    private boolean powerup;
+
+    public AmmoCard() {
+
+    }
 
     public List<AmmoCube> getCubes() {
         return Arrays.asList(cubes);
     }
 
     public PowerupCard getPowerup() {
-        return powerup;
+        //FIXME
+        return null;
     }
 }
