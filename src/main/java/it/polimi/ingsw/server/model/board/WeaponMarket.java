@@ -2,10 +2,11 @@ package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
- * 
+ *
  */
 public class WeaponMarket {
 
@@ -69,7 +70,10 @@ public class WeaponMarket {
         the player chooses a card to pick  // among the filtered market
         WeaponCard weapon = player...
                 */
-        WeaponCard weapon = new WeaponCard();// -- remove this line after defining the method player.pickWeapon
+        WeaponCard weapon = new WeaponCard("id", Collections.emptyList());// --
+        // remove this
+        // line
+        // after defining the method player.pickWeapon
 
        /*
        check: is the selected weapon available to the player? is he able to pay the cost?

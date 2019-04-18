@@ -7,11 +7,11 @@ import it.polimi.ingsw.server.model.AmmoCube;
  * 
  */
 public class PowerupCard extends AbstractCard {
-
     /**
      * Default constructor
      */
-    public PowerupCard(AmmoCube color) {
+    public PowerupCard(String id, AmmoCube color) {
+        super(id);
         this.cube = color;
     }
 

@@ -9,13 +9,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 /**
  * Loads ammo cards from a json file.
- * The file must be located where specified by the {@link #FILE_NAME} constant.
  * <p>
  * The file must contain an array of {@link AmmoCard} as follows:
  * <pre> {@code [
@@ -38,41 +35,53 @@ import java.util.stream.Collectors;
  * @see it.polimi.ingsw.server.model.cards.PowerupCard
  */
 public class AmmoCardLoader implements BasicLoader<AmmoCard> {
-    private static final String FILE_NAME = "./res/ammocards.json";
+    /**
+     * The loaded cards (could be empty).
+     */
+    private AmmoCard[] ammoCards;
 
-    AmmoCard[] ammoCards;
-
-    AmmoCardLoader() {
+    /**
+     * This constructor loads the cards from a file.
+     * The file must be located where specified by {@code file}.
+     *
+     * @param file the path, name and extension of the json file for ammo cards
+     * @throws IllegalArgumentException if {@code file} is incorrect
+     */
+    AmmoCardLoader(String file) {
         try {
-            ammoCards = new Gson().fromJson(new FileReader(FILE_NAME),
+            ammoCards = new Gson().fromJson(new FileReader(file),
                     AmmoCard[].class);
         } catch (FileNotFoundException e) {
-            Logger.getLogger(AmmoCardLoader.class.getName())
-                    .log(Level.WARNING, "Could not find: " + FILE_NAME +
-                            "; no ammo card loaded!", e);
-            ammoCards = new AmmoCard[]{};
+            throw new IllegalArgumentException("Could not find: " + file, e);
         }
     }
 
-    public static void main(String[] args) {
-        new AmmoCardLoader();
-    }
-
+    /**
+     * {@inheritDoc}
+     *
+     * @throws NoSuchElementException {@inheritDoc}
+     */
     @Override
-    public AmmoCard get(String id) {
-        List<AmmoCard> list = getAll();
-        if (getAll().isEmpty())
+    public synchronized AmmoCard get(String id) {
+        List<AmmoCard> list = getAll(id);
+        if (list.isEmpty())
             throw new NoSuchElementException("Can not find ammo card: " + id);
         return list.get(0);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<AmmoCard> getAll() {
+    public synchronized List<AmmoCard> getAll() {
         return new ArrayList<>(Arrays.asList(ammoCards));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public List<AmmoCard> getAll(String id) {
+    public synchronized List<AmmoCard> getAll(String id) {
         return getAll().stream()
                 .filter(c -> c.getId().equalsIgnoreCase(id))
                 .collect(Collectors.toList());

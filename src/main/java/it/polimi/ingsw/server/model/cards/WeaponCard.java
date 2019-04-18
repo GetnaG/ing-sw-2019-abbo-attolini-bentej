@@ -10,17 +10,10 @@ import java.util.List;
  */
 public class WeaponCard extends AbstractCard {
     private String resName;
-    /**
-     * Default constructor
-     */
-    public WeaponCard() {
-    }
 
-    public WeaponCard(List<AmmoCube> cost) {
+    public WeaponCard(String resourceId, List<AmmoCube> cost) {
+        super(resourceId);
         this.cost = cost;
-    }
-    public WeaponCard(String resName) {
-        this.resName = resName;
     }
 
 

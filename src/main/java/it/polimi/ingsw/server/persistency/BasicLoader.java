@@ -4,6 +4,7 @@ import java.util.List;
 
 /**
  * Implementing classes will handle loading and retrieving objects from file.
+ * The implementation must be able to function in a multithreaded environment.
  *
  * @author Abbo Giulio A.
  */
