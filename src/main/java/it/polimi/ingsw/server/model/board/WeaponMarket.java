@@ -70,7 +70,7 @@ public class WeaponMarket {
         the player chooses a card to pick  // among the filtered market
         WeaponCard weapon = player...
                 */
-        WeaponCard weapon = new WeaponCard("id", Collections.emptyList());// --
+        WeaponCard weapon = new WeaponCard("id", Collections.emptyList(), new String[][]{{"Test"}}, true);// --
         // remove this
         // line
         // after defining the method player.pickWeapon

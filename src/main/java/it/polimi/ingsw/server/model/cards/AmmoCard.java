@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.AmmoCube;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -45,7 +46,7 @@ public class AmmoCard extends AbstractCard {
      * @return the cubes that this allows to pick up
      */
     public List<AmmoCube> getCubes() {
-        return Arrays.asList(cubes);
+        return new ArrayList<>(Arrays.asList(cubes));
     }
 
     /**

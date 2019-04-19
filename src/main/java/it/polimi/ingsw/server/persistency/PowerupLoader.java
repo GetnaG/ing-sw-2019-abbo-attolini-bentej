@@ -77,7 +77,7 @@ public class PowerupLoader implements BasicLoader<PowerupCard> {
      * {@inheritDoc}
      */
     @Override
-    public List<PowerupCard> getAll() {
+    public synchronized List<PowerupCard> getAll() {
         return new ArrayList<>(Arrays.asList(powerupCards));
     }
 
@@ -85,7 +85,7 @@ public class PowerupLoader implements BasicLoader<PowerupCard> {
      * {@inheritDoc}
      */
     @Override
-    public List<PowerupCard> getAll(String id) {
+    public synchronized List<PowerupCard> getAll(String id) {
         return getAll().stream()
                 .filter(c -> c.getId().equalsIgnoreCase(id))
                 .collect(Collectors.toList());

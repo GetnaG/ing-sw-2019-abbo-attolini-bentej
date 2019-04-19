@@ -27,7 +27,7 @@ class PowerupLoaderTest {
     private static final String EXISTING_EFFECT = "tagback grenade";
     private static final AmmoCube EXISTING_COLOR = AmmoCube.BLUE;
 
-    PowerupLoader normalLoader;
+    private PowerupLoader normalLoader;
 
     @BeforeEach
     void setUp() {
@@ -54,6 +54,7 @@ class PowerupLoaderTest {
         assertEquals(EXISTING_COLOR, card.getCube());
     }
 
+    /*Testing that case is ignored*/
     @Test
     void get_existingId_ignoreCase() {
         PowerupCard card = normalLoader.get(EXISTING_ID.toLowerCase());

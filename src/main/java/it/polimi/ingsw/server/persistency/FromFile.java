@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.persistency;
 
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
+import it.polimi.ingsw.server.model.cards.WeaponCard;
 
 /**
  * Descrizione.
@@ -15,9 +16,12 @@ public class FromFile {
             "./resources/cards/jsons/ammocards.json";
     private static final String POWERUP_CARDS =
             "./resources/cards/jsons/powerupcards.json";
+    private static final String WEAPON_CARDS =
+            "./resources/cards/jsons/weaponcards.json";
 
     private static AmmoCardLoader ammoCardLoader;
     private static PowerupLoader powerupLoader;
+    private static WeaponLoader weaponLoader;
 
     private FromFile() {
     }
@@ -32,5 +36,11 @@ public class FromFile {
         if (powerupLoader == null)
             powerupLoader = new PowerupLoader(POWERUP_CARDS);
         return powerupLoader;
+    }
+
+    public static synchronized BasicLoader<WeaponCard> weapons() {
+        if (weaponLoader == null)
+            weaponLoader = new WeaponLoader(WEAPON_CARDS);
+        return weaponLoader;
     }
 }

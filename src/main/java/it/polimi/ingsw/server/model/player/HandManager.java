@@ -184,7 +184,7 @@ public class HandManager {
      */
     void unload(WeaponCard weapon) {
         checkNotNull(weapon);
-        if (loadedWeapons.contains(weapon) && !unloadedWeapons.contains(weapon)) {
+        if (loadedWeapons.contains(weapon)) {
             loadedWeapons.remove(weapon);
             unloadedWeapons.add(weapon);
         } else
@@ -203,8 +203,7 @@ public class HandManager {
      */
     void reload(WeaponCard weapon) {
         checkNotNull(weapon);
-        if (unloadedWeapons.contains(weapon) &&
-                !loadedWeapons.contains(weapon)) {
+        if (unloadedWeapons.contains(weapon)) {
             unloadedWeapons.remove(weapon);
             loadedWeapons.add(weapon);
         } else

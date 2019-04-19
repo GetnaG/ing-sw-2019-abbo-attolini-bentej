@@ -13,10 +13,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * Testing correct behaviour with normal usage
  */
 class PowerupCardTest {
-    PowerupCard card;
-    String id;
-    String effect;
-    AmmoCube cube;
+    private PowerupCard card;
+    private String id;
+    private String effect;
+    private AmmoCube cube;
 
     @BeforeEach
     void setUp() {

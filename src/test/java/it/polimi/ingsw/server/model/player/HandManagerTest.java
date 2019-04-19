@@ -32,10 +32,10 @@ class HandManagerTest {
         BPowerup = new PowerupCard("Bp", "Effect", AmmoCube.RED);
         CPowerup = new PowerupCard("Cp", "Effect", AmmoCube.RED);
         DPowerup = new PowerupCard("Dp", "Effect", AmmoCube.YELLOW);
-        AWeapon = new WeaponCard("A", Collections.emptyList());
-        BWeapon = new WeaponCard("B", Collections.emptyList());
-        CWeapon = new WeaponCard("C", Collections.emptyList());
-        DWeapon = new WeaponCard("D", Collections.emptyList());
+        AWeapon = new WeaponCard("A", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        BWeapon = new WeaponCard("B", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        CWeapon = new WeaponCard("C", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        DWeapon = new WeaponCard("D", Collections.emptyList(), new String[][]{{"Test"}}, true);
         normalHand = new HandManager();
 
         normalHand.addPowerup(APowerup);

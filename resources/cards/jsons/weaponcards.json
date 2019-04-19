@@ -1,0 +1,52 @@
+[
+  {
+    "cost": [
+      "YELLOW"
+    ],
+    "effectIdSequences": [
+      [
+        "sledgehammer"
+      ],
+      [
+        "pulverize"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_022"
+  },
+  {
+    "cost": [
+      "YELLOW",
+      "RED"
+    ],
+    "effectIdSequences": [
+      [
+        "cyberblade"
+      ],
+      [
+        "shadowstep"
+      ],
+      [
+        "slice and dice"
+      ]
+    ],
+    "onlySpecifiedOrder": false,
+    "resourceId": "AD_weapons_IT_023"
+  },
+  {
+    "cost": [
+      "YELLOW",
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "power glove"
+      ],
+      [
+        "rocket fist"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_024"
+  }
+]

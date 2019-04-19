@@ -288,7 +288,7 @@ class PlayerTest {
     @Test
     void buy_oneCube() {
         WeaponCard card = new WeaponCard("Weapon",
-                Arrays.asList(AmmoCube.BLUE));
+                Arrays.asList(AmmoCube.BLUE), new String[][]{{"Test"}}, true);
         AAmmoBox.addAmmo(AmmoCube.BLUE);
 
         APlayer.buy(card, null);
@@ -301,7 +301,7 @@ class PlayerTest {
     @Test
     void buy_moreCubes() {
         WeaponCard card = new WeaponCard("Weapon",
-                Arrays.asList(AmmoCube.BLUE, AmmoCube.RED));
+                Arrays.asList(AmmoCube.BLUE, AmmoCube.RED), new String[][]{{"Test"}}, true);
         PowerupCard powerup = new PowerupCard("powerup", "Effect", AmmoCube.RED);
         AAmmoBox.addAmmo(AmmoCube.BLUE);
         AHandManager.addPowerup(powerup);
@@ -316,7 +316,7 @@ class PlayerTest {
     /*Testing removing a weapon from the player*/
     @Test
     void discard() {
-        WeaponCard card = new WeaponCard("card", Collections.emptyList());
+        WeaponCard card = new WeaponCard("card", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card);
 
         APlayer.discard(card);
@@ -327,8 +327,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void unload_normal() {
-        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList());
-        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList());
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -347,8 +347,8 @@ class PlayerTest {
     /*Testing unloading an unloaded weapon*/
     @Test
     void unload_alreadyUnloaded() {
-        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList());
-        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList());
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -360,8 +360,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void reload_normal() {
-        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList());
-        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList());
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -380,7 +380,7 @@ class PlayerTest {
     /*Testing reloading a reloaded weapon*/
     @Test
     void reload_alreadyReloaded() {
-        WeaponCard card = new WeaponCard("card", Collections.emptyList());
+        WeaponCard card = new WeaponCard("card", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card);
 
         assertThrows(IllegalArgumentException.class,
@@ -390,8 +390,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void getLoadedWeapons() {
-        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList());
-        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList());
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -404,8 +404,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void getReloadableWeapons() {
-        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList());
-        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList());
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -418,8 +418,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void getAllWeapons() {
-        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList());
-        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList());
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -432,8 +432,8 @@ class PlayerTest {
     /*Testing if the right number is returned with loaded and unloaded weapons*/
     @Test
     void getNumOfWeapons() {
-        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList());
-        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList());
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
