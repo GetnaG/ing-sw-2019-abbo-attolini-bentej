@@ -16,7 +16,7 @@ import java.util.List;
  * @author Abbo Giulio A.
  * @see it.polimi.ingsw.server.persistency.PowerupLoader
  * @see AmmoCube
- * @see it.polimi.ingsw.server.controller.effects.AbstractEffect
+ * @see EffectInterface
  */
 public class PowerupCard extends AbstractCard {
     /**

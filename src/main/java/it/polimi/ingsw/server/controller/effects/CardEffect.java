@@ -1,39 +1,52 @@
 package it.polimi.ingsw.server.controller.effects;
-import it.polimi.ingsw.server.model.*;
+
+import it.polimi.ingsw.server.model.AmmoCube;
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 
  */
-public class GrabEffect implements EffectInterface {
+public class CardEffect implements EffectInterface {
 
     /**
      * Default constructor
      */
-    public GrabEffect() {
+    public CardEffect() {
     }
 
     /**
      * 
      */
-    private void getGrabbable() {
+    private int damageQty;
+
+    /**
+     * 
+     */
+    private int marksQty;
+
+    /**
+     * 
+     */
+    private boolean allowSameTarget;
+
+
+    /**
+     * @return
+     */
+    public List<AmmoCube> getAddictionalCost() {
         // TODO implement here
+        return null;
     }
 
     /**
      * 
      */
-    private void applyGrabbed() {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    private void discardWeapon() {
+    private void checkIfTargetCanUseTagBack() {
         // TODO implement here
     }
 
@@ -62,6 +75,11 @@ public class GrabEffect implements EffectInterface {
     public EffectInterface getDecorated() {
         // TODO implement here
         return null;
+    }
+
+    public List<AmmoCube> getCost() {
+        //TODO implement cost
+        return new ArrayList<>();
     }
 
 }

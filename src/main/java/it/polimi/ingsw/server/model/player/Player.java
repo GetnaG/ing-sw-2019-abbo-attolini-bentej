@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.model.player;
 
 import it.polimi.ingsw.server.ToClientInterface;
 import it.polimi.ingsw.server.controller.ScoreListener;
-import it.polimi.ingsw.server.controller.effects.AbstractEffect;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
@@ -543,40 +542,5 @@ public class Player implements Damageable {
         List<Player> marks = this.playerBoard.getMarks();
         this.playerBoard = playerBoard;
         this.playerBoard.addMarks(marks);
-    }
-
-    /**
-     * @deprecated use {@linkplain #canAfford(List, boolean)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public boolean canAfford(WeaponCard card, boolean buying) {
-        return canAfford(card.getCost(), buying);
-    }
-
-    /**
-     * @deprecated use ({@linkplain #canAffordWithPowerups(List, boolean)}
-     * instead
-     */
-    @Deprecated(forRemoval = true)
-    public List<PowerupCard> canAffordWithPowerups(WeaponCard card,
-                                                   boolean buying) {
-        return canAffordWithPowerups(card.getCost(), buying);
-    }
-
-    /**
-     * @deprecated use {@linkplain #canAfford(List, boolean)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public boolean canAfford(AbstractEffect effect) {
-        return canAfford(effect.getCost(), false);
-    }
-
-    /**
-     * @deprecated use ({@linkplain #canAffordWithPowerups(List, boolean)}
-     * instead
-     */
-    @Deprecated(forRemoval = true)
-    public List<PowerupCard> canAffordWithPowerups(AbstractEffect effect) {
-        return canAffordWithPowerups(effect.getCost(), false);
     }
 }
