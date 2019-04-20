@@ -1,5 +1,9 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.model.board.GameBoard;
+import it.polimi.ingsw.server.persistency.FromFile;
+
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -10,16 +14,22 @@ public class PowerupDeck extends AbstractDeck {
      * Represents the deck.
      */
     private List<PowerupCard> deck;
+    /**
+     * Game Board used/
+     */
+    GameBoard board;
 
     /**
      * Constructs a Powerup Deck. It takes care of creating the cards and shuffling them.
      * A new Powerup Deck contains 24 cards.
      * Once the Powerup Deck is empty, we can take create a new Powerup Deck using the discarded cards. This task is taken care by method {@code shuffleDeck()} called by method {@code drawCard()}.
      * This means that a call to method {@code drawCard()} will always be successful.
-     * @author Fahed Ben Tej
      */
-    public PowerupDeck() {
-        //TODO Create Powerup Cards from JSON and shuffle them.
+    public PowerupDeck(GameBoard board) {
+        this.board = board;
+
+        deck  = FromFile.powerups().getAll();
+        Collections.shuffle(deck);
     }
 
 
@@ -31,8 +41,10 @@ public class PowerupDeck extends AbstractDeck {
      */
     @Override
     public PowerupCard drawCard() {
-        if (deck.isEmpty())
-            shuffleDeck();
+        if (deck.isEmpty()){
+            deck = board.getDiscardedPowerups();
+            Collections.shuffle(deck);
+        }
 
         PowerupCard  drawnCard = deck.get(deck.size() -1 ) ;
         deck.remove(drawnCard);
@@ -50,10 +62,4 @@ public class PowerupDeck extends AbstractDeck {
         return deck.size();
     }
 
-    /**
-     * Takes the discarded Powerup Cards and shuffles them.
-     */
-    private void shuffleDeck() {
-        //TODO Implement how to get the discarded cards once JSON-reading task is completed.
-    }
 }

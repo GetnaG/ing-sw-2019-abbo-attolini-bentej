@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.board;
 
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.cards.AbstractCard;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 

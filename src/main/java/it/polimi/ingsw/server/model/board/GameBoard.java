@@ -72,9 +72,9 @@ public class GameBoard implements ReplaceListener {
         this.configuration = configuration;
 
         // Decks are shuffled when created
-        powerupDeck = new PowerupDeck();
-        weaponDeck = new WeaponDeck();
-        ammoDeck = new AmmoDeck();
+        powerupDeck = new PowerupDeck(this);
+        weaponDeck = new WeaponDeck(this);
+        ammoDeck = new AmmoDeck(this);
 
         //Discarded cards
         discardedPowerups = new ArrayList<>();
@@ -316,6 +316,22 @@ public class GameBoard implements ReplaceListener {
                 }
             }
 
+    }
+
+    /**
+     * Gets discarded powerups.
+     * @return discarded powerups
+     */
+    public List<PowerupCard> getDiscardedPowerups() {
+        return discardedPowerups;
+    }
+
+    /**
+     * Gets discarded ammos.
+     * @return discarded ammos
+     */
+    public List<AmmoCard> getDiscardedAmmos() {
+        return discardedAmmos;
     }
 
 

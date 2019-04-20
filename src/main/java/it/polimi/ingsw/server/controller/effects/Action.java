@@ -14,7 +14,12 @@ public class Action implements EffectInterface {
     /**
      * Default constructor
      */
-    public Action() {
+    public Action(String name) {
+    }
+    /**
+     * Default constructor
+     */
+    public Action( ) {
     }
 
     /**

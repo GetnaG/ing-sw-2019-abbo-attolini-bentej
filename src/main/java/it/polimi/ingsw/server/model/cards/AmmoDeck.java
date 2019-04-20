@@ -1,8 +1,13 @@
 package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.AgainstRulesException;
+import it.polimi.ingsw.server.model.board.GameBoard;
+import it.polimi.ingsw.server.persistency.BasicLoader;
+import it.polimi.ingsw.server.persistency.FromFile;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represent an AmmoDeck. It takes care of creating the cards and shuffling them.
@@ -15,25 +20,31 @@ public class AmmoDeck extends AbstractDeck {
      */
     private List<AmmoCard> deck;
     /**
+     * Game Board
+     */
+    private GameBoard board;
+
+    /**
      * Constructs an AmmoDeck already shuffled. It takes care of creating the cards.
      * A new Ammo Deck contains 36 cards.
      */
-    public AmmoDeck() {
-        //TODO Read cards from JSON and shuffle them;
+    public AmmoDeck(GameBoard board) {
+        this.board = board;
 
-
+        deck  = FromFile.ammoCards().getAll();
+        Collections.shuffle(deck);
     }
 
     /**
      * Drawing a random Ammo Card from the deck. If the deck is empty re-shuffles the deck. This means that will always return an Ammo Card.
      * @return a card from the deck
-     * @throws AgainstRulesException if deck is empty
      */
     @Override
     public AmmoCard drawCard() {
-        if (deck.isEmpty())
-            shuffleDeck();
-
+        if (deck.isEmpty()){
+            deck = board.getDiscardedAmmos();
+            Collections.shuffle(deck);
+        }
         AmmoCard  drawnCard = deck.get(deck.size() -1 ) ;
         deck.remove(drawnCard);
         return drawnCard;
@@ -49,12 +60,6 @@ public class AmmoDeck extends AbstractDeck {
         return deck.size();
     }
 
-    /**
-     * Takes the discarded Ammo Cards and shuffles them.
-     */
-    private void shuffleDeck() {
-        //TODO Implement how to get the discarded cards once JSON-reading task is completed.
-    }
 
 }
 

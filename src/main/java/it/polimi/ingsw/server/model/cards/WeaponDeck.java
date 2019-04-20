@@ -1,7 +1,10 @@
 package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.model.AgainstRulesException;
+import it.polimi.ingsw.server.model.board.GameBoard;
+import it.polimi.ingsw.server.persistency.FromFile;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -16,13 +19,20 @@ public class WeaponDeck extends AbstractDeck {
      * Represents the deck.
      */
     private List<WeaponCard> deck ;
+    /**
+     * Game Board
+     */
+    private GameBoard board;
 
     /**
      * Constructs a Weapon Deck. It takes care of creating the cards and shuffling them.
      * A new Weapon Deck contains 21 cards.
      */
-    public WeaponDeck() {
-        //TODO Read cards from JSON and shuffle them;
+    public WeaponDeck(GameBoard board) {
+        this.board = board;
+
+        deck = FromFile.weapons().getAll();
+        Collections.shuffle(deck);
     }
 
 
