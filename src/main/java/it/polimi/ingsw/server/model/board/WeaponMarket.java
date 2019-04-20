@@ -1,13 +1,12 @@
 package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.cards.WeaponCard;
-import it.polimi.ingsw.server.model.cards.WeaponDeck;
-import it.polimi.ingsw.server.model.player.Player;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
 /**
- * 
+ *
  */
 public class WeaponMarket {
 
@@ -18,6 +17,10 @@ public class WeaponMarket {
      */
     public WeaponMarket(List<WeaponCard> weaponCards) {
         this.weaponCards = weaponCards;
+    }
+
+    public WeaponMarket() {
+
     }
 
 
@@ -67,7 +70,10 @@ public class WeaponMarket {
         the player chooses a card to pick  // from the filtered market
         WeaponCard weapon = player...
                 */
-        WeaponCard weapon = new WeaponCard();// -- remove this line after defining the method player.pickWeapon
+        WeaponCard weapon = new WeaponCard("id", Collections.emptyList(), new String[][]{{"Test"}}, true);// --
+        // remove this
+        // line
+        // after defining the method player.pickWeapon
 
        /*
        check: is the selected weapon available to the player? is he able to pay the cost?

@@ -1,0 +1,37 @@
+[
+  {
+    "cubes": [
+      "YELLOW",
+      "BLUE",
+      "BLUE"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_042"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "RED",
+      "RED"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_043"
+  },
+  {
+    "cubes": [
+      "RED",
+      "BLUE",
+      "BLUE"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_044"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "YELLOW"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0420"
+  }
+]

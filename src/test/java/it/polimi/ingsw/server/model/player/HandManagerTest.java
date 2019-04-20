@@ -6,10 +6,7 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,14 +28,14 @@ class HandManagerTest {
 
     @BeforeEach
     void setUp() {
-        APowerup = new PowerupCard(AmmoCube.BLUE);
-        BPowerup = new PowerupCard(AmmoCube.RED);
-        CPowerup = new PowerupCard(AmmoCube.RED);
-        DPowerup = new PowerupCard(AmmoCube.YELLOW);
-        AWeapon = new WeaponCard("A");
-        BWeapon = new WeaponCard("B");
-        CWeapon = new WeaponCard("C");
-        DWeapon = new WeaponCard("D");
+        APowerup = new PowerupCard("Ap", "Effect", AmmoCube.BLUE);
+        BPowerup = new PowerupCard("Bp", "Effect", AmmoCube.RED);
+        CPowerup = new PowerupCard("Cp", "Effect", AmmoCube.RED);
+        DPowerup = new PowerupCard("Dp", "Effect", AmmoCube.YELLOW);
+        AWeapon = new WeaponCard("A", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        BWeapon = new WeaponCard("B", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        CWeapon = new WeaponCard("C", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        DWeapon = new WeaponCard("D", Collections.emptyList(), new String[][]{{"Test"}}, true);
         normalHand = new HandManager();
 
         normalHand.addPowerup(APowerup);

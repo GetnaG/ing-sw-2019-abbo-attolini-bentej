@@ -1,19 +1,41 @@
 package it.polimi.ingsw.server.controller.effects;
-import it.polimi.ingsw.server.model.*;
+
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 
  */
-public class TargetingScopeEffect implements EffectInterface {
+public class Grab implements EffectInterface {
 
     /**
      * Default constructor
      */
-    public TargetingScopeEffect() {
+    public Grab() {
+    }
+
+    /**
+     * 
+     */
+    private void getGrabbable() {
+        // TODO implement here
+    }
+
+    /**
+     * 
+     */
+    private void applyGrabbed() {
+        // TODO implement here
+    }
+
+    /**
+     * 
+     */
+    private void discardWeapon() {
+        // TODO implement here
     }
 
     /**

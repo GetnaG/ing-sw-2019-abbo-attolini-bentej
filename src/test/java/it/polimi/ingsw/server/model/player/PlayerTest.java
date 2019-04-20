@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -189,8 +190,8 @@ class PlayerTest {
     /*Testing adding a powerup card*/
     @Test
     void addPowerup() {
-        PowerupCard card1 = new PowerupCard(AmmoCube.BLUE);
-        PowerupCard card2 = new PowerupCard(AmmoCube.RED);
+        PowerupCard card1 = new PowerupCard("card1", "Effect", AmmoCube.BLUE);
+        PowerupCard card2 = new PowerupCard("card2", "Effect", AmmoCube.RED);
 
         AHandManager.addPowerup(card1);
 
@@ -204,8 +205,8 @@ class PlayerTest {
     /*Testing removing a powerup*/
     @Test
     void removePowerup() {
-        PowerupCard card1 = new PowerupCard(AmmoCube.BLUE);
-        PowerupCard card2 = new PowerupCard(AmmoCube.RED);
+        PowerupCard card1 = new PowerupCard("card1", "Effect", AmmoCube.BLUE);
+        PowerupCard card2 = new PowerupCard("card2", "Effect", AmmoCube.RED);
 
         AHandManager.addPowerup(card1);
         AHandManager.addPowerup(card2);
@@ -220,8 +221,8 @@ class PlayerTest {
     /*Testing if the powerups are added to the player*/
     @Test
     void getAllPowerup() {
-        PowerupCard card1 = new PowerupCard(AmmoCube.BLUE);
-        PowerupCard card2 = new PowerupCard(AmmoCube.RED);
+        PowerupCard card1 = new PowerupCard("card1", "Effect", AmmoCube.BLUE);
+        PowerupCard card2 = new PowerupCard("card2", "Effect", AmmoCube.RED);
 
         AHandManager.addPowerup(card1);
         AHandManager.addPowerup(card2);
@@ -234,7 +235,7 @@ class PlayerTest {
     /*Testing if a card is added to the powerups*/
     @Test
     void getNumOfPowerups() {
-        AHandManager.addPowerup(new PowerupCard(AmmoCube.RED));
+        AHandManager.addPowerup(new PowerupCard("test card", "Effect", AmmoCube.RED));
 
         assertEquals(1, APlayer.getNumOfPowerups());
     }
@@ -255,7 +256,7 @@ class PlayerTest {
     /*Testing normal behaviour*/
     @Test
     void canAffordWithPowerups_normal() {
-        PowerupCard card = new PowerupCard(AmmoCube.BLUE);
+        PowerupCard card = new PowerupCard("card test", "Effect", AmmoCube.BLUE);
         AHandManager.addPowerup(card);
         AAmmoBox.addAmmo(AmmoCube.YELLOW);
 
@@ -271,7 +272,7 @@ class PlayerTest {
     /*Testing with cubes ANY*/
     @Test
     void canAffordWithPowerups_ANY() {
-        PowerupCard card = new PowerupCard(AmmoCube.BLUE);
+        PowerupCard card = new PowerupCard("card test", "Effect", AmmoCube.BLUE);
         AHandManager.addPowerup(card);
         AAmmoBox.addAmmo(AmmoCube.YELLOW);
 
@@ -286,7 +287,8 @@ class PlayerTest {
     /*Testing card with one cube*/
     @Test
     void buy_oneCube() {
-        WeaponCard card = new WeaponCard(Arrays.asList(AmmoCube.BLUE));
+        WeaponCard card = new WeaponCard("Weapon",
+                Arrays.asList(AmmoCube.BLUE), new String[][]{{"Test"}}, true);
         AAmmoBox.addAmmo(AmmoCube.BLUE);
 
         APlayer.buy(card, null);
@@ -298,9 +300,9 @@ class PlayerTest {
     /*Testing card with more than one cubes*/
     @Test
     void buy_moreCubes() {
-        WeaponCard card = new WeaponCard(
-                Arrays.asList(AmmoCube.BLUE, AmmoCube.RED));
-        PowerupCard powerup = new PowerupCard(AmmoCube.RED);
+        WeaponCard card = new WeaponCard("Weapon",
+                Arrays.asList(AmmoCube.BLUE, AmmoCube.RED), new String[][]{{"Test"}}, true);
+        PowerupCard powerup = new PowerupCard("powerup", "Effect", AmmoCube.RED);
         AAmmoBox.addAmmo(AmmoCube.BLUE);
         AHandManager.addPowerup(powerup);
 
@@ -314,7 +316,7 @@ class PlayerTest {
     /*Testing removing a weapon from the player*/
     @Test
     void discard() {
-        WeaponCard card = new WeaponCard();
+        WeaponCard card = new WeaponCard("card", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card);
 
         APlayer.discard(card);
@@ -325,8 +327,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void unload_normal() {
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -345,8 +347,8 @@ class PlayerTest {
     /*Testing unloading an unloaded weapon*/
     @Test
     void unload_alreadyUnloaded() {
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -358,8 +360,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void reload_normal() {
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -378,7 +380,7 @@ class PlayerTest {
     /*Testing reloading a reloaded weapon*/
     @Test
     void reload_alreadyReloaded() {
-        WeaponCard card = new WeaponCard();
+        WeaponCard card = new WeaponCard("card", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card);
 
         assertThrows(IllegalArgumentException.class,
@@ -388,8 +390,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void getLoadedWeapons() {
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -402,8 +404,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void getReloadableWeapons() {
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -416,8 +418,8 @@ class PlayerTest {
     /*Testing normal behaviour for loaded and unloaded weapons*/
     @Test
     void getAllWeapons() {
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
@@ -430,8 +432,8 @@ class PlayerTest {
     /*Testing if the right number is returned with loaded and unloaded weapons*/
     @Test
     void getNumOfWeapons() {
-        WeaponCard card1 = new WeaponCard();
-        WeaponCard card2 = new WeaponCard();
+        WeaponCard card1 = new WeaponCard("card 1", Collections.emptyList(), new String[][]{{"Test"}}, true);
+        WeaponCard card2 = new WeaponCard("card 2", Collections.emptyList(), new String[][]{{"Test"}}, true);
         AHandManager.addWeaponCard(card1);
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
