@@ -38,8 +38,8 @@ public class SpawnSquare extends Square {
     }
 
 
-    public WeaponCard pickWeapon(){
-        WeaponCard w = market.pickWeaponFromList();
+    public WeaponCard pickWeapon(WeaponCard weapon){
+        WeaponCard w = market.pickWeaponFromList(weapon);
         super.replacer.replaceDiscardedWeapons(this, market.getCards()); //not sure on the second argument
         return w;
     }

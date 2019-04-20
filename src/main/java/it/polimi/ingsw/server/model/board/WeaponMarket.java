@@ -2,13 +2,13 @@ package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
-import java.util.Collections;
 import java.util.List;
 
 /**
  *
  */
 public class WeaponMarket {
+
 
     private List<WeaponCard> weaponCards;
 
@@ -26,7 +26,7 @@ public class WeaponMarket {
 
     /**
      * Adds card to market. If market is full, no card is added.
-     * @param weaponcard
+     * @param weaponcard is the card added to the market
      */
     public void addCard(WeaponCard weaponcard){
         int pos = 0;
@@ -34,6 +34,7 @@ public class WeaponMarket {
         {
             if(i==null){
                 weaponCards.set(pos, weaponcard);
+                break;
             }
             pos++;
         }
@@ -49,32 +50,15 @@ public class WeaponMarket {
                 weaponCards.set(pos, null);
             }
 
-            /*
-            else throw: error: weapon not found
-             */
-
         }
     }
 
     /**
      * @return null is returned if the player can't afford to pay the cost to pick the selected weapon
-     * alternative solution: filter the weapon to show to the player
+     *
      */
 
-    public WeaponCard pickWeaponFromList(){  //pick weapon from filtered list???
-        /*
-        the player chooses a card to pick  // from the filtered market
-        WeaponCard weapon = player...
-                */
-        WeaponCard weapon = new WeaponCard("id", Collections.emptyList(), new String[][]{{"Test"}}, true);// --
-        // remove this
-        // line
-        // after defining the method player.pickWeapon
-
-       /*
-       check: is the selected weapon available to the player? is he able to pay the cost?
-        */
-
+    public WeaponCard pickWeaponFromList(WeaponCard weapon){
         this.removeCardFromMarket(weapon);
         return weapon;
     }
