@@ -19,10 +19,6 @@ public class WeaponMarket {
         this.weaponCards = weaponCards;
     }
 
-    public WeaponMarket() {
-
-    }
-
 
     public List<WeaponCard> getCards() {
         return weaponCards;

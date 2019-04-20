@@ -1,5 +1,7 @@
 package it.polimi.ingsw.server.model.board;
 
+import it.polimi.ingsw.server.model.AmmoCube;
+import it.polimi.ingsw.server.model.cards.WeaponCard;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +26,7 @@ class GameBoardTest {
         List<Square> squares = new ArrayList<>();
 
         // Adding rooms and doors.
-        firstSquare = new SpawnSquare(new WeaponMarket());
+        firstSquare = new SpawnSquare(Color.BLUE, new WeaponMarket(null));
         secondSquare = new Square(Color.BLUE);
         thirdSquare = new Square(Color.GREEN);
         fourthSquare = new Square(Color.BLUE);
@@ -89,7 +91,7 @@ class GameBoardTest {
     @Test
     void findSpawn() {
         SpawnSquare spawn = configuration.get(0).getSpawnSquare();
-        assertEquals(spawn, gm.findSpawn(spawn.getColor()));
+        assertEquals(spawn, gm.findSpawn(spawn.getSpawnColor()));
 
     }
 
