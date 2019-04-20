@@ -64,7 +64,7 @@ public class WeaponMarket {
 
     public WeaponCard pickWeaponFromList(){  //pick weapon from filtered list???
         /*
-        the player chooses a card to pick  // among the filtered market
+        the player chooses a card to pick  // from the filtered market
         WeaponCard weapon = player...
                 */
         WeaponCard weapon = new WeaponCard();// -- remove this line after defining the method player.pickWeapon

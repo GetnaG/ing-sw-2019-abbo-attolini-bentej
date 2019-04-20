@@ -9,20 +9,16 @@ import it.polimi.ingsw.server.model.cards.AmmoCard;
 public class Square {
 
 
-    private Room room;  //-- group sqr
+    private Room room;
     private AmmoCard ammoCard;
     private Color color;
-
 
     private Square north;
     private Square south;
     private Square east;
     private Square west;
 
-    // -- Border : { Wall, Door, Corridor} <- Set when creating the map
     private Border northBorder;
-
-
     private Border southBorder;
     private Border eastBorder;
     private Border westBorder;
@@ -106,21 +102,15 @@ public class Square {
         this.replacer = replacer;
     }
 
-    /**
-     * Default constructor
-     */
-    public Square() {
-        room=null;
-        north=null;
-        south=null;
-        east=null;
-        west=null;
-        northBorder=null;
-        southBorder=null;
-        eastBorder=null;
-        westBorder=null;
-        replacer = null;
+    public Color getColor() {
+        return color;
     }
+
+    public void setColor(Color color) {
+        this.color = color;
+    }
+
+
     /**
      * Default constructor
      */
@@ -138,7 +128,21 @@ public class Square {
         this.color = color;
     }
 
-
+    /**
+     * Default constructor
+     */
+    public Square() {
+        room=null;
+        north=null;
+        south=null;
+        east=null;
+        west=null;
+        northBorder=null;
+        southBorder=null;
+        eastBorder=null;
+        westBorder=null;
+        replacer = null;
+    }
     /**
      * implemented by TurretSquare and SpawnSquare
      * @return in TurretSquare is AmmoCard, in SpawnSquare is List<WeaponCard>
@@ -157,23 +161,23 @@ public class Square {
             return true;
 
         else{
-                if(this.northBorder!=Border.DOOR){
+                if(this.northBorder!=Border.WALL){
                     if(this.north.room==destination.room)
                         return true;
 
                 }
 
-                if(this.southBorder!=Border.DOOR){
+                if(this.southBorder!=Border.WALL){
                       if(this.south.room==destination.room)
                           return true;
                 }
 
-                 if(this.eastBorder!=Border.DOOR){
+                 if(this.eastBorder!=Border.WALL){
                      if(this.east.room==destination.room)
                          return true;
                  }
 
-                 if(this.westBorder!=Border.DOOR){
+                 if(this.westBorder!=Border.WALL){
                      if(this.west.room==destination.room)
                           return true;
                  }

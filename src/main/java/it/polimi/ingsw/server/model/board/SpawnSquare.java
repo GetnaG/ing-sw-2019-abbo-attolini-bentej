@@ -14,7 +14,8 @@ public class SpawnSquare extends Square {
     /**
      * Default constructor
      */
-    public SpawnSquare(WeaponMarket w) {
+    public SpawnSquare(Color c, WeaponMarket w) {
+        super(c);
         market = w;
         spawn = null;
     }
@@ -22,12 +23,6 @@ public class SpawnSquare extends Square {
 
     public WeaponMarket getMarket() {
         return market;
-    }
-
-    public WeaponCard pickWeapon(){
-        WeaponCard w = market.pickWeaponFromList();
-        super.replacer.replaceDiscardedWeapons(this, market.getCards()); //not sure on the second argument
-        return w;
     }
 
     public void setMarket(WeaponMarket market) {
@@ -42,8 +37,15 @@ public class SpawnSquare extends Square {
         this.spawn = spawn;
     }
 
-    public AmmoCube getColor() {
-        Color c = super.getRoom().getColorRes();
+
+    public WeaponCard pickWeapon(){
+        WeaponCard w = market.pickWeaponFromList();
+        super.replacer.replaceDiscardedWeapons(this, market.getCards()); //not sure on the second argument
+        return w;
+    }
+
+    public AmmoCube getSpawnColor() {
+        Color c = super.getColor();
         if (c == Color.BLUE)
             return AmmoCube.BLUE;
         if (c == Color.RED)
