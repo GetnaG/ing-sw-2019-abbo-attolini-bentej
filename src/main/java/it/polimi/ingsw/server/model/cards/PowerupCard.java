@@ -6,6 +6,7 @@ import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -69,9 +70,14 @@ public class PowerupCard extends AbstractCard {
     public EffectInterface getEffect() {
         //FIXME after effects are implemented
         return new EffectInterface() {
+
             @Override
-            public List<Damageable> runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
+            public Iterator<EffectInterface> iterator() {
                 return null;
+            }
+
+            @Override
+            public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
             }
 
             @Override

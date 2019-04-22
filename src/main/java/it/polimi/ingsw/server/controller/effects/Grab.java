@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -39,14 +40,12 @@ public class Grab implements EffectInterface {
     }
 
     /**
-     * @param subjectPlayer 
-     * @param board 
-     * @param alredyTargeted 
-     * @return
+     * @param subjectPlayer
+     * @param board
+     * @param alredyTargeted
      */
-    public List<Damageable> runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
+    public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
         // TODO implement here
-        return null;
     }
 
     /**
@@ -65,4 +64,8 @@ public class Grab implements EffectInterface {
         return null;
     }
 
+    @Override
+    public Iterator<EffectInterface> iterator() {
+        return null;
+    }
 }

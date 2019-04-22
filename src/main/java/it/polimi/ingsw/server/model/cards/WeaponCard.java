@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -165,8 +166,7 @@ public class WeaponCard extends AbstractCard {
         }
 
         @Override
-        public List<Damageable> runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
-            return null;
+        public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
         }
 
         @Override
@@ -182,6 +182,11 @@ public class WeaponCard extends AbstractCard {
         public MockEffect setNext(WeaponCard.MockEffect next) {
             this.next = next;
             return this;
+        }
+
+        @Override
+        public Iterator<EffectInterface> iterator() {
+            return null;
         }
     }
 }
