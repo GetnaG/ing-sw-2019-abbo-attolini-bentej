@@ -15,11 +15,6 @@ import java.util.List;
  * @author Fahed Ben Tej
  */
 public class FirstTurn implements TurnInterface {
-    /**
-     * Powerup Cards drawn.
-     */
-    private List<PowerupCard> cardsDrawn;
-
 
     /**
      * Once the player draws two cards from the powerup deck, he chooses one which defines the Spawn.
@@ -28,7 +23,7 @@ public class FirstTurn implements TurnInterface {
      */
     public void startTurn(Player currentPlayer, GameBoard board) {
 
-        cardsDrawn = new ArrayList<>();
+        List<PowerupCard> cardsDrawn = new ArrayList<>();
 
         // Drawing two powerups
         cardsDrawn.add(board.getPowerupCard());

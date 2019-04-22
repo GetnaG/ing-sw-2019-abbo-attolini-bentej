@@ -31,7 +31,7 @@ public class NormalTurn implements TurnInterface {
      */
     private List<Action> actions;
     /**
-     * Already targeted targets
+     * Already hitted targets
      */
     private List<Damageable> alreadyTargeted;
 
@@ -76,13 +76,19 @@ public class NormalTurn implements TurnInterface {
     }
     /**
      * Asks the player to choose from a list of Actions and runs that action.
+     * //TODO Wrong : I should see the action tile first.
      */
     private void askAndRunAction() {
         actions = new ArrayList<>();
-        //TODO define the constructor of Action ?
-        actions.add(new Action("Move"));
-        actions.add(new Action("Grab"));
-        actions.add(new Action("Shoot"));
+        List<EffectInterface> tripleMove = new ArrayList<>();
+
+        tripleMove.add(new Move());
+        tripleMove.add(new Move());
+        tripleMove.add(new Move());
+
+        actions.add(new Action("TripleMove", tripleMove));
+        actions.add(new Action("Grab", new Grab()));
+        actions.add(new Action("Shoot", new Shoot()));
 
         Action chosenAction = player.getToClient().chooseAction(actions);
 

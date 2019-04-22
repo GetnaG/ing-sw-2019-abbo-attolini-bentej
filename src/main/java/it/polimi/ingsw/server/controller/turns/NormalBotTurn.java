@@ -4,7 +4,7 @@ import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
 /**
- * 
+ * A NormalBotTurn is used when a player has it
  */
 public class NormalBotTurn extends NormalTurn {
 
@@ -15,7 +15,5 @@ public class NormalBotTurn extends NormalTurn {
         super(player,board);
     }
 
-    public void failingMethod(){
 
-    }
 }
