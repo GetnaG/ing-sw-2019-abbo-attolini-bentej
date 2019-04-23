@@ -119,11 +119,10 @@ public class GameBoard implements ReplaceListener {
      * @return a {@code Square} which contains the {@code Spawn} of the given {@code Color}
      */
     public Square findSpawn(AmmoCube color) {
-        List<Room> spawnRoom =  configuration.stream()
-                                                     .filter(Room::hasSpawnSquare)
-                                                     .filter(x-> x.getSpawnSquare().getSpawnColor() == color)
-                                                     .collect(Collectors.toList());
-        return spawnRoom.get(0).getSpawnSquare();
+        List<SpawnSquare> spawns =  configuration.stream()
+                .filter(Room::hasSpawnSquare).map(x -> x.getSpawnSquare()).filter(x -> x.getSpawnColor() == color).collect(Collectors.toList());
+
+        return spawns.get(0);
     }
 
     /**

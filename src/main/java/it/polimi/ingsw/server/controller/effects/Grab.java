@@ -8,18 +8,14 @@ import java.util.Iterator;
 import java.util.List;
 
 /**
- * 
+ * A player can grab any Grabbable object. A Grabbable object can be an AmmoTile
+ * or a Turret.
  */
 public class Grab implements EffectInterface {
 
-    /**
-     * Default constructor
-     */
-    public Grab() {
-    }
 
     /**
-     * 
+     * Gets the grabbed object
      */
     private void getGrabbable() {
         // TODO implement here

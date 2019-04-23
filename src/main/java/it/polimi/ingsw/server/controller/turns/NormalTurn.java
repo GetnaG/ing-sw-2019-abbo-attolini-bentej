@@ -76,7 +76,6 @@ public class NormalTurn implements TurnInterface {
     }
     /**
      * Asks the player to choose from a list of Actions and runs that action.
-     * //TODO Wrong : I should see the action tile first.
      */
     private void askAndRunAction() {
         actions = new ArrayList<>();
@@ -89,6 +88,7 @@ public class NormalTurn implements TurnInterface {
         actions.add(new Action("TripleMove", tripleMove));
         actions.add(new Action("Grab", new Grab()));
         actions.add(new Action("Shoot", new Shoot()));
+        actions.addAll(player.getAdrenalineActions());
 
         Action chosenAction = player.getToClient().chooseAction(actions);
 

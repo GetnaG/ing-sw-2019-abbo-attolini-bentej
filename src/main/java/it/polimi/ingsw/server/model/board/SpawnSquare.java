@@ -14,8 +14,16 @@ public class SpawnSquare extends Square {
     /**
      * Default constructor
      */
-    public SpawnSquare(Color c, WeaponMarket w) {
-        super(c);
+    public SpawnSquare(AmmoCube color, WeaponMarket w) {
+        super(Color.valueOf(color.toString()));
+        market = w;
+        spawn = null;
+    }
+    /**
+     * Default constructor
+     */
+    public SpawnSquare(Color color, WeaponMarket w) {
+        super(color);
         market = w;
         spawn = null;
     }
