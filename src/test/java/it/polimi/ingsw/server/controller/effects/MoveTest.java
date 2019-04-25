@@ -9,13 +9,12 @@ import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class MoveTest {
     private GameBoard board;
@@ -167,6 +166,11 @@ class MoveTest {
             @Override
             public PowerupCard askUseTagback(List<PowerupCard> options) {
                 return options.get(0);
+            }
+
+            @Override
+            public List<Damageable> chooseTarget(List<List<Damageable>> options) {
+                return null;
             }
         };
 

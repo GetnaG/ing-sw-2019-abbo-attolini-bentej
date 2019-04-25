@@ -1,12 +1,14 @@
 package it.polimi.ingsw.server;
-import it.polimi.ingsw.server.controller.*;
+
+import it.polimi.ingsw.server.controller.SuspensionListener;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
-import java.util.*;
+import java.util.List;
 
 /**
  * 
@@ -85,4 +87,5 @@ public interface ToClientInterface {
      */
     public PowerupCard askUseTagback(List<PowerupCard> options);
 
+    List<Damageable> chooseTarget(List<List<Damageable>> options);
 }

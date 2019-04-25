@@ -589,5 +589,10 @@ class PlayerTest {
         public PowerupCard askUseTagback(List<PowerupCard> options) {
             return null;
         }
+
+        @Override
+        public List<Damageable> chooseTarget(List<List<Damageable>> options) {
+            return null;
+        }
     }
 }

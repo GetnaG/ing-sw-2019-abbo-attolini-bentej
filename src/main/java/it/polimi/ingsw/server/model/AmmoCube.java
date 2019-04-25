@@ -1,7 +1,5 @@
 package it.polimi.ingsw.server.model;
 
-import it.polimi.ingsw.server.model.board.Color;
-
 import java.util.Collections;
 import java.util.List;
 

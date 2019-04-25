@@ -1,0 +1,720 @@
+[
+  {
+    "id": "sledgehammer",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": 0
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "sledgehammer_pulverize",
+    "damageAmount": 3,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": 0
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresDistance": 2,
+    "quirks": []
+  },
+  {
+    "id": "shockwave",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 3
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": 1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": [
+      "DIFFERENT_SQUARES"
+    ]
+  },
+  {
+    "id": "shockwave_tsunami",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": -1,
+      "max": -1
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": 1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "powerGlove",
+    "damageAmount": 1,
+    "marksAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": 1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": [
+      "MOVE_TO_TARGET"
+    ]
+  },
+  {
+    "id": "powerGlove_rocketFist",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 0,
+      "max": 2
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": 2
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresDistance": 0,
+    "quirks": [
+      "DIFFERENT_SQUARES",
+      "MOVE_TO_TARGET"
+    ]
+  },
+  {
+    "id": "shotgun",
+    "damageAmount": 3,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": 0
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "VISIBLE_NOT_SELF",
+    "squaresDistance": 1,
+    "quirks": []
+  },
+  {
+    "id": "shotgun_longBarrel",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": 1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "zx-2",
+    "damageAmount": 1,
+    "marksAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "zx-2_scanner",
+    "marksAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 3
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "cyberblade",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": 0
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "cyberblade_sliceAndDice",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": 0
+    },
+    "historyPolicy": "NOT_TARGETED",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "railgun",
+    "damageAmount": 3,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresDistance": 0,
+    "quirks": [
+      "IGNORE_WALLS"
+    ]
+  },
+  {
+    "id": "railgun_piercing",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 2
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresDistance": 0,
+    "quirks": [
+      "IGNORE_WALLS"
+    ]
+  },
+  {
+    "id": "rocketLauncher",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "ALL",
+    "squaresDistance": 1,
+    "quirks": []
+  },
+  {
+    "id": "rocketLauncher_basic_fragmentingWarhead",
+    "damageAmount": 2,
+    "secondaryDamage": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "ALL",
+    "squaresDistance": 1,
+    "quirks": []
+  },
+  {
+    "id": "grenadeLauncher",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "ALL",
+    "squaresDistance": 1,
+    "quirks": []
+  },
+  {
+    "id": "grenadeLauncher_extraGrenade",
+    "secondaryDamage": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "VISIBLE",
+    "squaresDistance": 0,
+    "quirks": []
+  },
+  {
+    "id": "flamethrower",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 0,
+      "max": 2
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": 2
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresDistance": 0,
+    "quirks": [
+      "DIFFERENT_SQUARES"
+    ]
+  },
+  {
+    "id": "flamethrower_barbecue",
+    "damageAmount": 1,
+    "secondaryDamage": 1,
+    "targetsNumber": {
+      "min": 0,
+      "max": 2
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": 2
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresDistance": 0,
+    "quirks": [
+      "DIFFERENT_SQUARES"
+    ]
+  },
+  {
+    "id": "hellion",
+    "damageAmount": 1,
+    "secondaryMarks": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "hellion_nano-tracer",
+    "damageAmount": 1,
+    "secondaryMarks": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "heatseeker",
+    "damageAmount": 3,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "NOT_VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "furnace_cozyFire",
+    "secondaryDamage": 1,
+    "secondaryMarks": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 1,
+      "max": 1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "squaresDistance": 0,
+    "quirks": []
+  },
+  {
+    "id": "vortexCannon",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "VISIBLE_NOT_SELF",
+    "squaresDistance": 1,
+    "quirks": []
+  },
+  {
+    "id": "vortexCannon_blackHole",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 2
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "NOT_TARGETED",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "TO_PREVIOUS",
+    "squaresDistance": 1,
+    "quirks": []
+  },
+  {
+    "id": "tractorBeam",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "VISIBLE",
+    "squaresDistance": 2,
+    "quirks": []
+  },
+  {
+    "id": "tractorBeam_punisher",
+    "damageAmount": 3,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": 2
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "TO_SUBJECT",
+    "quirks": []
+  },
+  {
+    "id": "electroscythe",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": -1,
+      "max": -1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": 0
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "electroscythe_reaper",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": -1,
+      "max": -1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": 0
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "whisper",
+    "damageAmount": 3,
+    "marksAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 2,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "plasmaGun",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "plasmaGun_chargedShot",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ONLY_TARGETED",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "t.h.o.r.",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "t.h.o.r._chainReaction",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "NOT_TARGETED",
+    "targetsPolicy": "VISIBLE_BY_PREVIOUS",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "t.h.o.r._highVoltage",
+    "damageAmount": 2,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "NOT_TARGETED",
+    "targetsPolicy": "VISIBLE_BY_PREVIOUS",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "machineGun",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 2
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "machineGun_focusShot",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ONLY_TARGETED",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "machineGun_turretTripod",
+    "damageAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 2
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "squaresDistance": 0,
+    "quirks": [
+      "MAX_TWO_HITS"
+    ]
+  },
+  {
+    "id": "lockRifle",
+    "damageAmount": 2,
+    "marksAmount": 1,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
+  {
+    "id": "lockRifle_secondLock",
+    "damageAmount": 0,
+    "marksAmount": 1,
+    "secondaryDamage": 0,
+    "secondaryMarks": 0,
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "NOT_TARGETED",
+    "targetsPolicy": "VISIBLE",
+    "squaresPolicy": "NONE",
+    "squaresDistance": 0,
+    "quirks": []
+  },
+  {
+    "id": "newton",
+    "targetsNumber": {
+      "min": 1,
+      "max": 1
+    },
+    "targetsDistance": {
+      "min": 0,
+      "max": -1
+    },
+    "historyPolicy": "ALL",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "ALL",
+    "squaresDistance": 2,
+    "quirks": []
+  }
+]

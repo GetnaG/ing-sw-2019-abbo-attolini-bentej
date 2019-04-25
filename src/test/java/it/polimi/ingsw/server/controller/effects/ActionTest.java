@@ -13,8 +13,6 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ActionTest {
     private GameBoard board;
     private List<Square> configuration;
@@ -156,6 +154,11 @@ class ActionTest {
             @Override
             public PowerupCard askUseTagback(List<PowerupCard> options) {
                 return options.get(0);
+            }
+
+            @Override
+            public List<Damageable> chooseTarget(List<List<Damageable>> options) {
+                return null;
             }
         };
 
