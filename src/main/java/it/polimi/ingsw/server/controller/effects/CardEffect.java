@@ -86,6 +86,14 @@ public class CardEffect implements EffectInterface {
                 destinations = null;
                 break;
         }
+        if (policiesContain(QuirkPolicy.ROOM)) {
+            List<Square> others = new ArrayList<>();
+            for (Square s : destinations)
+                others.addAll(getSquaresSameRoom(s));
+            destinations.addAll(others);
+            destinations.stream().distinct()
+                    .filter(s -> !sameRoom(s, subject.getPosition()));
+        }
         if (destinations != null) {
             destinations = destinations.stream()
                     .filter(s1 -> {
@@ -103,6 +111,7 @@ public class CardEffect implements EffectInterface {
                     }).collect(Collectors.toList());
         }
     }
+
 
     private void selectTargets() throws AgainstRulesException {
         if (targetsNumber.min != -1 && targets.size() > targetsNumber.min) {
@@ -147,15 +156,24 @@ public class CardEffect implements EffectInterface {
             }
         }
 
-        if (targetsNumber.min == 1 && targetsNumber.max == 1)
-            for (Damageable sameSquare :
-                    getDamageableIn(targets.get(0).getPosition())) {
-                if (!sameSquare.equals(subject)) {
-                    addDamage(sameSquare, secondaryDamage);
-                    addMarks(sameSquare, secondaryMarks);
+        if (targetsNumber.min == 1 && targetsNumber.max == 1) {
+            if (policiesContain(QuirkPolicy.ROOM)) {
+                for (Square s :
+                        getSquaresSameRoom(targets.get(0).getPosition())) {
+                    for (Damageable d : getDamageableIn(s)) {
+                        addDamage(d, secondaryDamage);
+                        addMarks(d, secondaryMarks);
+                    }
                 }
-            }
-        else {
+            } else
+                for (Damageable sameSquare :
+                        getDamageableIn(targets.get(0).getPosition())) {
+                    if (!sameSquare.equals(subject)) {
+                        addDamage(sameSquare, secondaryDamage);
+                        addMarks(sameSquare, secondaryMarks);
+                    }
+                }
+        } else {
             Damageable dam = getNearestTarget();
             addDamage(dam, damageAmount);
             addMarks(dam, marksAmount);
@@ -222,6 +240,11 @@ public class CardEffect implements EffectInterface {
         List<Damageable> targets = getAllTargets();
         targets.removeAll(getVisibleTargetsBy(player));
         return targets;
+    }
+
+    private List<Square> getSquaresSameRoom(Square s) {
+        return getAllDestinations().stream()
+                .filter(x -> sameRoom(x, s)).collect(Collectors.toList());
     }
 
     private void chooseFrom(List<Damageable> l, CardEffect.Range amount) {
@@ -348,8 +371,12 @@ public class CardEffect implements EffectInterface {
         return new ArrayList<>();
     }
 
+    private boolean sameRoom(Square a, Square subjectPosition) {
+        return false;
+    }
+
     private enum QuirkPolicy {
-        DIFFERENT_SQUARES, IGNORE_WALLS, MOVE_TO_TARGET, MAX_TWO_HITS
+        DIFFERENT_SQUARES, IGNORE_WALLS, MOVE_TO_TARGET, MAX_TWO_HITS, ROOM
     }
 
     private enum HistoryPolicy {
