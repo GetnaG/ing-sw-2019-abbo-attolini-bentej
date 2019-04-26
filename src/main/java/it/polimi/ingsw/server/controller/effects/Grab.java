@@ -2,14 +2,19 @@ package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
+import it.polimi.ingsw.server.model.cards.AbstractCard;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.Iterator;
 import java.util.List;
 
 /**
- * A player can grab any Grabbable object. A Grabbable object can be an AmmoTile
+ * A player can grab any Grabbable object. A Grabbable object can be an AmmoCard
  * or a Turret.
+ *
+ * @author Fahed Ben Tej
+ * @see it.polimi.ingsw.server.model.cards.AmmoCard
+ * @see it.polimi.ingsw.server.model.board.Turret
  */
 public class Grab implements EffectInterface {
 
@@ -41,25 +46,28 @@ public class Grab implements EffectInterface {
      * @param alredyTargeted
      */
     public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
-        // TODO implement here
     }
 
     /**
+     * Return the name name of the Effect: "Grab"
      * @return
      */
     public String getName() {
-        // TODO implement here
-        return "";
+        return "Grab";
     }
 
     /**
+     * //FIXME
      * @return
      */
     public EffectInterface getDecorated() {
-        // TODO implement here
         return null;
     }
 
+    /**
+     * FIXME
+     * @return
+     */
     @Override
     public Iterator<EffectInterface> iterator() {
         return null;
