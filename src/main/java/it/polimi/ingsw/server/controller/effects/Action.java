@@ -84,6 +84,14 @@ public class Action implements EffectInterface {
         return effects.get(currentIndex-1);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addToChain(EffectInterface last) {
+        //TODO does this need fixing?
+    }
+
 
     @Override
     public Iterator<EffectInterface> iterator() {

@@ -62,6 +62,14 @@ public class Shoot implements EffectInterface {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addToChain(EffectInterface last) {
+
+    }
+
+    /**
      * //TODO
      *
      * @return

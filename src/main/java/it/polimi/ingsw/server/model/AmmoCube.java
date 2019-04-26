@@ -16,22 +16,22 @@ import java.util.List;
  */
 public enum AmmoCube {
     /**
-     * A blue ammo cube
+     * A blue ammo cube.
      */
     BLUE,
 
     /**
-     * A yellow ammo cube
+     * A yellow ammo cube.
      */
     YELLOW,
 
     /**
-     * A red ammo cube
+     * A red ammo cube.
      */
     RED,
 
     /**
-     * A cube of any color
+     * A cube of any color.
      */
     ANY;
 

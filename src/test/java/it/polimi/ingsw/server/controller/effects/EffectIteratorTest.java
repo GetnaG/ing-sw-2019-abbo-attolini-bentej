@@ -108,6 +108,11 @@ class EffectIteratorTest {
         }
 
         @Override
+        public void addToChain(EffectInterface last) {
+
+        }
+
+        @Override
         public Iterator<EffectInterface> iterator() {
             return new EffectIterator(decorated);
         }

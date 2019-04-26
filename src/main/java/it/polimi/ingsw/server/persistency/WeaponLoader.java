@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.persistency;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
 import java.io.FileNotFoundException;
@@ -27,25 +26,19 @@ import java.util.stream.Collectors;
  *     "resourceId": "AD_weapons_IT_022"
  *   }, ...
  * ]}</pre>
- * Where {@code cost} is an array of {@link AmmoCube} and it is the cost to
- * pay to reload the weapon; {@code effectIdSequences} represents all the
- * possible sequences of
- * {@link it.polimi.ingsw.server.controller.effects.EffectInterface} that
- * this card allows, written explicitly if {@code onlySpecifiedOrder} is
- * true, otherwise all the permutation of the elements are allowed; the
- * {@code resourceId} is as requested by
+ * For info on the meaning and the values allowed, refer to
+ * the fields of {@link WeaponCard}.
+ * The {@code resourceId} is as requested by
  * {@link it.polimi.ingsw.server.model.cards.AbstractCard}.
  *
  * @author Abbo Giulio A.
  * @see WeaponCard
- * @see it.polimi.ingsw.server.model.AmmoCube
- * @see it.polimi.ingsw.server.controller.effects.EffectInterface
  */
 public class WeaponLoader implements BasicLoader<WeaponCard> {
     /**
      * The loaded cards (could be empty).
      */
-    WeaponCard[] weaponCards;
+    private WeaponCard[] weaponCards;
 
     /**
      * This constructor loads the cards from a file.

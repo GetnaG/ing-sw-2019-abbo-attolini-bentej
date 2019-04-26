@@ -24,7 +24,8 @@ class WeaponCardTest {
     void setUp() {
         id = "Weapon id";
         cubes = Arrays.asList(AmmoCube.BLUE, AmmoCube.RED, AmmoCube.RED);
-        effects = new String[][]{{"00", "01"}, {"10", "11", "12"}, {"20"}};
+        effects = new String[][]{{"shotgun", "powerGlove"}, {"cyberblade",
+                "rocketLauncher", "hellion"}, {"heatseeker"}};
 
         card = new WeaponCard(id, cubes, effects, true);
     }
@@ -49,12 +50,12 @@ class WeaponCardTest {
     @Test
     void getPossibleSequences_unOrdered() {
         WeaponCard card = new WeaponCard(id, cubes, new String[][]
-                {{"A"}, {"B"}, {"A", "D"}}, false);
+                {{"railgun"}, {"zx-2"}, {"railgun", "powerGlove"}}, false);
 
         String[][] expected = {
-                {"A", "B", "A"},
-                {"A", "A", "B"},
-                {"B", "A", "A"}
+                {"railgun", "zx-2", "railgun"},
+                {"railgun", "railgun", "zx-2"},
+                {"zx-2", "railgun", "railgun"}
         };
 
         List<EffectInterface> sequences = card.getPossibleSequences();

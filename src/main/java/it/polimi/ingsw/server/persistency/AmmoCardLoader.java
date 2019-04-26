@@ -22,17 +22,13 @@ import java.util.stream.Collectors;
  *      "resourceId": "id"
  *  }, ...
  * ]}</pre>
- * Where {@code cubes} is followed by an array of
- * {@link it.polimi.ingsw.server.model.AmmoCube}s {@code "BLUE"},
- * {@code "RED"} or {@code "YELLOW"}; {@code powerup} indicates whether a
- * {@link it.polimi.ingsw.server.model.cards.PowerupCard} is
- * included; the {@code resourceId} is as requested by
+ * For info on the meaning and the values allowed, refer to
+ * the fields of {@link AmmoCard}.
+ * The {@code resourceId} is as requested by
  * {@link it.polimi.ingsw.server.model.cards.AbstractCard}.
  *
  * @author Abbo Giulio A.
  * @see AmmoCard
- * @see it.polimi.ingsw.server.model.AmmoCube
- * @see it.polimi.ingsw.server.model.cards.PowerupCard
  */
 public class AmmoCardLoader implements BasicLoader<AmmoCard> {
     /**

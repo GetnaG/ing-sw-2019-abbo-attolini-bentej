@@ -45,4 +45,11 @@ public interface EffectInterface extends Iterable<EffectInterface> {
      * @return the next effect in the chain, null if there is not one
      */
     EffectInterface getDecorated();
+
+    /**
+     * Sets the provided effect as the last effect in the chain.
+     *
+     * @param last the effect to be added
+     */
+    void addToChain(EffectInterface last);
 }

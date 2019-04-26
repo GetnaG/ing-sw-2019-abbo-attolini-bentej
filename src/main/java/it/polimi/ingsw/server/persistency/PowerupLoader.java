@@ -25,17 +25,13 @@ import java.util.stream.Collectors;
  *     "resourceId": "AD_powerups_IT_022"
  *   }, ...
  * ]}</pre>
- * Where {@code usableAsAction}, {@code usableOnDealingDamage} and {@code
- * usableOnReceivingDamage} indicate how the card can be used; {@code
- * effectId} identifies the effect of this card; {@code cube} is the color of
- * the {@link it.polimi.ingsw.server.model.AmmoCube} of this card; the {@code
- * resourceId} is as requested by
+ * For info on the meaning and the values allowed, refer to
+ * the fields of {@link PowerupCard}.
+ * The {@code resourceId} is as requested by
  * {@link it.polimi.ingsw.server.model.cards.AbstractCard}.
  *
  * @author Abbo Giulio A.
  * @see PowerupCard
- * @see it.polimi.ingsw.server.model.AmmoCube
- * @see it.polimi.ingsw.server.controller.effects.EffectInterface
  */
 public class PowerupLoader implements BasicLoader<PowerupCard> {
     /**

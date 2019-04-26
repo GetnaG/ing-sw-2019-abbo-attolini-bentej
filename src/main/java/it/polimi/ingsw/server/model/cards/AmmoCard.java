@@ -45,7 +45,7 @@ public class AmmoCard extends AbstractCard {
      *
      * @return the cubes that this allows to pick up
      */
-    public List<AmmoCube> getCubes() {
+    public synchronized List<AmmoCube> getCubes() {
         return new ArrayList<>(Arrays.asList(cubes));
     }
 

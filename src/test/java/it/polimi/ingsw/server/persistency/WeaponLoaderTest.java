@@ -26,7 +26,7 @@ class WeaponLoaderTest {
     private static final List<AmmoCube> EXISTING_COST =
             Arrays.asList(AmmoCube.YELLOW);
     private static final String[][] EXISTING_EFFECTS = {{"sledgehammer"}, {
-            "pulverize"}};
+            "sledgehammer_pulverize"}};
 
     private WeaponLoader normalLoader;
 

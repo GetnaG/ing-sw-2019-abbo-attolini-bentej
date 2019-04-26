@@ -1,31 +1,103 @@
 package it.polimi.ingsw.server.persistency;
 
+import com.google.gson.Gson;
+import it.polimi.ingsw.server.controller.effects.CardEffect;
+import it.polimi.ingsw.server.controller.effects.EffectInterface;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.util.Arrays;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 /**
- * Descrizione.
+ * Loads card effects from a json file.
  * <p>
- * Dettagli.
+ * The file must contain an array of {@link CardEffect} as follows:
+ * <pre> {@code [
+ *  {
+ *     "id": "name",
+ *     "damageAmount": 0,
+ *     "marksAmount": 0,
+ *     "secondaryDamage": 0,
+ *     "secondaryMarks": 0,
+ *     "targetsNumber": {"min": 0, "max": -1},
+ *     "targetsDistance": {"min": 0, "max": -1},
+ *     "historyPolicy": "ALL",
+ *     "targetsPolicy": "ALL",
+ *     "squaresPolicy": "NONE",
+ *     "squaresDistance": 0,
+ *     "quirks": []
+ *   }, ...
+ * ]}</pre>
+ * All missing numeric fields, excluded {@code targetsNumber} and {@code
+ * targetsDistance}, are considered as 0.
+ * For info on the meaning and the values allowed, refer to
+ * the fields of {@link CardEffect}.
  *
  * @author Abbo Giulio A.
+ * @see CardEffect
  */
-public class EffectLoader implements BasicLoader {
-    EffectLoader() {
+public class EffectLoader implements BasicLoader<EffectInterface> {
+    /**
+     * The loaded effects (could be empty).
+     */
+    private CardEffect[] cardEffects;
 
+    /**
+     * This constructor loads the effects from a file.
+     * The file must be located where specified by {@code file}.
+     *
+     * @param file the path, name and extension of the json file for effects
+     * @throws IllegalArgumentException if {@code file} is incorrect
+     */
+    EffectLoader(String file) {
+        try {
+            cardEffects = new Gson().fromJson(new FileReader(file),
+                    CardEffect[].class);
+        } catch (FileNotFoundException e) {
+            throw new IllegalArgumentException("Could not find: " + file, e);
+        }//TODO add other effects and return them below
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This returns a copy of the effect.
+     *
+     * @throws NoSuchElementException {@inheritDoc}
+     */
     @Override
-    public Object get(String id) {
-        return null;
+    public synchronized EffectInterface get(String id) {
+        List<EffectInterface> list = getAll(id);
+        if (list.isEmpty())
+            throw new NoSuchElementException("Can not find effect: " + id);
+        return list.get(0);
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This returns a copy of the effects.
+     */
     @Override
-    public List<Object> getAll() {
-        return null;
+    public synchronized List<EffectInterface> getAll() {
+        return Arrays.stream(cardEffects)
+                .map(CardEffect::new)
+                .collect(Collectors.toList());
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This returns a copy of the effects.
+     */
     @Override
-    public List<Object> getAll(String id) {
-        return null;
+    public synchronized List<EffectInterface> getAll(String id) {
+        return Arrays.stream(cardEffects)
+                .filter(c -> c.getName().equalsIgnoreCase(id))
+                .map(CardEffect::new)
+                .collect(Collectors.toList());
     }
 }

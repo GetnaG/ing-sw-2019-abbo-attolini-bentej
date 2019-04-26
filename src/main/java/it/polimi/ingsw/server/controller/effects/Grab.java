@@ -65,6 +65,14 @@ public class Grab implements EffectInterface {
     }
 
     /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addToChain(EffectInterface last) {
+
+    }
+
+    /**
      * FIXME
      * @return
      */

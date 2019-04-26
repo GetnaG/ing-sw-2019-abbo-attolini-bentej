@@ -2,19 +2,23 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.AmmoCube;
-import it.polimi.ingsw.server.model.Damageable;
-import it.polimi.ingsw.server.model.board.GameBoard;
-import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.persistency.FromFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 /**
  * This represents a weapon card, with a cost and sequences of effects.
  * Objects of this class are instantiated by a
  * {@link it.polimi.ingsw.server.persistency.WeaponLoader}.
+ * <p>
+ * The field {@linkplain #effectIdSequences} represents all the
+ * possible sequences of
+ * {@link it.polimi.ingsw.server.controller.effects.EffectInterface} that
+ * this card allows, this must be written explicitly if
+ * {@linkplain #onlySpecifiedOrder} is true, otherwise all the permutation of
+ * the elements are allowed.
  *
  * @author Abbo Giulio A.
  * @see it.polimi.ingsw.server.persistency.WeaponLoader
@@ -23,7 +27,7 @@ import java.util.List;
  */
 public class WeaponCard extends AbstractCard {
     /**
-     * The cubes that must be payed to reload this weapon.
+     * The {@linkplain AmmoCube}s that must be payed to reload this weapon.
      */
     private AmmoCube[] cost;
 
@@ -76,8 +80,6 @@ public class WeaponCard extends AbstractCard {
      * @return a list of all the possible sequences of effect allowed
      */
     public List<EffectInterface> getPossibleSequences() {
-        List<EffectInterface> list = new ArrayList<>();
-
         /*If the order is not fixed, this calculates all the possible
         permutations*/
         if (!onlySpecifiedOrder) {
@@ -95,14 +97,15 @@ public class WeaponCard extends AbstractCard {
         }
 
         /*Decorating the effects*/
-        //FIXME after effects are implemented
-        for (String[] effectIdSequence : effectIdSequences) {
-            MockEffect last = null;
-            for (int j = effectIdSequence.length - 1; j >= 0; j--) {
-                last = new MockEffect(effectIdSequence[j]).setNext(last);
+        List<EffectInterface> list = new ArrayList<>();
+        for (String[] effectIdSequence : effectIdSequences)
+            if (effectIdSequence.length > 0) {
+                EffectInterface chain =
+                        FromFile.effects().get(effectIdSequence[0]);
+                for (int i = 1; i < effectIdSequence.length; i++)
+                    chain.addToChain(FromFile.effects().get(effectIdSequence[i]));
+                list.add(chain);
             }
-            list.add(last);
-        }
         return list;
     }
 
@@ -145,7 +148,7 @@ public class WeaponCard extends AbstractCard {
         /*Iterating on the remaining elements*/
         for (int i = pos; i < elements.size(); i++) {
 
-            /*Fixating an element at the beginning*/
+            /*Fixing an element at the beginning*/
             List<String> left = new ArrayList<>(elements);
             String removed = left.get(i);
             left.remove(i);
@@ -153,40 +156,6 @@ public class WeaponCard extends AbstractCard {
 
             /*Recursive call on those left*/
             permutations(left, pos + 1, collector);
-        }
-    }
-
-    //TODO delete when effects will be implemented
-    private class MockEffect implements EffectInterface {
-        private String name;
-        private WeaponCard.MockEffect next;
-
-        public MockEffect(String name) {
-            this.name = name;
-        }
-
-        @Override
-        public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
-        }
-
-        @Override
-        public String getName() {
-            return name;
-        }
-
-        @Override
-        public EffectInterface getDecorated() {
-            return next;
-        }
-
-        public MockEffect setNext(WeaponCard.MockEffect next) {
-            this.next = next;
-            return this;
-        }
-
-        @Override
-        public Iterator<EffectInterface> iterator() {
-            return null;
         }
     }
 }

@@ -9,24 +9,217 @@ import it.polimi.ingsw.server.model.player.Player;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Effects should not be reused
+ * <p>
+ * * Objects of this class are instantiated by a
+ * * {@link it.polimi.ingsw.server.persistency.PowerupLoader}.
+ * <p>
+ * ; {@code
+ * squaresPolicy} can be: <ul>
+ * <li>{@code VISIBLE}, which allows only visible squares
+ * <li>{@code TO_SUBJECT}, which moves the target to the player running
+ * the effect
+ * <li>{@code TO_PREVIOUS}, which moves the target to the previous target
+ * <li>{@code ALL}, which allows all the squares
+ * <li>{@code VISIBLE_NOT_SELF} which allows all the squares but the player's one
+ * <li>{@code SINGLE_DIRECTION}, which allows all the squares in the
+ * cardinal directions from the player's square, including his own; this
+ * can be used with zero to two targets
+ * <li>{@code NONE}, if the squares are not relevant to the effect
+ * </ul>{@code squaresDistance} is ; {@code quirks} can contain: <ul>
+ *
+ * <li>{@code DIFFERENT_SQUARES}, if the targets must be all on different
+ * squares
+ * <li>{@code IGNORE_WALLS}, if the walls must be ignored when counting
+ * the moves
+ * <li>{@code MOVE_TO_TARGET}, if the player running the effect must be
+ * moved to the target
+ * <li>{@code MAX_TWO_HITS}, which removes from the available targets
+ * those targeted at least two times
+ * <li>{@code ROOM}, which can be used with secondary damage and marks to
+ * hit all the players in a room instead of a square
+ * </ul>
+ */
 public class CardEffect implements EffectInterface {
+    /**
+     * The name of this effect.
+     */
     private String id;
+    /**
+     * The damage given to the selected targets. Negative values are not
+     * allowed.
+     */
     private int damageAmount;
+    /**
+     * The marks given to the selected targets. Negative values are not
+     * allowed.
+     */
     private int marksAmount;
-    private int secondaryDamage;//if 1 target, everyone in square, else to nearest
+    /**
+     * The damage given to the other targets in the square or the nearest one.
+     * If only one target can be chosen, this damage is given to all the
+     * targets in his same square (or room), him included, otherwise it is
+     * given to the target nearest to the player who is running the effect.
+     * Negative values are not allowed.
+     */
+    private int secondaryDamage;
+    /**
+     * The marks given to the other targets in the square or the nearest one.
+     * If only one target can be chosen, this marks are given to all the
+     * targets in his same square (or room), him included, otherwise they are
+     * given to the target nearest to the player who is running the effect.
+     * Negative values are not allowed.
+     */
     private int secondaryMarks;
-    private CardEffect.Range targetsNumber;//-1,n don't choose; n,-1 no upper
-    private CardEffect.Range targetsDistance;
+    /**
+     * The number of targets that can be chosen.
+     * If the minimum is -1, then all the possible targets must be selected,
+     * if the maximum is -1 then there is no upper limit, and the player can
+     * choose the minimum allowed or more.
+     * Other negative values are not allowed.
+     */
+    private Range targetsNumber;
+    /**
+     * The range of allowed distances of the targets from the player.
+     * A maximum distance of -1 means that there is no maximum distance.
+     * Other negative values are not allowed.
+     */
+    private Range targetsDistance;
+    /**
+     * Filters the targets based on previous targets in this effects chain.
+     *
+     * @see HistoryPolicy
+     */
     private CardEffect.HistoryPolicy historyPolicy;
+    /**
+     * Filters the targets based on their visibility.
+     *
+     * @see TargetsPolicy
+     */
     private CardEffect.TargetsPolicy targetsPolicy;
+    /**
+     * Filters the squares.
+     *
+     * @see SquaresPolicy
+     */
     private CardEffect.SquaresPolicy squaresPolicy;
+    /**
+     * The maximum distance between a target and a square.
+     */
     private int squaresDistance;
+    /**
+     * Particular behaviours of this effect.
+     *
+     * @see QuirkPolicy
+     */
     private CardEffect.QuirkPolicy[] quirks;
+    /**
+     * The next effect in the chain.
+     * This field is not part of the effect and depends on the card.
+     */
     private EffectInterface decorated;
+    /**
+     * The list of available targets.
+     * This field is not part of the effect.
+     */
     private List<Damageable> targets;
+    /**
+     * The list of available squares.
+     * This field is not part of the effect.
+     */
     private List<Square> destinations;
+    /**
+     * The player running this effect.
+     * This field is not part of the effect.
+     */
     private Player subject;
+    /**
+     * The players that have already been targeted in this chain of effects.
+     * This field is not part of the effect.
+     */
     private List<Damageable> alreadyTargeted;
+
+    /**
+     * Creates a copy of the given card effect.
+     *
+     * @param copyOf the card effect to be copied.
+     */
+    public CardEffect(CardEffect copyOf) {
+        id = copyOf.id;
+        damageAmount = copyOf.damageAmount;
+        marksAmount = copyOf.marksAmount;
+        secondaryDamage = copyOf.secondaryDamage;
+        secondaryMarks = copyOf.secondaryMarks;
+        targetsNumber = new Range(copyOf.targetsNumber.min,
+                copyOf.targetsNumber.max);
+        targetsDistance = new Range(copyOf.targetsDistance.min,
+                copyOf.targetsDistance.max);
+        historyPolicy = copyOf.historyPolicy;
+        targetsPolicy = copyOf.targetsPolicy;
+        squaresPolicy = copyOf.squaresPolicy;
+        squaresDistance = copyOf.squaresDistance;
+        quirks = copyOf.quirks.clone();
+        decorated = null;
+        targets = null;
+        destinations = null;
+        subject = null;
+        alreadyTargeted = null;
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * This will interact with the player to choose the targets.
+     */
+    @Override
+    public void runEffect(Player subjectPlayer, GameBoard board,
+                          List<Damageable> alreadyTargeted) {
+        subject = subjectPlayer;
+        this.alreadyTargeted = alreadyTargeted;
+        filterTargets();
+        try {//FIXME: what to do if there are no targets?
+            selectTargets();
+        } catch (AgainstRulesException e) {
+            e.printStackTrace();
+        }
+        apply();
+        alreadyTargeted.addAll(targets);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return id;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public EffectInterface getDecorated() {
+        return decorated;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addToChain(EffectInterface last) {
+        decorated = last;
+    }
+
+    /**
+     * Returns an iterator over the elements of this chain of effects.
+     *
+     * @return an iterator over the elements of this chain of effects
+     */
+    @Override
+    public Iterator<EffectInterface> iterator() {
+        return new EffectIterator(this);
+    }
 
     private void filterTargets() {
         switch (targetsPolicy) {
@@ -111,7 +304,6 @@ public class CardEffect implements EffectInterface {
                     }).collect(Collectors.toList());
         }
     }
-
 
     private void selectTargets() throws AgainstRulesException {
         if (targetsNumber.min != -1 && targets.size() > targetsNumber.min) {
@@ -300,51 +492,6 @@ public class CardEffect implements EffectInterface {
             marks.add(subject);
         }
         damaged.giveMark(marks);
-    }
-
-    /**
-     * {@inheritDoc}
-     * This will interact with the player to choose the targets.
-     */
-    @Override
-    public void runEffect(Player subjectPlayer, GameBoard board,
-                          List<Damageable> alreadyTargeted) {
-        subject = subjectPlayer;
-        this.alreadyTargeted = alreadyTargeted;
-        filterTargets();
-        try {//FIXME
-            selectTargets();
-        } catch (AgainstRulesException e) {
-            e.printStackTrace();
-        }
-        apply();
-        alreadyTargeted.addAll(targets);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public String getName() {
-        return id;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public EffectInterface getDecorated() {
-        return decorated;
-    }
-
-    /**
-     * Returns an iterator over the elements of this chain of effects.
-     *
-     * @return an iterator over the elements of this chain of effects
-     */
-    @Override
-    public Iterator<EffectInterface> iterator() {
-        return new EffectIterator(this);
     }
 
     private boolean sameDirection(Square a, Square b) {

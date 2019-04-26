@@ -2,12 +2,7 @@ package it.polimi.ingsw.server.model.cards;
 
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.AmmoCube;
-import it.polimi.ingsw.server.model.Damageable;
-import it.polimi.ingsw.server.model.board.GameBoard;
-import it.polimi.ingsw.server.model.player.Player;
-
-import java.util.Iterator;
-import java.util.List;
+import it.polimi.ingsw.server.persistency.FromFile;
 
 /**
  * This represents a powerup card, with an effect and a cube.
@@ -49,7 +44,7 @@ public class PowerupCard extends AbstractCard {
      * Constructor used for testing, other fields are initialized to true.
      *
      * @param id       the id to locate the resources for this object
-     * @param effectId
+     * @param effectId the id associated with the effect of this card
      * @param cube     the cube of this card
      */
     public PowerupCard(String id, String effectId, AmmoCube cube) {
@@ -68,28 +63,7 @@ public class PowerupCard extends AbstractCard {
      * @return the effect associated with this card
      */
     public EffectInterface getEffect() {
-        //FIXME after effects are implemented
-        return new EffectInterface() {
-
-            @Override
-            public Iterator<EffectInterface> iterator() {
-                return null;
-            }
-
-            @Override
-            public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
-            }
-
-            @Override
-            public String getName() {
-                return effectId;
-            }
-
-            @Override
-            public EffectInterface getDecorated() {
-                return null;
-            }
-        };
+        return FromFile.effects().get(effectId);
     }
 
     /**

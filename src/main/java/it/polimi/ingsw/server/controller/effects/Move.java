@@ -48,6 +48,14 @@ public class Move implements EffectInterface {
         return null;
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addToChain(EffectInterface last) {
+        //TODO does this need fixing?
+    }
+
 
     @Override
     public Iterator<EffectInterface> iterator() {

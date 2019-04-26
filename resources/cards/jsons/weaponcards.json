@@ -8,7 +8,7 @@
         "sledgehammer"
       ],
       [
-        "pulverize"
+        "sledgehammer_pulverize"
       ]
     ],
     "onlySpecifiedOrder": true,
@@ -27,7 +27,7 @@
         "shadowstep"
       ],
       [
-        "slice and dice"
+        "cyberblade_sliceAndDice"
       ]
     ],
     "onlySpecifiedOrder": false,

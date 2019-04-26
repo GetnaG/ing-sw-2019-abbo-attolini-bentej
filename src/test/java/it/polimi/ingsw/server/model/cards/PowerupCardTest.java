@@ -21,7 +21,7 @@ class PowerupCardTest {
     @BeforeEach
     void setUp() {
         id = "Powerup id";
-        effect = "effect id";
+        effect = "railgun";
         cube = AmmoCube.BLUE;
 
         /*A powerup card with other fields set to true*/
