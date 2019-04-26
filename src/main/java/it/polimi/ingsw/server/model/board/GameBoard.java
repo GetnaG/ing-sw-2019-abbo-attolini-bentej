@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 public class GameBoard implements ReplaceListener {
 
 
-
     /**
      * The configuration of the rooms. Note that there exists only 4 possible configurations.
      */
@@ -87,6 +86,9 @@ public class GameBoard implements ReplaceListener {
     }
 
 
+    public List<Room> getConfiguration() {
+        return configuration;
+    }
 
     /**
      * Gets a random Ammo Card from the Ammo Deck. Note that Ammo Card can always be drawn. {@see AmmoDeck}

@@ -3,6 +3,12 @@ package it.polimi.ingsw.server.model.board;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.cards.AbstractCard;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
+import it.polimi.ingsw.server.model.board.GameBoard;
+
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
  *  Defines the structure of a square.
@@ -144,6 +150,34 @@ public class Square {
         westBorder=null;
         replacer = null;
     }
+
+
+    /**
+     * @return the list is organized as follows: Cardinals[this, north, south, east, west]
+     *         if the square does not confines with a square, then its position in the list is set to NULL
+     */
+    public List<Square> getCardinals(){
+        List<Square> Cardinals = new ArrayList<>(5);
+        int i=0;
+        for(Square s: Cardinals){
+            Cardinals.set(i, null);
+            i++;
+        }
+
+        i=0;
+        Cardinals.set(i,this);
+        i++;
+        if(!this.north.equals(null)) Cardinals.set(i, this.north);
+        i++;
+        if(!this.south.equals(null))Cardinals.set(i, this.south);
+        i++;
+        if(!this.east.equals(null))Cardinals.set(i, this.east);
+        i++;
+        if(!this.west.equals(null))Cardinals.set(i, this.west);
+
+        return Cardinals;
+    }
+
     /**
      * implemented by TurretSquare and SpawnSquare
      * @return in TurretSquare is AmmoCard, in SpawnSquare is List<WeaponCard>
@@ -194,6 +228,33 @@ public class Square {
 
     public void setGrabbable (AmmoCard ammoCard) {
         this.ammoCard = ammoCard;
+    }
+
+    /**
+     * @return returns a list of all the visible squares
+     *      1) for the first square in every room, check if it is visible from this square
+     *      2) if it is, add the entire room to the list of visible squares
+     */
+    public List<Square> listOfVisibles(GameBoard gb){
+        List<Square> visbles = new ArrayList<>();
+        List<Room> config = gb.getConfiguration();
+        int i=0;
+        int j=0;
+        int k=0;
+        Square temp;
+        for(Room r: config){
+            temp = r.getSquares().get(i);
+            if(this.checkVisible(temp)){
+                for(Square s: r.getSquares()) {
+                    visbles.set(j, r.getSquares().get(k));
+                    j++;
+                    k++;
+                }
+            }
+
+            k=0;
+        }
+        return visbles;
     }
 
 
