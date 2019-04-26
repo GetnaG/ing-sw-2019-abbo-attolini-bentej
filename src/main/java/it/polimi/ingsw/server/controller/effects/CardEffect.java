@@ -10,36 +10,22 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Effects should not be reused
+ * This class contains the instructions on how to run the card effects.
+ * Objects of this class are instantiated by an
+ * {@link it.polimi.ingsw.server.persistency.EffectLoader}.
  * <p>
- * * Objects of this class are instantiated by a
- * * {@link it.polimi.ingsw.server.persistency.PowerupLoader}.
+ * A card effect should not be reused, care must be taken to duplicate an
+ * effect every time it is needed and not to use the "original", this can be
+ * done with the provided constructor. The effect loader handles this by
+ * default.
  * <p>
- * ; {@code
- * squaresPolicy} can be: <ul>
- * <li>{@code VISIBLE}, which allows only visible squares
- * <li>{@code TO_SUBJECT}, which moves the target to the player running
- * the effect
- * <li>{@code TO_PREVIOUS}, which moves the target to the previous target
- * <li>{@code ALL}, which allows all the squares
- * <li>{@code VISIBLE_NOT_SELF} which allows all the squares but the player's one
- * <li>{@code SINGLE_DIRECTION}, which allows all the squares in the
- * cardinal directions from the player's square, including his own; this
- * can be used with zero to two targets
- * <li>{@code NONE}, if the squares are not relevant to the effect
- * </ul>{@code squaresDistance} is ; {@code quirks} can contain: <ul>
+ * With the word <i>target</i> it is meant every {@link Damageable} on which
+ * the effect can be applied.
  *
- * <li>{@code DIFFERENT_SQUARES}, if the targets must be all on different
- * squares
- * <li>{@code IGNORE_WALLS}, if the walls must be ignored when counting
- * the moves
- * <li>{@code MOVE_TO_TARGET}, if the player running the effect must be
- * moved to the target
- * <li>{@code MAX_TWO_HITS}, which removes from the available targets
- * those targeted at least two times
- * <li>{@code ROOM}, which can be used with secondary damage and marks to
- * hit all the players in a room instead of a square
- * </ul>
+ * @author Abbo Giulio A.
+ * @see it.polimi.ingsw.server.persistency.EffectLoader
+ * @see Player
+ * @see Square
  */
 public class CardEffect implements EffectInterface {
     /**
@@ -208,7 +194,10 @@ public class CardEffect implements EffectInterface {
      */
     @Override
     public void addToChain(EffectInterface last) {
-        decorated = last;
+        if (decorated == null)
+            decorated = last;
+        else
+            decorated.addToChain(last);
     }
 
     /**
@@ -279,13 +268,14 @@ public class CardEffect implements EffectInterface {
                 destinations = null;
                 break;
         }
-        if (policiesContain(QuirkPolicy.ROOM)) {
+        if (policiesContain(QuirkPolicy.ROOM) && destinations != null) {
             List<Square> others = new ArrayList<>();
             for (Square s : destinations)
                 others.addAll(getSquaresSameRoom(s));
             destinations.addAll(others);
-            destinations.stream().distinct()
-                    .filter(s -> !sameRoom(s, subject.getPosition()));
+            destinations = destinations.stream().distinct()
+                    .filter(s -> !sameRoom(s, subject.getPosition()))
+                    .collect(Collectors.toList());
         }
         if (destinations != null) {
             destinations = destinations.stream()
@@ -395,7 +385,7 @@ public class CardEffect implements EffectInterface {
 
     private boolean policiesContain(QuirkPolicy policy) {
         for (QuirkPolicy p : quirks)
-            if (p.equals(policy))
+            if (p == policy)
                 return true;
         return false;
     }
@@ -456,13 +446,14 @@ public class CardEffect implements EffectInterface {
                 return false;
             return true;
         }).collect(Collectors.toList());
-        targets = subject.getToClient().chooseTarget(choices);
+        l.clear();
+        l.addAll(subject.getToClient().chooseTarget(choices));
     }
 
     private void chooseFrom(List<Square> l) {
-        Square chosen = subject.getToClient().chooseDestination(destinations);
-        destinations.clear();
-        destinations.add(chosen);
+        Square chosen = subject.getToClient().chooseDestination(l);
+        l.clear();
+        l.add(chosen);
     }
 
     private void combinations(List<Damageable> elements, int min, int max,
@@ -499,7 +490,7 @@ public class CardEffect implements EffectInterface {
     }
 
     private List<Square> getCardinalFrom(Square position) {
-        return new ArrayList<>();//FIXME with same square
+        return new ArrayList<>();//TODO with same square
     }
 
     private int distance(Square a, Square b, boolean ignoreWalls) {
@@ -522,28 +513,130 @@ public class CardEffect implements EffectInterface {
         return false;
     }
 
+    /**
+     * Quirks specify a particular behaviour of the effect.
+     */
     private enum QuirkPolicy {
-        DIFFERENT_SQUARES, IGNORE_WALLS, MOVE_TO_TARGET, MAX_TWO_HITS, ROOM
+        /**
+         * The targets must be all on different squares.
+         */
+        DIFFERENT_SQUARES,
+        /**
+         * The wall must be ignored when counting moves.
+         */
+        IGNORE_WALLS,
+        /**
+         * The subject is moved to the furthest target affected.
+         */
+        MOVE_TO_TARGET,
+        /**
+         * Targets which have already been targeted at least two times in
+         * this chain are not valid targets.
+         */
+        MAX_TWO_HITS,
+        /**
+         * Can be used with secondary damage and marks to hit all the players
+         * in a room instead of a square.
+         */
+        ROOM
     }
 
+    /**
+     * Filters the targets based on the previous targets in the chain.
+     */
     private enum HistoryPolicy {
-        ONLY_TARGETED, NOT_TARGETED, ALL
+        /**
+         * Only targets that have already been affected in this chain.
+         */
+        ONLY_TARGETED,
+        /**
+         * Only targets that have not already been affected in this chain.
+         */
+        NOT_TARGETED,
+        /**
+         * All the targets are valid.
+         */
+        ALL
     }
 
+    /**
+     * Filters the targets based on their visibility.
+     */
     private enum TargetsPolicy {
-        VISIBLE, NOT_VISIBLE, VISIBLE_BY_PREVIOUS, ALL
+        /**
+         * Only targets visible by the subject.
+         */
+        VISIBLE,
+        /**
+         * Only targets not visible by the subject.
+         */
+        NOT_VISIBLE,
+        /**
+         * Only targets visible by the last targeted in the chain.
+         */
+        VISIBLE_BY_PREVIOUS,
+        /**
+         * All the targets are allowed.
+         */
+        ALL
     }
 
+    /**
+     * Filters the squares and defines the movement.
+     */
     private enum SquaresPolicy {
-        VISIBLE, TO_SUBJECT, TO_PREVIOUS, ALL, VISIBLE_NOT_SELF,
-        SINGLE_DIRECTION, NONE//single direction max 0,2 target
+        /**
+         * Only squares visible by the subject.
+         */
+        VISIBLE,
+        /**
+         * Moves the targets to the subject.
+         */
+        TO_SUBJECT,
+        /**
+         * Moves the targets to the last target in the chain.
+         */
+        TO_PREVIOUS,
+        /**
+         * All squares are allowed.
+         */
+        ALL,
+        /**
+         * Only squares visible by the subject except the subject's.
+         */
+        VISIBLE_NOT_SELF,
+        /**
+         * All the squares in the cardinal directions from the player's
+         * square are allowed, including his own.
+         * This can be used with zero to two targets.
+         */
+        SINGLE_DIRECTION,
+        /**
+         * The squares are not relevant in this effect.
+         */
+        NONE
     }
 
+    /**
+     * This class represents a range of values.
+     */
     private class Range {
+        /**
+         * The minimum allowed.
+         */
         private int min;
+        /**
+         * The maximum allowed.
+         */
         private int max;
 
-        public Range(int min, int max) {
+        /**
+         * Creates a range with the provided bounds.
+         *
+         * @param min the minimum allowed
+         * @param max the maximum allowed
+         */
+        Range(int min, int max) {
             this.min = min;
             this.max = max;
         }
