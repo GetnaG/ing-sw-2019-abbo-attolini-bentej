@@ -39,5 +39,4 @@ public class TurretSquare extends Square {
     public void setAmmoCard(AmmoCard ammoCard) {
         this.ammoCard = ammoCard;
     }
-
 }

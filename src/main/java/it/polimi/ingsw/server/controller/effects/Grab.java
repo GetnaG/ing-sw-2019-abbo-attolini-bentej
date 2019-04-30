@@ -46,6 +46,7 @@ public class Grab implements EffectInterface {
      * @param alredyTargeted
      */
     public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
+        
     }
 
     /**

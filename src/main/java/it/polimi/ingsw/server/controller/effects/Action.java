@@ -89,7 +89,7 @@ public class Action implements EffectInterface {
      */
     @Override
     public void addToChain(EffectInterface last) {
-        //TODO does this need fixing?
+        effects.add(last);
     }
 
 
