@@ -12,15 +12,15 @@ public class SpawnSquare extends Square {
     private Spawn spawn;
 
     /**
-     * Default constructor
+     * Default constructor of spawn squares that can
      */
-    public SpawnSquare(AmmoCube color, WeaponMarket w) {
+    public SpawnSquare(AmmoCube color, WeaponMarket w) { ///-------????
         super(Color.valueOf(color.toString()));
         market = w;
         spawn = null;
     }
     /**
-     * Default constructor
+     * Default constructor of spawn squares
      */
     public SpawnSquare(Color color, WeaponMarket w) {
         super(color);
@@ -46,12 +46,19 @@ public class SpawnSquare extends Square {
     }
 
 
+    /**
+     * @param weapon is  the weapon chosen by the player
+     * @return is the weapon to be removed from the market
+     */
     public WeaponCard pickWeapon(WeaponCard weapon){
         WeaponCard w = market.pickWeaponFromList(weapon);
-        super.replacer.replaceDiscardedWeapons(this, market.getCards()); //not sure on the second argument
+        super.replacer.addSpawnSquare(this);
         return w;
     }
 
+    /**
+     * @return return the color of the room selected to spawn
+     */
     public AmmoCube getSpawnColor() {
         Color c = super.getColor();
         if (c == Color.BLUE)
@@ -60,7 +67,7 @@ public class SpawnSquare extends Square {
             return AmmoCube.RED;
         if (c == Color.YELLOW)
             return AmmoCube.YELLOW;
-        return AmmoCube.ANY; // this option should not even exist
+        return AmmoCube.ANY;
     }
 
 }

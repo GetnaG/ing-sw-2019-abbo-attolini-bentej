@@ -309,7 +309,8 @@ public class GameBoard implements ReplaceListener {
         //Replacing Weapon Card
         for (SpawnSquare s : squareNewWeaponCard)
             if (weaponDeck.cardsLeft() !=0){
-                for(WeaponCard i: s.getMarket().getCards()) {
+                for(WeaponCard i: s.getMarket().getCards()) {   //drawWeaponCard solo finchè ci sono null, controllo in testa
+
                     try {
                         s.getMarket().addCard(weaponDeck.drawCard());
                     } catch (AgainstRulesException e) {

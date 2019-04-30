@@ -26,13 +26,13 @@ public class WeaponMarket {
 
     /**
      * Adds card to market. If market is full, no card is added.
+     *
      * @param weaponcard is the card added to the market
      */
-    public void addCard(WeaponCard weaponcard){
+    public void addCard(WeaponCard weaponcard) {
         int pos = 0;
-        for(WeaponCard i: weaponCards)
-        {
-            if(i==null){
+        for (WeaponCard i : weaponCards) {
+            if (i == null) {
                 weaponCards.set(pos, weaponcard);
                 break;
             }
@@ -41,12 +41,10 @@ public class WeaponMarket {
     }
 
 
-    public void removeCardFromMarket(WeaponCard w){
+    public void removeCardFromMarket(WeaponCard w) {
         int pos = 0;
-        for(WeaponCard i: weaponCards)
-        {
-            if(i.equals(w))
-            {
+        for (WeaponCard i : weaponCards) {
+            if (i.equals(w)) {
                 weaponCards.set(pos, null);
             }
 
@@ -54,11 +52,10 @@ public class WeaponMarket {
     }
 
     /**
-     * @return null is returned if the player can't afford to pay the cost to pick the selected weapon
-     *
+     * @return
      */
 
-    public WeaponCard pickWeaponFromList(WeaponCard weapon){
+    public WeaponCard pickWeaponFromList(WeaponCard weapon) { //
         this.removeCardFromMarket(weapon);
         return weapon;
     }
