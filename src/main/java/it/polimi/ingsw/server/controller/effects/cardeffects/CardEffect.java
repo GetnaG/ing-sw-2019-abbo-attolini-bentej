@@ -85,13 +85,13 @@ public class CardEffect implements EffectInterface {
      *
      * @see TargetsPolicy
      */
-    private CardEffect.TargetsPolicy targetsPolicy;
+    private TargetsPolicy targetsPolicy;
     /**
      * Filters the squares.
      *
      * @see SquaresPolicy
      */
-    private CardEffect.SquaresPolicy squaresPolicy;
+    private SquaresPolicy squaresPolicy;
     /**
      * The maximum distance between a target and a square.
      */
@@ -101,7 +101,7 @@ public class CardEffect implements EffectInterface {
      *
      * @see QuirkPolicy
      */
-    private CardEffect.QuirkPolicy[] quirks;
+    private QuirkPolicy[] quirks;
 
     /**
      * The next effect in the chain.
@@ -162,6 +162,9 @@ public class CardEffect implements EffectInterface {
         destinations = null;
         subject = null;
         alreadyTargeted = null;
+        alreadyDamaged = null;
+        board = null;
+        allTargets = null;
     }
 
     /**
@@ -225,54 +228,18 @@ public class CardEffect implements EffectInterface {
     }
 
     private void filterTargets() {
-        switch (targetsPolicy) {
-            case VISIBLE:
-                availableTargets = getVisibleTargetsBy(subject);
-                break;
-            case NOT_VISIBLE:
-                availableTargets = getNotVisibleTargets(subject);
-                break;
-            case VISIBLE_BY_PREVIOUS:
-                availableTargets = getVisibleTargetsBy(
-                        alreadyTargeted.get(alreadyTargeted.size() - 1));
-                break;
-            case ALL:
-            default:
-                availableTargets = allTargets;
-                break;
-        }
+        availableTargets = targetsPolicy.getDamageable(subject, allTargets,
+                alreadyTargeted.get(alreadyTargeted.size() - 1), board);
+
         availableTargets = availableTargets.stream().distinct()
                 .filter(d -> !d.equals(subject))
                 .filter(d -> checkTargetsDistanceAndDirection(subject, d))
-                .filter(d -> !policiesContain(QuirkPolicy.MAX_TWO_HITS) ||
+                .filter(d -> !QuirkPolicy.MAX_TWO_HITS.isIn(quirks) ||
                         Collections.frequency(alreadyTargeted, d) < 2)
                 .filter(d -> historyPolicy.filterTarget(d, alreadyTargeted, alreadyDamaged)).collect(Collectors.toList());
-        switch (squaresPolicy) {
-            case VISIBLE:
-                destinations = subject.getPosition().listOfVisibles(board);
-                break;
-            case VISIBLE_NOT_SELF:
-                destinations = subject.getPosition().listOfVisibles(board);
-                destinations.remove(subject.getPosition());
-                break;
-            case TO_PREVIOUS:
-                destinations = new ArrayList<>();
-                destinations.add(alreadyTargeted
-                        .get(alreadyTargeted.size() - 1).getPosition());
-                break;
-            case SUBJECT_CARDINALS:
-                destinations = subject.getPosition().getCardinals();
-                break;
-            case ALL:
-                destinations = new ArrayList<>(board.getAllSquares());
-                break;
-            case TO_SUBJECT:
-            case NONE:
-            default:
-                destinations = null;
-                break;
-        }
-        if (policiesContain(QuirkPolicy.ROOM) && destinations != null) {
+        destinations = squaresPolicy.getDestinations(subject, board,
+                alreadyTargeted.get(alreadyTargeted.size() - 1));
+        if (QuirkPolicy.ROOM.isIn(quirks) && destinations != null) {
             List<Square> others = new ArrayList<>();
             for (Square s : destinations)
                 others.addAll(getSquaresSameRoom(s));
@@ -313,7 +280,7 @@ public class CardEffect implements EffectInterface {
                                 return true;
                         return false;
                     }).collect(Collectors.toList());
-            if (destinations.size() < 1)
+            if (destinations.isEmpty())
                 throw new AgainstRulesException("Not enough destinations!");
             if (destinations.size() > 1)
                 chooseFrom(destinations);
@@ -324,26 +291,11 @@ public class CardEffect implements EffectInterface {
         for (Damageable d : availableTargets) {
             addDamage(d, damageAmount);
             addMarks(d, marksAmount);
-            switch (squaresPolicy) {
-                case TO_SUBJECT:
-                    d.setPosition(subject.getPosition());
-                    break;
-                case ALL:
-                case VISIBLE:
-                case VISIBLE_NOT_SELF:
-                case TO_PREVIOUS:
-                case SUBJECT_CARDINALS:
-                case NONE:
-                    if (!destinations.isEmpty())
-                        d.setPosition(destinations.get(0));
-                    break;
-                default:
-                    break;
-            }
+            squaresPolicy.apply(subject, d, destinations);
         }
 
         if (targetsNumber.isSingleValue()) {
-            if (policiesContain(QuirkPolicy.ROOM)) {
+            if (QuirkPolicy.ROOM.isIn(quirks)) {
                 for (Square s :
                         getSquaresSameRoom(availableTargets.get(0).getPosition())) {
                     for (Damageable d : board.getPlayerInSquare(s, allTargets)) {
@@ -364,16 +316,16 @@ public class CardEffect implements EffectInterface {
             addDamage(dam, damageAmount);
             addMarks(dam, marksAmount);
         }
-        if (policiesContain(QuirkPolicy.MOVE_TO_TARGET))
+        if (QuirkPolicy.MOVE_TO_TARGET.isIn(quirks))
             subject.setPosition(getFurthestTarget().getPosition());
     }
 
     private boolean checkTargetsDistanceAndDirection(Damageable a, Damageable b) {
         int dist = board.minimumDistance(a.getPosition(), b.getPosition(),
-                policiesContain(QuirkPolicy.IGNORE_WALLS));
+                QuirkPolicy.IGNORE_WALLS.isIn(quirks));
         boolean acceptableDistance = dist >= targetsDistance.getMin() &&
                 (!targetsDistance.hasMaximum() || dist <= targetsDistance.getMax());
-        if (policiesContain(QuirkPolicy.SINGLE_DIRECTION))
+        if (QuirkPolicy.SINGLE_DIRECTION.isIn(quirks))
             return acceptableDistance &&
                     a.getPosition().straight(b.getPosition());
         return acceptableDistance;
@@ -381,46 +333,27 @@ public class CardEffect implements EffectInterface {
 
     private boolean checkSquaresDistanceAndDirection(Square a, Square b) {
         int dist = board.minimumDistance(a, b,
-                policiesContain(QuirkPolicy.IGNORE_WALLS));
+                QuirkPolicy.IGNORE_WALLS.isIn(quirks));
         boolean acceptableDistance = dist <= squaresDistance;
-        if (policiesContain(QuirkPolicy.SINGLE_DIRECTION))
+        if (QuirkPolicy.SINGLE_DIRECTION.isIn(quirks))
             return acceptableDistance && a.straight(b);
         return acceptableDistance;
-    }
-
-    private boolean policiesContain(QuirkPolicy policy) {
-        for (QuirkPolicy p : quirks)
-            if (p == policy)
-                return true;
-        return false;
     }
 
     private Damageable getNearestTarget() {
         return availableTargets.stream().min(Comparator.comparingInt(a ->
                 board.minimumDistance(a.getPosition(), subject.getPosition(),
-                        policiesContain(QuirkPolicy.IGNORE_WALLS))))
+                        QuirkPolicy.IGNORE_WALLS.isIn(quirks))))
                 .orElse(null);
     }
 
     private Damageable getFurthestTarget() {
         return availableTargets.stream().max(Comparator.comparingInt(a ->
                 board.minimumDistance(a.getPosition(), subject.getPosition(),
-                        policiesContain(QuirkPolicy.IGNORE_WALLS))))
+                        QuirkPolicy.IGNORE_WALLS.isIn(quirks))))
                 .orElse(null);
     }
 
-    private List<Damageable> getVisibleTargetsBy(Damageable player) {
-        List<Damageable> targets = new ArrayList<>();
-        for (Square s : player.getPosition().listOfVisibles(board))
-            targets.addAll(board.getPlayerInSquare(s, allTargets));
-        return targets;
-    }
-
-    private List<Damageable> getNotVisibleTargets(Damageable player) {
-        List<Damageable> targets = allTargets;
-        targets.removeAll(getVisibleTargetsBy(player));
-        return targets;
-    }
 
     private List<Square> getSquaresSameRoom(Square s) {
         return board.getAllSquares().stream()
@@ -433,17 +366,15 @@ public class CardEffect implements EffectInterface {
         int max = amount.getMax();
         if (max == -1)
             max = l.size();
-        combinations(l, amount.getMin(), amount.getMax(), choices);
+        combinations(l, amount.getMin(), max, choices);
         choices = choices.stream().filter(c -> {
-            if (policiesContain(QuirkPolicy.DIFFERENT_SQUARES) &&
+            if (QuirkPolicy.DIFFERENT_SQUARES.isIn(quirks) &&
                     c.stream().map(Damageable::getPosition)
                             .distinct().count() != c.size())
                 return false;
-            if (policiesContain(QuirkPolicy.SINGLE_DIRECTION) &&
-                    c.size() == 2 &&
-                    !c.get(0).getPosition().straight(c.get(1).getPosition()))
-                return false;
-            return true;
+            return !QuirkPolicy.SINGLE_DIRECTION.isIn(quirks) ||
+                    c.size() != 2 ||
+                    c.get(0).getPosition().straight(c.get(1).getPosition());
         }).collect(Collectors.toList());
         l.clear();
         l.addAll(subject.getToClient().chooseTarget(choices));
@@ -456,10 +387,9 @@ public class CardEffect implements EffectInterface {
     }
 
     private void combinations(List<Damageable> elements, int min, int max,
-                              List<List<Damageable>> collector) {
-        if (elements.size() >= min && elements.size() <= max)
-            if (!collector.contains(elements))
-                collector.add(elements);
+                              List<? super List<Damageable>> collector) {
+        if (elements.size() >= min && elements.size() <= max && !collector.contains(elements))
+            collector.add(elements);//TODO check if duplicates are added
         if (elements.size() > min)
             for (Damageable d : elements) {
                 List<Damageable> sublist = new ArrayList<>(elements);
@@ -482,96 +412,6 @@ public class CardEffect implements EffectInterface {
             marks.add(subject);
         }
         damaged.giveMark(marks);
-    }
-
-    /**
-     * Quirks specify a particular behaviour of the effect.
-     */
-    private enum QuirkPolicy {
-        /**
-         * The availableTargets must be all on different squares.
-         */
-        DIFFERENT_SQUARES,
-        /**
-         * The wall must be ignored when counting moves.
-         */
-        IGNORE_WALLS,
-        /**
-         * The subject is moved to the furthest target affected.
-         */
-        MOVE_TO_TARGET,
-        /**
-         * Targets which have already been targeted at least two times in
-         * this chain are not valid availableTargets.
-         */
-        MAX_TWO_HITS,
-        /**
-         * Can be used with secondary damage and marks to hit all the players
-         * in a room instead of a square.
-         */
-        ROOM,
-        /**
-         * Restricts movement to a single cardinal direction.
-         * This can be used with zero to two availableTargets.
-         */
-        SINGLE_DIRECTION
-    }
-
-    /**
-     * Filters the availableTargets based on their visibility.
-     */
-    private enum TargetsPolicy {
-        /**
-         * Only availableTargets visible by the subject.
-         */
-        VISIBLE,
-        /**
-         * Only availableTargets not visible by the subject.
-         */
-        NOT_VISIBLE,
-        /**
-         * Only availableTargets visible by the last targeted in the chain.
-         */
-        VISIBLE_BY_PREVIOUS,
-        /**
-         * All the availableTargets are allowed.
-         */
-        ALL
-    }
-
-    /**
-     * Filters the squares and defines the movement.
-     */
-    private enum SquaresPolicy {
-        /**
-         * Only squares visible by the subject.
-         */
-        VISIBLE,
-        /**
-         * Moves the availableTargets to the subject.
-         */
-        TO_SUBJECT,
-        /**
-         * Moves the availableTargets to the last target in the chain.
-         */
-        TO_PREVIOUS,
-        /**
-         * All squares are allowed.
-         */
-        ALL,
-        /**
-         * Only squares visible by the subject except the subject's.
-         */
-        VISIBLE_NOT_SELF,
-        /**
-         * All the squares in the cardinal directions from the player's
-         * square are allowed, including his own.
-         */
-        SUBJECT_CARDINALS,
-        /**
-         * The squares are not relevant in this effect.
-         */
-        NONE
     }
 
 }
