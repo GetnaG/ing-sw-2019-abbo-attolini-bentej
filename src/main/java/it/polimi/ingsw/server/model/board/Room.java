@@ -37,8 +37,16 @@ public class Room {
         return spawnSquare;
     }
 
+
+    /**
+     * @param obj is a room
+     * @return true if two squares belong to the same room
+     */
     @Override
     public boolean equals(Object obj) {
-        return super.equals(obj); //true se due sqaure sono nella stessa room, guarda abstract card anche per square
+        return obj instanceof Room &&
+                (
+                        ((Room) obj).getSquares().equals(squares)
+                );
     }
 }

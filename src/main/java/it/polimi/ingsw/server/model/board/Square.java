@@ -47,16 +47,7 @@ public class Square {
      * Default constructor of an abstract square
      */
     public Square() {
-        room = null;
-        north = null;
-        south = null;
-        east = null;
-        west = null;
-        northBorder = null;
-        southBorder = null;
-        eastBorder = null;
-        westBorder = null;
-        replacer = null;
+        this(null);
     }
 
     public Square getNorth() {
@@ -172,7 +163,7 @@ public class Square {
      */
     public AbstractCard getGrabbables() {
         return null;
-    }
+    } // chiedere a fahed
 
     /**
      * @param destination is the square that will be checked
@@ -223,34 +214,115 @@ public class Square {
 
     /**
      * @return returns a list of all the visible squares
-     * 1) for the first square in every room, check if it is visible from this square
-     * 2) if it is, add the entire room to the list of visible squares
+     * 1) the calling square is always visible
+     * 2) for the first square in every room, check if it is visible from this square
+     * 3) if it is, add the entire room to the list of visible squares
      */
     public List<Square> listOfVisibles(GameBoard gb) {
-        List<Square> visbles = new ArrayList<>();
-        //mettere che this in pos 0 è visible----------------------------------------------------
-        List<Room> config = gb.getConfiguration();
+        List<Square> visibleSquares = new ArrayList<>();
         int i = 0;
         int j = 0;
-        int k = 0;
+        List<Room> config = gb.getConfiguration();
         Square temp;
+
+        visibleSquares.set(j, this);
         for (Room r : config) {
             temp = r.getSquares().get(i);
             if (this.checkVisible(temp)) {
-                for (Square s : r.getSquares()) {
-                    visbles.set(j, r.getSquares().get(k));
-                    j++;
-                    k++;
-                }
+                visibleSquares.addAll(j, r.getSquares());
+                j = j + r.getSquares().size();
             }
-
-            k = 0;
         }
-        return visbles;
+        return visibleSquares;
     }
 
-    //override di equals per controllare se 2 square sono lo stesso oppure ID-----------------------------------------
+    /**
+     * @param obj is a square
+     * @return true if the squares are the same instances
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof  Square))
+            return false;
+        
+        if(!(this.north == null && ((Square) obj).north== null)) {
+            if (!(this.north!=null && ((Square) obj).north!=null)) {
+                return false;
+            }
+            else if(!(((Square) obj).north == north)){
+                return false;
+            }
+        }
 
-    //controlla se uno square è raggiungibile in linea retta considerando in muri da this --- straight(sq dest)
+        if(!(this.south == null && ((Square) obj).south== null)) {
+            if (!(this.south!=null && ((Square) obj).south!=null)) {
+                return false;
+            }
+            else if(!(((Square) obj).south == south)){
+                return false;
+            }
+        }
 
+        if(!(this.east == null && ((Square) obj).east== null)) {
+            if (!(this.east!=null && ((Square) obj).east!=null)) {
+                return false;
+            }
+            else if(!(((Square) obj).east == east)){
+                return false;
+            }
+        }
+
+        if(!(this.west == null && ((Square) obj).west== null)) {
+            if (!(this.west!=null && ((Square) obj).west!=null)) {
+                return false;
+            }
+            else if(!(((Square) obj).west == west)){
+                return false;
+            }
+        }
+        
+        return true;
+    }
+
+
+    /**
+     * @param dest is a square.
+     * @return true if this and dest lie on the same line (aka there is a straight line with no walls between them)
+     */
+    public boolean straight(Square dest) {
+
+        if (this.equals(dest)) return true;
+
+        Square temp = this;
+
+        while (!this.north.equals(null) && !this.northBorder.equals(Border.WALL)) {
+            if (temp.north.equals(dest))
+                return true;
+
+            temp = temp.north;
+        }
+
+        while (!this.south.equals(null) && !this.southBorder.equals(Border.WALL)) {
+            if (temp.south.equals(dest))
+                return true;
+
+            temp = temp.south;
+        }
+
+        while (!this.east.equals(null) && !this.eastBorder.equals(Border.WALL)) {
+            if (temp.east.equals(dest))
+                return true;
+
+            temp = temp.east;
+        }
+
+        while (!this.west.equals(null) && !this.westBorder.equals(Border.WALL)) {
+            if (temp.west.equals(dest))
+                return true;
+
+            temp = temp.west;
+        }
+        return false;
+
+    }
 }

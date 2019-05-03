@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.turns;
 
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.board.*;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -37,12 +38,12 @@ class NormalTurnTest {
         List<Square> squares = new ArrayList<>();
         List<Room> conf = new ArrayList<>();
 
-        squares.add(new SpawnSquare(Color.GREEN, new WeaponMarket(new ArrayList<>())));
+        squares.add(new SpawnSquare(AmmoCube.BLUE, new WeaponMarket(new ArrayList<>())));
         squares.add(new Square(Color.BLUE));
         squares.add(new Square(Color.GREEN));
         squares.add(new Square(Color.BLUE));
         // Adding rooms and doors.
-        SpawnSquare square1 = new SpawnSquare(Color.GREEN, new WeaponMarket(new ArrayList<>()));
+        SpawnSquare square1 = new SpawnSquare(AmmoCube.BLUE, new WeaponMarket(new ArrayList<>()));
         Square square2 = new Square(Color.BLUE);
         Square square3 = new Square(Color.GREEN);
         Square square4 = new Square(Color.BLUE);

@@ -80,7 +80,7 @@ class ShootTest {
         List<Square> squares = new ArrayList<>();
         List<Room> conf = new ArrayList<>();
 
-        squares.add(new SpawnSquare(Color.BLUE, new WeaponMarket(new ArrayList<>())));
+        squares.add(new SpawnSquare(AmmoCube.BLUE, new WeaponMarket(new ArrayList<>())));
         squares.add(new Square(Color.BLUE));
         squares.add(new Square(Color.GREEN));
         squares.add(new Square(Color.BLUE));

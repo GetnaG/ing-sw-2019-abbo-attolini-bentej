@@ -17,36 +17,29 @@ public class GameBoard implements ReplaceListener {
 
 
     /**
-     * The configuration of the rooms. Note that there exists only 4 possible configurations.
-     */
-    private List<Room> configuration;
-
-    /**
-     * Powerup Deck used during the game.
-     */
-    private PowerupDeck powerupDeck;
-
-    /**
-     * Discarded Powerup Cards.
-     */
-    private List<PowerupCard> discardedPowerups;
-
-
-    /**
-     * Discarded Ammo Cards.
-     */
-    private List<AmmoCard> discardedAmmos;
-
-    /**
      * Contains all the squares where a new Ammo Card is needed.
      */
     List<Square> squareNewAmmoCard;
-
     /**
      * Contains all the squares where a new Weapon Card is needed.
      */
     List<SpawnSquare> squareNewWeaponCard;
-
+    /**
+     * The configuration of the rooms. Note that there exists only 4 possible configurations.
+     */
+    private List<Room> configuration;
+    /**
+     * Powerup Deck used during the game.
+     */
+    private PowerupDeck powerupDeck;
+    /**
+     * Discarded Powerup Cards.
+     */
+    private List<PowerupCard> discardedPowerups;
+    /**
+     * Discarded Ammo Cards.
+     */
+    private List<AmmoCard> discardedAmmos;
     /**
      * Weapon Deck used during the game.
      */
@@ -319,9 +312,9 @@ public class GameBoard implements ReplaceListener {
         for (SpawnSquare s : squareNewWeaponCard)
             if (weaponDeck.cardsLeft() != 0) {
                 for (WeaponCard i : s.getMarket().getCards()) {   //drawWeaponCard solo finchè ci sono null, controllo in testa
-
                     try {
-                        s.getMarket().addCard(weaponDeck.drawCard());
+                        if (i.equals(null))
+                            s.getMarket().addCard(weaponDeck.drawCard());
                     } catch (AgainstRulesException e) {
                     }
                 }
@@ -367,11 +360,11 @@ public class GameBoard implements ReplaceListener {
         });
         dist.put(start, 0);
         Square u = start;
-        while (!Q.isEmpty()){
+        while (!Q.isEmpty()) {
             u = min(Q, dist);
             Q.remove(u);
             List<Square> neighbours = getNeighbours(u, wallSensitive);
-            for (Square v : neighbours){
+            for (Square v : neighbours) {
                 int distance = dist.get(u) + 1;
                 if (distance < dist.get(v))
                     dist.replace(v, distance);
@@ -382,20 +375,20 @@ public class GameBoard implements ReplaceListener {
 
     /**
      * Gets the square  with the minimum distance in the given set of squares.
+     *
      * @param squares set of squares
      * @param map     distance for every square
      * @return
      */
-    private Square min(Set<Square> squares, Map<Square,Integer> map){
+    private Square min(Set<Square> squares, Map<Square, Integer> map) {
         int min = 999;
-        Square minSquare  = null;
-        for (Square s: squares)
-            if (map.get(s)< min){
+        Square minSquare = null;
+        for (Square s : squares)
+            if (map.get(s) < min) {
                 min = map.get(s);
                 minSquare = s;
             }
-        return  minSquare;
-
+        return minSquare;
 
 
     }

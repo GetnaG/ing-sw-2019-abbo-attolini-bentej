@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.server.ToClientInterface;
 import it.polimi.ingsw.server.controller.ScoreListener;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.*;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
@@ -37,7 +38,7 @@ class ActionTest {
         List<Square> squares = new ArrayList<>();
         List<Room> conf = new ArrayList<>();
 
-        squares.add(new SpawnSquare(Color.BLUE, new WeaponMarket(new ArrayList<>())));
+        squares.add(new SpawnSquare(AmmoCube.BLUE, new WeaponMarket(new ArrayList<>())));
         squares.add(new Square(Color.BLUE));
         squares.add(new Square(Color.GREEN));
         squares.add(new Square(Color.BLUE));

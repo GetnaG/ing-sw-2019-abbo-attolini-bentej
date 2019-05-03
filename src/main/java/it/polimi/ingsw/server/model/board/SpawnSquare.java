@@ -11,21 +11,26 @@ public class SpawnSquare extends Square {
     private WeaponMarket market;
     private Spawn spawn;
 
-    /**
-     * Default constructor of spawn squares that can
-     */
+
+    /* Default constructor of spawn squares that can*/
+
     public SpawnSquare(AmmoCube color, WeaponMarket w) { ///-------????
-        super(Color.valueOf(color.toString()));
+        super(constructorHelper(color));
         market = w;
         spawn = null;
     }
-    /**
-     * Default constructor of spawn squares
-     */
-    public SpawnSquare(Color color, WeaponMarket w) {
-        super(color);
-        market = w;
-        spawn = null;
+    private static Color constructorHelper(AmmoCube c){
+        switch (c) {
+            case BLUE:
+                return Color.BLUE;
+            case YELLOW:
+                return Color.YELLOW;
+            case RED:
+                return Color.RED;
+            case ANY:
+                throw new IllegalArgumentException();
+        }
+        throw new IllegalArgumentException();
     }
 
 
@@ -48,12 +53,10 @@ public class SpawnSquare extends Square {
 
     /**
      * @param weapon is  the weapon chosen by the player
-     * @return is the weapon to be removed from the market
      */
-    public WeaponCard pickWeapon(WeaponCard weapon){
-        WeaponCard w = market.pickWeaponFromList(weapon);
+    public void pickWeapon(WeaponCard weapon){
+        market.pickWeaponFromList(weapon);
         super.replacer.addSpawnSquare(this);
-        return w;
     }
 
     /**

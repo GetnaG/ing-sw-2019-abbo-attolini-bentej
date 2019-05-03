@@ -40,24 +40,17 @@ public class WeaponMarket {
         }
     }
 
-
-    public void removeCardFromMarket(WeaponCard w) {
+    /**
+     * @param weapon is the weapon chosen by the player to pick
+     */
+    public void pickWeaponFromList(WeaponCard weapon) {
         int pos = 0;
         for (WeaponCard i : weaponCards) {
-            if (i.equals(w)) {
+            if (i.equals(weapon)) {
                 weaponCards.set(pos, null);
             }
-
+            pos++;
         }
-    }
-
-    /**
-     * @return
-     */
-
-    public WeaponCard pickWeaponFromList(WeaponCard weapon) { //
-        this.removeCardFromMarket(weapon);
-        return weapon;
     }
 
 }
