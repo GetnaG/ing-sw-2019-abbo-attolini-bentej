@@ -131,29 +131,40 @@ public class Square {
     }
 
     /**
-     * @return the list is organized as follows: Cardinals[this, north, south, east, west]
+     * @return the list is organized as follows: Cardinals[
+     * this,
+     * list of northern squares,
+     * list of southern squares,
+     * list of eastern squares,
+     * list of western squares]
+     *
      * if the square does not confines with a square, then its position in the list is set to NULL
      */
     public List<Square> getCardinals() {
-        List<Square> Cardinals = new ArrayList<>(5);
+        List<Square> cardinals = null;
         int i = 0;
-        for (Square s : Cardinals) {
-            Cardinals.set(i, null);
+        Square temp = this;
+
+        cardinals.add(i, this);
+
+        while (!(temp.north == null )) {
+            cardinals.add(i, temp.north);
+            i++;
+        }
+        while (!(temp.south == null )) {
+            cardinals.add(i, temp.south);
+            i++;
+        }
+        while (!(temp.east == null )) {
+            cardinals.add(i, temp.east);
+            i++;
+        }
+        while (!(temp.west == null )) {
+            cardinals.add(i, temp.west);
             i++;
         }
 
-        i = 0;
-        Cardinals.set(i, this);
-        i++;
-        if (!this.north.equals(null)) Cardinals.set(i, this.north);
-        i++;
-        if (!this.south.equals(null)) Cardinals.set(i, this.south);
-        i++;
-        if (!this.east.equals(null)) Cardinals.set(i, this.east);
-        i++;
-        if (!this.west.equals(null)) Cardinals.set(i, this.west);
-
-        return Cardinals;
+        return cardinals;
     }
 
     /**
@@ -242,45 +253,33 @@ public class Square {
      */
     @Override
     public boolean equals(Object obj) {
-        if(!(obj instanceof  Square))
+        if (!(obj instanceof Square))
             return false;
-        
-        if(!(this.north == null && ((Square) obj).north== null)) {
-            if (!(this.north!=null && ((Square) obj).north!=null)) {
-                return false;
-            }
-            else if(!(((Square) obj).north == north)){
+
+        if (!(this.north == null && ((Square) obj).north == null)) {
+            if (!(this.north != null && ((Square) obj).north != null) || ((Square) obj).north != north  )  {
                 return false;
             }
         }
 
-        if(!(this.south == null && ((Square) obj).south== null)) {
-            if (!(this.south!=null && ((Square) obj).south!=null)) {
-                return false;
-            }
-            else if(!(((Square) obj).south == south)){
+        if (!(this.south == null && ((Square) obj).south == null)) {
+            if (!(this.south != null && ((Square) obj).south != null)  ||  ((Square) obj).south != south) {
                 return false;
             }
         }
 
-        if(!(this.east == null && ((Square) obj).east== null)) {
-            if (!(this.east!=null && ((Square) obj).east!=null)) {
-                return false;
-            }
-            else if(!(((Square) obj).east == east)){
+        if (!(this.east == null && ((Square) obj).east == null)) {
+            if (!(this.east != null && ((Square) obj).east != null)  ||  ((Square) obj).east != east) {
                 return false;
             }
         }
 
-        if(!(this.west == null && ((Square) obj).west== null)) {
-            if (!(this.west!=null && ((Square) obj).west!=null)) {
-                return false;
-            }
-            else if(!(((Square) obj).west == west)){
+        if (!(this.west == null && ((Square) obj).west == null)) {
+            if (!(this.west != null && ((Square) obj).west != null)  ||  ((Square) obj).west != west) {
                 return false;
             }
         }
-        
+
         return true;
     }
 
@@ -295,28 +294,28 @@ public class Square {
 
         Square temp = this;
 
-        while (!this.north.equals(null) && !this.northBorder.equals(Border.WALL)) {
+        while (!(temp.north == null ) && !temp.northBorder.equals(Border.WALL)) {
             if (temp.north.equals(dest))
                 return true;
 
             temp = temp.north;
         }
 
-        while (!this.south.equals(null) && !this.southBorder.equals(Border.WALL)) {
+        while (!(temp.south == null ) && !temp.southBorder.equals(Border.WALL)) {
             if (temp.south.equals(dest))
                 return true;
 
             temp = temp.south;
         }
 
-        while (!this.east.equals(null) && !this.eastBorder.equals(Border.WALL)) {
+        while (!(temp.east == null ) && !temp.eastBorder.equals(Border.WALL)) {
             if (temp.east.equals(dest))
                 return true;
 
             temp = temp.east;
         }
 
-        while (!this.west.equals(null) && !this.westBorder.equals(Border.WALL)) {
+        while (!(temp.west == null ) && !temp.westBorder.equals(Border.WALL)) {
             if (temp.west.equals(dest))
                 return true;
 
