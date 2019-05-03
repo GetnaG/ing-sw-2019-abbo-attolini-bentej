@@ -1,15 +1,19 @@
 package it.polimi.ingsw.server.persistency;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.CardEffect;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
+import it.polimi.ingsw.server.controller.effects.Move;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Loads card effects from a json file.
@@ -40,6 +44,7 @@ import java.util.stream.Collectors;
  * @see CardEffect
  */
 public class EffectLoader implements BasicLoader<EffectInterface> {
+    private List<EffectInterface> moveSelfEffects;
     /**
      * The loaded effects (could be empty).
      */
@@ -58,7 +63,13 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
                     CardEffect[].class);
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Could not find: " + file, e);
-        }//TODO add other effects and return them below
+        }
+        moveSelfEffects = new ArrayList<>();
+        moveSelfEffects.add(new Action("cyberblade_shadowstep", new Move()));
+        moveSelfEffects.add(new Action("rocketLauncher_rocketJump",
+                Arrays.asList(new Move(), new Move())));
+        moveSelfEffects.add(new Action("plasmaGun_phaseGlide",
+                Arrays.asList(new Move(), new Move())));
     }
 
     /**
@@ -83,9 +94,10 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
      */
     @Override
     public synchronized List<EffectInterface> getAll() {
-        return Arrays.stream(cardEffects)
-                .map(CardEffect::new)
-                .collect(Collectors.toList());
+        return Stream.concat(Arrays.stream(cardEffects)
+                        .map(CardEffect::new),
+                moveSelfEffects.stream()
+        ).collect(Collectors.toList());
     }
 
     /**
@@ -95,9 +107,10 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
      */
     @Override
     public synchronized List<EffectInterface> getAll(String id) {
-        return Arrays.stream(cardEffects)
-                .filter(c -> c.getName().equalsIgnoreCase(id))
-                .map(CardEffect::new)
-                .collect(Collectors.toList());
+        return Stream.concat(Arrays.stream(cardEffects)
+                        .filter(c -> c.getName().equalsIgnoreCase(id))
+                        .map(CardEffect::new),
+                moveSelfEffects.stream()
+        ).collect(Collectors.toList());
     }
 }
