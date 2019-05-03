@@ -2,7 +2,6 @@ package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
-import it.polimi.ingsw.server.model.cards.AbstractCard;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.Iterator;
@@ -42,10 +41,12 @@ public class Grab implements EffectInterface {
 
     /**
      * @param subjectPlayer
+     * @param allTargets
      * @param board
      * @param alredyTargeted
+     * @param damageTargeted
      */
-    public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
         
     }
 

@@ -19,11 +19,13 @@ public class Move implements EffectInterface {
     /**
      * Moves a player by one cell
      * @param subjectPlayer     the player who is moving
+     * @param allTargets
      * @param board             board of the game
      * @param alredyTargeted    not used
+     * @param damageTargeted
      */
     @Override
-    public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
         List<Square> neighboursBy1 = neighbours(subjectPlayer.getPosition());
         Square destination = subjectPlayer.getToClient().chooseDestination(
                 neighboursBy1);

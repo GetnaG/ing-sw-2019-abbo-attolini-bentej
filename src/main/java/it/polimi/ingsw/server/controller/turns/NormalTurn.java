@@ -72,7 +72,7 @@ public class NormalTurn implements TurnInterface {
         PowerupCard card = player.getToClient().choosePowerup(player.getAllPowerup());
 
         if (card != null)
-            card.getEffect().runEffect(player, board, alreadyTargeted);
+            card.getEffect().runEffect(player, null, board, alreadyTargeted, new ArrayList<>());
     }
     /**
      * Asks the player to choose from a list of Actions and runs that action.
@@ -92,7 +92,7 @@ public class NormalTurn implements TurnInterface {
 
         Action chosenAction = player.getToClient().chooseAction(actions);
 
-        chosenAction.runEffect(player, board, alreadyTargeted);
+        chosenAction.runEffect(player, null, board, alreadyTargeted, new ArrayList<>());
 
     }
 

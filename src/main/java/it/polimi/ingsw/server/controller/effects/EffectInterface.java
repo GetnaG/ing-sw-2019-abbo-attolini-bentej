@@ -22,13 +22,14 @@ public interface EffectInterface extends Iterable<EffectInterface> {
     /**
      * Runs this effect for the specified player.
      *
-     * @param subjectPlayer   the player who calls this effect
-     * @param board           the game board (for applying the effect)
-     * @param alreadyTargeted a list of elements already targeted by this
-     *                        chain of effects
+     * @param subjectPlayer  the player who calls this effect
+     * @param allTargets     all the targets on the board
+     * @param board          the game board (for applying the effect)
+     * @param allTargeted    a list of elements already targeted by this chain
+     * @param damageTargeted a list of the elements that have received damage
      */
-    void runEffect(Player subjectPlayer, GameBoard board,
-                   List<Damageable> alreadyTargeted);
+    void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board,
+                   List<Damageable> allTargeted, List<Damageable> damageTargeted);
 
     /**
      * Returns the name of this effect.

@@ -94,7 +94,9 @@ class EffectIteratorTest {
         }
 
         @Override
-        public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
+        public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board,
+                              List<Damageable> alreadyTargeted,
+                              List<Damageable> damageTargeted) {
         }
 
         @Override

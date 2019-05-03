@@ -24,7 +24,7 @@ public class EffectIterator implements Iterator<EffectInterface> {
      *
      * @param first the first element of the iteration
      */
-    EffectIterator(EffectInterface first) {
+    public EffectIterator(EffectInterface first) {
         nextUp = first;
     }
 

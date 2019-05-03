@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -25,10 +26,12 @@ public class Shoot implements EffectInterface {
      * If the player has loaded weapons, asks him to choose a weapon to use.
      * Then asks which effect of that weapon he wants to use and runs it.
      * @param subjectPlayer     the subject of the turn
+     * @param allTargets
      * @param board             the board used in the game
      * @param alredyTargeted    the targets already hitted in the player's turn.
+     * @param damageTargeted
      */
-    public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
         this.player = subjectPlayer;
        if (subjectPlayer.getLoadedWeapons().isEmpty())
             return;
@@ -41,7 +44,7 @@ public class Shoot implements EffectInterface {
                 weaponChosen.getPossibleSequences()
         );
 
-        effectChosen.runEffect(subjectPlayer, board, alredyTargeted);
+        effectChosen.runEffect(subjectPlayer, null, board, alredyTargeted, new ArrayList<>());
     }
 
     /**

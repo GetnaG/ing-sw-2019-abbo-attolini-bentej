@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.AgainstRulesException;
 import it.polimi.ingsw.server.model.AmmoCube;
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.cards.*;
 import it.polimi.ingsw.server.model.player.Player;
 
@@ -421,7 +422,7 @@ public class GameBoard implements ReplaceListener {
      * @param square
      * @return a set presenting the players in the given square
      */
-    public Collection<Player> getPlayerInSquare(Square square, Collection<Player> players) {
+    public Collection<? extends Damageable> getPlayerInSquare(Square square, Collection<? extends Damageable> players) {
         return players.stream().filter(p -> p.getPosition().equals(square)).collect(Collectors.toSet());
     }
 

@@ -16,8 +16,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 class ShootTest {
     private GameBoard board;
     private List<Square> configuration;
@@ -70,7 +68,7 @@ class ShootTest {
     void runEffect() {
         Shoot shoot = new Shoot();
 
-        shoot.runEffect(players.get(0), board, new ArrayList<>());
+        shoot.runEffect(players.get(0), null, board, new ArrayList<>(), new ArrayList<>());
 
 
     }

@@ -57,11 +57,13 @@ public class Action implements EffectInterface {
     /**
      * Runs all the effects (steps) composed by the Action.
      * @param subjectPlayer     who is running the Action
+     * @param allTargets
      * @param board             board used in the game
      * @param alredyTargeted    list of players already targeted during the turn
+     * @param damageTargeted
      */
-    public void runEffect(Player subjectPlayer, GameBoard board, List<Damageable> alredyTargeted) {
-        effects.forEach(x -> x.runEffect(subjectPlayer, board, alredyTargeted));
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
+        effects.forEach(x -> x.runEffect(subjectPlayer, null, board, alredyTargeted, new ArrayList<>()));
     }
 
     /**

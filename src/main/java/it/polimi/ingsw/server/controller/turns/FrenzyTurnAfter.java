@@ -52,7 +52,7 @@ public class FrenzyTurnAfter implements TurnInterface {
         actions.add(getSecondFrenzyActionAfter());
 
         choosenAction = currentPlayer.getToClient().chooseAction(actions);
-        choosenAction.runEffect(currentPlayer, board, new ArrayList<>());
+        choosenAction.runEffect(currentPlayer, null, board, new ArrayList<>(), new ArrayList<>());
     }
 
     /**

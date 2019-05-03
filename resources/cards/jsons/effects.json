@@ -16,9 +16,9 @@
     "targetsDistance": {"min": 0, "max": 0},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresPolicy": "SUBJECT_CARDINALS",
     "squaresDistance": 2,
-    "quirks": []
+    "quirks": ["SINGLE_DIRECTION"]
   },
   {
     "id": "shockwave",
@@ -58,9 +58,9 @@
     "targetsDistance": {"min": 1, "max": 2},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresPolicy": "SUBJECT_CARDINALS",
     "squaresDistance": 0,
-    "quirks": ["DIFFERENT_SQUARES", "MOVE_TO_TARGET"]
+    "quirks": ["DIFFERENT_SQUARES", "MOVE_TO_TARGET", "SINGLE_DIRECTION"]
   },
   {
     "id": "shotgun",
@@ -131,9 +131,9 @@
     "targetsDistance": {"min": 0, "max": -1},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresPolicy": "SUBJECT_CARDINALS",
     "squaresDistance": 0,
-    "quirks": ["IGNORE_WALLS"]
+    "quirks": ["IGNORE_WALLS", "SINGLE_DIRECTION"]
   },
   {
     "id": "railgun_piercing",
@@ -142,9 +142,9 @@
     "targetsDistance": {"min": 0, "max": -1},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresPolicy": "SUBJECT_CARDINALS",
     "squaresDistance": 0,
-    "quirks": ["IGNORE_WALLS"]
+    "quirks": ["IGNORE_WALLS", "SINGLE_DIRECTION"]
   },
   {
     "id": "rocketLauncher",
@@ -198,9 +198,9 @@
     "targetsDistance": {"min": 1, "max": 2},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresPolicy": "SUBJECT_CARDINALS",
     "squaresDistance": 0,
-    "quirks": ["DIFFERENT_SQUARES"]
+    "quirks": ["DIFFERENT_SQUARES", "SINGLE_DIRECTION"]
   },
   {
     "id": "flamethrower_barbecue",
@@ -210,9 +210,9 @@
     "targetsDistance": {"min": 1, "max": 2},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SINGLE_DIRECTION",
+    "squaresPolicy": "SUBJECT_CARDINALS",
     "squaresDistance": 0,
-    "quirks": ["DIFFERENT_SQUARES"]
+    "quirks": ["DIFFERENT_SQUARES", "SINGLE_DIRECTION"]
   },
   {
     "id": "hellion",
@@ -448,7 +448,16 @@
     "squaresDistance": 0,
     "quirks": []
   },
-
+  {
+    "id": "targetingScope",
+    "damageAmount": 1,
+    "targetsNumber": {"min": 1, "max": 1},
+    "targetsDistance": {"min": 0, "max": -1},
+    "historyPolicy": "ONLY_DAMAGED",
+    "targetsPolicy": "ALL",
+    "squaresPolicy": "NONE",
+    "quirks": []
+  },
   {
     "id": "newton",
     "targetsNumber": {"min": 1, "max": 1},
@@ -457,6 +466,6 @@
     "targetsPolicy": "ALL",
     "squaresPolicy": "ALL",
     "squaresDistance": 2,
-    "quirks": []
+    "quirks": ["SINGLE_DIRECTION"]
   }
 ]
