@@ -5,7 +5,7 @@ package it.polimi.ingsw.server.controller.effects.cardeffects;
  */
 enum QuirkPolicy {
     /**
-     * The availableTargets must be all on different squares.
+     * The targets must be all on different squares.
      */
     DIFFERENT_SQUARES,
     /**
@@ -18,20 +18,26 @@ enum QuirkPolicy {
     MOVE_TO_TARGET,
     /**
      * Targets which have already been targeted at least two times in
-     * this chain are not valid availableTargets.
+     * this chain are not valid targets.
      */
     MAX_TWO_HITS,
     /**
      * Can be used with secondary damage and marks to hit all the players
-     * in a room instead of a square.
+     * in a room instead of a square, does not include the subject's room.
      */
     ROOM,
     /**
      * Restricts movement to a single cardinal direction.
-     * This can be used with zero to two availableTargets.
+     * This can be used with zero to two targets.
      */
     SINGLE_DIRECTION;
 
+    /**
+     * Checks whether this is in the provided array.
+     *
+     * @param quirks the array to be checked
+     * @return true if this instance is in the array
+     */
     boolean isIn(QuirkPolicy[] quirks) {
         for (QuirkPolicy p : quirks)
             if (p == this)

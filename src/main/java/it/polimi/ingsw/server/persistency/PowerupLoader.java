@@ -42,18 +42,28 @@ public class PowerupLoader implements BasicLoader<PowerupCard> {
     /**
      * This constructor loads the cards from a file.
      * The file must be located where specified by {@code file}.
+     * This also checks that the specified effect exists.
      *
      * @param file the path, name and extension of the json file for powerup
      *             cards
      * @throws IllegalArgumentException if {@code file} is incorrect
      */
     PowerupLoader(String file) {
+        /*Loading the cards from file*/
         try {
             powerupCards = new Gson().fromJson(new FileReader(file),
                     PowerupCard[].class);
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Could not find: " + file, e);
         }
+
+        /*Checking if all effects are present*/
+        for (PowerupCard card : powerupCards)
+            try {
+                card.getEffect();
+            } catch (NoSuchElementException e) {
+                throw new WrongFileInputException(file, card.getId(), e);
+            }
     }
 
     /**

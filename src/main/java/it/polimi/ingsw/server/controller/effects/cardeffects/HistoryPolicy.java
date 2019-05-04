@@ -25,6 +25,16 @@ enum HistoryPolicy {
      */
     ALL;
 
+    /**
+     * Checks if the provided target is acceptable according tho this policy.
+     *
+     * @param damageable      the target to be evaluated
+     * @param alreadyTargeted the targets that have already been affected in
+     *                        this chain
+     * @param alreadyDamaged  the targets that have already been damaged in
+     *                        this chain
+     * @return true if the provided target is acceptable
+     */
     boolean filterTarget(Damageable damageable,
                          List<Damageable> alreadyTargeted,
                          List<Damageable> alreadyDamaged) {

@@ -44,6 +44,9 @@ import java.util.stream.Stream;
  * @see CardEffect
  */
 public class EffectLoader implements BasicLoader<EffectInterface> {
+    /**
+     * The effects not present in the json.
+     */
     private List<EffectInterface> moveSelfEffects;
     /**
      * The loaded effects (could be empty).
@@ -53,17 +56,27 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
     /**
      * This constructor loads the effects from a file.
      * The file must be located where specified by {@code file}.
+     * This also performs a check on the loaded elements.
+     * Other effects are added.
      *
      * @param file the path, name and extension of the json file for effects
      * @throws IllegalArgumentException if {@code file} is incorrect
      */
     EffectLoader(String file) {
+        /*Loading from file*/
         try {
             cardEffects = new Gson().fromJson(new FileReader(file),
                     CardEffect[].class);
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Could not find: " + file, e);
         }
+
+        /*Checking the cardEffects*/
+        for (CardEffect effect : cardEffects)
+            if (!effect.checkIntegrity())
+                throw new WrongFileInputException(file, effect.getName());
+
+        /*Adding the other effects*/
         moveSelfEffects = new ArrayList<>();
         moveSelfEffects.add(new Action("cyberblade_shadowstep", new Move()));
         moveSelfEffects.add(new Action("rocketLauncher_rocketJump",

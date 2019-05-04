@@ -5,9 +5,10 @@ import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.player.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Filters the squares and defines the movement.
@@ -18,11 +19,11 @@ enum SquaresPolicy {
      */
     VISIBLE,
     /**
-     * Moves the availableTargets to the subject.
+     * Moves the targets to the subject.
      */
     TO_SUBJECT,
     /**
-     * Moves the availableTargets to the last target in the chain.
+     * Moves the targets to the last target in the chain.
      */
     TO_PREVIOUS,
     /**
@@ -43,22 +44,31 @@ enum SquaresPolicy {
      */
     NONE;
 
-    List<Square> getDestinations(Player subject, GameBoard board,
-                                 Damageable lastTargeted) {
+    /**
+     * Returns all the valid squares according to this policy.
+     *
+     * @param subject         the player using the effect with this policy
+     * @param board           the game board of this game
+     * @param alreadyTargeted the target that have already been affected in
+     *                        this chain of effects
+     * @return all the valid squares, null if squares are not relevant
+     */
+    Set<Square> getValidDestinations(Player subject, GameBoard board,
+                                     List<Damageable> alreadyTargeted) {
         switch (this) {
             case VISIBLE:
-                return subject.getPosition().listOfVisibles(board);
+                return new HashSet<>(subject.getPosition().listOfVisibles(board));
             case VISIBLE_NOT_SELF:
-                List<Square> visible =
-                        subject.getPosition().listOfVisibles(board);
+                Set<Square> visible = new HashSet<>(
+                        subject.getPosition().listOfVisibles(board));
                 visible.remove(subject.getPosition());
                 return visible;
             case TO_PREVIOUS:
-                return Arrays.asList(lastTargeted.getPosition());
+                return new HashSet<>(Collections.singletonList(alreadyTargeted.get(alreadyTargeted.size() - 1).getPosition()));
             case SUBJECT_CARDINALS:
-                return subject.getPosition().getCardinals();
+                return new HashSet<>(subject.getPosition().getCardinals());
             case ALL:
-                return new ArrayList<>(board.getAllSquares());
+                return new HashSet<>(board.getAllSquares());
             case TO_SUBJECT:
             case NONE:
             default:
@@ -66,7 +76,14 @@ enum SquaresPolicy {
         }
     }
 
-    void apply(Player subject, Damageable target, List<Square> destination) {
+    /**
+     * Applies the right movement to the provided target.
+     *
+     * @param subject     the player using the effect with this policy
+     * @param target      the target to be affected
+     * @param destination a set containing the chosen destination
+     */
+    void apply(Player subject, Damageable target, Set<Square> destination) {
         switch (this) {
             case TO_SUBJECT:
                 target.setPosition(subject.getPosition());
@@ -78,7 +95,7 @@ enum SquaresPolicy {
             case SUBJECT_CARDINALS:
             case NONE:
                 if (destination != null && !destination.isEmpty())
-                    target.setPosition(destination.get(0));
+                    target.setPosition(destination.iterator().next());
                 return;
             default:
         }

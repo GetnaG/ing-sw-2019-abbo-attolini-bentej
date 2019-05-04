@@ -55,6 +55,14 @@ public class WeaponLoader implements BasicLoader<WeaponCard> {
         } catch (FileNotFoundException e) {
             throw new IllegalArgumentException("Could not find: " + file, e);
         }
+
+        /*Checking if all effects are present*/
+        for (WeaponCard card : weaponCards)
+            try {
+                card.getPossibleSequences();
+            } catch (NoSuchElementException e) {
+                throw new WrongFileInputException(file, card.getId(), e);
+            }
     }
 
     /**
