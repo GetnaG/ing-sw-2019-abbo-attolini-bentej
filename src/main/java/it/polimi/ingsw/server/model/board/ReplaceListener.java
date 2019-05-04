@@ -33,8 +33,8 @@ public interface ReplaceListener {
     /**
      * Adds a {@linkplain SpawnSquare} to the squares that need a new card.
      *
-     * @param toBeReplaced  the {@code SpawnSquare} without some {@code
-     *                      WeaponCard}s
+     * @param toBeReplaced the {@code SpawnSquare} without some {@code
+     *                     WeaponCard}s
      * @throws NullPointerException if {@code toBeReplaced} is null
      */
     void addSpawnSquare(SpawnSquare toBeReplaced);
@@ -45,9 +45,9 @@ public interface ReplaceListener {
      * chooses to take one more, he has to put one back to the shop it took
      * it from.
      *
-     * @param location  the location of the shop
-     * @param weapons   the {@linkplain List} of weapons to put back
-     * @throws NullPointerException if a parameter is null
+     * @param location the location of the shop
+     * @param weapons  the {@linkplain List} of weapons to put back
+     * @throws NullPointerException     if a parameter is null
      * @throws IllegalArgumentException if location does not have a weapon shop
      */
     void replaceDiscardedWeapons(Square location, List<WeaponCard> weapons);

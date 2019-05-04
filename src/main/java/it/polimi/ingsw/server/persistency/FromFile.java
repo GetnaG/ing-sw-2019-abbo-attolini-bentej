@@ -69,7 +69,7 @@ public class FromFile {
      */
     public static synchronized BasicLoader<AmmoCard> ammoCards() {
         if (ammoCardLoader == null)
-            ammoCardLoader = new AmmoCardLoader(AMMO_CARDS);
+            setup();
         return ammoCardLoader;
     }
 
@@ -80,7 +80,7 @@ public class FromFile {
      */
     public static synchronized BasicLoader<PowerupCard> powerups() {
         if (powerupLoader == null)
-            powerupLoader = new PowerupLoader(POWERUP_CARDS);
+            setup();
         return powerupLoader;
     }
 
@@ -91,7 +91,7 @@ public class FromFile {
      */
     public static synchronized BasicLoader<WeaponCard> weapons() {
         if (weaponLoader == null)
-            weaponLoader = new WeaponLoader(WEAPON_CARDS);
+            setup();
         return weaponLoader;
     }
 
@@ -102,7 +102,17 @@ public class FromFile {
      */
     public static synchronized BasicLoader<EffectInterface> effects() {
         if (effectLoader == null)
-            effectLoader = new EffectLoader(EFFECTS);
+            setup();
         return effectLoader;
+    }
+
+    /**
+     * Loads the  resources from file in the right order.
+     */
+    private static void setup() {
+        effectLoader = new EffectLoader(EFFECTS);
+        weaponLoader = new WeaponLoader(WEAPON_CARDS);
+        powerupLoader = new PowerupLoader(POWERUP_CARDS);
+        ammoCardLoader = new AmmoCardLoader(AMMO_CARDS);
     }
 }

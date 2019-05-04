@@ -2,9 +2,9 @@ package it.polimi.ingsw.server.persistency;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.server.controller.effects.Action;
-import it.polimi.ingsw.server.controller.effects.cardeffects.CardEffect;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.controller.effects.Move;
+import it.polimi.ingsw.server.controller.effects.cardeffects.CardEffect;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
