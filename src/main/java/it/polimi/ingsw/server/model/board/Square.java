@@ -231,23 +231,24 @@ public class Square {
             return true;
 
         else {
-            if (this.northBorder != Border.WALL) {
+            if (this.northBorder != Border.WALL  && this.northBorder != null) {
                 if (this.north.room == destination.room)
                     return true;
 
             }
+            ///////////////////////////////////////////////////////////////// kind of break -> riscrivereeeeeeeee
 
-            if (this.southBorder != Border.WALL) {
+            if (this.southBorder != Border.WALL && this.southBorder != null) {
                 if (this.south.room == destination.room)
                     return true;
             }
 
-            if (this.eastBorder != Border.WALL) {
+            if (this.eastBorder != Border.WALL && this.eastBorder != null) {
                 if (this.east.room == destination.room)
                     return true;
             }
 
-            if (this.westBorder != Border.WALL) {
+            if (this.westBorder != Border.WALL && this.westBorder != null) {
                 if (this.west.room == destination.room)
                     return true;
             }
@@ -328,28 +329,28 @@ public class Square {
 
         Square temp = this;
 
-        while (!(temp.north == null ) && !temp.northBorder.equals(Border.WALL)) {
+        while (temp.north != null && temp.northBorder != Border.WALL) {
             if (temp.north.equals(dest))
                 return true;
 
             temp = temp.north;
         }
 
-        while (!(temp.south == null ) && !temp.southBorder.equals(Border.WALL)) {
+        while (temp.south != null && temp.southBorder != Border.WALL) {
             if (temp.south.equals(dest))
                 return true;
 
             temp = temp.south;
         }
 
-        while (!(temp.east == null ) && !temp.eastBorder.equals(Border.WALL)) {
+        while (temp.east != null && temp.eastBorder != Border.WALL) {
             if (temp.east.equals(dest))
                 return true;
 
             temp = temp.east;
         }
 
-        while (!(temp.west == null ) && !temp.westBorder.equals(Border.WALL)) {
+        while (temp.west != null && temp.westBorder != Border.WALL) {
             if (temp.west.equals(dest))
                 return true;
 

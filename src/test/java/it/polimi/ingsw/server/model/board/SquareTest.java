@@ -6,7 +6,8 @@ import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class SquareTest {
 
@@ -37,7 +38,7 @@ class SquareTest {
 
     @Test
     void checkVisible() {
-     //1//
+        //1//
         Square testS = new Square(Color.BLUE);
         Square testDestinationS = new Square(Color.BLUE);
         List<Square> listA = new ArrayList<>();
@@ -50,16 +51,13 @@ class SquareTest {
         assertTrue(testS.getRoom().equals(testDestinationS.getRoom()));
         assertTrue(testS.checkVisible(testDestinationS));
 
-     //2//
+        //2//
         listA.remove(2);
 
         testS.setNorth(testDestinationS);
         testDestinationS.setSouth(testS);
         testDestinationS.setColor(Color.YELLOW);
         testS.setNorthBorder(Border.DOOR);
-       // testDestinationS.setSouthBorder(Border.DOOR);
-
-        assertTrue(testDestinationS.getSouthBorder() == Border.DOOR);
 
         List<Square> listB = new ArrayList<>();
         SpawnSquare testSPSQ2 = new SpawnSquare(AmmoCube.YELLOW, null);
@@ -67,10 +65,9 @@ class SquareTest {
         listB.add(testDestinationS);
         Room roomB = new Room(listB, testSPSQ2);
 
-
         assertTrue(testS.checkVisible(testDestinationS));
 
-     //3//
+        //3//
         Square testDestinationS2 = new Square(Color.YELLOW);
         listB.remove(1);
         listB.add(testDestinationS2);
@@ -79,23 +76,78 @@ class SquareTest {
         testS.setNorthBorder(Border.WALL);
         roomB.setSquares(listB);
 
-        assertTrue(testDestinationS2.getRoom() == roomB);
-
-        //assertTrue(!testS.checkVisible(testDestinationS2));
-
+        assertTrue(!testS.checkVisible(testDestinationS2));
     }
 
     /*
     @Test
     void listOfVisibles() {
     }
+    */
 
     @Test
     void equals() {
+        Square a = new Square(Color.BLUE);
+        Square b = new Square(Color.BLUE);
+        Square x = new Square();
+        Square y = new Square();
+        Square z = new Square();
+
+        //1//
+        a.setNorth(x);
+        b.setNorth(x);
+        a.setEast(y);
+        b.setEast(y);
+        a.setWest(z);
+        b.setWest(z);
+
+        assertTrue(a.equals(b));
+        assertEquals(a, b);
+
+        //2//
+        b.setNorth(null);
+        b.setWest(x);
+        b.setSouth(y);
+        b.setEast(null);
+
+        assertTrue(!a.equals(b));
+
+        //3//
+        b.setColor(Color.YELLOW);
+
+        assertTrue(!a.equals(b));
+
     }
+
 
     @Test
     void straight() {
+        Square testS = new Square();
+        Square testDestinationS = new Square();
+        Square a = new Square(), b = new Square(), c = new Square(), d = new Square();
+
+        //1//
+        testS.setNorth(a);
+        testDestinationS.setNorth(a);
+        testS.setSouth(b);
+        testDestinationS.setSouth(b);
+        testS.setEast(c);
+        testDestinationS.setEast(c);
+        testS.setWest(d);
+        testDestinationS.setWest(d);
+
+        assertTrue(testS.straight(testDestinationS));
+
+        //2//
+        testS = new Square();
+        testDestinationS = new Square();
+        testS.setWest(testDestinationS);
+        testDestinationS.setEast(testS);
+        testS.setWestBorder(Border.CORRIDOR);
+        testDestinationS.setEastBorder(Border.CORRIDOR);
+
+        assertTrue(testS.straight(testDestinationS));
+
     }
-    */
+
 }
