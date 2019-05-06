@@ -1,12 +1,18 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
+import it.polimi.ingsw.server.model.board.SpawnSquare;
+import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
+import it.polimi.ingsw.server.model.cards.PowerupCard;
+import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * A player can grab any Grabbable object. A Grabbable object can be an AmmoCard
@@ -20,27 +26,6 @@ public class Grab implements EffectInterface {
 
 
     /**
-     * Gets the grabbed object
-     */
-    private void getGrabbable() {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    private void applyGrabbed() {
-        // TODO implement here
-    }
-
-    /**
-     * 
-     */
-    private void discardWeapon() {
-        // TODO implement here
-    }
-
-    /**
      * Runs Grab effect for the specified player.
      *
      * @param subjectPlayer  the player who calls this effect
@@ -50,16 +35,37 @@ public class Grab implements EffectInterface {
      * @param damageTargeted a list of the elements that have received damage
      */
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> allTargeted, List<Damageable> damageTargeted){
-        // We can grab an AmmoCard
-        if(subjectPlayer.getPosition().getAmmoCard() != null){
-            AmmoCard card = subjectPlayer.getPosition().getAmmoCard();
-            // get the cubes
-            // If the tile depicts a powerup card, draw one
-        }
-        // We can grab a Weapon
+        Square position = subjectPlayer.getPosition();
 
-        if(subjectPlayer.getPosition().getTurret() != null){
-            // we can grab a Turret
+        // We can grab an AmmoCard if there's an AmmoTile
+        if(position.getAmmoCard() != null){
+            AmmoCard card = position.getAmmoCard();
+            subjectPlayer.addAmmo(card.getCubes());
+            // If the tile depicts a powerup card, draw one.
+            if (card.hasPowerup() && subjectPlayer.getAllPowerup().size() >= 3){
+                subjectPlayer.addPowerup(board.getPowerupCard());
+            }
+        }
+        // We can grab a Weapon if there's a Market in our position
+        if (position.getRoom().getSpawnSquare().equals(position)){
+            //get weapons in market and filter only the affordable ones
+            List<WeaponCard> weaponAvailable = position.getRoom().getSpawnSquare().getMarket().getCards();
+            List<WeaponCard> weaponsAffordable = weaponAvailable.stream().filter(card ->  subjectPlayer.canAfford(card.getCost(), true)).collect(Collectors.toList());
+            // ask the player which weapon he wants to buy
+            WeaponCard weaponToBuy = subjectPlayer.getToClient().chooseWeaponToBuy(weaponsAffordable);
+            // If he has 3 weapons, he has to discard one.
+            if (subjectPlayer.getNumOfWeapons() >=3){
+                WeaponCard weaponToDiscard = subjectPlayer.getToClient().chooseWeaponToDiscard(subjectPlayer.getAllWeapons());
+                subjectPlayer.discard(weaponToDiscard);
+            }
+            // The player buys the weapon with the chosen powerup eventually
+            List<PowerupCard> powerupToPay =  List.of(subjectPlayer.getToClient().choosePowerupForPaying(subjectPlayer.getAllPowerup()));
+            subjectPlayer.buy(weaponToBuy, powerupToPay);
+
+
+        }
+        if(position.getTurret() != null){
+            // we can grab a Turret //TODO Implement Turret which is an extra-feature
         }
     }
 
@@ -72,8 +78,8 @@ public class Grab implements EffectInterface {
     }
 
     /**
-     * //FIXME
-     * @return
+     * Has no decorated.
+     * @return null
      */
     public EffectInterface getDecorated() {
         return null;
@@ -88,8 +94,8 @@ public class Grab implements EffectInterface {
     }
 
     /**
-     * FIXME
-     * @return
+     * Has no iterator
+     * @return null
      */
     @Override
     public Iterator<EffectInterface> iterator() {
