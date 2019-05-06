@@ -21,11 +21,6 @@ public class TurretSquare extends Square {
     }
 
 
-    //returns the reference
-    public AmmoCard getAmmoCard() {
-        return ammoCard;
-    }
-
     public void setAmmoCard(AmmoCard ammoCard) {
         this.ammoCard = ammoCard;
     }
@@ -36,5 +31,21 @@ public class TurretSquare extends Square {
         AmmoCard tmp = ammoCard;
         ammoCard = null;
         return tmp;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public AmmoCard getAmmoCard(){
+        return null;
+    }
+
+    /**
+     * @{inheritDoc}
+     */
+    @Override
+    public Turret getTurret(){
+        return this.turret;
     }
 }

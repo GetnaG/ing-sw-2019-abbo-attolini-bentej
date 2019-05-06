@@ -48,10 +48,12 @@ public class Action implements EffectInterface {
         this.effects.add(effect);
         this.currentIndex = 0;
     }
+
     /**
      * Default constructor
      */
-    public Action( ) {
+    public Action() {
+
     }
 
     /**
@@ -62,8 +64,8 @@ public class Action implements EffectInterface {
      * @param alredyTargeted    list of players already targeted during the turn
      * @param damageTargeted
      */
-    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
-        effects.forEach(x -> x.runEffect(subjectPlayer, null, board, alredyTargeted, new ArrayList<>()));
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alreadyTargeted, List<Damageable> damageTargeted) {
+        effects.forEach(x -> x.runEffect(subjectPlayer, null, board, alreadyTargeted, new ArrayList<>()));
     }
 
     /**
@@ -94,7 +96,10 @@ public class Action implements EffectInterface {
         effects.add(last);
     }
 
-
+    /**
+     * Gets the iterator for an Action.
+     * @return iterator for Action
+     */
     @Override
     public Iterator<EffectInterface> iterator() {
         return effects.listIterator();

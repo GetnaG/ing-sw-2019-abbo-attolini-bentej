@@ -168,13 +168,20 @@ public class Square {
     }
 
     /**
-     * implemented by TurretSquare and SpawnSquare
-     *
-     * @return in TurretSquare is AmmoCard, in SpawnSquare is List<WeaponCard>
+     * Gets the AmmoCard in the Square or null if the game mode is not deathmatch.
+     * @return AmmoCard in this Square
      */
-    public AbstractCard getGrabbables() {
+    public AmmoCard getAmmoCard() {
+        return ammoCard;
+    }
+
+    /**
+     * Gets the Turret in this Square or null if the game mode is not Turret Mode.
+     * @return Turret in this Square
+     */
+    public Turret getTurret() {
         return null;
-    } // chiedere a fahed
+    }
 
     /**
      * @param destination is the square that will be checked

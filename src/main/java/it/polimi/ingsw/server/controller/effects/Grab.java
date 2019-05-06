@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
+import it.polimi.ingsw.server.model.cards.AmmoCard;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.Iterator;
@@ -40,14 +41,26 @@ public class Grab implements EffectInterface {
     }
 
     /**
-     * @param subjectPlayer
-     * @param allTargets
-     * @param board
-     * @param alredyTargeted
-     * @param damageTargeted
+     * Runs Grab effect for the specified player.
+     *
+     * @param subjectPlayer  the player who calls this effect
+     * @param allTargets     all the targets on the board
+     * @param board          the game board (for applying the effect)
+     * @param allTargeted    a list of elements already targeted by this chain
+     * @param damageTargeted a list of the elements that have received damage
      */
-    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
-        
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> allTargeted, List<Damageable> damageTargeted){
+        // We can grab an AmmoCard
+        if(subjectPlayer.getPosition().getAmmoCard() != null){
+            AmmoCard card = subjectPlayer.getPosition().getAmmoCard();
+            // get the cubes
+            // If the tile depicts a powerup card, draw one
+        }
+        // We can grab a Weapon
+
+        if(subjectPlayer.getPosition().getTurret() != null){
+            // we can grab a Turret
+        }
     }
 
     /**
