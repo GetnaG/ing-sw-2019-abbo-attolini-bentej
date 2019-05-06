@@ -3,8 +3,7 @@ package it.polimi.ingsw.server.model.board;
 import it.polimi.ingsw.server.model.cards.AbstractCard;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * Defines the structure of a square.
@@ -14,6 +13,7 @@ public class Square {
 
     protected ReplaceListener replacer;
     private Room room;
+    private AbstractCard abstractCard;  //------------------??
     private AmmoCard ammoCard;
     private Color color;
     private Square north;
@@ -86,8 +86,11 @@ public class Square {
         return northBorder;
     }
 
-    public void setNorthBorder(Border northBorder) {
+    public void setNorthBorder(Border northBorder) {  //--------------------------- check gameboard 4 redundancy!!!!!
         this.northBorder = northBorder;
+        if(this.north != null && this.north.getSouthBorder() == null)  // there is a valid square with a non initialized border
+            this.north.setSouthBorder(northBorder);
+
     }
 
     public Border getSouthBorder() {
@@ -96,6 +99,8 @@ public class Square {
 
     public void setSouthBorder(Border southBorder) {
         this.southBorder = southBorder;
+        if(this.south != null && this.south.getNorthBorder() == null)  // there is a valid square with a non initialized border
+            this.south.setNorthBorder(southBorder);
     }
 
     public Border getEastBorder() {
@@ -104,6 +109,8 @@ public class Square {
 
     public void setEastBorder(Border eastBorder) {
         this.eastBorder = eastBorder;
+        if(this.east != null && this.east.getWestBorder() == null)  // there is a valid square with a non initialized border
+            this.east.setWestBorder(eastBorder);
     }
 
     public Border getWestBorder() {
@@ -112,6 +119,8 @@ public class Square {
 
     public void setWestBorder(Border westBorder) {
         this.westBorder = westBorder;
+        if(this.west != null && this.west.getEastBorder() == null)  // there is a valid square with a non initialized border
+            this.west.setEastBorder(westBorder);
     }
 
     public ReplaceListener getReplacer() {
@@ -130,6 +139,43 @@ public class Square {
         this.color = color;
     }
 
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public void setGrabbable(AbstractCard abstractCard) {
+        this.abstractCard = abstractCard;
+    } //---------??
+
+    /**
+     * Gets the AmmoCard in the Square or null if the game mode is not deathmatch.
+     * @return AbstractCard in this Square, the card can be AmmoCard (if turretSquare), wea
+     */
+    public AbstractCard getGrabbable() {
+        return abstractCard;
+    }  //--------------------------------------?????
+
+    /**
+     * Gets the Turret in this Square or null if the game mode is not Turret Mode.
+     * @return Turret in this Square
+     */
+    public Turret getTurret() {
+        return null;
+    } //-------------------------------------------?????
+
+
+    public void setAmmoCard(AmmoCard ammoCard){
+        this.ammoCard = ammoCard;
+    }
+
+    public AmmoCard getAmmoCard(){
+        return ammoCard;
+    }
+
     /**
      * @return the list is organized as follows: Cardinals[
      * this,
@@ -141,46 +187,38 @@ public class Square {
      * if the square does not confines with a square, then its position in the list is set to NULL
      */
     public List<Square> getCardinals() {
-        List<Square> cardinals = null;
-        int i = 0;
+        List<Square> cardinals = new ArrayList<>();
         Square temp = this;
 
-        cardinals.add(i, this);
+        cardinals.add(this);
 
-        while (!(temp.north == null )) {
-            cardinals.add(i, temp.north);
-            i++;
+        while (temp.north != null ) {
+            cardinals.add(temp.north);
+            temp = temp.north;
         }
-        while (!(temp.south == null )) {
-            cardinals.add(i, temp.south);
-            i++;
+
+        temp = this;
+
+        while (temp.south != null ) {
+            cardinals.add(temp.south);
+            temp = temp.south;
         }
-        while (!(temp.east == null )) {
-            cardinals.add(i, temp.east);
-            i++;
+
+        temp = this;
+
+        while (temp.east != null ) {
+            cardinals.add(temp.east);
+            temp = temp.east;
         }
-        while (!(temp.west == null )) {
-            cardinals.add(i, temp.west);
-            i++;
+
+        temp = this;
+
+        while (temp.west != null ) {
+            cardinals.add(temp.west);
+            temp = temp.south;
         }
 
         return cardinals;
-    }
-
-    /**
-     * Gets the AmmoCard in the Square or null if the game mode is not deathmatch.
-     * @return AmmoCard in this Square
-     */
-    public AmmoCard getAmmoCard() {
-        return ammoCard;
-    }
-
-    /**
-     * Gets the Turret in this Square or null if the game mode is not Turret Mode.
-     * @return Turret in this Square
-     */
-    public Turret getTurret() {
-        return null;
     }
 
     /**
@@ -218,17 +256,6 @@ public class Square {
         return false;
     }
 
-    public Room getRoom() {
-        return room;
-    }
-
-    public void setRoom(Room room) {
-        this.room = room;
-    }
-
-    public void setGrabbable(AmmoCard ammoCard) {
-        this.ammoCard = ammoCard;
-    }
 
     /**
      * @return returns a list of all the visible squares

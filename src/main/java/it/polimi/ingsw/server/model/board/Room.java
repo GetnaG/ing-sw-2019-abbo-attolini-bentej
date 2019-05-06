@@ -13,16 +13,29 @@ public class Room {
     public Room( List<Square> squares, SpawnSquare spawnSquare ) {
 
         this.squares = squares;
+        for(Square i: squares)
+            i.setRoom(this);
         this.spawnSquare = spawnSquare;
+
+        //set spawnsqaure as leader of the list of the room squares, check that a room has exactly 1 spawnsquare
+        if(squares.get(0)  != this.spawnSquare)
+            ;  //------------------------------------------------------------------ exception????????????????
+
+
     }
 
     public Room( List<Square> squares ) {
         this.squares = squares;
+        for(Square i: squares)
+            i.setRoom(this);
         spawnSquare = null;
     }
 
     public void setSquares(List<Square> squares) {
+
         this.squares = squares;
+        for(Square i: squares)
+            i.setRoom(this);
     }
 
     public List<Square> getSquares(){

@@ -37,7 +37,7 @@ public class TurretSquare extends Square {
      * @{inheritDoc}
      */
     @Override
-    public AmmoCard getAmmoCard(){
+    public AmmoCard getGrabbable(){
         return null;
     }
 
