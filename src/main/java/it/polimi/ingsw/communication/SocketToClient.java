@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
+import java.net.Socket;
 import java.util.List;
 
 /**
@@ -18,6 +19,12 @@ import java.util.List;
  * @author Abbo Giulio A.
  */
 public class SocketToClient implements ToClientInterface {
+    private Socket socket;
+
+    public SocketToClient(Socket socket) {
+        this.socket = socket;
+    }
+
     @Override
     public EffectInterface chooseEffectsSequence(List<EffectInterface> options) {
         return null;

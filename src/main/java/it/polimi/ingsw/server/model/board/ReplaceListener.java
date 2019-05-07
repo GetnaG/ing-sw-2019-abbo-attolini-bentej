@@ -23,9 +23,9 @@ import java.util.List;
  */
 public interface ReplaceListener {
     /**
-     * Adds a {@linkplain TurretSquare} to the squares that need a new card.
+     * Adds a {@linkplain Square} to the squares that need a new card.
      *
-     * @param toBeReplaced the {@code TurretSquare} without a {@code AmmoCard}
+     * @param toBeReplaced the square without a {@code AmmoCard}
      * @throws NullPointerException if {@code toBeReplaced} is null
      */
     void addSquare(Square toBeReplaced);

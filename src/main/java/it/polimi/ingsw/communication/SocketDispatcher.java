@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.serverlogic.ServerMain;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 /**
  * Descrizione.
@@ -27,7 +28,8 @@ public class SocketDispatcher extends Thread {
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (listening) {
-                new SocketHandler(serverSocket.accept()).start();
+                Socket socket = serverSocket.accept();
+                new Thread(() -> new User(new SocketToClient(socket)).init());
             }
 
         } catch (IOException e) {
