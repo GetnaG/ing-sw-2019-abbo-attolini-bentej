@@ -82,7 +82,56 @@ public class User implements ToClientInterface {
         try {
             return task.get(30, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+        return null;
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PowerupCard chooseSpawn(List<PowerupCard> option) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<PowerupCard> task =executorService.submit(()-> toClient.chooseSpawn(option));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
+        return null;
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PowerupCard choosePowerup(List<PowerupCard> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<PowerupCard> task =executorService.submit(()-> toClient.choosePowerup(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
+
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Square chooseDestination(List<Square> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<Square> task =executorService.submit(()-> toClient.chooseDestination(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
         }
 
         return null;
@@ -92,31 +141,15 @@ public class User implements ToClientInterface {
      * {@inheritDoc}
      */
     @Override
-    public PowerupCard chooseSpawn(List<PowerupCard> option) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public PowerupCard choosePowerup(List<PowerupCard> options) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Square chooseDestination(List<Square> options) {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public WeaponCard chooseWeaponCard(List<WeaponCard> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<WeaponCard> task =executorService.submit(()-> toClient.chooseWeaponCard(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
         return null;
     }
 
@@ -125,6 +158,14 @@ public class User implements ToClientInterface {
      */
     @Override
     public WeaponCard chooseWeaponToBuy(List<WeaponCard> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<WeaponCard> task =executorService.submit(()-> toClient.chooseWeaponToBuy(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
         return null;
     }
 
@@ -133,6 +174,13 @@ public class User implements ToClientInterface {
      */
     @Override
     public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<WeaponCard> task =executorService.submit(()-> toClient.chooseWeaponToDiscard(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
         return null;
     }
 
@@ -141,6 +189,14 @@ public class User implements ToClientInterface {
      */
     @Override
     public WeaponCard chooseWeaponToReload(List<WeaponCard> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<WeaponCard> task =executorService.submit(()-> toClient.chooseWeaponToReload(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
         return null;
     }
 
@@ -149,6 +205,14 @@ public class User implements ToClientInterface {
      */
     @Override
     public Action chooseAction(List<Action> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<Action> task =executorService.submit(()-> toClient.chooseAction(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
         return null;
     }
 
@@ -157,6 +221,14 @@ public class User implements ToClientInterface {
      */
     @Override
     public PowerupCard choosePowerupForPaying(List<PowerupCard> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<PowerupCard> task =executorService.submit(()-> toClient.choosePowerupForPaying(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
         return null;
     }
 
@@ -165,6 +237,14 @@ public class User implements ToClientInterface {
      */
     @Override
     public PowerupCard askUseTagback(List<PowerupCard> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<PowerupCard> task =executorService.submit(()-> toClient.askUseTagback(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
         return null;
     }
 
@@ -173,11 +253,27 @@ public class User implements ToClientInterface {
      */
     @Override
     public List<Damageable> chooseTarget(List<List<Damageable>> options) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<List<Damageable>> task =executorService.submit(()-> toClient.chooseTarget(options));
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
+
         return null;
     }
 
     @Override
     public String chooseUserName() {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<String> task =executorService.submit(()-> toClient.chooseUserName());
+        try {
+            return task.get(30, TimeUnit.SECONDS);
+        } catch (InterruptedException | ExecutionException | TimeoutException e) {
+//         throw new NotReachableException
+        }
         return null;
     }
+
 }
