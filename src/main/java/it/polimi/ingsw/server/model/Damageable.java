@@ -84,4 +84,12 @@ public interface Damageable {
      * @return the {@code Player} who dealt the overkill; null if not present
      */
     Player getOverkillPlayer();
+
+    /**
+     * Returns the name of this damageable.
+     * This is used when choosing the targets for effects, for example.
+     *
+     * @return the name of this damageable
+     */
+    String getName();
 }

@@ -251,6 +251,17 @@ public class Player implements Damageable {
     }
 
     /**
+     * {@inheritDoc}
+     * Returns the nickname of this.
+     *
+     * @return {@inheritDoc}
+     */
+    @Override
+    public String getName() {
+        return nickname;
+    }
+
+    /**
      * Returns a list with the available adrenaline actions.
      *
      * @return the available adrenaline actions
@@ -463,15 +474,6 @@ public class Player implements Damageable {
      */
     public int getNumOfWeapons() {
         return getAllWeapons().size();
-    }
-
-    /**
-     * Returns the nickname of this player.
-     *
-     * @return the nickname of this player
-     */
-    public String getNickname() {
-        return nickname;
     }
 
     /**

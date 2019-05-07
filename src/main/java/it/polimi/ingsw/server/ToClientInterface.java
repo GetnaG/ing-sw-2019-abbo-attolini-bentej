@@ -28,10 +28,10 @@ public interface ToClientInterface {
     public EffectInterface chooseEffectsSequence(List<EffectInterface> options);
 
     /**
-     * @param option 
+     * @param options
      * @return
      */
-    public PowerupCard chooseSpawn(List<PowerupCard> option);
+    public PowerupCard chooseSpawn(List<PowerupCard> options);
 
     /**
      * @param options 

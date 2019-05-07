@@ -446,7 +446,7 @@ class PlayerTest {
     void getNickname() {
         Player player = new Player("Test");
 
-        assertEquals("Test", player.getNickname());
+        assertEquals("Test", player.getName());
     }
 
     /*Testing getter for the score*/

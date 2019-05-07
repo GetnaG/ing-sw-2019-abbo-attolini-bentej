@@ -83,6 +83,11 @@ public class Spawn implements Damageable {
         return null;
     }
 
+    @Override
+    public String getName() {
+        return null;
+    }
+
     public List<Player> getTokens() {
         return tokens;
     }
