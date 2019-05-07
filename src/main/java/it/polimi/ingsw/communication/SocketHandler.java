@@ -1,5 +1,7 @@
 package it.polimi.ingsw.communication;
 
+import java.net.Socket;
+
 /**
  * Descrizione.
  * <p>
@@ -7,5 +9,15 @@ package it.polimi.ingsw.communication;
  *
  * @author Abbo Giulio A.
  */
-public class SocketHandler {
+public class SocketHandler extends Thread {
+    Socket socket;
+    public SocketHandler(Socket socket) {
+        this.socket = socket;
+    }
+
+    @Override
+    public void run() {
+
+
+    }
 }

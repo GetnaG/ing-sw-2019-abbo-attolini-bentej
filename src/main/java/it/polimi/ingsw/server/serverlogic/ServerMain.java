@@ -8,4 +8,7 @@ package it.polimi.ingsw.server.serverlogic;
  * @author Abbo Giulio A.
  */
 public class ServerMain {
+    public void notifyException(Exception e) {
+
+    }
 }
