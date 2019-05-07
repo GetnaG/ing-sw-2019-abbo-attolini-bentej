@@ -88,4 +88,6 @@ public interface ToClientInterface {
     public PowerupCard askUseTagback(List<PowerupCard> options);
 
     List<Damageable> chooseTarget(List<List<Damageable>> options);
+
+    String chooseUserName();
 }

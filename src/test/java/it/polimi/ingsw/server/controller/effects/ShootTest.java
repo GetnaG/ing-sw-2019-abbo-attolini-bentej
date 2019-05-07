@@ -201,6 +201,12 @@ class ShootTest {
             public List<Damageable> chooseTarget(List<List<Damageable>> options) {
                 return null;
             }
+
+            @Override
+            public String chooseUserName() {
+                return null;
+            }
+
         };
 
     }
