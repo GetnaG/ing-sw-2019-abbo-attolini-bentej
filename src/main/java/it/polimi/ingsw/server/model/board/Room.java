@@ -2,7 +2,13 @@ package it.polimi.ingsw.server.model.board;
 import java.util.*;
 
 /**
- * 
+ *  A room consists in a list of Squares
+ *  It can either contain a SpawnSquare (if and only if its color is BLUE, YELLOW or RED), or not (in which case
+ *  its color is chosen among the colors listed in the enum Color)
+ *
+ *  If the room contains a SpawnSquare, it is always set as the first element of the list of Squares that make up
+ *  the room
+ *
  */
 public class Room {
 
@@ -17,22 +23,17 @@ public class Room {
             i.setRoom(this);
         this.spawnSquare = spawnSquare;
 
-        //set spawnsqaure as leader of the list of the room squares, check that a room has exactly 1 spawnsquare
         if(squares.get(0)  != this.spawnSquare)
-            ;  //------------------------------------------------------------------ exception????????????????
-
-
+            swap0(squares, spawnSquare);
     }
 
     public Room( List<Square> squares ) {
         this.squares = squares;
         for(Square i: squares)
             i.setRoom(this);
-        spawnSquare = null;
     }
 
     public void setSquares(List<Square> squares) {
-
         this.squares = squares;
         for(Square i: squares)
             i.setRoom(this);
@@ -43,7 +44,9 @@ public class Room {
     }
 
     public boolean hasSpawnSquare() {
-        return spawnSquare != null;
+        if(getSpawnSquare() != null)
+            return true;
+        return false;
     }
 
     public SpawnSquare getSpawnSquare() {
@@ -53,13 +56,28 @@ public class Room {
 
     /**
      * @param obj is a room
-     * @return true if two squares belong to the same room
+     * @return true if two rooms have the same list of squares
      */
     @Override
     public boolean equals(Object obj) {
-        return obj instanceof Room &&
-                (
-                        ((Room) obj).getSquares().equals(squares)
-                );
+        return (obj instanceof Room) && (((Room) obj).getSquares().equals(squares));
     }
+    
+    
+
+    private List<Square> swap0(List<Square> s, Square b){
+        int i=0;
+        Square tmp;
+
+        while(!s.get(i).equals(b))
+            i++;
+        
+        tmp = s.get(0);
+        s.set(0, b);
+        s.set(i, tmp);
+
+        return s;
+    }
+
+
 }

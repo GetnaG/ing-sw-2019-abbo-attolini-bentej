@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.board;
 
-import it.polimi.ingsw.server.model.cards.AbstractCard;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 
 import java.util.ArrayList;
@@ -16,6 +15,7 @@ public class Square {
     private Room room;
     private AmmoCard ammoCard;
     private Color color;
+    private int ID;
     private Square north;
     private Square south;
     private Square east;
@@ -61,7 +61,7 @@ public class Square {
                 this.north.setSouth(this);
             }
         }
-        
+
     }
 
     public Square getSouth() {
@@ -170,6 +170,16 @@ public class Square {
     public void setRoom(Room room) {
         this.room = room;
     }
+
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
+    }
+
 
     /**
      * Gets the Turret in this Square or null if the game mode is not Turret Mode.
@@ -287,8 +297,6 @@ public class Square {
         List<Room> config = gb.getConfiguration();
         Square temp;
 
-        //visibleSquares.addAll(this.room.getSquares());
-
         for (Room r : config) {
             temp = r.getSquares().get(i);
             if (this.checkVisible(temp)) {
@@ -331,6 +339,9 @@ public class Square {
                 return false;
             }
         }
+
+        if(this.getColor() != ((Square) obj).getColor())
+            return false;
 
         return true;
     }
