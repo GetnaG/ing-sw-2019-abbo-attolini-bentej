@@ -35,7 +35,7 @@ class GameBoardTest {
         // Adding rooms and doors.
         firstSquare = new SpawnSquare(AmmoCube.BLUE,new WeaponMarket(new ArrayList<>()));
         secondSquare = new Square(Color.BLUE);
-        thirdSquare = new Square(Color.GREEN);
+        thirdSquare = new Square(Color.BLUE);
         fourthSquare = new Square(Color.BLUE);
 
         squares.add(firstSquare);
@@ -75,7 +75,7 @@ class GameBoardTest {
 
         squaresInRoom.add(firstSquare);
         squaresInRoom.add(thirdSquare);
-        Room firstRoom = new Room(squaresInRoom, (SpawnSquare)firstSquare );
+        Room firstRoom = new Room(squaresInRoom, firstSquare );
 
         squaresInRoom = new ArrayList<>();
         squaresInRoom.add(secondSquare);

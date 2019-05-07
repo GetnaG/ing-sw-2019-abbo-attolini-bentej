@@ -21,10 +21,20 @@ public class Room {
         this.squares = squares;
         for(Square i: squares)
             i.setRoom(this);
+
         this.spawnSquare = spawnSquare;
 
         if(squares.get(0)  != this.spawnSquare)
             swap0(squares, spawnSquare);
+
+        if(squares.isEmpty())
+            throw new IllegalArgumentException();
+        else
+            for(Square x: squares)
+                if(squares.get(0).getColor() != x.getColor())
+                    throw new IllegalArgumentException();
+
+
     }
 
     public Room( List<Square> squares ) {
