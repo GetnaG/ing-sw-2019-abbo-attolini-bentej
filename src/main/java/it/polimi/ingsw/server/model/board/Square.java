@@ -172,8 +172,8 @@ public class Square {
     }
 
 
-    public int getID() {
-        return ID;
+    public String getID() {
+        return Integer.toString(ID);
     }
 
     public void setID(int ID) {

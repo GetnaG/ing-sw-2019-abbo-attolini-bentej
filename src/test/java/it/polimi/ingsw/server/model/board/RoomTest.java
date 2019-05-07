@@ -11,7 +11,7 @@ class RoomTest {
 
     @Test
     void hasSpawnSquare() {
-        /*Square a = new Square(Color.YELLOW), b = new Square(Color.BLUE), c = new Square(Color.WHITE);
+       /* Square a = new Square(Color.YELLOW), b = new Square(Color.BLUE), c = new Square(Color.WHITE);
         List<Square> l = new ArrayList<>();
         l.add(a);
         l.add(b);
