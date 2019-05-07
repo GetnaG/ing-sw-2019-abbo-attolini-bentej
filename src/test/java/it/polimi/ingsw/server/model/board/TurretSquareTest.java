@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 class TurretSquareTest {
-
+/*
     @Test
     @Disabled
     void removeAmmoCard() {
@@ -14,7 +14,7 @@ class TurretSquareTest {
                 new AmmoCube[]{}, false), null);
         Square listener = new Square();
         testTS.setReplacer(listener.replacer);
-        AmmoCard card1 = testTS.removeAmmoCard();
+        AmmoCard card1 = testTS.getAmmoCard();
         listener.replacer.replaceAll();
         AmmoCard card2 = testTS.getAmmoCard();
 
@@ -23,4 +23,5 @@ class TurretSquareTest {
 
 
     }
+    */
 }

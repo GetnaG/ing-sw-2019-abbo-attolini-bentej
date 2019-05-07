@@ -278,7 +278,7 @@ public class GameBoard implements ReplaceListener {
      * @param toBeReplaced the square where there is an Ammo Card to be replaced.
      *                     The method {@link GameBoard#replaceAll} actually takes care of replacing the Ammo Card at the end of turn.
      */
-    public void addTurretSquare(TurretSquare toBeReplaced) {
+    public void addSquare(Square toBeReplaced) {
         squareNewAmmoCard.add(toBeReplaced);
     }
 
@@ -308,13 +308,13 @@ public class GameBoard implements ReplaceListener {
 
         //Replacing Ammo Cards
         for (Square s : squareNewAmmoCard)
-            s.setGrabbable(ammoDeck.drawCard());
+            s.setAmmoCard(ammoDeck.drawCard());
         //Replacing Weapon Card
         for (SpawnSquare s : squareNewWeaponCard)
             if (weaponDeck.cardsLeft() != 0) {
                 for (WeaponCard i : s.getMarket().getCards()) {   //drawWeaponCard solo finchè ci sono null, controllo in testa
                     try {
-                        if (i.equals(null))
+                        if (i == null)
                             s.getMarket().addCard(weaponDeck.drawCard());
                     } catch (AgainstRulesException e) {
                     }

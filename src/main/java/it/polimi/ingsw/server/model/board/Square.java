@@ -3,7 +3,8 @@ package it.polimi.ingsw.server.model.board;
 import it.polimi.ingsw.server.model.cards.AbstractCard;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Defines the structure of a square.
@@ -13,7 +14,6 @@ public class Square {
 
     protected ReplaceListener replacer;
     private Room room;
-    private AbstractCard abstractCard;  //------------------??
     private AmmoCard ammoCard;
     private Color color;
     private Square north;
@@ -55,7 +55,13 @@ public class Square {
     }
 
     public void setNorth(Square north) {
-        this.north = north;
+        if (this.north != north) {
+            this.north = north;
+            if (this.north != null) {
+                this.north.setSouth(this);
+            }
+        }
+        
     }
 
     public Square getSouth() {
@@ -63,7 +69,13 @@ public class Square {
     }
 
     public void setSouth(Square south) {
-        this.south = south;
+        if (this.south != south) {
+            this.south = south;
+            if (this.south != null) {
+                this.south.setNorth(this);
+            }
+        }
+
     }
 
     public Square getEast() {
@@ -71,7 +83,13 @@ public class Square {
     }
 
     public void setEast(Square east) {
-        this.east = east;
+        if (this.east != east) {
+            this.east = east;
+            if (this.east != null) {
+                this.east.setWest(this);
+            }
+        }
+
     }
 
     public Square getWest() {
@@ -79,7 +97,13 @@ public class Square {
     }
 
     public void setWest(Square west) {
-        this.west = west;
+        if (this.west != west) {
+            this.west = west;
+            if (this.west != null) {
+                this.west.setEast(this);
+            }
+        }
+
     }
 
     public Border getNorthBorder() {
@@ -88,7 +112,7 @@ public class Square {
 
     public void setNorthBorder(Border northBorder) {  //--------------------------- check gameboard 4 redundancy!!!!!
         this.northBorder = northBorder;
-        if(this.north != null && this.north.getSouthBorder() == null)  // there is a valid square with a non initialized border
+        if (this.north != null && this.north.getSouthBorder() == null)  // there is a valid square with a non initialized border
             this.north.setSouthBorder(northBorder);
 
     }
@@ -99,7 +123,7 @@ public class Square {
 
     public void setSouthBorder(Border southBorder) {
         this.southBorder = southBorder;
-        if(this.south != null && this.south.getNorthBorder() == null)  // there is a valid square with a non initialized border
+        if (this.south != null && this.south.getNorthBorder() == null)  // there is a valid square with a non initialized border
             this.south.setNorthBorder(southBorder);
     }
 
@@ -109,7 +133,7 @@ public class Square {
 
     public void setEastBorder(Border eastBorder) {
         this.eastBorder = eastBorder;
-        if(this.east != null && this.east.getWestBorder() == null)  // there is a valid square with a non initialized border
+        if (this.east != null && this.east.getWestBorder() == null)  // there is a valid square with a non initialized border
             this.east.setWestBorder(eastBorder);
     }
 
@@ -119,7 +143,7 @@ public class Square {
 
     public void setWestBorder(Border westBorder) {
         this.westBorder = westBorder;
-        if(this.west != null && this.west.getEastBorder() == null)  // there is a valid square with a non initialized border
+        if (this.west != null && this.west.getEastBorder() == null)  // there is a valid square with a non initialized border
             this.west.setEastBorder(westBorder);
     }
 
@@ -147,33 +171,25 @@ public class Square {
         this.room = room;
     }
 
-    public void setGrabbable(AbstractCard abstractCard) {
-        this.abstractCard = abstractCard;
-    } //---------??
-
-    /**
-     * Gets the AmmoCard in the Square or null if the game mode is not deathmatch.
-     * @return AbstractCard in this Square, the card can be AmmoCard (if turretSquare), wea
-     */
-    public AbstractCard getGrabbable() {
-        return abstractCard;
-    }  //--------------------------------------?????
-
     /**
      * Gets the Turret in this Square or null if the game mode is not Turret Mode.
+     *
      * @return Turret in this Square
      */
     public Turret getTurret() {
         return null;
-    } //-------------------------------------------?????
-
-
-    public void setAmmoCard(AmmoCard ammoCard){
-        this.ammoCard = ammoCard;
     }
 
-    public AmmoCard getAmmoCard(){
-        return ammoCard;
+    public AmmoCard getAmmoCard() {
+        replacer.addSquare(this);
+        AmmoCard tmp = ammoCard;
+        ammoCard = null;
+        return tmp;
+
+    }
+
+    public void setAmmoCard(AmmoCard ammoCard) {
+        this.ammoCard = ammoCard;
     }
 
     /**
@@ -183,7 +199,7 @@ public class Square {
      * list of southern squares,
      * list of eastern squares,
      * list of western squares]
-     *
+     * <p>
      * if the square does not confines with a square, then its position in the list is set to NULL
      */
     public List<Square> getCardinals() {
@@ -192,28 +208,28 @@ public class Square {
 
         cardinals.add(this);
 
-        while (temp.north != null ) {
+        while (temp.north != null) {
             cardinals.add(temp.north);
             temp = temp.north;
         }
 
         temp = this;
 
-        while (temp.south != null ) {
+        while (temp.south != null) {
             cardinals.add(temp.south);
             temp = temp.south;
         }
 
         temp = this;
 
-        while (temp.east != null ) {
+        while (temp.east != null) {
             cardinals.add(temp.east);
             temp = temp.east;
         }
 
         temp = this;
 
-        while (temp.west != null ) {
+        while (temp.west != null) {
             cardinals.add(temp.west);
             temp = temp.south;
         }
@@ -231,25 +247,25 @@ public class Square {
             return true;
 
         else {
-            if (this.northBorder != Border.WALL  && this.northBorder != null) {
-                if (this.north.room == destination.room)
+            if (this.northBorder != Border.WALL && this.northBorder != null) {
+                if (this.north.room == destination.room || this.northBorder == Border.CORRIDOR)
                     return true;
 
             }
-            ///////////////////////////////////////////////////////////////// kind of break -> riscrivereeeeeeeee
+
 
             if (this.southBorder != Border.WALL && this.southBorder != null) {
-                if (this.south.room == destination.room)
+                if (this.south.room == destination.room || this.southBorder == Border.CORRIDOR)
                     return true;
             }
 
             if (this.eastBorder != Border.WALL && this.eastBorder != null) {
-                if (this.east.room == destination.room)
+                if (this.east.room == destination.room || this.eastBorder == Border.CORRIDOR)
                     return true;
             }
 
             if (this.westBorder != Border.WALL && this.westBorder != null) {
-                if (this.west.room == destination.room)
+                if (this.west.room == destination.room || this.westBorder == Border.CORRIDOR)
                     return true;
             }
         }
@@ -271,7 +287,8 @@ public class Square {
         List<Room> config = gb.getConfiguration();
         Square temp;
 
-        visibleSquares.set(j, this);
+        //visibleSquares.addAll(this.room.getSquares());
+
         for (Room r : config) {
             temp = r.getSquares().get(i);
             if (this.checkVisible(temp)) {
@@ -292,25 +309,25 @@ public class Square {
             return false;
 
         if (!(this.north == null && ((Square) obj).north == null)) {
-            if (!(this.north != null && ((Square) obj).north != null) || ((Square) obj).north != north  )  {
+            if (!(this.north != null && ((Square) obj).north != null) || ((Square) obj).north != north) {
                 return false;
             }
         }
 
         if (!(this.south == null && ((Square) obj).south == null)) {
-            if (!(this.south != null && ((Square) obj).south != null)  ||  ((Square) obj).south != south) {
+            if (!(this.south != null && ((Square) obj).south != null) || ((Square) obj).south != south) {
                 return false;
             }
         }
 
         if (!(this.east == null && ((Square) obj).east == null)) {
-            if (!(this.east != null && ((Square) obj).east != null)  ||  ((Square) obj).east != east) {
+            if (!(this.east != null && ((Square) obj).east != null) || ((Square) obj).east != east) {
                 return false;
             }
         }
 
         if (!(this.west == null && ((Square) obj).west == null)) {
-            if (!(this.west != null && ((Square) obj).west != null)  ||  ((Square) obj).west != west) {
+            if (!(this.west != null && ((Square) obj).west != null) || ((Square) obj).west != west) {
                 return false;
             }
         }
@@ -336,6 +353,8 @@ public class Square {
             temp = temp.north;
         }
 
+        temp = this;
+
         while (temp.south != null && temp.southBorder != Border.WALL) {
             if (temp.south.equals(dest))
                 return true;
@@ -343,12 +362,16 @@ public class Square {
             temp = temp.south;
         }
 
+        temp = this;
+
         while (temp.east != null && temp.eastBorder != Border.WALL) {
             if (temp.east.equals(dest))
                 return true;
 
             temp = temp.east;
         }
+
+        temp = this;
 
         while (temp.west != null && temp.westBorder != Border.WALL) {
             if (temp.west.equals(dest))

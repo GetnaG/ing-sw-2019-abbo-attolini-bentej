@@ -12,8 +12,6 @@ public class SpawnSquare extends Square {
     private Spawn spawn;
 
 
-    /* Default constructor of spawn squares that can*/
-
     public SpawnSquare(AmmoCube color, WeaponMarket w) { ///-------????
         super(constructorHelper(color));
         market = w;

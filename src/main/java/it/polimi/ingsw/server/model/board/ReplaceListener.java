@@ -28,7 +28,7 @@ public interface ReplaceListener {
      * @param toBeReplaced the {@code TurretSquare} without a {@code AmmoCard}
      * @throws NullPointerException if {@code toBeReplaced} is null
      */
-    void addTurretSquare(TurretSquare toBeReplaced);
+    void addSquare(Square toBeReplaced);
 
     /**
      * Adds a {@linkplain SpawnSquare} to the squares that need a new card.
