@@ -1,6 +1,6 @@
 package it.polimi.ingsw.server.controller.effects;
 
-import it.polimi.ingsw.server.ToClientInterface;
+import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.server.controller.ScoreListener;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;

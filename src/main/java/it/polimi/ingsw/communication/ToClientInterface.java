@@ -1,6 +1,6 @@
-package it.polimi.ingsw.server;
+package it.polimi.ingsw.communication;
 
-import it.polimi.ingsw.server.controller.SuspensionListener;
+import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.Damageable;

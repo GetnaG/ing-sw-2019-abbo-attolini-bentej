@@ -1,4 +1,4 @@
-package it.polimi.ingsw.server.controller;
+package it.polimi.ingsw.server.serverlogic;
 
 import it.polimi.ingsw.server.model.player.Player;
 
