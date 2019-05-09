@@ -202,6 +202,8 @@ public class CardEffect implements EffectInterface {
             selectTargets();
         } catch (AgainstRulesException e) {
             e.printStackTrace();
+        } catch (ToClientException e) {
+            return;
         }
         apply();
     }
@@ -291,8 +293,9 @@ public class CardEffect implements EffectInterface {
      *
      * @throws AgainstRulesException if there are not enough targets or
      *                               destinations
+     * @throws ToClientException     if the subject gets suspended
      */
-    private void selectTargets() throws AgainstRulesException {
+    private void selectTargets() throws AgainstRulesException, ToClientException {
         /*If the subject must choose fewer targets than available*/
         if (targetsNumber.hasMinimum() &&
                 availableTargets.size() > targetsNumber.getMin()) {
@@ -518,8 +521,10 @@ public class CardEffect implements EffectInterface {
      * @param available the valid targets
      * @param amount    the range of target to be chosen, {@code [0, n... -1]}
      * @throws AgainstRulesException if there are not enough targets
+     * @throws ToClientException     if the subject gets suspended
      */
-    private void chooseFrom(Set<Damageable> available, Range amount) throws AgainstRulesException {
+    private void chooseFrom(Set<Damageable> available, Range amount)
+            throws AgainstRulesException, ToClientException {
 
         /*Preparing a list of all the possible sequences*/
         List<List<Damageable>> choices = new ArrayList<>();
@@ -544,25 +549,18 @@ public class CardEffect implements EffectInterface {
 
         /*Asking the subject for the desired sequence*/
         available.clear();
-        try {
-            available.addAll(new HashSet<>(subject.getToClient().chooseTarget(choices)));
-        } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
-        }
+        available.addAll(new HashSet<>(subject.getToClient().chooseTarget(choices)));
     }
 
     /**
      * Handles the interaction with the subject for destinations.
      *
      * @param available the available destinations
+     * @throws ToClientException if the subject gets suspended
      */
-    private void chooseFrom(List<Square> available) {
-        Square chosen = null;
-        try {
-            chosen = subject.getToClient().chooseDestination(available);
-        } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
-        }
+    private void chooseFrom(List<Square> available) throws ToClientException {
+        Square chosen;
+        chosen = subject.getToClient().chooseDestination(available);
         available.clear();
         available.add(chosen);
     }

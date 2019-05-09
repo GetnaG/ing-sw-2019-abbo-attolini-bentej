@@ -109,7 +109,7 @@ public enum SocketProtocol {
     PROTOCOL_END_MULTI("End list of lists"),
 
     /**
-     * The provided choice was not in the options.
+     * The provided choice was not in the options or was not valid.
      */
     PROTOCOL_ERR_CHOICE("Error choice");
 

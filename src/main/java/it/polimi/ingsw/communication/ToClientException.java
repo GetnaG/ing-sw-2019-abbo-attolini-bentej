@@ -8,8 +8,6 @@ package it.polimi.ingsw.communication;
  * @author Abbo Giulio A.
  */
 public class ToClientException extends Exception {
-    private String message;
-
     /**
      * Constructs a new exception with the specified detail message.
      *
