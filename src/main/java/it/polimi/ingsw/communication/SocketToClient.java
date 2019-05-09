@@ -16,77 +16,147 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Descrizione.
- * <p>
- * Dettagli.
+ * This class handles the communication through socket, server side.
+ * This also ensures that only one communication with the client happens at one
+ * time.
  *
  * @author Abbo Giulio A.
+ * @see SocketProtocol
  */
 public class SocketToClient implements ToClientInterface {
-    private Socket socket;
+    /**
+     * The socket through which communicate.
+     */
+    private final Socket socket;
 
+    /**
+     * This sets the socket.
+     *
+     * @param socket the socket through which communicate
+     */
     SocketToClient(Socket socket) {
         this.socket = socket;
     }
 
-    private String askWaitAndCheck(String name, List<String> options) /*throws IOException*/ {
-        String choice = null;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-            out.println(name);
-            out.println(SocketProtocol.START_OF_LIST.getCommand());
-            for (String s : options)
-                out.println(s);
-            out.println(SocketProtocol.END_OF_LIST.getCommand());
-            choice = in.readLine();
-        } catch (IOException e) {
-            //TODO throw new IOException(e);
+    /**
+     * Handles the communication for a list of choices.
+     *
+     * @param command the message to be sent
+     * @param options the option to choose from
+     * @return the selected option
+     * @throws ToClientException if there are problems with the socket
+     */
+    private String askWaitAndCheck(SocketProtocol command, List<String> options)
+            throws ToClientException {
+
+        /*Sending the data an retrieving the answer*/
+        String choice;
+        synchronized (socket) {
+
+            /*Try-with-resources will call close() automatically*/
+            try (BufferedReader in = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(),
+                         true)
+            ) {
+                out.println(command);
+                out.println(SocketProtocol.PROTOCOL_LIST);
+                for (String s : options)
+                    out.println(s);
+                out.println(SocketProtocol.PROTOCOL_END_LIST);
+                choice = in.readLine();
+            } catch (IOException e) {
+                throw new ToClientException("Socket exception", e);
+            }
         }
+
+        /*Checking if the answer was one of the options*/
         if (choice != null && options.contains(choice))
             return choice;
-        return options.get(0);
-        //TODO throw new exception wrong choice
+
+        /*The answer is not valid: sending an error and asking again*/
+        sendError(SocketProtocol.PROTOCOL_ERR_CHOICE);
+        return askWaitAndCheck(command, options);
     }
 
-    private int listAskWaitAndCheck(String name, List<List<String>> options) /*throws IOException*/ {
+    /**
+     * Handles the communication for a list of lists.
+     *
+     * @param command the message to be sent
+     * @param options the option to choose from
+     * @return the index of the selected option
+     * @throws ToClientException if there are problems with the socket
+     */
+    private int listAskWaitAndCheck(SocketProtocol command,
+                                    List<List<String>> options) throws ToClientException {
+
+        /*Sending the data an retrieving the answer*/
         int choice = -1;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-            out.println(name);
-            out.println(SocketProtocol.START_LIST_OF_LISTS.getCommand());
-            for (List<String> list : options) {
-                out.println(SocketProtocol.START_OF_LIST.getCommand());
-                for (String s : list)
-                    out.println(s);
-                out.println(SocketProtocol.END_OF_LIST.getCommand());
+        synchronized (socket) {
+
+            /*Try-with-resources will call close() automatically*/
+            try (BufferedReader in = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(),
+                         true)
+            ) {
+                out.println(command);
+                out.println(SocketProtocol.PROTOCOL_MULTI);
+                for (List<String> list : options) {
+                    out.println(SocketProtocol.PROTOCOL_LIST);
+                    for (String s : list)
+                        out.println(s);
+                    out.println(SocketProtocol.PROTOCOL_END_LIST);
+                }
+                out.println(SocketProtocol.PROTOCOL_END_MULTI);
+                choice = Integer.parseInt(in.readLine());
+            } catch (IOException e) {
+                throw new ToClientException("Socket exception", e);
             }
-            out.println(SocketProtocol.END_LIST_OF_LISTS.getCommand());
-            choice = Integer.parseInt(in.readLine());
-        } catch (IOException e) {
-            //TODO throw new IOException(e);
+
         }
+
+        /*Checking if the answer is valid.*/
         if (choice >= 0 && choice < options.size())
             return choice;
-        return 0;
-        //TODO throw new exception wrong choice
+
+        /*The answer is not valid: sending an error and asking again*/
+        sendError(SocketProtocol.PROTOCOL_ERR_CHOICE);
+        return listAskWaitAndCheck(command, options);
     }
 
-    @Override
-    public String chooseUserName() {
+    private void sendError(SocketProtocol command) throws ToClientException {
+        synchronized (socket) {
+            try (BufferedReader in = new BufferedReader(
+                    new InputStreamReader(socket.getInputStream()));
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(),
+                         true)
+            ) {
+                out.println(command);
+            } catch (IOException e) {
+                throw new ToClientException("Socket exception", e);
+            }
+        }
+    }
+
+    private String askAndWait(SocketProtocol name) throws ToClientException {
         String choice = null;
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-             PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
-            out.println(SocketProtocol.NICKNAME.getCommand());
-            choice = in.readLine();
-        } catch (IOException e) {
-            //TODO throw new IOException(e);
+        synchronized (socket) {
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)) {
+                out.println(name);
+                choice = in.readLine();
+            } catch (IOException e) {
+                throw new ToClientException("Socket exception", e);
+            }
         }
         if (choice != null)
             return choice;
         return ""; //TODO throw new exception wrong choice
     }
 
-    private EffectInterface askEffect(String name, List<EffectInterface> options) {
+
+    private EffectInterface askEffect(SocketProtocol name, List<EffectInterface> options) throws ToClientException {
         String choice = askWaitAndCheck(name,
                 options.stream().map(EffectInterface::getName).collect(Collectors.toList()));
         for (EffectInterface i : options)
@@ -95,7 +165,7 @@ public class SocketToClient implements ToClientInterface {
         return options.get(0);//FIXME unchecked exception
     }
 
-    private PowerupCard askPowerup(String name, List<PowerupCard> options) {
+    private PowerupCard askPowerup(SocketProtocol name, List<PowerupCard> options) throws ToClientException {
         String choice = askWaitAndCheck(name,
                 options.stream().map(PowerupCard::getId).collect(Collectors.toList()));
         for (PowerupCard i : options)
@@ -104,7 +174,7 @@ public class SocketToClient implements ToClientInterface {
         return options.get(0);//FIXME unchecked exception
     }
 
-    private Square askSquare(String name, List<Square> options) {
+    private Square askSquare(SocketProtocol name, List<Square> options) throws ToClientException {
         String choice = askWaitAndCheck(name,
                 options.stream().map(Square::getID).collect(Collectors.toList()));
         for (Square i : options)
@@ -113,7 +183,7 @@ public class SocketToClient implements ToClientInterface {
         return options.get(0);//FIXME unchecked exception
     }
 
-    private WeaponCard askWeapon(String name, List<WeaponCard> options) {
+    private WeaponCard askWeapon(SocketProtocol name, List<WeaponCard> options) throws ToClientException {
         String choice = askWaitAndCheck(name,
                 options.stream().map(WeaponCard::getId).collect(Collectors.toList()));
         for (WeaponCard i : options)
@@ -122,7 +192,7 @@ public class SocketToClient implements ToClientInterface {
         return options.get(0);//FIXME unchecked exception
     }
 
-    private Action askAction(String name, List<Action> options) {
+    private Action askAction(SocketProtocol name, List<Action> options) throws ToClientException {
         String choice = askWaitAndCheck(name,
                 options.stream().map(Action::getName).collect(Collectors.toList()));
         for (Action i : options)
@@ -131,7 +201,7 @@ public class SocketToClient implements ToClientInterface {
         return options.get(0);//FIXME unchecked exception
     }
 
-    private List<Damageable> askDamageableList(String name, List<List<Damageable>> options) {
+    private List<Damageable> askDamageableList(SocketProtocol name, List<List<Damageable>> options) throws ToClientException {
         int choice = listAskWaitAndCheck(name,
                 options.stream().map(o -> o.stream().map(Damageable::getName).collect(Collectors.toList())).collect(Collectors.toList()));
         return options.get(choice);
@@ -140,62 +210,67 @@ public class SocketToClient implements ToClientInterface {
 
 
     @Override
-    public EffectInterface chooseEffectsSequence(List<EffectInterface> options) {
-        return askEffect(SocketProtocol.EFFECTS_SEQUENCE.getCommand(), options);
+    public EffectInterface chooseEffectsSequence(List<EffectInterface> options) throws ToClientException {
+        return askEffect(SocketProtocol.EFFECTS_SEQUENCE, options);
     }
 
     @Override
-    public PowerupCard chooseSpawn(List<PowerupCard> options) {
-        return askPowerup(SocketProtocol.SPAWN.getCommand(), options);
+    public PowerupCard chooseSpawn(List<PowerupCard> options) throws ToClientException {
+        return askPowerup(SocketProtocol.SPAWN, options);
     }
 
     @Override
-    public PowerupCard choosePowerup(List<PowerupCard> options) {
-        return askPowerup(SocketProtocol.POWERUP.getCommand(), options);
+    public PowerupCard choosePowerup(List<PowerupCard> options) throws ToClientException {
+        return askPowerup(SocketProtocol.POWERUP, options);
     }
 
     @Override
-    public Square chooseDestination(List<Square> options) {
-        return askSquare(SocketProtocol.DESTINATION.getCommand(), options);
+    public Square chooseDestination(List<Square> options) throws ToClientException {
+        return askSquare(SocketProtocol.DESTINATION, options);
     }
 
     @Override
-    public WeaponCard chooseWeaponCard(List<WeaponCard> options) {
-        return askWeapon(SocketProtocol.WEAPON_CARD.getCommand(), options);
+    public WeaponCard chooseWeaponCard(List<WeaponCard> options) throws ToClientException {
+        return askWeapon(SocketProtocol.WEAPON, options);
     }
 
     @Override
-    public WeaponCard chooseWeaponToBuy(List<WeaponCard> options) {
-        return askWeapon(SocketProtocol.WEAPON_TO_BUY.getCommand(), options);
+    public WeaponCard chooseWeaponToBuy(List<WeaponCard> options) throws ToClientException {
+        return askWeapon(SocketProtocol.WEAPON_TO_BUY, options);
     }
 
     @Override
-    public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options) {
-        return askWeapon(SocketProtocol.WEAPON_TO_DISCARD.getCommand(), options);
+    public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options) throws ToClientException {
+        return askWeapon(SocketProtocol.WEAPON_TO_DISCARD, options);
     }
 
     @Override
-    public WeaponCard chooseWeaponToReload(List<WeaponCard> options) {
-        return askWeapon(SocketProtocol.WEAPON_TO_RELOAD.getCommand(), options);
+    public WeaponCard chooseWeaponToReload(List<WeaponCard> options) throws ToClientException {
+        return askWeapon(SocketProtocol.WEAPON_TO_RELOAD, options);
     }
 
     @Override
-    public Action chooseAction(List<Action> options) {
-        return askAction(SocketProtocol.ACTION.getCommand(), options);
+    public Action chooseAction(List<Action> options) throws ToClientException {
+        return askAction(SocketProtocol.ACTION, options);
     }
 
     @Override
-    public PowerupCard choosePowerupForPaying(List<PowerupCard> options) {
-        return askPowerup(SocketProtocol.POWERUP_FOR_PAYING.getCommand(), options);
+    public PowerupCard choosePowerupForPaying(List<PowerupCard> options) throws ToClientException {
+        return askPowerup(SocketProtocol.POWERUP_FOR_PAYING, options);
     }
 
     @Override
-    public PowerupCard askUseTagback(List<PowerupCard> options) {
-        return askPowerup(SocketProtocol.USE_TAGBACK.getCommand(), options);
+    public PowerupCard askUseTagback(List<PowerupCard> options) throws ToClientException {
+        return askPowerup(SocketProtocol.USE_TAGBACK, options);
     }
 
     @Override
-    public List<Damageable> chooseTarget(List<List<Damageable>> options) {
-        return askDamageableList(SocketProtocol.TARGET.getCommand(), options);
+    public List<Damageable> chooseTarget(List<List<Damageable>> options) throws ToClientException {
+        return askDamageableList(SocketProtocol.TARGET, options);
+    }
+
+    @Override
+    public String chooseUserName() throws ToClientException {
+        return askAndWait(SocketProtocol.NICKNAME);
     }
 }
