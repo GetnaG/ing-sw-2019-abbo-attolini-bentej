@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.server.serverlogic.ServerMain;
 import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
@@ -26,7 +27,7 @@ public class User implements ToClientInterface {
     private String name;
 
     /**
-     * Timer lasts 30 seconds.
+     * Timer lasts 30 seconds. //FIXME Make it parametric
      */
     private Timer timer;
 
@@ -63,6 +64,7 @@ public class User implements ToClientInterface {
      */
     public void init(){
         name = this.chooseUserName();
+        ServerMain.getServerHall().addUser(this);
     }
 
     public void addSuspensionListener(SuspensionListener suspensionListener){

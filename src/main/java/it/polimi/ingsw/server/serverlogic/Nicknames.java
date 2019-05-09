@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.serverlogic;
 
 import it.polimi.ingsw.server.model.board.Square;
+import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,16 +11,12 @@ import java.util.List;
  *
  * @author Fahed B. Tej.
  */
-public class Nicknames {
+public class Nicknames implements SuspensionListener {
     /**
      * List of the names of the players in the game. It include connected and disconnected players.
      */
-    private List<String> names;
+    private List<String> onlineNames;
 
-    /**
-     * List of the names reserved by someone using the requestNickname() method.
-     */
-    private List<String> reservedNames;
 
     /**
      * List of the names of the disconnected players.
@@ -30,32 +27,43 @@ public class Nicknames {
      * Default constructor
      */
     public Nicknames(){
-        this.names = new ArrayList<>();
-        this.reservedNames = new ArrayList<>();
+        this.onlineNames = new ArrayList<>();
         this.offlineNames = new ArrayList<>();
     }
 
     /**
-     * Given a nickname, the following method will check if the nickname is already avaiable, taken by an online player or taken by an offline player. Then, if it is avaiable, it will add it.
+     * Adds the given nickname to the registered nicknames.
      * @param nickname      requested nickname
-     * @return  1 if is avaiable, 0 if taken by an offline player or -1 if taken by an offline player.
+     * @return  1 if operation was successful, 0 if taken by an offline player or -1 if taken by an online player.
      */
-    public int requestNickname(String nickname) {
-        if (names.contains(nickname) && !reservedNames.contains(nickname) && !offlineNames.contains(nickname)){
-            names.add(nickname);
+    public int addNickname(String nickname) {
+        if (!onlineNames.contains(nickname)  && !offlineNames.contains(nickname)){
+            onlineNames.add(nickname);
             return 1;
         }
-        if (offlineNames.contains(offlineNames))
-            return -1;
-        return 0;
+        if (offlineNames.contains(nickname))
+            return 0;
+        return -1;
     }
 
     /**
-     * Adds user to the offline players.
-     * @param user  disconected user
+     * Sets the given player's status to disconnected
+     * @param player    disconnected player
      */
-    public void addOfflineUser(String user){
-        offlineNames.add(user);
+    @Override
+    public void playerSuspension(Player player) {
+        onlineNames.remove(player.getName());
+        offlineNames.add(player.getName());
+    }
+
+    /**
+     * Sets the given player's status to disconnected
+     * @param player    reconnected player
+     */
+    @Override
+    public void playerResumption(Player player) {
+        onlineNames.add(player.getName());
+        offlineNames.remove(player.getName());
     }
 
 }
