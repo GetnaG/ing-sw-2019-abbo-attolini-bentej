@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.turns;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.controller.effects.*;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -53,9 +54,12 @@ public class FrenzyTurnBefore implements TurnInterface {
         actions.add(getSecondFrenzyActionBefore());
         actions.add(getThirdFrenzyActionBefore());
 
-        choosenAction = currentPlayer.getToClient().chooseAction(actions);
-        choosenAction.runEffect(currentPlayer, null, board, new ArrayList<>(), new ArrayList<>());
-
+        try {
+            choosenAction = currentPlayer.getToClient().chooseAction(actions);
+            choosenAction.runEffect(currentPlayer, null, board, new ArrayList<>(), new ArrayList<>());
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
     }
 
     /**

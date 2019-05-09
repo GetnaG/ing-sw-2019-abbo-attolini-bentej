@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.turns;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -26,7 +27,12 @@ public class RespawnTurn implements TurnInterface {
         // player draws card
         currentPlayer.addPowerup(board.getPowerupCard());
         // we make the player choose a powerup
-        PowerupCard cardChosen = currentPlayer.getToClient().choosePowerup(currentPlayer.getAllPowerup());
+        PowerupCard cardChosen = null;
+        try {
+            cardChosen = currentPlayer.getToClient().choosePowerup(currentPlayer.getAllPowerup());
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
         // discard that card
         currentPlayer.removePowerup(cardChosen);
         // set the player position in the spawn determined by that square

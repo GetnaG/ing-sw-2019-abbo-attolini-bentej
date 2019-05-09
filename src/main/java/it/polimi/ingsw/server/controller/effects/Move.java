@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Border;
 import it.polimi.ingsw.server.model.board.GameBoard;
@@ -27,8 +28,13 @@ public class Move implements EffectInterface {
     @Override
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
         List<Square> neighboursBy1 = neighbours(subjectPlayer.getPosition());
-        Square destination = subjectPlayer.getToClient().chooseDestination(
-                neighboursBy1);
+        Square destination = null;
+        try {
+            destination = subjectPlayer.getToClient().chooseDestination(
+                    neighboursBy1);
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
 
 
         subjectPlayer.setPosition(destination);

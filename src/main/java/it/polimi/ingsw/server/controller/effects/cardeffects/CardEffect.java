@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects.cardeffects;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.controller.effects.EffectIterator;
 import it.polimi.ingsw.server.model.AgainstRulesException;
@@ -543,7 +544,11 @@ public class CardEffect implements EffectInterface {
 
         /*Asking the subject for the desired sequence*/
         available.clear();
-        available.addAll(new HashSet<>(subject.getToClient().chooseTarget(choices)));
+        try {
+            available.addAll(new HashSet<>(subject.getToClient().chooseTarget(choices)));
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
     }
 
     /**
@@ -552,7 +557,12 @@ public class CardEffect implements EffectInterface {
      * @param available the available destinations
      */
     private void chooseFrom(List<Square> available) {
-        Square chosen = subject.getToClient().chooseDestination(available);
+        Square chosen = null;
+        try {
+            chosen = subject.getToClient().chooseDestination(available);
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
         available.clear();
         available.add(chosen);
     }

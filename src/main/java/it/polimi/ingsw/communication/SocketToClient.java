@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class SocketToClient implements ToClientInterface {
     private Socket socket;
 
-    public SocketToClient(Socket socket) {
+    SocketToClient(Socket socket) {
         this.socket = socket;
     }
 

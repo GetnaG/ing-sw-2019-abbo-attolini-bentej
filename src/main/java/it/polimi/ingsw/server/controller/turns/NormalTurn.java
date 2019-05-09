@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.turns;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.controller.effects.*;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
@@ -69,7 +70,12 @@ public class NormalTurn implements TurnInterface {
         if (player.getAllPowerup().isEmpty())
             return;
 
-        PowerupCard card = player.getToClient().choosePowerup(player.getAllPowerup());
+        PowerupCard card = null;
+        try {
+            card = player.getToClient().choosePowerup(player.getAllPowerup());
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
 
         if (card != null)
             card.getEffect().runEffect(player, null, board, alreadyTargeted, new ArrayList<>());
@@ -90,7 +96,12 @@ public class NormalTurn implements TurnInterface {
         actions.add(new Action("Shoot", new Shoot()));
         actions.addAll(player.getAdrenalineActions());
 
-        Action chosenAction = player.getToClient().chooseAction(actions);
+        Action chosenAction = null;
+        try {
+            chosenAction = player.getToClient().chooseAction(actions);
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
 
         chosenAction.runEffect(player, null, board, alreadyTargeted, new ArrayList<>());
 
@@ -106,10 +117,13 @@ public class NormalTurn implements TurnInterface {
                 .filter(x -> player.canAfford(x.getCost(), false))
                 .collect(Collectors.toList());
 
-        cardToReload = player.getToClient().chooseWeaponToReload(weaponCards);
-
-        if (cardToReload != null)
-            player.reload(cardToReload);
+        try {
+            cardToReload = player.getToClient().chooseWeaponToReload(weaponCards);
+            if (cardToReload != null)
+                player.reload(cardToReload);
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
     }
 
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.turns;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.PowerupDeck;
@@ -29,7 +30,12 @@ public class FirstTurn implements TurnInterface {
         cardsDrawn.add(board.getPowerupCard());
         cardsDrawn.add(board.getPowerupCard());
         //Choosing a card and setting the position according to its color.
-        PowerupCard cardChosen = currentPlayer.getToClient().choosePowerup(cardsDrawn);
+        PowerupCard cardChosen = null;
+        try {
+            cardChosen = currentPlayer.getToClient().choosePowerup(cardsDrawn);
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
         currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
     }
 

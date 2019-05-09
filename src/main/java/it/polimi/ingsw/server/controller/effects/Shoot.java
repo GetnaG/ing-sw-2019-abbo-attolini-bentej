@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
@@ -33,18 +34,22 @@ public class Shoot implements EffectInterface {
      */
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
         this.player = subjectPlayer;
-       if (subjectPlayer.getLoadedWeapons().isEmpty())
+        if (subjectPlayer.getLoadedWeapons().isEmpty())
             return;
 
-        WeaponCard weaponChosen = subjectPlayer.getToClient().chooseWeaponCard(
-                subjectPlayer.getLoadedWeapons()
-        );
+        try {
+            WeaponCard weaponChosen = subjectPlayer.getToClient().chooseWeaponCard(
+                    subjectPlayer.getLoadedWeapons()
+            );
 
-        EffectInterface effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(
-                weaponChosen.getPossibleSequences()
-        );
+            EffectInterface effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(
+                    weaponChosen.getPossibleSequences()
+            );
 
-        effectChosen.runEffect(subjectPlayer, null, board, alredyTargeted, new ArrayList<>());
+            effectChosen.runEffect(subjectPlayer, null, board, alredyTargeted, new ArrayList<>());
+        } catch (ToClientException e) {
+            //TODO Handle if the user is disconnected
+        }
     }
 
     /**
