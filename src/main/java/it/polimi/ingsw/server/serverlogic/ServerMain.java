@@ -30,7 +30,7 @@ public class ServerMain {
 
         secondsWaitingRoom = Integer.parseInt(args[1]);
 
-        hall = new ServerHall(secondsWaitingRoom);
+
    }
 
     /**
@@ -42,6 +42,8 @@ public class ServerMain {
     }
 
     public static ServerHall getServerHall(){
+        if (hall == null)
+            hall = new ServerHall(secondsWaitingRoom);
         return hall;
     }
 }
