@@ -13,39 +13,37 @@ import java.net.Socket;
  */
 public class SocketDispatcher extends Thread {
     /**
-     * The port this listens to.
+     * The socket that will receive the connections.
      */
-    private int port;
-    /**
-     * Whether this is running; when false the thread ends its execution.
-     */
-    private boolean listening;
+    private final ServerSocket serverSocket;
     /**
      * The class which will be notified if the socket can not start.
      */
     private ServerMain serverMain;
+    /**
+     * Whether this is running; when false the thread ends its execution.
+     */
+    private boolean listening;
 
     /**
      * Constructor that sets the attributes for this.
      *
-     * @param serverMain the class that will be notified if the socket can
-     *                   not start
-     * @param port       the listening port
+     * @param serverSocket the socket that will receive the connections
      */
-    public SocketDispatcher(ServerMain serverMain, int port) {
-        this.port = port;
+    public SocketDispatcher(ServerSocket serverSocket, ServerMain serverMain) {
+        this.serverSocket = serverSocket;
         this.serverMain = serverMain;
         listening = true;
     }
 
     /**
-     * Starts listening on the port, on new connection a thread is created.
+     * Starts listening on the socket, on new connection a thread is created.
      * The child thread creates a {@linkplain User} with a
      * {@linkplain SocketToClient} and calls {@linkplain User#init()}.
      */
     @Override
     public void run() {
-        try (ServerSocket serverSocket = new ServerSocket(port)) {
+        try (serverSocket) {
             while (listening) {
                 System.out.println("Socket is ready and listening.");
                 Socket socket = serverSocket.accept();
@@ -55,10 +53,17 @@ public class SocketDispatcher extends Thread {
                     } catch (ToClientException e) {
                         System.out.println("Socket died.");
                     }
-                }).run();
+                }).start();
             }
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             serverMain.notifyException(e);
         }
+    }
+
+    /**
+     * Stops listening through the socket.
+     */
+    public void stopListening() {
+        listening = false;
     }
 }
