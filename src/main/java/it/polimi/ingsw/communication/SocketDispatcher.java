@@ -47,8 +47,15 @@ public class SocketDispatcher extends Thread {
     public void run() {
         try (ServerSocket serverSocket = new ServerSocket(port)) {
             while (listening) {
+                System.out.println("Socket is ready and listening.");
                 Socket socket = serverSocket.accept();
-                new Thread(() -> new User(new SocketToClient(socket)).init());
+                new Thread(() -> {
+                    try {
+                        new User(new SocketToClient(socket)).init();
+                    } catch (ToClientException e) {
+                        System.out.println("Socket died.");
+                    }
+                }).run();
             }
         } catch (IOException e) {
             serverMain.notifyException(e);

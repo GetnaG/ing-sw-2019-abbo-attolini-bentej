@@ -277,4 +277,16 @@ public class User implements ToClientInterface {
         return null;
     }
 
+    /**
+     * Closes the connection.
+     */
+    @Override
+    public void quit() {
+        try {
+            toClient.quit();
+        } catch (ToClientException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

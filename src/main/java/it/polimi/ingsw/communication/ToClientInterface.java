@@ -158,4 +158,12 @@ public interface ToClientInterface {
      *                           or the client does not answer in time
      */
     String chooseUserName() throws ToClientException;
+
+    /**
+     * Closes the connection.
+     *
+     * @throws ToClientException if there are problems with the communication
+     *                           or the client does not answer in time
+     */
+    void quit() throws ToClientException;
 }

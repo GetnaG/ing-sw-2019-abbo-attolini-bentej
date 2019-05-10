@@ -36,8 +36,9 @@ public class SocketToClient implements ToClientInterface {
      *
      * @param socket the socket through which communicate
      */
-    SocketToClient(Socket socket) {
+    SocketToClient(Socket socket) throws ToClientException {
         this.socket = socket;
+        sendMessage(SocketProtocol.PROTOCOL_GREET);
     }
 
     /**
@@ -78,7 +79,7 @@ public class SocketToClient implements ToClientInterface {
             return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendError(SocketProtocol.PROTOCOL_ERR_CHOICE);
+        sendMessage(SocketProtocol.PROTOCOL_ERR_CHOICE);
         return askWaitAndCheck(command, options);
     }
 
@@ -125,7 +126,7 @@ public class SocketToClient implements ToClientInterface {
             return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendError(SocketProtocol.PROTOCOL_ERR_CHOICE);
+        sendMessage(SocketProtocol.PROTOCOL_ERR_CHOICE);
         return listAskWaitAndCheck(command, options);
     }
 
@@ -145,11 +146,11 @@ public class SocketToClient implements ToClientInterface {
         synchronized (socket) {
 
             /*Try-with-resources will call close() automatically*/
-            try (BufferedReader in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-                 PrintWriter out = new PrintWriter(socket.getOutputStream(),
-                         true)
-            ) {
+            try {
+                BufferedReader in = new BufferedReader(
+                        new InputStreamReader(socket.getInputStream()));
+                PrintWriter out = new PrintWriter(socket.getOutputStream(),
+                        true);
                 out.println(command);
                 choice = in.readLine();
             } catch (IOException e) {
@@ -162,20 +163,21 @@ public class SocketToClient implements ToClientInterface {
             return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendError(SocketProtocol.PROTOCOL_ERR_CHOICE);
+        sendMessage(SocketProtocol.PROTOCOL_ERR_CHOICE);
         return askAndWait(command);
     }
 
     /**
-     * Sends an error message through the socket.
+     * Sends a command that does not need an answer.
      *
-     * @param command the error message
+     * @param command the message
      * @throws ToClientException if there are problems with the socket
      */
-    private void sendError(SocketProtocol command) throws ToClientException {
+    private void sendMessage(SocketProtocol command) throws ToClientException {
         synchronized (socket) {
-            try (PrintWriter out = new PrintWriter(socket.getOutputStream(),
-                    true)) {
+            try {
+                PrintWriter out = new PrintWriter(socket.getOutputStream(),
+                        true);
                 out.println(command);
             } catch (IOException e) {
                 throw new ToClientException("Socket exception", e);
@@ -454,5 +456,16 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public String chooseUserName() throws ToClientException {
         return askAndWait(SocketProtocol.NICKNAME);
+    }
+
+    /**
+     * {@inheritDoc}
+     * This stops the execution until the connection is closed.
+     *
+     * @throws ToClientException if there are problems with the socket
+     */
+    @Override
+    public void quit() throws ToClientException {
+        askAndWait(SocketProtocol.QUIT);
     }
 }

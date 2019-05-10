@@ -41,55 +41,55 @@ public enum SocketProtocol {
     /**
      * Choose between sequences of effects.
      */
-    EFFECTS_SEQUENCE("effect sequence"),
+    EFFECTS_SEQUENCE("Please choose an effect sequence."),
     /**
      * Choose where to spawn.
      */
-    SPAWN("spawn"),
+    SPAWN("Please choose a card to use for spawning."),
     /**
      * Choose what powerup to use.
      */
-    POWERUP("powerup"),
+    POWERUP("Please choose a powerup"),
     /**
      * Choose a square.
      */
-    DESTINATION("destination"),
+    DESTINATION("Please choose a square."),
     /**
      * Choose a weapon.
      */
-    WEAPON("weapon card"),
+    WEAPON("Please choose a weapon."),
     /**
      * Choose which weapon to buy.
      */
-    WEAPON_TO_BUY("weapon to buy"),
+    WEAPON_TO_BUY("Please choose a weapon to be bought."),
     /**
      * Choose which weapon to discard.
      */
-    WEAPON_TO_DISCARD("weapon to discard"),
+    WEAPON_TO_DISCARD("Please choose a weapon to be discarded."),
     /**
      * Choose which weapon to reload.
      */
-    WEAPON_TO_RELOAD("weapon to reload"),
+    WEAPON_TO_RELOAD("Please choose a weapon to be reloaded."),
     /**
      * Choose an action.
      */
-    ACTION("action"),
+    ACTION("Please choose an action."),
     /**
      * Choose which powerup to use for paying.
      */
-    POWERUP_FOR_PAYING("powerup for paying"),
+    POWERUP_FOR_PAYING("Please choose a powerup to cover the cost."),
     /**
      * Choose which tagback card to use.
      */
-    USE_TAGBACK("use tagback"),
+    USE_TAGBACK("Please choose which tagback to use."),
     /**
      * Choose a target.
      */
-    TARGET("target"),
+    TARGET("Please select a target."),
     /**
      * Choose a nickname.
      */
-    NICKNAME("choose name"),
+    NICKNAME("Please choose a nickname."),
     /**
      * Elements sent after this are part of a list.
      */
@@ -102,16 +102,23 @@ public enum SocketProtocol {
      * Elements sent after this are part of a list of list.
      * The client must return the index of the choice.
      */
-    PROTOCOL_MULTI("List of lists"),
+    PROTOCOL_MULTI("Element:"),
     /**
      * The last element sent was the last list in the list.
      */
-    PROTOCOL_END_MULTI("End list of lists"),
-
+    PROTOCOL_END_MULTI("End of the element."),
     /**
      * The provided choice was not in the options or was not valid.
      */
-    PROTOCOL_ERR_CHOICE("Error choice");
+    PROTOCOL_ERR_CHOICE("Choice not valid!"),
+    /**
+     * Asks the client to close the connection.
+     */
+    QUIT("Quit"),
+    /**
+     * Sends a test message through the socket.
+     */
+    PROTOCOL_GREET("Hello! You are successfully connected.");
 
     /**
      * The string that will be sent through the socket.
@@ -128,6 +135,20 @@ public enum SocketProtocol {
     }
 
     /**
+     * Returns the instance of this class with the provided command.
+     *
+     * @param command the command required
+     * @return the instance of this class with the provided command
+     * @throws IllegalArgumentException if no elements have the provided command
+     */
+    public static SocketProtocol with(String command) {
+        for (SocketProtocol p : SocketProtocol.values())
+            if (p.getCommand().equals(command))
+                return p;
+        throw new IllegalArgumentException("Can not find SocketProtocol: " + command);
+    }
+
+    /**
      * Returns the string associated with this constant.
      *
      * @return the string associated with this
@@ -135,7 +156,6 @@ public enum SocketProtocol {
     public String getCommand() {
         return command;
     }
-
 
     /**
      * Returns the string associated with this constant

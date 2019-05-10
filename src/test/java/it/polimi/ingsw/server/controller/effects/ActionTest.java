@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.server.controller.ScoreListener;
 import it.polimi.ingsw.server.model.AmmoCube;
@@ -165,6 +166,11 @@ class ActionTest {
             @Override
             public String chooseUserName() {
                 return null;
+            }
+
+            @Override
+            public void quit() throws ToClientException {
+
             }
         };
 

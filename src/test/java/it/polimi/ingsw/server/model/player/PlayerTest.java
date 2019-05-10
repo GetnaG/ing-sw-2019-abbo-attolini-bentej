@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.player;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.server.controller.ScoreListener;
 import it.polimi.ingsw.server.controller.effects.Action;
@@ -598,6 +599,11 @@ class PlayerTest {
         @Override
         public String chooseUserName() {
             return null;
+        }
+
+        @Override
+        public void quit() throws ToClientException {
+
         }
     }
 }
