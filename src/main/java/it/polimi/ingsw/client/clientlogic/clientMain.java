@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.SocketFromServer;
 import it.polimi.ingsw.communication.SocketProtocol;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -48,6 +49,26 @@ public class clientMain {
         @Override
         public void SendNotification(String message) {
             System.out.println(message);
+        }
+
+        @Override
+        public String tempAsk(String message, List<String> options) {
+            System.out.println(message);
+            options.forEach(System.out::println);
+            Scanner scanner = new Scanner(System.in);
+            return scanner.nextLine();
+        }
+
+        @Override
+        public String tempAskList(String message, List<List<String>> options) {
+            System.out.println(message + "Insert the number associated with " +
+                    "the choice.");
+            for (List<String> o : options) {
+                System.out.println("\n"+options.indexOf(o));
+                o.forEach(System.out::println);
+            }
+            Scanner scanner = new Scanner(System.in);
+            return scanner.nextLine();
         }
     }
 }
