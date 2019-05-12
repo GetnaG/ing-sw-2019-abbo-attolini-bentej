@@ -12,7 +12,7 @@ public class SpawnSquare extends Square {
     private Spawn spawn;
 
 
-    public SpawnSquare(AmmoCube color, WeaponMarket w) { ///-------????
+    public SpawnSquare(AmmoCube color, WeaponMarket w) {
         super(constructorHelper(color));
         market = w;
         spawn = null;
@@ -53,8 +53,12 @@ public class SpawnSquare extends Square {
      * @param weapon is  the weapon chosen by the player
      */
     public void pickWeapon(WeaponCard weapon){
-        market.pickWeaponFromList(weapon);
-        super.replacer.addSpawnSquare(this);
+        if(market.isValidWeapon(weapon)) {
+            market.pickWeaponFromList(weapon);
+            super.replacer.addSpawnSquare(this);
+        }
+        else
+            System.out.println("Warning: You are trying to remove a non-existing weapon!");
     }
 
     /**

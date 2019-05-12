@@ -64,19 +64,21 @@ class RoomTest {
         //3//
         SpawnSquare a2 = new SpawnSquare(AmmoCube.BLUE, null);
         SpawnSquare d2 = new SpawnSquare(AmmoCube.BLUE, null);
+        b = new Square(Color.BLUE);
+        e = new Square(Color.BLUE);
         List<Square> list = new ArrayList<>();
-        list.add(a);
+        list.add(a2);
         list.add(b);
         list.add(c);
         List<Square> list2 = new ArrayList<>();
-        list2.add(d);
+        list2.add(d2);
         list2.add(e);
         list2.add(f);
 
         Room r3 = new Room(list, a2);
         Room r4 = new Room(list2, d2);
 
+        assertTrue(r3.equals(r4));
 
-        //assertTrue(r3.equals(r4));
     }
 }

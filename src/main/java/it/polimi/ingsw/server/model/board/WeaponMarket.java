@@ -45,12 +45,22 @@ public class WeaponMarket {
      */
     public void pickWeaponFromList(WeaponCard weapon) {
         int pos = 0;
-        for (WeaponCard i : weaponCards) {
-            if (i.equals(weapon)) {
-                weaponCards.set(pos, null);
+            for (WeaponCard i : weaponCards) {
+                if (i != null && i.equals(weapon)) {
+                    weaponCards.set(pos, null);
+                    return;
+                }
+                System.out.println("actual pos: " + pos);
+                pos++;
             }
-            pos++;
+    }
+
+    public boolean isValidWeapon(WeaponCard w){
+        for (WeaponCard i: weaponCards) {
+            if(i.getId().equals(w.getId()))
+                return true;
         }
+        return false;
     }
 
 }
