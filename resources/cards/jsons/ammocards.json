@@ -28,10 +28,289 @@
   },
   {
     "cubes": [
+      "RED",
+      "YELLOW",
+      "YELLOW"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_045"
+  },
+  {
+    "cubes": [
+      "BLUE",
+      "YELLOW",
+      "YELLOW"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_046"
+  },
+  {
+  "cubes": [
+    "BLUE",
+    "RED",
+    "RED"
+  ],
+  "powerup": false,
+  "resourceId": "AD_ammo_047"
+},
+  {
+    "cubes": [
+      "YELLOW",
+      "BLUE",
+      "BLUE"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_048"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "RED",
+      "RED"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_049"
+  },
+  {
+    "cubes": [
+      "RED",
+      "BLUE",
+      "BLUE"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0410"
+  },
+  {
+    "cubes": [
+      "RED",
+      "YELLOW",
+      "YELLOW"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0411"
+  },
+  {
+    "cubes": [
+      "BLUE",
+      "YELLOW",
+      "YELLOW"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0412"
+  },
+  {
+    "cubes": [
+      "BLUE",
+      "RED",
+      "RED"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0413"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "BLUE",
+      "BLUE"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0414"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "RED",
+      "RED"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0415"
+  },
+  {
+    "cubes": [
+      "RED",
+      "BLUE",
+      "BLUE"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0416"
+  },
+  {
+    "cubes": [
+      "RED",
+      "YELLOW",
+      "YELLOW"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0411"
+  },
+  {
+    "cubes": [
+      "BLUE",
+      "YELLOW",
+      "YELLOW"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0418"
+  },
+  {
+    "cubes": [
+      "BLUE",
+      "RED",
+      "RED"
+    ],
+    "powerup": false,
+    "resourceId": "AD_ammo_0419"
+  },
+  {
+    "cubes": [
       "YELLOW",
       "YELLOW"
     ],
     "powerup": true,
     "resourceId": "AD_ammo_0420"
+  },
+  {
+    "cubes": [
+      "RED",
+      "RED"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0421"
+  },
+  {
+    "cubes": [
+      "BLUE",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0422"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "RED"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0423"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0424"
+  },
+  {
+    "cubes": [
+      "RED",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0425"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "RED"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0426"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0427"
+  },
+  {
+    "cubes": [
+      "RED",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0428"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "YELLOW"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0429"
+  },
+  {
+    "cubes": [
+      "RED",
+      "RED"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0430"
+  },
+  {
+    "cubes": [
+      "BLUE",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0431"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "RED"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0432"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0433"
+  },
+  {
+    "cubes": [
+      "RED",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0434"
+  },
+  {
+    "cubes": [
+      "RED",
+      "RED"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0421"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "RED"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0435"
+  },
+  {
+    "cubes": [
+      "YELLOW",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0436"
+  },
+  {
+    "cubes": [
+      "RED",
+      "BLUE"
+    ],
+    "powerup": true,
+    "resourceId": "AD_ammo_0437"
   }
 ]

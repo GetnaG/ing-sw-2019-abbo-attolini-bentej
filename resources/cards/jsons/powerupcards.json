@@ -30,5 +30,69 @@
     "effectId": "targeting scope",
     "cube": "BLUE",
     "resourceId": "AD_powerups_IT_025"
+  },
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": true,
+    "usableOnReceivingDamage": false,
+    "effectId": "targeting scope",
+    "cube": "RED",
+    "resourceId": "AD_powerups_IT_026"
+  },
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": true,
+    "usableOnReceivingDamage": false,
+    "effectId": "targeting scope",
+    "cube": "YELLOW",
+    "resourceId": "AD_powerups_IT_027"
+  },
+  {
+    "usableAsAction": true,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": false,
+    "effectId": "newton",
+    "cube": "BLUE",
+    "resourceId": "AD_powerups_IT_028"
+  },
+  {
+    "usableAsAction": true,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": false,
+    "effectId": "newton",
+    "cube": "RED",
+    "resourceId": "AD_powerups_IT_029"
+  },
+  {
+    "usableAsAction": true,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": false,
+    "effectId": "newton",
+    "cube": "YELLOW",
+    "resourceId": "AD_powerups_IT_0210"
+  },
+  {
+    "usableAsAction": true,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": false,
+    "effectId": "teleporter",
+    "cube": "BLUE",
+    "resourceId": "AD_powerups_IT_0211"
+  },
+  {
+    "usableAsAction": true,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": false,
+    "effectId": "teleporter",
+    "cube": "BLUE",
+    "resourceId": "AD_powerups_IT_0212"
+  },
+  {
+    "usableAsAction": true,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": false,
+    "effectId": "teleporter",
+    "cube": "YELLOW",
+    "resourceId": "AD_powerups_IT_0213"
   }
 ]

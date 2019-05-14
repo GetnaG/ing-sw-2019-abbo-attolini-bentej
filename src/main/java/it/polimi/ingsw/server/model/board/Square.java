@@ -14,7 +14,7 @@ public class Square {
     protected ReplaceListener replacer;
     private Room room;
     private AmmoCard ammoCard;
-    private Color color;
+    private SquareColor squareColor;
     private int ID;
     private Square north;
     private Square south;
@@ -29,7 +29,7 @@ public class Square {
     /**
      * Default constructor of a physical square
      */
-    public Square(Color color) {
+    public Square(SquareColor squareColor) {
         room = null;
         north = null;
         south = null;
@@ -40,7 +40,7 @@ public class Square {
         eastBorder = null;
         westBorder = null;
         replacer = null;
-        this.color = color;
+        this.squareColor = squareColor;
     }
 
     /**
@@ -155,12 +155,12 @@ public class Square {
         this.replacer = replacer;
     }
 
-    public Color getColor() {
-        return color;
+    public SquareColor getSquareColor() {
+        return squareColor;
     }
 
-    public void setColor(Color color) {
-        this.color = color;
+    public void setSquareColor(SquareColor squareColor) {
+        this.squareColor = squareColor;
     }
 
     public Room getRoom() {
@@ -340,7 +340,7 @@ public class Square {
             }
         }
 
-        if(this.getColor() != ((Square) obj).getColor())
+        if(this.getSquareColor() != ((Square) obj).getSquareColor())
             return false;
 
         return true;

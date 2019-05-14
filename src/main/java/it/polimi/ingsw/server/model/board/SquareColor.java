@@ -1,5 +1,5 @@
 package it.polimi.ingsw.server.model.board;
 
-public enum Color {
+public enum SquareColor {
     RED, BLUE, YELLOW, PURPLE, WHITE, GREEN
 }

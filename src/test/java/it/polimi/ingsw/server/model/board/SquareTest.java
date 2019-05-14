@@ -42,8 +42,8 @@ class SquareTest {
     @Test
     void checkVisible() {
         //1//
-        Square testS = new Square(Color.BLUE);
-        Square testDestinationS = new Square(Color.BLUE);
+        Square testS = new Square(SquareColor.BLUE);
+        Square testDestinationS = new Square(SquareColor.BLUE);
         List<Square> listA = new ArrayList<>();
         SpawnSquare testSPSQ = new SpawnSquare(AmmoCube.BLUE, null);
         listA.add(testSPSQ);
@@ -60,7 +60,7 @@ class SquareTest {
 
         testS.setNorth(testDestinationS);
         testDestinationS.setSouth(testS);
-        testDestinationS.setColor(Color.YELLOW);
+        testDestinationS.setSquareColor(SquareColor.YELLOW);
         testS.setNorthBorder(Border.DOOR);
 
         List<Square> listB = new ArrayList<>();
@@ -74,7 +74,7 @@ class SquareTest {
 
 
         //3//
-        Square testDestinationS2 = new Square(Color.YELLOW);
+        Square testDestinationS2 = new Square(SquareColor.YELLOW);
         listB.remove(1);
         listB.add(testDestinationS2);
         testDestinationS2.setSouth(testS);
@@ -86,8 +86,8 @@ class SquareTest {
         assertTrue(!testDestinationS2.checkVisible(testS));
 
         //4//
-        testS = new Square(Color.BLUE);
-        Square a = new Square(Color.GREEN);
+        testS = new Square(SquareColor.BLUE);
+        Square a = new Square(SquareColor.GREEN);
         SpawnSquare testD = new SpawnSquare(AmmoCube.RED, null);
 
         testS.setSouth(a);
@@ -114,8 +114,8 @@ class SquareTest {
 
     @Test
     void listOfVisibles() {
-        Square testS = new Square(Color.BLUE);
-        Square a = new Square(Color.GREEN);
+        Square testS = new Square(SquareColor.BLUE);
+        Square a = new Square(SquareColor.GREEN);
         SpawnSquare testD = new SpawnSquare(AmmoCube.RED, null);
 
         testS.setSouth(a);
@@ -146,7 +146,7 @@ class SquareTest {
 
         assertEquals(2, testS.listOfVisibles(g).size());
 
-        Square b = new Square(Color.PURPLE);
+        Square b = new Square(SquareColor.PURPLE);
         b.setSouth(testD);
         b.setWest(testS);
         b.setSouthBorder(Border.WALL);
@@ -158,8 +158,8 @@ class SquareTest {
 
     @Test
     void equals() {
-        Square a = new Square(Color.BLUE);
-        Square b = new Square(Color.BLUE);
+        Square a = new Square(SquareColor.BLUE);
+        Square b = new Square(SquareColor.BLUE);
         Square x = new Square();
         Square y = new Square();
         Square z = new Square();
@@ -184,7 +184,7 @@ class SquareTest {
         assertTrue(!a.equals(b));
 
         //3//
-        b.setColor(Color.YELLOW);
+        b.setSquareColor(SquareColor.YELLOW);
 
         assertTrue(!a.equals(b));
 

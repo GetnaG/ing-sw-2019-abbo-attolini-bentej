@@ -50,7 +50,6 @@ public class WeaponMarket {
                     weaponCards.set(pos, null);
                     return;
                 }
-                System.out.println("actual pos: " + pos);
                 pos++;
             }
     }

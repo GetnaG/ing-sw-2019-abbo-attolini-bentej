@@ -114,10 +114,10 @@ public class GameBoard implements ReplaceListener {
     }
 
     /**
-     * Finds the {@code Square} which contains the {@code Spawn} of the given {@code Color}
+     * Finds the {@code Square} which contains the {@code Spawn} of the given {@code SquareColor}
      *
      * @param color the color of the spawn to find
-     * @return a {@code Square} which contains the {@code Spawn} of the given {@code Color}
+     * @return a {@code Square} which contains the {@code Spawn} of the given {@code SquareColor}
      */
     public Square findSpawn(AmmoCube color) {
         List<SpawnSquare> spawns = configuration.stream()

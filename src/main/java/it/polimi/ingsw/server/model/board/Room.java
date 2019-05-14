@@ -4,7 +4,7 @@ import java.util.*;
 /**
  *  A room consists in a list of Squares
  *  It can either contain a SpawnSquare (if and only if its color is BLUE, YELLOW or RED), or not (in which case
- *  its color is chosen among the colors listed in the enum Color)
+ *  its color is chosen among the colors listed in the enum SquareColor)
  *
  *  If the room contains a SpawnSquare, it is always set as the first element of the list of Squares that make up
  *  the room
@@ -31,7 +31,7 @@ public class Room {
             throw new IllegalArgumentException();
         else
             for(Square x: squares)
-                if(squares.get(0).getColor() != x.getColor())
+                if(squares.get(0).getSquareColor() != x.getSquareColor())
                     throw new IllegalArgumentException();
 
 

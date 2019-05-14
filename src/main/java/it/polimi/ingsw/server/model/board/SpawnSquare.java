@@ -17,14 +17,14 @@ public class SpawnSquare extends Square {
         market = w;
         spawn = null;
     }
-    private static Color constructorHelper(AmmoCube c){
+    private static SquareColor constructorHelper(AmmoCube c){
         switch (c) {
             case BLUE:
-                return Color.BLUE;
+                return SquareColor.BLUE;
             case YELLOW:
-                return Color.YELLOW;
+                return SquareColor.YELLOW;
             case RED:
-                return Color.RED;
+                return SquareColor.RED;
             case ANY:
                 throw new IllegalArgumentException();
         }
@@ -65,12 +65,12 @@ public class SpawnSquare extends Square {
      * @return return the color of the room selected to spawn
      */
     public AmmoCube getSpawnColor() {
-        Color c = super.getColor();
-        if (c == Color.BLUE)
+        SquareColor c = super.getSquareColor();
+        if (c == SquareColor.BLUE)
             return AmmoCube.BLUE;
-        if (c == Color.RED)
+        if (c == SquareColor.RED)
             return AmmoCube.RED;
-        if (c == Color.YELLOW)
+        if (c == SquareColor.YELLOW)
             return AmmoCube.YELLOW;
         return AmmoCube.ANY;
     }

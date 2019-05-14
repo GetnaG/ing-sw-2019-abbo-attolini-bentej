@@ -51,9 +51,9 @@ class MoveTest {
         List<Room> conf = new ArrayList<>();
 
         squares.add(new SpawnSquare(AmmoCube.BLUE, new WeaponMarket(new ArrayList<>())));
-        squares.add(new Square(Color.BLUE));
-        squares.add(new Square(Color.BLUE));
-        squares.add(new Square(Color.BLUE));
+        squares.add(new Square(SquareColor.BLUE));
+        squares.add(new Square(SquareColor.BLUE));
+        squares.add(new Square(SquareColor.BLUE));
         // Adding rooms and doors.
         SpawnSquare square1 = (SpawnSquare) squares.get(0);
         Square square2 = squares.get(1);

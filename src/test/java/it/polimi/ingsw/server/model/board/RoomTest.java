@@ -13,7 +13,7 @@ class RoomTest {
     @Test
     void hasSpawnSquare() {
         //1//
-        Square a = new Square(Color.YELLOW), b = new Square(Color.BLUE), c = new Square(Color.WHITE);
+        Square a = new Square(SquareColor.YELLOW), b = new Square(SquareColor.BLUE), c = new Square(SquareColor.WHITE);
         List<Square> l = new ArrayList<>();
         l.add(a);
         l.add(b);
@@ -23,9 +23,9 @@ class RoomTest {
         assertTrue(!r.hasSpawnSquare());
 
         //2//
-        a = new Square(Color.YELLOW);
-        b = new Square(Color.YELLOW);
-        c = new Square(Color.YELLOW);
+        a = new Square(SquareColor.YELLOW);
+        b = new Square(SquareColor.YELLOW);
+        c = new Square(SquareColor.YELLOW);
         l = new ArrayList<>();
         l.add(a);
         l.add(b);
@@ -38,8 +38,8 @@ class RoomTest {
     @Test
     void equals() {
         //1//
-        Square a = new Square(Color.BLUE), b = new Square(Color.BLUE), c = new Square(Color.BLUE);
-        Square d = new Square(Color.BLUE), e = new Square(Color.BLUE), f = new Square(Color.BLUE);
+        Square a = new Square(SquareColor.BLUE), b = new Square(SquareColor.BLUE), c = new Square(SquareColor.BLUE);
+        Square d = new Square(SquareColor.BLUE), e = new Square(SquareColor.BLUE), f = new Square(SquareColor.BLUE);
         List<Square> l = new ArrayList<>();
         List<Square> l2 = new ArrayList<>();
         l.add(a);
@@ -64,8 +64,8 @@ class RoomTest {
         //3//
         SpawnSquare a2 = new SpawnSquare(AmmoCube.BLUE, null);
         SpawnSquare d2 = new SpawnSquare(AmmoCube.BLUE, null);
-        b = new Square(Color.BLUE);
-        e = new Square(Color.BLUE);
+        b = new Square(SquareColor.BLUE);
+        e = new Square(SquareColor.BLUE);
         List<Square> list = new ArrayList<>();
         list.add(a2);
         list.add(b);
