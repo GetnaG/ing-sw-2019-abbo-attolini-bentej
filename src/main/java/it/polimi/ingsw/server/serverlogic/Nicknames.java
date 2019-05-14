@@ -24,11 +24,17 @@ public class Nicknames implements SuspensionListener {
     private List<String> offlineNames;
 
     /**
+     * List of online players not in a game
+     */
+    private List<String> waitingRoomNames;
+
+    /**
      * Default constructor
      */
     public Nicknames(){
         this.onlineNames = new ArrayList<>();
         this.offlineNames = new ArrayList<>();
+        this.waitingRoomNames = new ArrayList<>();
     }
 
     /**
@@ -64,6 +70,18 @@ public class Nicknames implements SuspensionListener {
     public void playerResumption(Player player) {
         onlineNames.add(player.getName());
         offlineNames.remove(player.getName());
+    }
+
+    /**
+     * Removes the given players from the waiting room list
+     * @param players   nicknames of players to be removed
+     */
+    public void removeFromWaitingRoom(List<Player> players){
+        waitingRoomNames.removeAll(players);
+    }
+
+    public String getNicknameFirstPlayer(){
+        return waitingRoomNames.get(0);
     }
 
 }

@@ -11,10 +11,14 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 
+ * Controls the flow of the Game. The Game is seen as a sequence of turns.
  */
 public class DeathmatchController implements SuspensionListener, ScoreListener {
 
+    /**
+     * Players in the Game
+     */
+    private List<Player>  players;
     /**
      * Default constructor
      */
@@ -22,9 +26,27 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     }
 
     /**
-     * 
+     * Constructs a DeathmatchController with the given users
+     * @param users     users in the game
      */
-    private Player players;
+    public DeathmatchController(List<User> users){
+        this.players = buildPlayers(users);
+        //whos first
+
+    }
+
+    /**
+     * Given the list of users, returns a list of players
+     * @param users
+     * @return
+     */
+    private List<Player> buildPlayers(List<User> users){
+        return null;
+    }
+
+
+
+
 
     /**
      * 
