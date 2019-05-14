@@ -50,11 +50,11 @@ public class SocketFromServer {
                      true)
         ) {
             /*Listening until the QUIT command*/
-            while (!(input = in.readLine()).equals(SocketProtocol.QUIT.getCommand())) {
+            while (!(input = in.readLine()).equals(Type.QUIT.getCommand())) {
 
                 /*Trying to convert the string to enum and handling the command*/
                 try {
-                    SocketProtocol command = SocketProtocol.with(input);
+                    Type command = Type.with(input);
                     switch (command) {
                         case EFFECTS_SEQUENCE:
                         case TARGET:
@@ -93,7 +93,7 @@ public class SocketFromServer {
                     interactor.SendNotification("error " + input);//TODO localization
                 }
             }
-            out.println(SocketProtocol.QUIT);
+            out.println(Type.QUIT);
         }
     }
 
@@ -107,8 +107,8 @@ public class SocketFromServer {
     private List<String> options(BufferedReader in) throws IOException {
         String input;
         List<String> options = new ArrayList<>();
-        while ((input = in.readLine()).equals(SocketProtocol.PROTOCOL_LIST.getCommand())) {
-            while (!(input = in.readLine()).equals(SocketProtocol.PROTOCOL_END_LIST.getCommand()))
+        while ((input = in.readLine()).equals(Type.PROTOCOL_LIST.getCommand())) {
+            while (!(input = in.readLine()).equals(Type.PROTOCOL_END_LIST.getCommand()))
                 options.add(input);
         }
         return options;
@@ -125,9 +125,9 @@ public class SocketFromServer {
         String input;
         List<List<String>> multiOptions = new ArrayList<>();
         in.readLine();//TODO: skipping list head (to be fixed)
-        while ((input = in.readLine()).equals(SocketProtocol.PROTOCOL_LIST.getCommand())) {
+        while ((input = in.readLine()).equals(Type.PROTOCOL_LIST.getCommand())) {
             List<String> o = new ArrayList<>();
-            while (!(input = in.readLine()).equals(SocketProtocol.PROTOCOL_END_LIST.getCommand()))
+            while (!(input = in.readLine()).equals(Type.PROTOCOL_END_LIST.getCommand()))
                 o.add(input);
         }
         in.readLine();//TODO: skipping list tail (to be fixed)

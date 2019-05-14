@@ -37,7 +37,7 @@ package it.polimi.ingsw.communication;
  *
  * @author Abbo Giulio A.
  */
-public enum SocketProtocol {
+public enum Type {
     /**
      * Choose between sequences of effects.
      */
@@ -130,7 +130,7 @@ public enum SocketProtocol {
      *
      * @param command the string that will be sent.
      */
-    SocketProtocol(String command) {
+    Type(String command) {
         this.command = command;
     }
 
@@ -141,11 +141,11 @@ public enum SocketProtocol {
      * @return the instance of this class with the provided command
      * @throws IllegalArgumentException if no elements have the provided command
      */
-    public static SocketProtocol with(String command) {
-        for (SocketProtocol p : SocketProtocol.values())
+    public static Type with(String command) {
+        for (Type p : Type.values())
             if (p.getCommand().equals(command))
                 return p;
-        throw new IllegalArgumentException("Can not find SocketProtocol: " + command);
+        throw new IllegalArgumentException("Can not find Type: " + command);
     }
 
     /**

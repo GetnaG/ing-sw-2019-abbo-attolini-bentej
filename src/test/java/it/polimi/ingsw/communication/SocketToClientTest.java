@@ -72,18 +72,18 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_MULTI.getCommand(),
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_MULTI.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "00",
                 "01",
-                SocketProtocol.PROTOCOL_END_LIST.getCommand(),
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_END_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "01",
-                SocketProtocol.PROTOCOL_END_LIST.getCommand(),
-                SocketProtocol.PROTOCOL_END_MULTI.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand(),
+                Type.PROTOCOL_END_MULTI.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.EFFECTS_SEQUENCE.getCommand(), actual.remove(0));
+        assertEquals(Type.EFFECTS_SEQUENCE.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -112,13 +112,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.SPAWN.getCommand(), actual.remove(0));
+        assertEquals(Type.SPAWN.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -147,13 +147,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.POWERUP.getCommand(), actual.remove(0));
+        assertEquals(Type.POWERUP.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -182,13 +182,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.DESTINATION.getCommand(), actual.remove(0));
+        assertEquals(Type.DESTINATION.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -217,13 +217,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.WEAPON.getCommand(), actual.remove(0));
+        assertEquals(Type.WEAPON.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -252,13 +252,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.WEAPON_TO_BUY.getCommand(), actual.remove(0));
+        assertEquals(Type.WEAPON_TO_BUY.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -287,13 +287,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.WEAPON_TO_DISCARD.getCommand(), actual.remove(0));
+        assertEquals(Type.WEAPON_TO_DISCARD.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -322,13 +322,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.WEAPON_TO_RELOAD.getCommand(), actual.remove(0));
+        assertEquals(Type.WEAPON_TO_RELOAD.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -357,13 +357,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.ACTION.getCommand(), actual.remove(0));
+        assertEquals(Type.ACTION.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -392,13 +392,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.POWERUP_FOR_PAYING.getCommand(), actual.remove(0));
+        assertEquals(Type.POWERUP_FOR_PAYING.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -427,13 +427,13 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "name",
                 DEFAULT_CHOICE,
-                SocketProtocol.PROTOCOL_END_LIST.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.USE_TAGBACK.getCommand(), actual.remove(0));
+        assertEquals(Type.USE_TAGBACK.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -462,18 +462,18 @@ class SocketToClientTest {
 
         /*Checking the protocol*/
         List<String> expected = Arrays.asList(
-                SocketProtocol.PROTOCOL_MULTI.getCommand(),
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_MULTI.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "00",
                 "01",
-                SocketProtocol.PROTOCOL_END_LIST.getCommand(),
-                SocketProtocol.PROTOCOL_LIST.getCommand(),
+                Type.PROTOCOL_END_LIST.getCommand(),
+                Type.PROTOCOL_LIST.getCommand(),
                 "01",
-                SocketProtocol.PROTOCOL_END_LIST.getCommand(),
-                SocketProtocol.PROTOCOL_END_MULTI.getCommand()
+                Type.PROTOCOL_END_LIST.getCommand(),
+                Type.PROTOCOL_END_MULTI.getCommand()
         );
         List<String> actual = socket.contents();
-        assertEquals(SocketProtocol.TARGET.getCommand(), actual.remove(0));
+        assertEquals(Type.TARGET.getCommand(), actual.remove(0));
         for (int i = 0; i < actual.size(); i++) {
             assertEquals(expected.get(0), actual.get(0));
         }
@@ -487,14 +487,14 @@ class SocketToClientTest {
         } catch (ToClientException e) {
             fail(e);
         }
-        assertEquals(SocketProtocol.NICKNAME.getCommand(), socket.contents().get(0));
+        assertEquals(Type.NICKNAME.getCommand(), socket.contents().get(0));
     }
 
     @Test
     void quit() {
         socket.put(DEFAULT_CHOICE);
         assertDoesNotThrow(() -> toClient.quit());
-        assertEquals(SocketProtocol.QUIT.getCommand(), socket.contents().get(0));
+        assertEquals(Type.QUIT.getCommand(), socket.contents().get(0));
     }
 
     class MockSocket extends Socket {

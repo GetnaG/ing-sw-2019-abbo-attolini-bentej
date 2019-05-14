@@ -23,7 +23,7 @@ import java.util.stream.Collectors;
  * time.
  *
  * @author Abbo Giulio A.
- * @see SocketProtocol
+ * @see Type
  */
 public class SocketToClient implements ToClientInterface {
     /**
@@ -38,7 +38,7 @@ public class SocketToClient implements ToClientInterface {
      */
     SocketToClient(Socket socket) throws ToClientException {
         this.socket = socket;
-        sendMessage(SocketProtocol.PROTOCOL_GREET);
+        sendMessage(Type.PROTOCOL_GREET);
     }
 
     /**
@@ -50,7 +50,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected option
      * @throws ToClientException if there are problems with the socket
      */
-    private String askWaitAndCheck(SocketProtocol command, List<String> options)
+    private String askWaitAndCheck(Type command, List<String> options)
             throws ToClientException {
 
         /*Sending the data an retrieving the answer*/
@@ -64,10 +64,10 @@ public class SocketToClient implements ToClientInterface {
                          true)
             ) {
                 out.println(command);
-                out.println(SocketProtocol.PROTOCOL_LIST);
+                out.println(Type.PROTOCOL_LIST);
                 for (String s : options)
                     out.println(s);
-                out.println(SocketProtocol.PROTOCOL_END_LIST);
+                out.println(Type.PROTOCOL_END_LIST);
                 choice = in.readLine();
             } catch (IOException e) {
                 throw new ToClientException("Socket exception", e);
@@ -79,7 +79,7 @@ public class SocketToClient implements ToClientInterface {
             return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendMessage(SocketProtocol.PROTOCOL_ERR_CHOICE);
+        sendMessage(Type.PROTOCOL_ERR_CHOICE);
         return askWaitAndCheck(command, options);
     }
 
@@ -92,7 +92,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the index of the selected option
      * @throws ToClientException if there are problems with the socket
      */
-    private int listAskWaitAndCheck(SocketProtocol command,
+    private int listAskWaitAndCheck(Type command,
                                     List<List<String>> options) throws ToClientException {
 
         /*Sending the data an retrieving the answer*/
@@ -106,14 +106,14 @@ public class SocketToClient implements ToClientInterface {
                          true)
             ) {
                 out.println(command);
-                out.println(SocketProtocol.PROTOCOL_MULTI);
+                out.println(Type.PROTOCOL_MULTI);
                 for (List<String> list : options) {
-                    out.println(SocketProtocol.PROTOCOL_LIST);
+                    out.println(Type.PROTOCOL_LIST);
                     for (String s : list)
                         out.println(s);
-                    out.println(SocketProtocol.PROTOCOL_END_LIST);
+                    out.println(Type.PROTOCOL_END_LIST);
                 }
-                out.println(SocketProtocol.PROTOCOL_END_MULTI);
+                out.println(Type.PROTOCOL_END_MULTI);
                 choice = Integer.parseInt(in.readLine());
             } catch (IOException e) {
                 throw new ToClientException("Socket exception", e);
@@ -126,7 +126,7 @@ public class SocketToClient implements ToClientInterface {
             return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendMessage(SocketProtocol.PROTOCOL_ERR_CHOICE);
+        sendMessage(Type.PROTOCOL_ERR_CHOICE);
         return listAskWaitAndCheck(command, options);
     }
 
@@ -139,7 +139,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the answer
      * @throws ToClientException if there are problems with the socket
      */
-    private String askAndWait(SocketProtocol command) throws ToClientException {
+    private String askAndWait(Type command) throws ToClientException {
 
         /*Sending the data an retrieving the answer*/
         String choice;
@@ -163,7 +163,7 @@ public class SocketToClient implements ToClientInterface {
             return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendMessage(SocketProtocol.PROTOCOL_ERR_CHOICE);
+        sendMessage(Type.PROTOCOL_ERR_CHOICE);
         return askAndWait(command);
     }
 
@@ -173,7 +173,7 @@ public class SocketToClient implements ToClientInterface {
      * @param command the message
      * @throws ToClientException if there are problems with the socket
      */
-    private void sendMessage(SocketProtocol command) throws ToClientException {
+    private void sendMessage(Type command) throws ToClientException {
         synchronized (socket) {
             try {
                 PrintWriter out = new PrintWriter(socket.getOutputStream(),
@@ -194,7 +194,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected effect
      * @throws ToClientException if there are problems with the socket
      */
-    private EffectInterface askEffect(SocketProtocol command,
+    private EffectInterface askEffect(Type command,
                                       List<EffectInterface> options)
             throws ToClientException {
 
@@ -219,7 +219,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected powerup
      * @throws ToClientException if there are problems with the socket
      */
-    private PowerupCard askPowerup(SocketProtocol command,
+    private PowerupCard askPowerup(Type command,
                                    List<PowerupCard> options)
             throws ToClientException {
         String choice = askWaitAndCheck(command, options.stream()
@@ -238,7 +238,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected square
      * @throws ToClientException if there are problems with the socket
      */
-    private Square askSquare(SocketProtocol command, List<Square> options)
+    private Square askSquare(Type command, List<Square> options)
             throws ToClientException {
         String choice = askWaitAndCheck(command, options.stream()
                 .map(Square::getID).collect(Collectors.toList()));
@@ -256,7 +256,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected weapon
      * @throws ToClientException if there are problems with the socket
      */
-    private WeaponCard askWeapon(SocketProtocol command,
+    private WeaponCard askWeapon(Type command,
                                  List<WeaponCard> options)
             throws ToClientException {
         String choice = askWaitAndCheck(command, options.stream()
@@ -275,7 +275,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected action
      * @throws ToClientException if there are problems with the socket
      */
-    private Action askAction(SocketProtocol command, List<Action> options)
+    private Action askAction(Type command, List<Action> options)
             throws ToClientException {
         String choice = askWaitAndCheck(command, options.stream()
                 .map(Action::getName).collect(Collectors.toList()));
@@ -293,7 +293,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected damageable list
      * @throws ToClientException if there are problems with the socket
      */
-    private List<Damageable> askDamageableList(SocketProtocol command,
+    private List<Damageable> askDamageableList(Type command,
                                                List<List<Damageable>> options)
             throws ToClientException {
         int choice = listAskWaitAndCheck(command, options.stream()
@@ -312,7 +312,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public EffectInterface chooseEffectsSequence(List<EffectInterface> options)
             throws ToClientException {
-        return askEffect(SocketProtocol.EFFECTS_SEQUENCE, options);
+        return askEffect(Type.EFFECTS_SEQUENCE, options);
     }
 
     /**
@@ -324,7 +324,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public PowerupCard chooseSpawn(List<PowerupCard> options)
             throws ToClientException {
-        return askPowerup(SocketProtocol.SPAWN, options);
+        return askPowerup(Type.SPAWN, options);
     }
 
     /**
@@ -336,7 +336,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public PowerupCard choosePowerup(List<PowerupCard> options)
             throws ToClientException {
-        return askPowerup(SocketProtocol.POWERUP, options);
+        return askPowerup(Type.POWERUP, options);
     }
 
     /**
@@ -348,7 +348,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public Square chooseDestination(List<Square> options)
             throws ToClientException {
-        return askSquare(SocketProtocol.DESTINATION, options);
+        return askSquare(Type.DESTINATION, options);
     }
 
     /**
@@ -360,7 +360,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public WeaponCard chooseWeaponCard(List<WeaponCard> options)
             throws ToClientException {
-        return askWeapon(SocketProtocol.WEAPON, options);
+        return askWeapon(Type.WEAPON, options);
     }
 
     /**
@@ -372,7 +372,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public WeaponCard chooseWeaponToBuy(List<WeaponCard> options)
             throws ToClientException {
-        return askWeapon(SocketProtocol.WEAPON_TO_BUY, options);
+        return askWeapon(Type.WEAPON_TO_BUY, options);
     }
 
     /**
@@ -384,7 +384,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options)
             throws ToClientException {
-        return askWeapon(SocketProtocol.WEAPON_TO_DISCARD, options);
+        return askWeapon(Type.WEAPON_TO_DISCARD, options);
     }
 
     /**
@@ -396,7 +396,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public WeaponCard chooseWeaponToReload(List<WeaponCard> options)
             throws ToClientException {
-        return askWeapon(SocketProtocol.WEAPON_TO_RELOAD, options);
+        return askWeapon(Type.WEAPON_TO_RELOAD, options);
     }
 
     /**
@@ -408,7 +408,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public Action chooseAction(List<Action> options)
             throws ToClientException {
-        return askAction(SocketProtocol.ACTION, options);
+        return askAction(Type.ACTION, options);
     }
 
     /**
@@ -420,7 +420,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public PowerupCard choosePowerupForPaying(List<PowerupCard> options)
             throws ToClientException {
-        return askPowerup(SocketProtocol.POWERUP_FOR_PAYING, options);
+        return askPowerup(Type.POWERUP_FOR_PAYING, options);
     }
 
     /**
@@ -432,7 +432,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public PowerupCard askUseTagback(List<PowerupCard> options)
             throws ToClientException {
-        return askPowerup(SocketProtocol.USE_TAGBACK, options);
+        return askPowerup(Type.USE_TAGBACK, options);
     }
 
     /**
@@ -444,7 +444,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public List<Damageable> chooseTarget(List<List<Damageable>> options)
             throws ToClientException {
-        return askDamageableList(SocketProtocol.TARGET, options);
+        return askDamageableList(Type.TARGET, options);
     }
 
     /**
@@ -455,7 +455,7 @@ public class SocketToClient implements ToClientInterface {
      */
     @Override
     public String chooseUserName() throws ToClientException {
-        return askAndWait(SocketProtocol.NICKNAME);
+        return askAndWait(Type.NICKNAME);
     }
 
     /**
@@ -466,6 +466,6 @@ public class SocketToClient implements ToClientInterface {
      */
     @Override
     public void quit() throws ToClientException {
-        askAndWait(SocketProtocol.QUIT);
+        askAndWait(Type.QUIT);
     }
 }
