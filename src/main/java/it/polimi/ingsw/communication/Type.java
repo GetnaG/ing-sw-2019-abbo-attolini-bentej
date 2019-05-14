@@ -41,97 +41,80 @@ public enum Type {
     /**
      * Choose between sequences of effects.
      */
-    EFFECTS_SEQUENCE("Please choose an effect sequence."),
+    EFFECTS_SEQUENCE("Please choose an effect sequence.", true),
     /**
      * Choose where to spawn.
      */
-    SPAWN("Please choose a card to use for spawning."),
+    SPAWN("Please choose a card to use for spawning.", true),
     /**
      * Choose what powerup to use.
      */
-    POWERUP("Please choose a powerup"),
+    POWERUP("Please choose a powerup", true),
     /**
      * Choose a square.
      */
-    DESTINATION("Please choose a square."),
+    DESTINATION("Please choose a square.", true),
     /**
      * Choose a weapon.
      */
-    WEAPON("Please choose a weapon."),
+    WEAPON("Please choose a weapon.", true),
     /**
      * Choose which weapon to buy.
      */
-    WEAPON_TO_BUY("Please choose a weapon to be bought."),
+    WEAPON_TO_BUY("Please choose a weapon to be bought.", true),
     /**
      * Choose which weapon to discard.
      */
-    WEAPON_TO_DISCARD("Please choose a weapon to be discarded."),
+    WEAPON_TO_DISCARD("Please choose a weapon to be discarded.", true),
     /**
      * Choose which weapon to reload.
      */
-    WEAPON_TO_RELOAD("Please choose a weapon to be reloaded."),
+    WEAPON_TO_RELOAD("Please choose a weapon to be reloaded.", true),
     /**
      * Choose an action.
      */
-    ACTION("Please choose an action."),
+    ACTION("Please choose an action.", true),
     /**
      * Choose which powerup to use for paying.
      */
-    POWERUP_FOR_PAYING("Please choose a powerup to cover the cost."),
+    POWERUP_FOR_PAYING("Please choose a powerup to cover the cost.", true),
     /**
      * Choose which tagback card to use.
      */
-    USE_TAGBACK("Please choose which tagback to use."),
+    USE_TAGBACK("Please choose which tagback to use.", true),
     /**
      * Choose a target.
      */
-    TARGET("Please select a target."),
+    TARGET("Please select a target.", true),
     /**
      * Choose a nickname.
      */
-    NICKNAME("Please choose a nickname."),
-    /**
-     * Elements sent after this are part of a list.
-     */
-    PROTOCOL_LIST("Choose one of the following:"),
-    /**
-     * The last element sent was the last in the list.
-     */
-    PROTOCOL_END_LIST("End of the list."),
-    /**
-     * Elements sent after this are part of a list of list.
-     * The client must return the index of the choice.
-     */
-    PROTOCOL_MULTI("Element:"),
-    /**
-     * The last element sent was the last list in the list.
-     */
-    PROTOCOL_END_MULTI("End of the element."),
-    /**
-     * The provided choice was not in the options or was not valid.
-     */
-    PROTOCOL_ERR_CHOICE("Choice not valid!"),
+    NICKNAME("Please choose a nickname.", false),
     /**
      * Asks the client to close the connection.
      */
-    QUIT("Quit"),
+    QUIT("Quit", false),
     /**
      * Sends a test message through the socket.
      */
-    PROTOCOL_GREET("Hello! You are successfully connected.");
+    GREET("Hello! You are successfully connected.", true),
 
+    ERROR("Error", false);
     /**
      * The string that will be sent through the socket.
      */
     private final String command;
+
+    private final boolean hasOptions;
 
     /**
      * This constructor allows to specify fields for the enum.
      *
      * @param command the string that will be sent.
      */
-    Type(String command) {
+    Type(String command, boolean hasOptions) {
         this.command = command;
+        this.hasOptions = hasOptions;
     }
 
     /**

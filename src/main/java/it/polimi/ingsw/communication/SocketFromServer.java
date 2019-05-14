@@ -58,8 +58,8 @@ public class SocketFromServer {
                     switch (command) {
                         case EFFECTS_SEQUENCE:
                         case TARGET:
-                            out.println(interactor.tempAskList(
-                                    command.getCommand(), multiOptions(in)));
+                            //out.println(interactor.tempAskList(
+                                    //command.getCommand(), multiOptions(in)));
                             break;
                         case SPAWN:
                         case POWERUP:
@@ -71,19 +71,14 @@ public class SocketFromServer {
                         case ACTION:
                         case POWERUP_FOR_PAYING:
                         case USE_TAGBACK:
-                            out.println(interactor.tempAsk(
-                                    command.getCommand(), options(in)));
+                            //out.println(interactor.tempAsk(
+                                    //command.getCommand(), options(in)));
                             break;
                         case NICKNAME:
                             out.println(interactor.askName());
                             break;
-                        case PROTOCOL_LIST:
-                        case PROTOCOL_END_LIST:
-                        case PROTOCOL_MULTI:
-                        case PROTOCOL_END_MULTI:
-                        case PROTOCOL_ERR_CHOICE:
                         case QUIT:
-                        case PROTOCOL_GREET:
+                        case GREET:
                         default:
                             interactor.SendNotification(input);
                     }
@@ -103,7 +98,7 @@ public class SocketFromServer {
      * @param in the input from the socket
      * @return a list of the possible options
      * @throws IOException if there are problems with the socket
-     */
+     *//*
     private List<String> options(BufferedReader in) throws IOException {
         String input;
         List<String> options = new ArrayList<>();
@@ -114,13 +109,13 @@ public class SocketFromServer {
         return options;
     }
 
-    /**
+    *//**
      * Reads from the socket a list of possible sequences.
      *
      * @param in the input from the socket
      * @return a list of the possible option sequences
      * @throws IOException if there are problems with the socket
-     */
+     *//*
     private List<List<String>> multiOptions(BufferedReader in) throws IOException {
         String input;
         List<List<String>> multiOptions = new ArrayList<>();
@@ -132,5 +127,5 @@ public class SocketFromServer {
         }
         in.readLine();//TODO: skipping list tail (to be fixed)
         return multiOptions;
-    }
+    }*/
 }

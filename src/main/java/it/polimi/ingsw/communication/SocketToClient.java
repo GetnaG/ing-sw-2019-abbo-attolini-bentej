@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.Damageable;
@@ -13,6 +14,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
@@ -38,49 +40,7 @@ public class SocketToClient implements ToClientInterface {
      */
     SocketToClient(Socket socket) throws ToClientException {
         this.socket = socket;
-        sendMessage(Type.PROTOCOL_GREET);
-    }
-
-    /**
-     * Handles the communication for a list of choices.
-     * This keeps asking the client if the answer is not valid.
-     *
-     * @param command the message to be sent
-     * @param options the option to choose from
-     * @return the selected option
-     * @throws ToClientException if there are problems with the socket
-     */
-    private String askWaitAndCheck(Type command, List<String> options)
-            throws ToClientException {
-
-        /*Sending the data an retrieving the answer*/
-        String choice;
-        synchronized (socket) {
-
-            /*Try-with-resources will call close() automatically*/
-            try (BufferedReader in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-                 PrintWriter out = new PrintWriter(socket.getOutputStream(),
-                         true)
-            ) {
-                out.println(command);
-                out.println(Type.PROTOCOL_LIST);
-                for (String s : options)
-                    out.println(s);
-                out.println(Type.PROTOCOL_END_LIST);
-                choice = in.readLine();
-            } catch (IOException e) {
-                throw new ToClientException("Socket exception", e);
-            }
-        }
-
-        /*Checking if the answer was one of the options*/
-        if (choice != null && options.contains(choice))
-            return choice;
-
-        /*The answer is not valid: sending an error and asking again*/
-        sendMessage(Type.PROTOCOL_ERR_CHOICE);
-        return askWaitAndCheck(command, options);
+        sendMessage(Type.GREET);
     }
 
     /**
@@ -92,33 +52,23 @@ public class SocketToClient implements ToClientInterface {
      * @return the index of the selected option
      * @throws ToClientException if there are problems with the socket
      */
-    private int listAskWaitAndCheck(Type command,
-                                    List<List<String>> options) throws ToClientException {
+    private int sendOptions(Type command, List<List<String>> options) throws ToClientException {
 
         /*Sending the data an retrieving the answer*/
         int choice;
         synchronized (socket) {
 
             /*Try-with-resources will call close() automatically*/
-            try (BufferedReader in = new BufferedReader(
-                    new InputStreamReader(socket.getInputStream()));
-                 PrintWriter out = new PrintWriter(socket.getOutputStream(),
-                         true)
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(),true)
             ) {
-                out.println(command);
-                out.println(Type.PROTOCOL_MULTI);
-                for (List<String> list : options) {
-                    out.println(Type.PROTOCOL_LIST);
-                    for (String s : list)
-                        out.println(s);
-                    out.println(Type.PROTOCOL_END_LIST);
-                }
-                out.println(Type.PROTOCOL_END_MULTI);
-                choice = Integer.parseInt(in.readLine());
+                Message message = new Message(command, options);
+                out.println(new Gson().toJson(message));
+
+                choice = new Gson().fromJson(in.readLine(), Message.class).getAnswer();
             } catch (IOException e) {
                 throw new ToClientException("Socket exception", e);
             }
-
         }
 
         /*Checking if the answer is valid.*/
@@ -126,8 +76,8 @@ public class SocketToClient implements ToClientInterface {
             return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendMessage(Type.PROTOCOL_ERR_CHOICE);
-        return listAskWaitAndCheck(command, options);
+        sendMessage(Type.ERROR);
+        return sendOptions(command, options);
     }
 
     /**
@@ -139,7 +89,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the answer
      * @throws ToClientException if there are problems with the socket
      */
-    private String askAndWait(Type command) throws ToClientException {
+    private String sendNotification(Type command) throws ToClientException {
 
         /*Sending the data an retrieving the answer*/
         String choice;
@@ -163,8 +113,8 @@ public class SocketToClient implements ToClientInterface {
             return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendMessage(Type.PROTOCOL_ERR_CHOICE);
-        return askAndWait(command);
+        sendMessage(Type.ERROR);
+        return sendNotification(command);
     }
 
     /**
@@ -207,7 +157,7 @@ public class SocketToClient implements ToClientInterface {
         }
 
         /*Asking and returning the right element*/
-        int choice = listAskWaitAndCheck(command, names);
+        int choice = sendOptions(command, names);
         return options.get(choice);
     }
 
@@ -222,12 +172,9 @@ public class SocketToClient implements ToClientInterface {
     private PowerupCard askPowerup(Type command,
                                    List<PowerupCard> options)
             throws ToClientException {
-        String choice = askWaitAndCheck(command, options.stream()
-                .map(PowerupCard::getId).collect(Collectors.toList()));
-        for (PowerupCard i : options)
-            if (i.getId().equalsIgnoreCase(choice))
-                return i;
-        throw new NoSuchElementException("Could not find powerup " + choice);
+        return options.get(sendOptions(command, options.stream()
+                .map(PowerupCard::getId).map(Arrays::
+                        asList).collect(Collectors.toList())));
     }
 
     /**
@@ -240,12 +187,9 @@ public class SocketToClient implements ToClientInterface {
      */
     private Square askSquare(Type command, List<Square> options)
             throws ToClientException {
-        String choice = askWaitAndCheck(command, options.stream()
-                .map(Square::getID).collect(Collectors.toList()));
-        for (Square i : options)
-            if (i.getID().equalsIgnoreCase(choice))
-                return i;
-        throw new NoSuchElementException("Could not find square " + choice);
+        return options.get(sendOptions(command, options.stream()
+                .map(Square::getID).map(Arrays::
+                        asList).collect(Collectors.toList())));
     }
 
     /**
@@ -259,12 +203,9 @@ public class SocketToClient implements ToClientInterface {
     private WeaponCard askWeapon(Type command,
                                  List<WeaponCard> options)
             throws ToClientException {
-        String choice = askWaitAndCheck(command, options.stream()
-                .map(WeaponCard::getId).collect(Collectors.toList()));
-        for (WeaponCard i : options)
-            if (i.getId().equalsIgnoreCase(choice))
-                return i;
-        throw new NoSuchElementException("Could not find weapon " + choice);
+        return options.get(sendOptions(command, options.stream()
+                .map(WeaponCard::getId).map(Arrays::
+                        asList).collect(Collectors.toList())));
     }
 
     /**
@@ -277,12 +218,9 @@ public class SocketToClient implements ToClientInterface {
      */
     private Action askAction(Type command, List<Action> options)
             throws ToClientException {
-        String choice = askWaitAndCheck(command, options.stream()
-                .map(Action::getName).collect(Collectors.toList()));
-        for (Action i : options)
-            if (i.getName().equalsIgnoreCase(choice))
-                return i;
-        throw new NoSuchElementException("Could not find action " + choice);
+        return options.get(sendOptions(command, options.stream()
+                .map(Action::getName).map(Arrays::
+                        asList).collect(Collectors.toList())));
     }
 
     /**
@@ -296,7 +234,7 @@ public class SocketToClient implements ToClientInterface {
     private List<Damageable> askDamageableList(Type command,
                                                List<List<Damageable>> options)
             throws ToClientException {
-        int choice = listAskWaitAndCheck(command, options.stream()
+        int choice = sendOptions(command, options.stream()
                 .map(o -> o.stream()
                         .map(Damageable::getName).collect(Collectors.toList()))
                 .collect(Collectors.toList()));
@@ -455,7 +393,7 @@ public class SocketToClient implements ToClientInterface {
      */
     @Override
     public String chooseUserName() throws ToClientException {
-        return askAndWait(Type.NICKNAME);
+        return sendNotification(Type.NICKNAME);
     }
 
     /**
@@ -466,6 +404,6 @@ public class SocketToClient implements ToClientInterface {
      */
     @Override
     public void quit() throws ToClientException {
-        askAndWait(Type.QUIT);
+        sendNotification(Type.QUIT);
     }
 }

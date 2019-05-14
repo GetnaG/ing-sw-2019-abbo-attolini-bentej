@@ -29,7 +29,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Testing: Correct returned value, correct protocol
  */
 class SocketToClientTest {
-    private static final String DEFAULT_CHOICE = "Default";
+    /*private static final String DEFAULT_CHOICE = "Default";
     private MockSocket socket;
     private SocketToClient toClient;
 
@@ -41,7 +41,7 @@ class SocketToClientTest {
         } catch (ToClientException ignored) {
         }
 
-        /*Flushing the buffer*/
+        *//*Flushing the buffer*//*
         socket.contents();
     }
 
@@ -53,13 +53,13 @@ class SocketToClientTest {
     @Test
     void chooseEffectsSequence() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         EffectInterface expectedChoice = new MockEffect("10", null);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put("1");
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<EffectInterface> options = Arrays.asList(
                 new MockEffect("00", new MockEffect("01", null)),
                 expectedChoice
@@ -70,7 +70,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_MULTI.getCommand(),
                 Type.PROTOCOL_LIST.getCommand(),
@@ -92,14 +92,14 @@ class SocketToClientTest {
     @Test
     void chooseSpawn() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         PowerupCard expectedChoice =
                 new PowerupCard(DEFAULT_CHOICE, null, null);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<PowerupCard> options = Arrays.asList(
                 new PowerupCard("name", null, null),
                 expectedChoice
@@ -110,7 +110,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -127,14 +127,14 @@ class SocketToClientTest {
     @Test
     void choosePowerup() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         PowerupCard expectedChoice =
                 new PowerupCard(DEFAULT_CHOICE, null, null);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<PowerupCard> options = Arrays.asList(
                 new PowerupCard("name", null, null),
                 expectedChoice
@@ -145,7 +145,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -162,14 +162,14 @@ class SocketToClientTest {
     @Test
     void chooseDestination() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         Square expectedChoice =
                 new MockSquare(DEFAULT_CHOICE);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<Square> options = Arrays.asList(
                 new MockSquare("name"),
                 expectedChoice
@@ -180,7 +180,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -197,14 +197,14 @@ class SocketToClientTest {
     @Test
     void chooseWeaponCard() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         WeaponCard expectedChoice =
                 new WeaponCard(DEFAULT_CHOICE, new ArrayList<>(), null, false);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<WeaponCard> options = Arrays.asList(
                 new WeaponCard("name", new ArrayList<>(), null, false),
                 expectedChoice
@@ -215,7 +215,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -232,14 +232,14 @@ class SocketToClientTest {
     @Test
     void chooseWeaponToBuy() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         WeaponCard expectedChoice =
                 new WeaponCard(DEFAULT_CHOICE, new ArrayList<>(), null, false);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<WeaponCard> options = Arrays.asList(
                 new WeaponCard("name", new ArrayList<>(), null, false),
                 expectedChoice
@@ -250,7 +250,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -267,14 +267,14 @@ class SocketToClientTest {
     @Test
     void chooseWeaponToDiscard() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         WeaponCard expectedChoice =
                 new WeaponCard(DEFAULT_CHOICE, new ArrayList<>(), null, false);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<WeaponCard> options = Arrays.asList(
                 new WeaponCard("name", new ArrayList<>(), null, false),
                 expectedChoice
@@ -285,7 +285,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -302,14 +302,14 @@ class SocketToClientTest {
     @Test
     void chooseWeaponToReload() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         WeaponCard expectedChoice =
                 new WeaponCard(DEFAULT_CHOICE, new ArrayList<>(), null, false);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<WeaponCard> options = Arrays.asList(
                 new WeaponCard("name", new ArrayList<>(), null, false),
                 expectedChoice
@@ -320,7 +320,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -337,14 +337,14 @@ class SocketToClientTest {
     @Test
     void chooseAction() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         Action expectedChoice =
                 new Action(DEFAULT_CHOICE, new ArrayList<>());
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<Action> options = Arrays.asList(
                 new Action("name", new ArrayList<>()),
                 expectedChoice
@@ -355,7 +355,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -372,14 +372,14 @@ class SocketToClientTest {
     @Test
     void choosePowerupForPaying() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         PowerupCard expectedChoice =
                 new PowerupCard(DEFAULT_CHOICE, null, null);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<PowerupCard> options = Arrays.asList(
                 new PowerupCard("name", null, null),
                 expectedChoice
@@ -390,7 +390,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -407,14 +407,14 @@ class SocketToClientTest {
     @Test
     void askUseTagback() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         PowerupCard expectedChoice =
                 new PowerupCard(DEFAULT_CHOICE, null, null);
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put(DEFAULT_CHOICE);
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<PowerupCard> options = Arrays.asList(
                 new PowerupCard("name", null, null),
                 expectedChoice
@@ -425,7 +425,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_LIST.getCommand(),
                 "name",
@@ -442,14 +442,14 @@ class SocketToClientTest {
     @Test
     void chooseTarget() {
 
-        /*The object that should be returned*/
+        *//*The object that should be returned*//*
         List<Damageable> expectedChoice =
                 Arrays.asList(new MockDamageable("10"));
 
-        /*Writing the choice to the socket*/
+        *//*Writing the choice to the socket*//*
         socket.put("1");
 
-        /*Asking and checking the answer*/
+        *//*Asking and checking the answer*//*
         List<List<Damageable>> options = Arrays.asList(
                 Arrays.asList(new MockDamageable("00"), new MockDamageable("01")),
                 expectedChoice
@@ -460,7 +460,7 @@ class SocketToClientTest {
             fail(e);
         }
 
-        /*Checking the protocol*/
+        *//*Checking the protocol*//*
         List<String> expected = Arrays.asList(
                 Type.PROTOCOL_MULTI.getCommand(),
                 Type.PROTOCOL_LIST.getCommand(),
@@ -640,5 +640,5 @@ class SocketToClientTest {
         public Iterator<EffectInterface> iterator() {
             return new EffectIterator(this);
         }
-    }
+    }*/
 }
