@@ -40,7 +40,6 @@ public class User implements ToClientInterface {
      * The underlying ToClientInterface
      */
     private ToClientInterface toClient;
-
     /**
      * Constructs a User
      * @param toClient            underlying connection interface
@@ -57,6 +56,14 @@ public class User implements ToClientInterface {
      */
     public User(ToClientInterface toClient) {
         this.toClient = toClient;
+    }
+
+    /**
+     * Gets the nickname of the user
+     * @return  nickname of the user
+     */
+    public String getName() {
+        return name;
     }
 
     /**

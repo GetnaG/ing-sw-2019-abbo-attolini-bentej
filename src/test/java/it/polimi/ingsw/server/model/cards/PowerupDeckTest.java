@@ -50,6 +50,7 @@ class PowerupDeckTest {
     }
 
     @Test
+    @Disabled
     void cardsLeft() {
         assertEquals(NOCARDS, deck1.cardsLeft());
         assertEquals(NOCARDS, deck2.cardsLeft());

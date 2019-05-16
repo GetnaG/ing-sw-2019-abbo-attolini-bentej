@@ -106,11 +106,19 @@ public class GameBoard implements ReplaceListener {
 
     /**
      * Gets a random Weapon Card from the Weapon Deck. Note that Weapon Cards can't be drawn if the Deck is empty {@see WeaponDeck}.
-     *
+     *  A call to {@code }
      * @return random Weapon Card from the Weapon Deck.
      */
     public WeaponCard getWeaponCard() throws AgainstRulesException {
         return weaponDeck.drawCard();
+    }
+
+    /**
+     * Checks if the Weapon Deck is empty
+     * @return  true if is empty, false otherwise.
+     */
+    public boolean isWeaponDeckEmpty(){
+        return  weaponDeck.cardsLeft() > 0;
     }
 
     /**

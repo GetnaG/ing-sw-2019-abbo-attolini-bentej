@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
+import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,6 +104,11 @@ public class Player implements Damageable {
     private ScoreListener scorer;
 
     /**
+     * Suspension listner is called when a player has to be suspended.
+     */
+    private SuspensionListener suspension;
+
+    /**
      * Constructor for testing purposes.
      *
      * @param hand        the hand manager
@@ -136,6 +142,36 @@ public class Player implements Damageable {
         this.toClient = toClient;
         this.playerBoard = playerBoard;
         this.scorer = scorer;
+
+        score = 0;
+        hand = new HandManager();
+        ammoBox = new AmmoBox();
+
+        //FIXME To be specified, maybe add from json?
+        adrenaline1 = new Action();
+        adrenaline2 = new Action();
+    }
+
+    /**
+     * Instantiates a player with the given parameters.
+     *
+     * @param nickname    the name of this player
+     * @param firstPlayer true if this is the first player
+     * @param figureRes   info on the resources associated with this
+     * @param toClient    communication interface with the player
+     * @param playerBoard the board that will handle the damage
+     * @param scorer      the interface that handles the scoring
+     */
+    public Player(String nickname, boolean firstPlayer, String figureRes,
+                  ToClientInterface toClient,
+                  PlayerBoardInterface playerBoard, ScoreListener scorer, SuspensionListener suspension) {
+        this.nickname = nickname;
+        this.firstPlayer = firstPlayer;
+        this.figureRes = figureRes;
+        this.toClient = toClient;
+        this.playerBoard = playerBoard;
+        this.scorer = scorer;
+        this.suspension = suspension;
 
         score = 0;
         hand = new HandManager();
@@ -521,6 +557,15 @@ public class Player implements Damageable {
      */
     public String getFigureRes() {
         return figureRes;
+    }
+
+    /**
+     * Returns a reference to the suspension listener associated with this player.
+     *
+     * @return a reference to the suspension listener associated with this player.
+     */
+    public SuspensionListener getSuspensionListener(){
+        return suspension;
     }
 
     /**

@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.PowerupDeck;
 import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,16 +27,34 @@ public class FirstTurn implements TurnInterface {
 
         List<PowerupCard> cardsDrawn = new ArrayList<>();
 
-        // Drawing two powerups
-        cardsDrawn.add(board.getPowerupCard());
-        cardsDrawn.add(board.getPowerupCard());
-        //Choosing a card and setting the position according to its color.
-        PowerupCard cardChosen = null;
-        try {
-            cardChosen = currentPlayer.getToClient().choosePowerup(cardsDrawn);
-        } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
+        List<PowerupCard> drawnPowerups = new ArrayList<>();
+        PowerupCard cardChosen ;
+
+        // Drawing two cards
+        PowerupCard firstPowerup = board.getPowerupCard();
+        PowerupCard secondPowerup = board.getPowerupCard();
+        drawnPowerups.add(firstPowerup);
+        drawnPowerups.add(secondPowerup);
+        // Player choosen a card, the other one is discarded.
+        try{
+            cardChosen = currentPlayer.getToClient().choosePowerup(drawnPowerups);
+            drawnPowerups.remove(cardChosen);
+            if (cardChosen.equals(firstPowerup)) {
+                board.putPowerupCard(secondPowerup);
+            } else {
+                board.putPowerupCard(firstPowerup);
+            }
+
+        } catch ( ToClientException e){
+            // player is not reachable.
+            // (1) making a default move
+            cardChosen = drawnPowerups.get(0);
+            board.putPowerupCard(drawnPowerups.get(1));
+            // (2) taking him offline
+            currentPlayer.getSuspensionListener().playerSuspension(currentPlayer);
+
         }
+
         currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
     }
 

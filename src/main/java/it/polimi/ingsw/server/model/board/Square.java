@@ -44,6 +44,20 @@ public class Square {
     }
 
     /**
+     * Constructor of a physical square. By default all, a square is isolated. This means that its borders are all walls.
+     * @param squareColor  color of square
+     * @param card AmmoCard associated with this square (in case of a deathmatch mode).
+     */
+    public Square(SquareColor squareColor, AmmoCard card) {
+        this.squareColor = squareColor;
+        this.ammoCard = card;
+        northBorder = Border.WALL;
+        eastBorder = Border.WALL;
+        southBorder = Border.WALL;
+        westBorder = Border.WALL;
+    }
+
+    /**
      * Default constructor of an abstract square
      */
     public Square() {
