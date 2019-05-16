@@ -24,7 +24,7 @@ public class KillshotTrack extends AbstractTrack {
     private List<List<Player>> tokenTrack;
 
     /**
-     * Creates a KillShots track with 8 skulls.
+     * Creates a KillShots track with 8 skulls by default.
      */
     public KillshotTrack() {
         skullsLeft = 8;

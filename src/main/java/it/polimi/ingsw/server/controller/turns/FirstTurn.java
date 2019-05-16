@@ -23,7 +23,7 @@ public class FirstTurn implements TurnInterface {
      * @param currentPlayer
      * @param board GameBoard
      */
-    public void startTurn(Player currentPlayer, GameBoard board) {
+    public int startTurn(Player currentPlayer, GameBoard board) {
 
         List<PowerupCard> cardsDrawn = new ArrayList<>();
 
@@ -56,6 +56,7 @@ public class FirstTurn implements TurnInterface {
         }
 
         currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
+        return 0;
     }
 
 

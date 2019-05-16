@@ -590,4 +590,12 @@ public class Player implements Damageable {
         this.playerBoard = playerBoard;
         this.playerBoard.addMarks(marks);
     }
+
+    /**
+     * Gets the Board of the player.
+     * @return Bord of the player.
+     */
+    public PlayerBoardInterface getPlayerBoard(){
+        return playerBoard;
+    }
 }

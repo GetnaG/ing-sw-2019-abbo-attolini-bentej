@@ -37,6 +37,11 @@ public class NormalTurn implements TurnInterface {
     private List<Damageable> alreadyTargeted;
 
     /**
+     * True if final frenzy is triggered
+     */
+    private boolean isFinalFrenzyTriggered;
+
+    /**
      * Creates a normal turn.
      */
     public NormalTurn(Player currentPlayer, GameBoard board){
@@ -44,37 +49,53 @@ public class NormalTurn implements TurnInterface {
         this.board = board;
         this.alreadyTargeted = new ArrayList<>();
         this.actions = new ArrayList<>();
+        this.isFinalFrenzyTriggered = false;
     }
 
     /**
      * A player takes two actions then he has the option to reload. Between each of these steps he is asked if he want to use a Powerup Card.
      * @param currentPlayer 
      * @param board GameBoard
+     *
+     * @return -1 if Final Frenzy is triggered, else 0
      */
-    public void startTurn(Player currentPlayer, GameBoard board) {
+    public int startTurn(Player currentPlayer, GameBoard board) {
         //TODO Refractor
         this.player = currentPlayer;
         this.board = board;
 
-
-        for (int i = 0; i < 2; i++)
+        for (int i = 0; i < 2; i++){
+            if (isFinalFrenzyTriggered)
+                return -1;
+            askAndRunPowerup();
+            if (isFinalFrenzyTriggered)
+                return -1;
             askAndRunAction();
-
+            if (isFinalFrenzyTriggered)
+                return -1;
+        }
         askAndReload();
+        return 0;
     }
 
     /**
      * Asks the player if he wants to use a Powerup Card. Then it runs its effect.
      */
     private void askAndRunPowerup(){
-        if (player.getAllPowerup().isEmpty())
+        isFinalFrenzyTriggered = board.checkFinalFrenzy();
+
+        if (player.getAllPowerup().isEmpty() || isFinalFrenzyTriggered)
             return;
+
 
         PowerupCard card = null;
         try {
             card = player.getToClient().choosePowerup(player.getAllPowerup());
         } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
+            // (1) default move : nothing
+            // (2) suspend player
+            player.getSuspensionListener().playerSuspension(player);
+            return;
         }
 
         if (card != null)
@@ -84,6 +105,10 @@ public class NormalTurn implements TurnInterface {
      * Asks the player to choose from a list of Actions and runs that action.
      */
     private void askAndRunAction() {
+        isFinalFrenzyTriggered = board.checkFinalFrenzy();
+        if (isFinalFrenzyTriggered)
+            return;
+
         actions = new ArrayList<>();
         List<EffectInterface> tripleMove = new ArrayList<>();
 
@@ -100,7 +125,10 @@ public class NormalTurn implements TurnInterface {
         try {
             chosenAction = player.getToClient().chooseAction(actions);
         } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
+            // (1) default move : does nothing
+            // (2) suspend player
+            player.getSuspensionListener().playerSuspension(player);
+            return;
         }
 
         chosenAction.runEffect(player, null, board, alreadyTargeted, new ArrayList<>());
@@ -111,6 +139,10 @@ public class NormalTurn implements TurnInterface {
      * Asks the player to choose whether to reload. Then it takes care of reloading.
      */
     private void askAndReload() {
+        isFinalFrenzyTriggered = board.checkFinalFrenzy();
+
+        if (isFinalFrenzyTriggered)
+            return;
         WeaponCard cardToReload;
 
         List<WeaponCard> weaponCards = player.getAllWeapons().stream()
@@ -122,7 +154,10 @@ public class NormalTurn implements TurnInterface {
             if (cardToReload != null)
                 player.reload(cardToReload);
         } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
+            // (1) default move : nothing
+            // (2) suspend player
+            player.getSuspensionListener().playerSuspension(player);
+            return;
         }
     }
 

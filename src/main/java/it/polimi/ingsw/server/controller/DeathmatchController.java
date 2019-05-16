@@ -2,6 +2,8 @@ package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.server.controller.turns.FirstTurn;
+import it.polimi.ingsw.server.controller.turns.NormalTurn;
+import it.polimi.ingsw.server.controller.turns.RespawnTurn;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.board.*;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
@@ -18,7 +20,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Controls the flow of the Game. The Game is seen as a sequence of turns. The order of the turns follows the order of connection.
+ * Controls the flow of the Game.
+ * <p>
+ * The Game is seen as a sequence of turns. The order of the turns follows the order of connection.
  *
  *  @author Fahed B. Tej
  */
@@ -30,33 +34,39 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     private List<Player>  players;
 
     /**
-     * 
+     * Current Player
      */
     private Player currentPlayer;
 
     /**
-     * 
+     * Game Board used in the game
      */
     private GameBoard board;
 
     /**
-     *
+     *  Configuration of the map
      */
     private List<Room> gameConfiguration;
 
+    /**
+     * Suspended Players
+     */
+    private List<Player> suspendedPlayers;
 
     /**
      * Constructs a DeathmatchController with the given users
      * @param users     users in the game. The order of the turns is based on the given list.
      */
-    public DeathmatchController(List<User> users){
+    public DeathmatchController(List<User> users, int skullsLeft){
         this.players = users.stream()
                 .map(u ->
                         buildPlayer(u,users.indexOf(u)==0, "FigureRes"+users.indexOf(u))) //TODO Make FigureRes parametric
                 .collect(Collectors.toList());
 
         this.gameConfiguration = loadRooms();
-        this.board = new GameBoard(new KillshotTrack(8), loadRooms());
+        this.gameConfiguration = loadRooms();
+        this.board = new GameBoard(new KillshotTrack(skullsLeft), gameConfiguration);
+        this.suspendedPlayers = new ArrayList<>();
     }
 
     /**
@@ -241,12 +251,36 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
         }
     }
+
+    public void addUsers(List<User> connectedUsers){
+        for (User user: connectedUsers){
+            players.add(
+                    buildPlayer(
+                            user,
+                            connectedUsers.indexOf(user) + players.size() > 0,
+                            "FigureRes"+ connectedUsers.indexOf(user)));
+        }
+    }
     /**
-     * Starts the game.
+     * Starts the game. The game is diveden in the following four phases:
+     * (1) Initial Turn
+     * (2) NormalTurns and RespawnTurns
+     * (3) FinalFrenzy
+     * (4) Scoring
      */
     public void start() {
-        callFirstTurn();
-
+        // First turn
+        firstTurn();
+        // A series of normal turns interrupted by Final Frenzy
+        while(!checkFinalFrenzy()){
+            currentPlayer = nextPlayer(currentPlayer);
+            normalTurn(currentPlayer);
+            if (checkFinalFrenzy()) break;
+        }
+        if (checkFinalFrenzy()){
+            finalFrenzyTurn();
+        }
+        score();
     }
 
     /**
@@ -256,7 +290,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * (3) Start the first turn by discarding the other
      * powerup. Its color determines the spawnpoint.
      */
-    private void callFirstTurn() {
+    private void firstTurn() {
         for (Player p : players){
             currentPlayer = p;
             new FirstTurn().startTurn(currentPlayer, board);
@@ -266,75 +300,112 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     /**
      * 
      */
-    private void checkFinalFrenzy() {
-        // TODO implement here
+    private boolean checkFinalFrenzy() {
+        return  board.checkFinalFrenzy();
     }
-
-    /**
-     * 
+    /*
+        1. Final frenzy is triggered when the last skull is taken from the killshot track.
+        2. All players with no damage flip over their boards. They will be worth only a minimal amount.
+        3. Each player, including the one who triggered final frenzy, gets one more turn. They flip their action tiles to the final frenzy side.
+        a. Those who play before the starting player
+        choose twice from this set of actions:
+        I. Move up to 4 squares.
+                II. Move up to 2 squares and grab something.
+        III. Move up to 1 square, reload, and shoot.
+                b. The starting player and all those who play after choose 1 of these actions:
+        I. Either move up to 3 squares and grab
+        something.
+                II. Or move up to 2 squares, reload, and shoot.
+        4. Boards that receive killshots in final frenzy are flipped to the 2-1-1-1 side after they are scored.
      */
-    private void CallNormalTurn() {
-        // TODO implement here
+    private void finalFrenzyTurn(){
+
     }
 
     /**
-     * 
+     * Deals with the normal turn of the {@code currentPlayer}.
      */
-    private void callScoreKilled() {
-        // TODO implement here
+    private void normalTurn(Player currentPlayer) {
+        NormalTurn turn = new NormalTurn(currentPlayer, board);
+        int exitValue = turn.startTurn(currentPlayer, board);
+        respawnDeadPlayers();
     }
 
+
     /**
-     * 
+     * Return the next non-suspended player
+     * @param p current player
+     * @return  next non-suspended player
      */
-    private void handleOverAndDoubleKill() {
-        // TODO implement here
+    private Player nextPlayer(Player p){
+        Player next =  players.get(players.indexOf(p)+1);
+        if (suspendedPlayers.contains(next))
+            return nextPlayer(next);
+        return next;
     }
 
     /**
-     * 
+     * Respawns all dead players. Each player gets to play a Respawn Turn.
      */
-    private void callRespawnForKilled() {
-        // TODO implement here
+    private void respawnDeadPlayers(){
+        List<Player> toBeRespawned = players.stream().filter(p -> p.getPlayerBoard().isDead()).collect(Collectors.toList());
+        for (Player p : toBeRespawned){
+            new RespawnTurn().startTurn(p, board);
+        }
     }
 
     /**
-     * 
+     * Scores all the game
      */
-    private void callFinalFrenzyTurn() {
-        // TODO implement here
+    private void score(){
     }
 
     /**
-     * 
-     */
-    public void scoreBoard() {
-        // TODO implement here
-    }
-
-    /**
-     * @param player
+     * Changes the given player status to suspended.
+     *
+     * @param player    player to be suspended
      */
     public void playerSuspension(Player player) {
-        // TODO implement here
+        suspendedPlayers.add(player);
     }
 
     /**
-     * @param player
+     * Changes the given player to resumed.
+     *
+     * @param player    player resumed
      */
     public void playerResumption(Player player) {
         // TODO implement here
     }
 
+
+
+
     /**
-     * @param killed
+     * This calls {@code scoreBoard} on the {@linkplain GameBoard}. It is used
+     * at the end of the game.
+     */
+    public void scoreBoard() {
+
+    }
+
+    /**
+     * Adds a {@linkplain Damageable} object to the objects that will be
+     * scored.
+     *
+     * @param killed the {@code Damageable} to be scored
+     * @throws NullPointerException if {@code killed} is null
      */
     public void addKilled(Damageable killed) {
         // TODO implement here
     }
 
     /**
-     * 
+     * Scores all the {@linkplain Damageable} objects added. This method must
+     * also take care of adding the <i>kill shot</i> and
+     * <i>overkill</i> tokens (if applicable) to the {@code GameBoard}.
+     * This affects all the objects added since the last call to {@code
+     * emptyKilledList}.
      */
     public void scoreAllKilled() {
         // TODO implement here
@@ -343,9 +414,12 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
 
     /**
-     * @return
+     * Returns a {@linkplain List} of the objects that will be scored. These are
+     * the {@linkplain Damageable} added since the last call to {@code
+     * emptyKilledList}.
+     *
+     * @return a list of the objects that will be scored
      */
-
     public List<Damageable> getKilled() {
         // TODO implement here
         return null;
@@ -353,17 +427,12 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
 
     /**
-     * 
+     * Clears the list of objects on which scoring will be performed. Invoking
+     * {@code scoreAllKilled} will effect only the objects added after the last
+     * call to this method. A call to {@code scoreAllKilled} immediately after
+     * this method will produce no effect.
      */
     public void emptyKilledList() {
         // TODO implement here
     }
-
-    /**
-     * Users that are playing this game
-     */
-    public void addUsers(Collection<User> users){
-
-    }
-
 }

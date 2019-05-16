@@ -44,8 +44,10 @@ public class FrenzyTurnBefore implements TurnInterface {
      * At the end of the turn there is no point in reloading because his match is over.
      * @param currentPlayer 
      * @param board GameBoard
+     *
+     * @return -1 if Final Frenzy is triggered, else 0. In this case, final frenzy is never triggered because it has already happened.
      */
-    public void startTurn(Player currentPlayer, GameBoard board) {
+    public int startTurn(Player currentPlayer, GameBoard board) {
 
         List<Action> actions = new ArrayList<>();
         Action choosenAction;
@@ -60,6 +62,8 @@ public class FrenzyTurnBefore implements TurnInterface {
         } catch (ToClientException e) {
             //TODO Handle if the user is disconnected
         }
+
+        return 0;
     }
 
     /**

@@ -21,8 +21,10 @@ public class RespawnTurn implements TurnInterface {
      * Makes the player draw a powerup card. He chooses the powerup which determines his next spawn.
      * @param currentPlayer player respawning.
      * @param board GameBoard used in the board.
+     *
+     * @return -1 if Final Frenzy is triggered, else 0
      */
-    public void startTurn(Player currentPlayer, GameBoard board) {
+    public int startTurn(Player currentPlayer, GameBoard board) {
 
         // player draws card
         currentPlayer.addPowerup(board.getPowerupCard());
@@ -37,6 +39,8 @@ public class RespawnTurn implements TurnInterface {
         currentPlayer.removePowerup(cardChosen);
         // set the player position in the spawn determined by that square
         currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
+
+        return 0;
     }
 
 }

@@ -3,8 +3,10 @@ package it.polimi.ingsw.server.serverlogic;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.server.controller.DeathmatchController;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Represents the place where Users gather to create a Game.
@@ -27,7 +29,7 @@ public class ServerHall implements Runnable {
     /**
      * Connected Users
      */
-    private Collection<User> connectedUsers;
+    private List<User> connectedUsers;
 
     /**
      * Status of the nextGame;
@@ -41,7 +43,7 @@ public class ServerHall implements Runnable {
 
     public ServerHall(int secondsWaitingRoom){
         this.seconds = secondsWaitingRoom;
-        this.connectedUsers = new HashSet<>();
+        this.connectedUsers = new ArrayList<>();
         statusNextGame = GameStatus.NOTSTARTED;
     }
 
@@ -58,7 +60,7 @@ public class ServerHall implements Runnable {
         do {
 
             if (statusNextGame == GameStatus.NOTSTARTED && !connectedUsers.isEmpty()) {
-                nextGame = new DeathmatchController();
+                nextGame = new DeathmatchController(new ArrayList<>(), 8);
                 statusNextGame = GameStatus.STARTING;
                 startTimer = System.currentTimeMillis();
             }

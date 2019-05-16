@@ -14,7 +14,9 @@ public interface TurnInterface {
      * Starts player's turn.
      * @param currentPlayer the player who's turn is starting.
      * @param board GameBoard of the game.
+     *
+     * @return -1 if Final Frenzy is triggered, else 0.
      */
-    public void startTurn(Player currentPlayer, GameBoard board);
+    public int startTurn(Player currentPlayer, GameBoard board);
 
 }
