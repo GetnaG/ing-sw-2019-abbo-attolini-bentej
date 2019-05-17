@@ -1,8 +1,10 @@
 package it.polimi.ingsw.communication;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.controller.effects.EffectIterator;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.Square;
@@ -19,9 +21,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 
 /*
@@ -29,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Testing: Correct returned value, correct protocol
  */
 class SocketToClientTest {
-    /*private static final String DEFAULT_CHOICE = "Default";
+    private static final String DEFAULT_CHOICE = "Default";
     private MockSocket socket;
     private SocketToClient toClient;
 
@@ -41,7 +45,7 @@ class SocketToClientTest {
         } catch (ToClientException ignored) {
         }
 
-        *//*Flushing the buffer*//*
+        /*Flushing the buffer*/
         socket.contents();
     }
 
@@ -50,451 +54,257 @@ class SocketToClientTest {
         socket.close();
     }
 
-    @Test
-    void chooseEffectsSequence() {
+    /* Tests the TESTED function with the provided OPTIONS, of which the
+     * #WITHDEAFULT is the one that will be chosen. NAMEGETTER provides the
+     * string associated with an element of the options, TYPE is the expected
+     * message type.*/
+    private <T> void optionsHelper(List<T> options, int withDefault,
+                                   FunctionException<? super List<T>, ? extends T> tested,
+                                   Function<? super T, String> nameGetter,
+                                   MessageType type) {
+        /*Preparing the default choice*/
+        socket.put(Integer.toString(withDefault));
 
-        *//*The object that should be returned*//*
-        EffectInterface expectedChoice = new MockEffect("10", null);
-
-        *//*Writing the choice to the socket*//*
-        socket.put("1");
-
-        *//*Asking and checking the answer*//*
-        List<EffectInterface> options = Arrays.asList(
-                new MockEffect("00", new MockEffect("01", null)),
-                expectedChoice
-        );
         try {
-            assertEquals(expectedChoice, toClient.chooseEffectsSequence(options));
+            /*Checking the returned object*/
+            T answer = tested.apply(options);
+            assertEquals(DEFAULT_CHOICE, nameGetter.apply(answer));
+
+            /*Checking the message type*/
+            ProtocolMessage sent = socket.contents();
+            assertEquals(type, sent.getCommand());
+
+            /*Checking the options provided*/
+            String[][] sentOptions = sent.getOptions();
+            for (int i = 0; i < options.size(); i++) {
+                assertEquals(nameGetter.apply(options.get(i)),
+                        sentOptions[i][0]);
+            }
         } catch (ToClientException e) {
             fail(e);
         }
+    }
 
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_MULTI.getCommand(),
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "00",
-                "01",
-                ProtocolType.PROTOCOL_END_LIST.getCommand(),
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "01",
-                ProtocolType.PROTOCOL_END_LIST.getCommand(),
-                ProtocolType.PROTOCOL_END_MULTI.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.EFFECTS_SEQUENCE.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
+    @Test
+    void chooseEffectsSequence() {
+        optionsHelper(Arrays.asList(
+                new MockEffect("test1", new MockEffect("test2", null)),
+                new MockEffect(DEFAULT_CHOICE, null)),
+                1,
+                toClient::chooseEffectsSequence,
+                EffectInterface::getName,
+                MessageType.EFFECTS_SEQUENCE);
     }
 
     @Test
     void chooseSpawn() {
-
-        *//*The object that should be returned*//*
-        PowerupCard expectedChoice =
-                new PowerupCard(DEFAULT_CHOICE, null, null);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<PowerupCard> options = Arrays.asList(
-                new PowerupCard("name", null, null),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new PowerupCard("test1", null, null),
+                new PowerupCard("test2", null, null),
+                new PowerupCard(DEFAULT_CHOICE, null, null)),
+                2,
+                toClient::chooseSpawn,
+                PowerupCard::getId,
+                MessageType.SPAWN
         );
-        try {
-            assertEquals(expectedChoice, toClient.chooseSpawn(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.SPAWN.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void choosePowerup() {
-
-        *//*The object that should be returned*//*
-        PowerupCard expectedChoice =
-                new PowerupCard(DEFAULT_CHOICE, null, null);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<PowerupCard> options = Arrays.asList(
-                new PowerupCard("name", null, null),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new PowerupCard("test1", null, null),
+                new PowerupCard("test2", null, null),
+                new PowerupCard(DEFAULT_CHOICE, null, null)),
+                2,
+                toClient::choosePowerup,
+                PowerupCard::getId,
+                MessageType.POWERUP
         );
-        try {
-            assertEquals(expectedChoice, toClient.choosePowerup(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.POWERUP.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void chooseDestination() {
-
-        *//*The object that should be returned*//*
-        Square expectedChoice =
-                new MockSquare(DEFAULT_CHOICE);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<Square> options = Arrays.asList(
-                new MockSquare("name"),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new MockSquare("test1"),
+                new MockSquare(DEFAULT_CHOICE),
+                new MockSquare("test2")),
+                1,
+                toClient::chooseDestination,
+                Square::getID,
+                MessageType.DESTINATION
         );
-        try {
-            assertEquals(expectedChoice, toClient.chooseDestination(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.DESTINATION.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void chooseWeaponCard() {
-
-        *//*The object that should be returned*//*
-        WeaponCard expectedChoice =
-                new WeaponCard(DEFAULT_CHOICE, new ArrayList<>(), null, false);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<WeaponCard> options = Arrays.asList(
-                new WeaponCard("name", new ArrayList<>(), null, false),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new WeaponCard("test1", Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard("test2", Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard(DEFAULT_CHOICE, Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard("test1", Arrays.asList(AmmoCube.RED), null, true)),
+                2,
+                toClient::chooseWeaponCard,
+                WeaponCard::getId,
+                MessageType.WEAPON
         );
-        try {
-            assertEquals(expectedChoice, toClient.chooseWeaponCard(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.WEAPON.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void chooseWeaponToBuy() {
-
-        *//*The object that should be returned*//*
-        WeaponCard expectedChoice =
-                new WeaponCard(DEFAULT_CHOICE, new ArrayList<>(), null, false);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<WeaponCard> options = Arrays.asList(
-                new WeaponCard("name", new ArrayList<>(), null, false),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new WeaponCard("test1", Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard("test2", Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard(DEFAULT_CHOICE, Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard("test1", Arrays.asList(AmmoCube.RED), null, true)),
+                2,
+                toClient::chooseWeaponToBuy,
+                WeaponCard::getId,
+                MessageType.WEAPON_TO_BUY
         );
-        try {
-            assertEquals(expectedChoice, toClient.chooseWeaponToBuy(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.WEAPON_TO_BUY.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void chooseWeaponToDiscard() {
-
-        *//*The object that should be returned*//*
-        WeaponCard expectedChoice =
-                new WeaponCard(DEFAULT_CHOICE, new ArrayList<>(), null, false);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<WeaponCard> options = Arrays.asList(
-                new WeaponCard("name", new ArrayList<>(), null, false),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new WeaponCard("test1", Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard("test2", Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard(DEFAULT_CHOICE, Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard("test1", Arrays.asList(AmmoCube.RED), null, true)),
+                2,
+                toClient::chooseWeaponToDiscard,
+                WeaponCard::getId,
+                MessageType.WEAPON_TO_DISCARD
         );
-        try {
-            assertEquals(expectedChoice, toClient.chooseWeaponToDiscard(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.WEAPON_TO_DISCARD.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void chooseWeaponToReload() {
-
-        *//*The object that should be returned*//*
-        WeaponCard expectedChoice =
-                new WeaponCard(DEFAULT_CHOICE, new ArrayList<>(), null, false);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<WeaponCard> options = Arrays.asList(
-                new WeaponCard("name", new ArrayList<>(), null, false),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new WeaponCard("test1", Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard("test2", Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard(DEFAULT_CHOICE, Arrays.asList(AmmoCube.RED), null, true),
+                new WeaponCard("test1", Arrays.asList(AmmoCube.RED), null, true)),
+                2,
+                toClient::chooseWeaponToReload,
+                WeaponCard::getId,
+                MessageType.WEAPON_TO_RELOAD
         );
-        try {
-            assertEquals(expectedChoice, toClient.chooseWeaponToReload(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.WEAPON_TO_RELOAD.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void chooseAction() {
-
-        *//*The object that should be returned*//*
-        Action expectedChoice =
-                new Action(DEFAULT_CHOICE, new ArrayList<>());
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<Action> options = Arrays.asList(
-                new Action("name", new ArrayList<>()),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new Action(DEFAULT_CHOICE, new ArrayList<>()),
+                new Action("test1", new ArrayList<>())),
+                0,
+                toClient::chooseAction,
+                Action::getName,
+                MessageType.ACTION
         );
-        try {
-            assertEquals(expectedChoice, toClient.chooseAction(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.ACTION.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void choosePowerupForPaying() {
-
-        *//*The object that should be returned*//*
-        PowerupCard expectedChoice =
-                new PowerupCard(DEFAULT_CHOICE, null, null);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<PowerupCard> options = Arrays.asList(
-                new PowerupCard("name", null, null),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new PowerupCard("test1", null, null),
+                new PowerupCard("test2", null, null),
+                new PowerupCard(DEFAULT_CHOICE, null, null)),
+                2,
+                toClient::choosePowerupForPaying,
+                PowerupCard::getId,
+                MessageType.POWERUP_FOR_PAYING
         );
-        try {
-            assertEquals(expectedChoice, toClient.choosePowerupForPaying(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.POWERUP_FOR_PAYING.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void askUseTagback() {
-
-        *//*The object that should be returned*//*
-        PowerupCard expectedChoice =
-                new PowerupCard(DEFAULT_CHOICE, null, null);
-
-        *//*Writing the choice to the socket*//*
-        socket.put(DEFAULT_CHOICE);
-
-        *//*Asking and checking the answer*//*
-        List<PowerupCard> options = Arrays.asList(
-                new PowerupCard("name", null, null),
-                expectedChoice
+        optionsHelper(Arrays.asList(
+                new PowerupCard("test1", null, null),
+                new PowerupCard("test2", null, null),
+                new PowerupCard(DEFAULT_CHOICE, null, null)),
+                2,
+                toClient::askUseTagback,
+                PowerupCard::getId,
+                MessageType.USE_TAGBACK
         );
-        try {
-            assertEquals(expectedChoice, toClient.askUseTagback(options));
-        } catch (ToClientException e) {
-            fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "name",
-                DEFAULT_CHOICE,
-                ProtocolType.PROTOCOL_END_LIST.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.USE_TAGBACK.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
-        }
     }
 
     @Test
     void chooseTarget() {
+        /*Preparing the default choice*/
+        socket.put("2");
 
-        *//*The object that should be returned*//*
-        List<Damageable> expectedChoice =
-                Arrays.asList(new MockDamageable("10"));
-
-        *//*Writing the choice to the socket*//*
-        socket.put("1");
-
-        *//*Asking and checking the answer*//*
-        List<List<Damageable>> options = Arrays.asList(
-                Arrays.asList(new MockDamageable("00"), new MockDamageable("01")),
-                expectedChoice
-        );
         try {
-            assertEquals(expectedChoice, toClient.chooseTarget(options));
+            /*Preparing the options*/
+            List<List<Damageable>> options = Arrays.asList(
+                    Arrays.asList(new MockDamageable("test1")),
+                    Arrays.asList(new MockDamageable("test2"),
+                            new MockDamageable("test22")),
+                    Arrays.asList(new MockDamageable("test3"),
+                            new MockDamageable("test32")),
+                    Arrays.asList(new MockDamageable("test4")));
+
+            /*Checking the returned list*/
+            List<Damageable> answer = toClient.chooseTarget(options);
+            List<Damageable> defaultChoice = options.get(2);
+            for (int i = 0; i < defaultChoice.size(); i++) {
+                assertEquals(defaultChoice.get(i).getName(), answer.get(i).getName());
+            }
+
+            /*Checking the message type*/
+            ProtocolMessage sent = socket.contents();
+            assertEquals(MessageType.TARGET, sent.getCommand());
+            String[][] sentOptions = sent.getOptions();
+
+            /*Checking the options provided*/
+            for (int i = 0; i < options.size(); i++) {
+                for (int j = 0; j < options.get(i).size(); j++)
+                    assertEquals(options.get(i).get(j).getName(),
+                            sentOptions[i][j]);
+            }
         } catch (ToClientException e) {
             fail(e);
-        }
-
-        *//*Checking the protocol*//*
-        List<String> expected = Arrays.asList(
-                ProtocolType.PROTOCOL_MULTI.getCommand(),
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "00",
-                "01",
-                ProtocolType.PROTOCOL_END_LIST.getCommand(),
-                ProtocolType.PROTOCOL_LIST.getCommand(),
-                "01",
-                ProtocolType.PROTOCOL_END_LIST.getCommand(),
-                ProtocolType.PROTOCOL_END_MULTI.getCommand()
-        );
-        List<String> actual = socket.contents();
-        assertEquals(ProtocolType.TARGET.getCommand(), actual.remove(0));
-        for (int i = 0; i < actual.size(); i++) {
-            assertEquals(expected.get(0), actual.get(0));
         }
     }
 
     @Test
     void chooseUserName() {
-        socket.put("test name");
+        /*Preparing the default choice*/
+        socket.put(DEFAULT_CHOICE);
+
         try {
-            assertEquals("test name", toClient.chooseUserName());
+            /*Checking the returned object*/
+            String answer = toClient.chooseUserName();
+            assertEquals(DEFAULT_CHOICE, answer);
+
+            /*Checking the message type*/
+            ProtocolMessage sent = socket.contents();
+            assertEquals(MessageType.NICKNAME, sent.getCommand());
         } catch (ToClientException e) {
             fail(e);
         }
-        assertEquals(ProtocolType.NICKNAME.getCommand(), socket.contents().get(0));
     }
 
     @Test
     void quit() {
         socket.put(DEFAULT_CHOICE);
-        assertDoesNotThrow(() -> toClient.quit());
-        assertEquals(ProtocolType.QUIT.getCommand(), socket.contents().get(0));
+
+        try {
+            toClient.quit();
+
+            /*Checking the message type*/
+            ProtocolMessage sent = socket.contents();
+            assertEquals(MessageType.NOTIFICATION, sent.getCommand());
+            assertEquals(Notification.NotificationType.QUIT,
+                    sent.getNotifications()[0].getType());
+        } catch (ToClientException e) {
+            fail(e);
+        }
+    }
+
+    @FunctionalInterface
+    interface FunctionException<T, R> {
+        R apply(T t) throws ToClientException;
     }
 
     class MockSocket extends Socket {
@@ -519,17 +329,20 @@ class SocketToClientTest {
             return toClient;
         }
 
-        List<String> contents() {
+        ProtocolMessage contents() {
             byte[] buf = toClient.toByteArray();
             int length = toClient.size();
             toClient.reset();
             return new BufferedReader(new InputStreamReader(
-                    new ByteArrayInputStream(buf, 0, length)))
-                    .lines().collect(Collectors.toList());
+                    new ByteArrayInputStream(buf, 0, length))).lines()
+                    .map(s -> new Gson().fromJson(s, ProtocolMessage.class))
+                    .collect(Collectors.toList()).get(0);
         }
 
         void put(String string) {
-            new PrintWriter(toServer, true).println(string);
+            new PrintWriter(toServer, true).println(new Gson().toJson(
+                    new ProtocolMessage(MessageType.ACTION, string)
+            ));
         }
 
         @Override
@@ -594,7 +407,7 @@ class SocketToClientTest {
     class MockSquare extends Square {
         private String id;
 
-        public MockSquare(String id) {
+        MockSquare(String id) {
             this.id = id;
         }
 
@@ -608,7 +421,7 @@ class SocketToClientTest {
         EffectInterface next;
         String name;
 
-        public MockEffect(String name, MockEffect next) {
+        MockEffect(String name, MockEffect next) {
             this.name = name;
             this.next = next;
         }
@@ -640,5 +453,5 @@ class SocketToClientTest {
         public Iterator<EffectInterface> iterator() {
             return new EffectIterator(this);
         }
-    }*/
+    }
 }

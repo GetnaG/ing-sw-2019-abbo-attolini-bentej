@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /*
  * Author: Abbo Giulio A.
+ * Testing: if the sockets are handled correctly.
  */
 class SocketDispatcherTest {
     private static final int PORT = 8374;

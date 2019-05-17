@@ -1,19 +1,40 @@
 package it.polimi.ingsw.communication;
 
 /**
- * Descrizione.
- * <p>
- * Dettagli.
+ * This represents a notification element.
+ * Notifications are messages that do not expect an answer and do not modify
+ * the game status.
  *
  * @author Abbo Giulio A.
+ * @see ProtocolMessage
  */
 class Notification {
-    NotificationType type;
+    /**
+     * The type of this notification.
+     */
+    private NotificationType type;
 
-    public Notification(NotificationType type) {
+    /**
+     * Constructs a notification with the specified type.
+     *
+     * @param type the type of this notification.
+     */
+    Notification(NotificationType type) {
         this.type = type;
     }
 
+    /**
+     * Returns the type of this notification.
+     *
+     * @return the type of this notification
+     */
+    public NotificationType getType() {
+        return type;
+    }
+
+    /**
+     * The possible types of notification.
+     */
     enum NotificationType {
         /**
          * Asks the client to close the connection.
@@ -23,8 +44,9 @@ class Notification {
          * Sends a test message through the socket.
          */
         GREET,
-
-        ERROR,
-
+        /**
+         * Notifies the client that the answer was not valid.
+         */
+        ERROR
     }
 }

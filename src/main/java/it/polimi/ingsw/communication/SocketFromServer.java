@@ -34,7 +34,7 @@ public class SocketFromServer {
     /**
      * Starts the socket and waits for commands.
      * On new commands, calls the appropriate methods of the interactor and
-     * returns the user choice if necessary.
+     * sends to the server the user choice.
      *
      * @param ip   the ip of the server
      * @param port the port of the server
@@ -71,10 +71,11 @@ public class SocketFromServer {
                             if (message.getCommand().hasOptions())
                                 answer = new ProtocolMessage(message.getCommand(),
                                         handleQuestion(message.getCommand(), message.getOptions()));
-                            answer = new ProtocolMessage(message.getCommand(),
-                                    handleQuestion(message.getCommand()));
+                            else
+                                answer = new ProtocolMessage(message.getCommand(),
+                                        handleQuestion(message.getCommand()));
                     }
-                    out.println(new Gson().toJson(message));
+                    out.println(new Gson().toJson(answer));
                 } catch (RuntimeException e) {
                     interactor.sendNotification("Could not parse " + input);
                 }
@@ -85,8 +86,8 @@ public class SocketFromServer {
     private void handleNotifications(Notification[] notifications) {
         interactor.sendNotification("Notification: ");
         for (Notification n : notifications) {
-            interactor.sendNotification(n.type.toString());
-            if (n.type == Notification.NotificationType.QUIT)
+            interactor.sendNotification(n.getType().toString());
+            if (n.getType() == Notification.NotificationType.QUIT)
                 listening = false;
         }
     }
@@ -97,12 +98,12 @@ public class SocketFromServer {
             interactor.sendNotification(u.type.toString());
     }
 
-    private String handleQuestion(ProtocolType command) {
-        return interactor.tempAsk(command.getCommand());
+    private String handleQuestion(MessageType command) {
+        return interactor.tempAsk(command.getMessage());
     }
 
-    private String handleQuestion(ProtocolType command, String[][] options) {
-        return Integer.toString(interactor.tempAsk(command.getCommand(),
+    private String handleQuestion(MessageType command, String[][] options) {
+        return Integer.toString(interactor.tempAsk(command.getMessage(),
                 options));
     }
 }

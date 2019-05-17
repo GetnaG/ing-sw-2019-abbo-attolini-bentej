@@ -1,7 +1,7 @@
 package it.polimi.ingsw.client.clientlogic;
 
 import it.polimi.ingsw.client.interaction.InteractionInterface;
-import it.polimi.ingsw.communication.ProtocolType;
+import it.polimi.ingsw.communication.MessageType;
 import it.polimi.ingsw.communication.SocketFromServer;
 
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class clientMain {
 
         @Override
         public String askName() {
-            return ask(ProtocolType.NICKNAME.getCommand());
+            return ask(MessageType.NICKNAME.getMessage());
         }
 
         @Override
