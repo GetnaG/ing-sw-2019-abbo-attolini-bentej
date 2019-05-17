@@ -37,7 +37,7 @@ package it.polimi.ingsw.communication;
  *
  * @author Abbo Giulio A.
  */
-public enum Type {
+public enum ProtocolType {
     /**
      * Choose between sequences of effects.
      */
@@ -90,16 +90,10 @@ public enum Type {
      * Choose a nickname.
      */
     NICKNAME("Please choose a nickname.", false),
-    /**
-     * Asks the client to close the connection.
-     */
-    QUIT("Quit", false),
-    /**
-     * Sends a test message through the socket.
-     */
-    GREET("Hello! You are successfully connected.", true),
 
-    ERROR("Error", false);
+    UPDATE("Update", false),
+
+    NOTIFICATION("Notification", false);
     /**
      * The string that will be sent through the socket.
      */
@@ -112,7 +106,7 @@ public enum Type {
      *
      * @param command the string that will be sent.
      */
-    Type(String command, boolean hasOptions) {
+    ProtocolType(String command, boolean hasOptions) {
         this.command = command;
         this.hasOptions = hasOptions;
     }
@@ -124,11 +118,11 @@ public enum Type {
      * @return the instance of this class with the provided command
      * @throws IllegalArgumentException if no elements have the provided command
      */
-    public static Type with(String command) {
-        for (Type p : Type.values())
+    public static ProtocolType with(String command) {
+        for (ProtocolType p : ProtocolType.values())
             if (p.getCommand().equals(command))
                 return p;
-        throw new IllegalArgumentException("Can not find Type: " + command);
+        throw new IllegalArgumentException("Can not find ProtocolType: " + command);
     }
 
     /**
@@ -138,6 +132,10 @@ public enum Type {
      */
     public String getCommand() {
         return command;
+    }
+
+    public boolean hasOptions() {
+        return hasOptions;
     }
 
     /**

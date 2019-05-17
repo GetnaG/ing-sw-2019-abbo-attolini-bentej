@@ -14,9 +14,9 @@ public interface InteractionInterface {
     String askName();
 
     //TODO: the argument will be a reference to a string
-    void SendNotification(String message);
+    void sendNotification(String message);
 
     //TODO: To replace when user interaction will be implemented
-    String tempAsk(String message, List<String> options);
-    String tempAskList(String message, List<List<String>> options);
+    String tempAsk(String message);
+    int tempAsk(String message, String[][] options);
 }

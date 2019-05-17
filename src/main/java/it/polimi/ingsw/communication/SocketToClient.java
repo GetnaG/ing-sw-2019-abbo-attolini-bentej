@@ -16,7 +16,6 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
  * time.
  *
  * @author Abbo Giulio A.
- * @see Type
+ * @see ProtocolType
  */
 public class SocketToClient implements ToClientInterface {
     /**
@@ -40,7 +39,26 @@ public class SocketToClient implements ToClientInterface {
      */
     SocketToClient(Socket socket) throws ToClientException {
         this.socket = socket;
-        sendMessage(Type.GREET);
+        sendNotification(Notification.NotificationType.GREET);
+    }
+
+    private ProtocolMessage send(ProtocolMessage message) throws ToClientException {
+        ProtocolMessage answer;
+        synchronized (socket) {
+
+            /*Try-with-resources will call close() automatically*/
+            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
+            ) {
+                out.println(new Gson().toJson(message));
+
+                answer = new Gson().fromJson(in.readLine(),
+                        ProtocolMessage.class);
+            } catch (IOException e) {
+                throw new ToClientException("Socket exception", e);
+            }
+        }
+        return answer;
     }
 
     /**
@@ -52,88 +70,31 @@ public class SocketToClient implements ToClientInterface {
      * @return the index of the selected option
      * @throws ToClientException if there are problems with the socket
      */
-    private int sendOptions(Type command, List<List<String>> options) throws ToClientException {
+    private int sendAndCheck(ProtocolType command, List<List<String>> options) throws ToClientException {
+        try {
+            int choice = Integer.parseInt(
+                    send(new ProtocolMessage(command, options)).getUserChoice());
 
-        /*Sending the data an retrieving the answer*/
-        int choice;
-        synchronized (socket) {
-
-            /*Try-with-resources will call close() automatically*/
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                 PrintWriter out = new PrintWriter(socket.getOutputStream(),true)
-            ) {
-                Message message = new Message(command, options);
-                out.println(new Gson().toJson(message));
-
-                choice = new Gson().fromJson(in.readLine(), Message.class).getAnswer();
-            } catch (IOException e) {
-                throw new ToClientException("Socket exception", e);
-            }
+            /*Checking if the answer is valid.*/
+            if (choice >= 0 && choice < options.size())
+                return choice;
+        } catch (NumberFormatException ignored) {
         }
-
-        /*Checking if the answer is valid.*/
-        if (choice >= 0 && choice < options.size())
-            return choice;
 
         /*The answer is not valid: sending an error and asking again*/
-        sendMessage(Type.ERROR);
-        return sendOptions(command, options);
+        sendNotification(Notification.NotificationType.ERROR);
+        return sendAndCheck(command, options);
     }
 
-    /**
-     * Handles the communication for a question with no options provided.
-     * The answer can not be null or an empty string.
-     * This keeps asking the client if the answer is not valid.
-     *
-     * @param command the message to be sent
-     * @return the answer
-     * @throws ToClientException if there are problems with the socket
-     */
-    private String sendNotification(Type command) throws ToClientException {
-
-        /*Sending the data an retrieving the answer*/
-        String choice;
-        synchronized (socket) {
-
-            /*Try-with-resources will call close() automatically*/
-            try {
-                BufferedReader in = new BufferedReader(
-                        new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(),
-                        true);
-                out.println(command);
-                choice = in.readLine();
-            } catch (IOException e) {
-                throw new ToClientException("Socket exception", e);
-            }
-        }
-
-        /*Checking that the answer is not null or empty.*/
-        if (choice != null && !"".equals(choice))
-            return choice;
-
-        /*The answer is not valid: sending an error and asking again*/
-        sendMessage(Type.ERROR);
-        return sendNotification(command);
+    private void sendNotification(Notification.NotificationType notification) throws ToClientException {
+        send(new ProtocolMessage(new Notification[]{
+                new Notification(notification)}));
     }
 
-    /**
-     * Sends a command that does not need an answer.
-     *
-     * @param command the message
-     * @throws ToClientException if there are problems with the socket
-     */
-    private void sendMessage(Type command) throws ToClientException {
-        synchronized (socket) {
-            try {
-                PrintWriter out = new PrintWriter(socket.getOutputStream(),
-                        true);
-                out.println(command);
-            } catch (IOException e) {
-                throw new ToClientException("Socket exception", e);
-            }
-        }
+    private void sendUpdate(Update update) throws ToClientException {
+        send(new ProtocolMessage(new Update[]{update}));
     }
+
 
     /**
      * Handles the interaction using {@linkplain EffectInterface}.
@@ -144,7 +105,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected effect
      * @throws ToClientException if there are problems with the socket
      */
-    private EffectInterface askEffect(Type command,
+    private EffectInterface askEffect(ProtocolType command,
                                       List<EffectInterface> options)
             throws ToClientException {
 
@@ -157,7 +118,7 @@ public class SocketToClient implements ToClientInterface {
         }
 
         /*Asking and returning the right element*/
-        int choice = sendOptions(command, names);
+        int choice = sendAndCheck(command, names);
         return options.get(choice);
     }
 
@@ -169,10 +130,10 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected powerup
      * @throws ToClientException if there are problems with the socket
      */
-    private PowerupCard askPowerup(Type command,
+    private PowerupCard askPowerup(ProtocolType command,
                                    List<PowerupCard> options)
             throws ToClientException {
-        return options.get(sendOptions(command, options.stream()
+        return options.get(sendAndCheck(command, options.stream()
                 .map(PowerupCard::getId).map(Arrays::
                         asList).collect(Collectors.toList())));
     }
@@ -185,9 +146,9 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected square
      * @throws ToClientException if there are problems with the socket
      */
-    private Square askSquare(Type command, List<Square> options)
+    private Square askSquare(ProtocolType command, List<Square> options)
             throws ToClientException {
-        return options.get(sendOptions(command, options.stream()
+        return options.get(sendAndCheck(command, options.stream()
                 .map(Square::getID).map(Arrays::
                         asList).collect(Collectors.toList())));
     }
@@ -200,10 +161,10 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected weapon
      * @throws ToClientException if there are problems with the socket
      */
-    private WeaponCard askWeapon(Type command,
+    private WeaponCard askWeapon(ProtocolType command,
                                  List<WeaponCard> options)
             throws ToClientException {
-        return options.get(sendOptions(command, options.stream()
+        return options.get(sendAndCheck(command, options.stream()
                 .map(WeaponCard::getId).map(Arrays::
                         asList).collect(Collectors.toList())));
     }
@@ -216,9 +177,9 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected action
      * @throws ToClientException if there are problems with the socket
      */
-    private Action askAction(Type command, List<Action> options)
+    private Action askAction(ProtocolType command, List<Action> options)
             throws ToClientException {
-        return options.get(sendOptions(command, options.stream()
+        return options.get(sendAndCheck(command, options.stream()
                 .map(Action::getName).map(Arrays::
                         asList).collect(Collectors.toList())));
     }
@@ -231,10 +192,10 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected damageable list
      * @throws ToClientException if there are problems with the socket
      */
-    private List<Damageable> askDamageableList(Type command,
+    private List<Damageable> askDamageableList(ProtocolType command,
                                                List<List<Damageable>> options)
             throws ToClientException {
-        int choice = sendOptions(command, options.stream()
+        int choice = sendAndCheck(command, options.stream()
                 .map(o -> o.stream()
                         .map(Damageable::getName).collect(Collectors.toList()))
                 .collect(Collectors.toList()));
@@ -250,7 +211,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public EffectInterface chooseEffectsSequence(List<EffectInterface> options)
             throws ToClientException {
-        return askEffect(Type.EFFECTS_SEQUENCE, options);
+        return askEffect(ProtocolType.EFFECTS_SEQUENCE, options);
     }
 
     /**
@@ -262,7 +223,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public PowerupCard chooseSpawn(List<PowerupCard> options)
             throws ToClientException {
-        return askPowerup(Type.SPAWN, options);
+        return askPowerup(ProtocolType.SPAWN, options);
     }
 
     /**
@@ -274,7 +235,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public PowerupCard choosePowerup(List<PowerupCard> options)
             throws ToClientException {
-        return askPowerup(Type.POWERUP, options);
+        return askPowerup(ProtocolType.POWERUP, options);
     }
 
     /**
@@ -286,7 +247,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public Square chooseDestination(List<Square> options)
             throws ToClientException {
-        return askSquare(Type.DESTINATION, options);
+        return askSquare(ProtocolType.DESTINATION, options);
     }
 
     /**
@@ -298,7 +259,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public WeaponCard chooseWeaponCard(List<WeaponCard> options)
             throws ToClientException {
-        return askWeapon(Type.WEAPON, options);
+        return askWeapon(ProtocolType.WEAPON, options);
     }
 
     /**
@@ -310,7 +271,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public WeaponCard chooseWeaponToBuy(List<WeaponCard> options)
             throws ToClientException {
-        return askWeapon(Type.WEAPON_TO_BUY, options);
+        return askWeapon(ProtocolType.WEAPON_TO_BUY, options);
     }
 
     /**
@@ -322,7 +283,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options)
             throws ToClientException {
-        return askWeapon(Type.WEAPON_TO_DISCARD, options);
+        return askWeapon(ProtocolType.WEAPON_TO_DISCARD, options);
     }
 
     /**
@@ -334,7 +295,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public WeaponCard chooseWeaponToReload(List<WeaponCard> options)
             throws ToClientException {
-        return askWeapon(Type.WEAPON_TO_RELOAD, options);
+        return askWeapon(ProtocolType.WEAPON_TO_RELOAD, options);
     }
 
     /**
@@ -346,7 +307,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public Action chooseAction(List<Action> options)
             throws ToClientException {
-        return askAction(Type.ACTION, options);
+        return askAction(ProtocolType.ACTION, options);
     }
 
     /**
@@ -358,7 +319,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public PowerupCard choosePowerupForPaying(List<PowerupCard> options)
             throws ToClientException {
-        return askPowerup(Type.POWERUP_FOR_PAYING, options);
+        return askPowerup(ProtocolType.POWERUP_FOR_PAYING, options);
     }
 
     /**
@@ -370,7 +331,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public PowerupCard askUseTagback(List<PowerupCard> options)
             throws ToClientException {
-        return askPowerup(Type.USE_TAGBACK, options);
+        return askPowerup(ProtocolType.USE_TAGBACK, options);
     }
 
     /**
@@ -382,7 +343,7 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public List<Damageable> chooseTarget(List<List<Damageable>> options)
             throws ToClientException {
-        return askDamageableList(Type.TARGET, options);
+        return askDamageableList(ProtocolType.TARGET, options);
     }
 
     /**
@@ -393,7 +354,7 @@ public class SocketToClient implements ToClientInterface {
      */
     @Override
     public String chooseUserName() throws ToClientException {
-        return sendNotification(Type.NICKNAME);
+        return send(new ProtocolMessage(ProtocolType.NICKNAME)).getUserChoice();
     }
 
     /**
@@ -404,6 +365,6 @@ public class SocketToClient implements ToClientInterface {
      */
     @Override
     public void quit() throws ToClientException {
-        sendNotification(Type.QUIT);
+        sendNotification(Notification.NotificationType.QUIT);
     }
 }

@@ -25,7 +25,7 @@ class AmmoDeckTest {
         deck2 = new AmmoDeck(gm2);
     }
 
-    @Test
+    @Test@Disabled
     void drawCard() {
 
         List<AmmoCard> drawnCards = new ArrayList<>();

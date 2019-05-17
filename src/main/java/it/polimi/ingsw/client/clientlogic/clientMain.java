@@ -1,11 +1,10 @@
 package it.polimi.ingsw.client.clientlogic;
 
 import it.polimi.ingsw.client.interaction.InteractionInterface;
+import it.polimi.ingsw.communication.ProtocolType;
 import it.polimi.ingsw.communication.SocketFromServer;
-import it.polimi.ingsw.communication.Type;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -43,32 +42,33 @@ public class clientMain {
 
         @Override
         public String askName() {
-            return ask(Type.NICKNAME.getCommand());
+            return ask(ProtocolType.NICKNAME.getCommand());
         }
 
         @Override
-        public void SendNotification(String message) {
+        public void sendNotification(String message) {
             System.out.println(message);
         }
 
         @Override
-        public String tempAsk(String message, List<String> options) {
+        public String tempAsk(String message) {
             System.out.println(message);
-            options.forEach(System.out::println);
             Scanner scanner = new Scanner(System.in);
             return scanner.nextLine();
         }
 
         @Override
-        public String tempAskList(String message, List<List<String>> options) {
+        public int tempAsk(String message, String[][] options) {
             System.out.println(message + "Insert the number associated with " +
                     "the choice.");
-            for (List<String> o : options) {
-                System.out.println("\n"+options.indexOf(o));
-                o.forEach(System.out::println);
+            for (int i = 0; i < options.length; i++) {
+                System.out.println("\n" + i);
+                for (int j = 0; j < options[i].length; j++) {
+                    System.out.println(options[i][j]);
+                }
             }
             Scanner scanner = new Scanner(System.in);
-            return scanner.nextLine();
+            return Integer.parseInt(scanner.nextLine());
         }
     }
 }

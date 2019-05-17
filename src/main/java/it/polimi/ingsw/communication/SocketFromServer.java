@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication;
 
+import com.google.gson.Gson;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 
 import java.io.BufferedReader;
@@ -7,8 +8,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * This class handles the communication through socket, client side.
@@ -20,6 +19,8 @@ public class SocketFromServer {
      * The class that will interact with the user.
      */
     private InteractionInterface interactor;
+
+    private boolean listening;
 
     /**
      * Constructs a class with the provided {@linkplain InteractionInterface}.
@@ -41,6 +42,7 @@ public class SocketFromServer {
      */
     public void startListening(String ip, int port) throws IOException {
         String input;
+        listening = true;
 
         /*Opening the socket and initializing the I/O*/
         try (Socket socket = new Socket(ip, port);
@@ -50,82 +52,57 @@ public class SocketFromServer {
                      true)
         ) {
             /*Listening until the QUIT command*/
-            while (!(input = in.readLine()).equals(Type.QUIT.getCommand())) {
-
-                /*Trying to convert the string to enum and handling the command*/
+            while (listening) {
+                input = in.readLine();
                 try {
-                    Type command = Type.with(input);
-                    switch (command) {
-                        case EFFECTS_SEQUENCE:
-                        case TARGET:
-                            //out.println(interactor.tempAskList(
-                                    //command.getCommand(), multiOptions(in)));
+                    ProtocolMessage message = new Gson().fromJson(input,
+                            ProtocolMessage.class);
+                    ProtocolMessage answer;
+                    switch (message.getCommand()) {
+                        case UPDATE:
+                            handleUpdates(message.getUpdates());
+                            answer = new ProtocolMessage(message.getCommand());
                             break;
-                        case SPAWN:
-                        case POWERUP:
-                        case DESTINATION:
-                        case WEAPON:
-                        case WEAPON_TO_BUY:
-                        case WEAPON_TO_DISCARD:
-                        case WEAPON_TO_RELOAD:
-                        case ACTION:
-                        case POWERUP_FOR_PAYING:
-                        case USE_TAGBACK:
-                            //out.println(interactor.tempAsk(
-                                    //command.getCommand(), options(in)));
+                        case NOTIFICATION:
+                            handleNotifications(message.getNotifications());
+                            answer = new ProtocolMessage(message.getCommand());
                             break;
-                        case NICKNAME:
-                            out.println(interactor.askName());
-                            break;
-                        case QUIT:
-                        case GREET:
                         default:
-                            interactor.SendNotification(input);
+                            if (message.getCommand().hasOptions())
+                                answer = new ProtocolMessage(message.getCommand(),
+                                        handleQuestion(message.getCommand(), message.getOptions()));
+                            answer = new ProtocolMessage(message.getCommand(),
+                                    handleQuestion(message.getCommand()));
                     }
-                } catch (IllegalArgumentException e) {
-
-                    /*The input could not be converted: sending a message*/
-                    interactor.SendNotification("error " + input);//TODO localization
+                    out.println(new Gson().toJson(message));
+                } catch (RuntimeException e) {
+                    interactor.sendNotification("Could not parse " + input);
                 }
             }
-            out.println(Type.QUIT);
         }
     }
 
-    /**
-     * Reads from the socket the available options and returns them into a list.
-     *
-     * @param in the input from the socket
-     * @return a list of the possible options
-     * @throws IOException if there are problems with the socket
-     *//*
-    private List<String> options(BufferedReader in) throws IOException {
-        String input;
-        List<String> options = new ArrayList<>();
-        while ((input = in.readLine()).equals(Type.PROTOCOL_LIST.getCommand())) {
-            while (!(input = in.readLine()).equals(Type.PROTOCOL_END_LIST.getCommand()))
-                options.add(input);
+    private void handleNotifications(Notification[] notifications) {
+        interactor.sendNotification("Notification: ");
+        for (Notification n : notifications) {
+            interactor.sendNotification(n.type.toString());
+            if (n.type == Notification.NotificationType.QUIT)
+                listening = false;
         }
-        return options;
     }
 
-    *//**
-     * Reads from the socket a list of possible sequences.
-     *
-     * @param in the input from the socket
-     * @return a list of the possible option sequences
-     * @throws IOException if there are problems with the socket
-     *//*
-    private List<List<String>> multiOptions(BufferedReader in) throws IOException {
-        String input;
-        List<List<String>> multiOptions = new ArrayList<>();
-        in.readLine();//TODO: skipping list head (to be fixed)
-        while ((input = in.readLine()).equals(Type.PROTOCOL_LIST.getCommand())) {
-            List<String> o = new ArrayList<>();
-            while (!(input = in.readLine()).equals(Type.PROTOCOL_END_LIST.getCommand()))
-                o.add(input);
-        }
-        in.readLine();//TODO: skipping list tail (to be fixed)
-        return multiOptions;
-    }*/
+    private void handleUpdates(Update[] updates) {
+        interactor.sendNotification("Update: ");
+        for (Update u : updates)
+            interactor.sendNotification(u.type.toString());
+    }
+
+    private String handleQuestion(ProtocolType command) {
+        return interactor.tempAsk(command.getCommand());
+    }
+
+    private String handleQuestion(ProtocolType command, String[][] options) {
+        return Integer.toString(interactor.tempAsk(command.getCommand(),
+                options));
+    }
 }
