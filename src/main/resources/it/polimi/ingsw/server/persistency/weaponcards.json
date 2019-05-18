@@ -24,7 +24,7 @@
         "cyberblade"
       ],
       [
-        "shadowstep"
+        "cyberblade_shadowstep"
       ],
       [
         "cyberblade_sliceAndDice"
@@ -40,10 +40,10 @@
     ],
     "effectIdSequences": [
       [
-        "power glove"
+        "powerGlove"
       ],
       [
-        "rocket fist"
+        "powerGlove_rocketFist"
       ]
     ],
     "onlySpecifiedOrder": true,

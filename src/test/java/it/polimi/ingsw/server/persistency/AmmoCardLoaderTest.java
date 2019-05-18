@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.persistency;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
@@ -13,11 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /*
  * Author: Abbo Giulio A.
- * Testing: with same json as src
+ * Testing: with resources file
  */
 class AmmoCardLoaderTest {
     /*Position of the file*/
-    private static final String FILE = "./resources/cards/jsons/ammocards.json";
+    private static final String FILE = "ammocardsTest.json";
 
     /*Existing entry*/
     private static final String EXISTING_ID = "AD_ammo_042";
@@ -27,18 +28,12 @@ class AmmoCardLoaderTest {
             AmmoCube.BLUE};
     private static final boolean EXISTING_POWERUP = false;
 
-    AmmoCardLoader normalLoader;
+    private AmmoCardLoader normalLoader;
 
     @BeforeEach
     void setUp() {
-        normalLoader = new AmmoCardLoader(FILE);
-    }
-
-    /*Testing the constructor when the file can not be found*/
-    @Test
-    void AmmoCardLoader_noFile() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new AmmoCardLoader(""));
+        normalLoader =
+                new AmmoCardLoader(AmmoCardLoaderTest.class.getResourceAsStream(FILE));
     }
 
     /*Testing with existing id*/

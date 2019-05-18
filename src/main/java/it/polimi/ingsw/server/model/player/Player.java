@@ -534,14 +534,6 @@ public class Player implements Damageable {
     }
 
     /**
-     * @deprecated use {@link Player#addScore(int)} instead
-     */
-    @Deprecated(forRemoval = true)
-    public void setScore(int score) {
-        this.score = score;
-    }
-
-    /**
      * Returns whether this is the first player to start the game.
      *
      * @return true if this is the first player

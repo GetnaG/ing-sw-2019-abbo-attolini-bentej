@@ -6,8 +6,8 @@ import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.controller.effects.Move;
 import it.polimi.ingsw.server.controller.effects.cardeffects.CardEffect;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -54,27 +54,22 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
     private CardEffect[] cardEffects;
 
     /**
-     * This constructor loads the effects from a file.
-     * The file must be located where specified by {@code file}.
+     * This constructor loads the effects from a stream.
      * This also performs a check on the loaded elements.
      * Other effects are added.
      *
-     * @param file the path, name and extension of the json file for effects
-     * @throws IllegalArgumentException if {@code file} is incorrect
+     * @param inputStream the stream for the input file
      */
-    EffectLoader(String file) {
+    EffectLoader(InputStream inputStream) {
         /*Loading from file*/
-        try {
-            cardEffects = new Gson().fromJson(new FileReader(file),
-                    CardEffect[].class);
-        } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("Could not find: " + file, e);
-        }
+        cardEffects = new Gson().fromJson(new InputStreamReader(inputStream),
+                CardEffect[].class);
 
         /*Checking the cardEffects*/
         for (CardEffect effect : cardEffects)
             if (!effect.checkIntegrity())
-                throw new WrongFileInputException(file, effect.getName());
+                throw new WrongFileInputException("Card effects",
+                        effect.getName());
 
         /*Adding the other effects*/
         moveSelfEffects = new ArrayList<>();
@@ -83,6 +78,11 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
                 Arrays.asList(new Move(), new Move())));
         moveSelfEffects.add(new Action("plasmaGun_phaseGlide",
                 Arrays.asList(new Move(), new Move())));
+
+        //FIXME: temporary effects right one to be added
+        moveSelfEffects.add(new Action("teleporter", new Move()));
+        moveSelfEffects.add(new Action("tagbackGrenade", new Move()));
+
     }
 
     /**
@@ -124,6 +124,7 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
                         .filter(c -> c.getName().equalsIgnoreCase(id))
                         .map(CardEffect::new),
                 moveSelfEffects.stream()
+                        .filter(c -> c.getName().equalsIgnoreCase(id))
         ).collect(Collectors.toList());
     }
 }

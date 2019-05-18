@@ -21,23 +21,19 @@ public class FromFile {
     /**
      * The position of the json for ammo cards.
      */
-    private static final String AMMO_CARDS =
-            "./resources/cards/jsons/ammocards.json";
+    private static final String AMMO_CARDS = "ammocards.json";
     /**
      * The position of the json for powerup cards.
      */
-    private static final String POWERUP_CARDS =
-            "./resources/cards/jsons/powerupcards.json";
+    private static final String POWERUP_CARDS = "powerupcards.json";
     /**
      * The position of the json for weapon cards.
      */
-    private static final String WEAPON_CARDS =
-            "./resources/cards/jsons/weaponcards.json";
+    private static final String WEAPON_CARDS = "weaponcards.json";
     /**
      * The position of the json for the effects.
      */
-    private static final String EFFECTS =
-            "./resources/cards/jsons/effects.json";
+    private static final String EFFECTS = "effects.json";
 
     /**
      * The only instance of an ammo card loader.
@@ -110,9 +106,13 @@ public class FromFile {
      * Loads the  resources from file in the right order.
      */
     private static void setup() {
-        effectLoader = new EffectLoader(EFFECTS);
-        weaponLoader = new WeaponLoader(WEAPON_CARDS);
-        powerupLoader = new PowerupLoader(POWERUP_CARDS);
-        ammoCardLoader = new AmmoCardLoader(AMMO_CARDS);
+        effectLoader =
+                new EffectLoader(FromFile.class.getResourceAsStream(EFFECTS));
+        weaponLoader =
+                new WeaponLoader(FromFile.class.getResourceAsStream(WEAPON_CARDS));
+        powerupLoader =
+                new PowerupLoader(FromFile.class.getResourceAsStream(POWERUP_CARDS));
+        ammoCardLoader =
+                new AmmoCardLoader(FromFile.class.getResourceAsStream(AMMO_CARDS));
     }
 }

@@ -3,8 +3,8 @@ package it.polimi.ingsw.server.persistency;
 import com.google.gson.Gson;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,19 +37,13 @@ public class AmmoCardLoader implements BasicLoader<AmmoCard> {
     private AmmoCard[] ammoCards;
 
     /**
-     * This constructor loads the cards from a file.
-     * The file must be located where specified by {@code file}.
+     * This constructor loads the cards from a stream.
      *
-     * @param file the path, name and extension of the json file for ammo cards
-     * @throws IllegalArgumentException if {@code file} is incorrect
+     * @param inputStream the stream for the input file
      */
-    AmmoCardLoader(String file) {
-        try {
-            ammoCards = new Gson().fromJson(new FileReader(file),
-                    AmmoCard[].class);
-        } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("Could not find: " + file, e);
-        }
+    AmmoCardLoader(InputStream inputStream) {
+        ammoCards = new Gson().fromJson(new InputStreamReader(inputStream),
+                AmmoCard[].class);
     }
 
     /**

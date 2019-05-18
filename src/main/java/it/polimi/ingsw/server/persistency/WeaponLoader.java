@@ -3,8 +3,8 @@ package it.polimi.ingsw.server.persistency;
 import com.google.gson.Gson;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -42,26 +42,19 @@ public class WeaponLoader implements BasicLoader<WeaponCard> {
 
     /**
      * This constructor loads the cards from a file.
-     * The file must be located where specified by {@code file}.
      *
-     * @param file the path, name and extension of the json file for powerup
-     *             cards
-     * @throws IllegalArgumentException if {@code file} is incorrect
+     * @param inputStream the stream for the input file
      */
-    WeaponLoader(String file) {
-        try {
-            weaponCards = new Gson().fromJson(new FileReader(file),
-                    WeaponCard[].class);
-        } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("Could not find: " + file, e);
-        }
+    WeaponLoader(InputStream inputStream) {
+        weaponCards = new Gson().fromJson(new InputStreamReader(inputStream),
+                WeaponCard[].class);
 
         /*Checking if all effects are present*/
         for (WeaponCard card : weaponCards)
             try {
                 card.getPossibleSequences();
             } catch (NoSuchElementException e) {
-                throw new WrongFileInputException(file, card.getId(), e);
+                throw new WrongFileInputException("Weapon card", card.getId(), e);
             }
     }
 

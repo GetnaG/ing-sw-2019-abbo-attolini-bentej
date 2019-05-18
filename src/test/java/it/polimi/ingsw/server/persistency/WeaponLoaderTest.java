@@ -14,12 +14,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /*
  * Author: Abbo Giulio A.
- * Testing: with same json as src
+ * Testing: with resources file
  */
 class WeaponLoaderTest {
     /*Position of the file*/
-    private static final String FILE =
-            "./resources/cards/jsons/weaponcards.json";
+    private static final String FILE = "weaponcardsTest.json";
 
     /*Existing entry with order*/
     private static final String EXISTING_ID = "AD_weapons_IT_022";
@@ -32,14 +31,8 @@ class WeaponLoaderTest {
 
     @BeforeEach
     void setUp() {
-        normalLoader = new WeaponLoader(FILE);
-    }
-
-    /*Testing the constructor when the file can not be found*/
-    @Test
-    void WeaponLoader_noFile() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new WeaponLoader(""));
+        normalLoader =
+                new WeaponLoader(WeaponLoaderTest.class.getResourceAsStream(FILE));
     }
 
     /*Testing with existing id*/

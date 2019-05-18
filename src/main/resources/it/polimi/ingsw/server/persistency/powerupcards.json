@@ -3,7 +3,7 @@
     "usableAsAction": false,
     "usableOnDealingDamage": false,
     "usableOnReceivingDamage": true,
-    "effectId": "tagback grenade",
+    "effectId": "tagbackGrenade",
     "cube": "BLUE",
     "resourceId": "AD_powerups_IT_022"
   },
@@ -11,7 +11,7 @@
     "usableAsAction": false,
     "usableOnDealingDamage": false,
     "usableOnReceivingDamage": true,
-    "effectId": "tagback grenade",
+    "effectId": "tagbackGrenade",
     "cube": "RED",
     "resourceId": "AD_powerups_IT_023"
   },
@@ -19,7 +19,7 @@
     "usableAsAction": false,
     "usableOnDealingDamage": false,
     "usableOnReceivingDamage": true,
-    "effectId": "tagback grenade",
+    "effectId": "tagbackGrenade",
     "cube": "YELLOW",
     "resourceId": "AD_powerups_IT_024"
   },
@@ -27,7 +27,7 @@
     "usableAsAction": false,
     "usableOnDealingDamage": true,
     "usableOnReceivingDamage": false,
-    "effectId": "targeting scope",
+    "effectId": "targetingScope",
     "cube": "BLUE",
     "resourceId": "AD_powerups_IT_025"
   },
@@ -35,7 +35,7 @@
     "usableAsAction": false,
     "usableOnDealingDamage": true,
     "usableOnReceivingDamage": false,
-    "effectId": "targeting scope",
+    "effectId": "targetingScope",
     "cube": "RED",
     "resourceId": "AD_powerups_IT_026"
   },
@@ -43,7 +43,7 @@
     "usableAsAction": false,
     "usableOnDealingDamage": true,
     "usableOnReceivingDamage": false,
-    "effectId": "targeting scope",
+    "effectId": "targetingScope",
     "cube": "YELLOW",
     "resourceId": "AD_powerups_IT_027"
   },

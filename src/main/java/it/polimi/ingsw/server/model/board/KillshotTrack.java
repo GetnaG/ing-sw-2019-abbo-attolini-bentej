@@ -105,22 +105,22 @@ public class KillshotTrack extends AbstractTrack {
             switch(points){
                 case -1 :
                     points = 8;
-                    p.setScore(p.getScore()+points);
+                    p.addScore(points);
                     break;
                 case 8 :
                     points = 6;
-                    p.setScore(p.getScore()+points);
+                    p.addScore(points);
                     break;
                 case 6 :
                     points = 4;
-                    p.setScore(p.getScore()+points);
+                    p.addScore(points);
                     break;
                 case 4 :
                     points = 2;
-                    p.setScore(p.getScore()+points);
+                    p.addScore(points);
                     break;
                 case 2 :
-                    p.setScore(p.getScore()+points);
+                    p.addScore(points);
                     points = 1;
                     break;
                 default:     

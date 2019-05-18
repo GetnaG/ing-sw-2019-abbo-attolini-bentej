@@ -1,0 +1,52 @@
+[
+  {
+    "cost": [
+      "YELLOW"
+    ],
+    "effectIdSequences": [
+      [
+        "sledgehammer"
+      ],
+      [
+        "sledgehammer_pulverize"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_022"
+  },
+  {
+    "cost": [
+      "YELLOW",
+      "RED"
+    ],
+    "effectIdSequences": [
+      [
+        "cyberblade"
+      ],
+      [
+        "cyberblade"
+      ],
+      [
+        "cyberblade_sliceAndDice"
+      ]
+    ],
+    "onlySpecifiedOrder": false,
+    "resourceId": "AD_weapons_IT_023"
+  },
+  {
+    "cost": [
+      "YELLOW",
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "powerGlove"
+      ],
+      [
+        "powerGlove_rocketFist"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_024"
+  }
+]

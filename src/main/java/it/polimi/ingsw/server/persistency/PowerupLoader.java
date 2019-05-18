@@ -3,8 +3,8 @@ package it.polimi.ingsw.server.persistency;
 import com.google.gson.Gson;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -41,28 +41,22 @@ public class PowerupLoader implements BasicLoader<PowerupCard> {
 
     /**
      * This constructor loads the cards from a file.
-     * The file must be located where specified by {@code file}.
      * This also checks that the specified effect exists.
      *
-     * @param file the path, name and extension of the json file for powerup
-     *             cards
+     * @param inputStream the stream for the input file
      * @throws IllegalArgumentException if {@code file} is incorrect
      */
-    PowerupLoader(String file) {
+    PowerupLoader(InputStream inputStream) {
         /*Loading the cards from file*/
-        try {
-            powerupCards = new Gson().fromJson(new FileReader(file),
-                    PowerupCard[].class);
-        } catch (FileNotFoundException e) {
-            throw new IllegalArgumentException("Could not find: " + file, e);
-        }
+        powerupCards = new Gson().fromJson(new InputStreamReader(inputStream),
+                PowerupCard[].class);
 
         /*Checking if all effects are present*/
         for (PowerupCard card : powerupCards)
             try {
                 card.getEffect();
             } catch (NoSuchElementException e) {
-                throw new WrongFileInputException(file, card.getId(), e);
+                throw new WrongFileInputException("Powerup cards", card.getId(), e);
             }
     }
 

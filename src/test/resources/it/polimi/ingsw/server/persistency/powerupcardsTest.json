@@ -1,0 +1,26 @@
+[
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": true,
+    "effectId": "plasmaGun",
+    "cube": "BLUE",
+    "resourceId": "AD_powerups_IT_022"
+  },
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": true,
+    "effectId": "tagbackGrenade",
+    "cube": "RED",
+    "resourceId": "AD_powerups_IT_023"
+  },
+  {
+    "usableAsAction": false,
+    "usableOnDealingDamage": false,
+    "usableOnReceivingDamage": true,
+    "effectId": "tagbackGrenade",
+    "cube": "YELLOW",
+    "resourceId": "AD_powerups_IT_024"
+  }
+]

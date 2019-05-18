@@ -13,38 +13,30 @@ import static org.junit.jupiter.api.Assertions.*;
 
 /*
  * Author: Abbo Giulio A.
- * Testing: with same json as src
+ * Testing: with resources file
  */
 class PowerupLoaderTest {
     /*Position of the file*/
-    private static final String FILE =
-            "./resources/cards/jsons/powerupcards.json";
+    private static final String FILE = "powerupcardsTest.json";
 
     /*Existing entry*/
     private static final String EXISTING_ID = "AD_powerups_IT_022";
     private static final boolean EXISTING_AS_ACTION = false;
     private static final boolean EXISTING_ON_DEALING = false;
     private static final boolean EXISTING_ON_RECEIVING = true;
-    private static final String EXISTING_EFFECT = "tagback grenade";
+    private static final String EXISTING_EFFECT = "plasmaGun";
     private static final AmmoCube EXISTING_COLOR = AmmoCube.BLUE;
 
     private PowerupLoader normalLoader;
 
     @BeforeEach
     void setUp() {
-        normalLoader = new PowerupLoader(FILE);
-    }
-
-    /*Testing the constructor when the file can not be found*/
-    @Test
-    void PowerupLoader_noFile() {
-        assertThrows(IllegalArgumentException.class,
-                () -> new PowerupLoader(""));
+        normalLoader =
+                new PowerupLoader(PowerupLoaderTest.class.getResourceAsStream(FILE));
     }
 
     /*Testing with existing id*/
     @Test
-    @Disabled
     void get_existingId() {
         PowerupCard card = normalLoader.get(EXISTING_ID);
 
@@ -58,7 +50,6 @@ class PowerupLoaderTest {
 
     /*Testing that case is ignored*/
     @Test
-    @Disabled
     void get_existingId_ignoreCase() {
         PowerupCard card = normalLoader.get(EXISTING_ID.toLowerCase());
 
