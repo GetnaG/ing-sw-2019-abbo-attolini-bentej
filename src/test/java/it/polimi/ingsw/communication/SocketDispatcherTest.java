@@ -2,6 +2,7 @@ package it.polimi.ingsw.communication;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ class SocketDispatcherTest {
     private static final int PORT = 8374;
 
     private ServerSocket socket;
+    private SocketDispatcher dispatcher;
 
     @BeforeEach
     void setUp() {
@@ -32,8 +34,15 @@ class SocketDispatcherTest {
     @AfterEach
     void tearDown() {
         try {
+            if (dispatcher.isAlive()) {
+                dispatcher.stopListening();
+
+                /*Stopping the thread*/
+                new Socket("localhost", PORT);
+                dispatcher.join();
+            }
             socket.close();
-        } catch (IOException | NullPointerException ignored) {
+        } catch (IOException | NullPointerException | InterruptedException ignored) {
         }
     }
 
@@ -44,33 +53,32 @@ class SocketDispatcherTest {
         /*Closing the socket*/
         try {
             socket.close();
-            SocketDispatcher dispatcher = new SocketDispatcher(socket);
+            dispatcher = new SocketDispatcher(socket);
             assertThrows(UncheckedIOException.class, dispatcher::run);
-        } catch (IOException e) {
-            fail(e);
+        } catch (IOException ignored) {
         }
     }
 
     /*Testing normal behaviour*/
     @Test
     void run() {
-        SocketDispatcher dispatcher = new SocketDispatcher(socket);
+        dispatcher = new SocketDispatcher(socket);
         dispatcher.start();
 
         assertDoesNotThrow(() -> new Socket("localhost", PORT));
-
-        dispatcher.stopListening();
     }
 
     /*Testing socket disconnected*/
     @Test
     void run_socketDisconnected() {
-        SocketDispatcher dispatcher = new SocketDispatcher(socket);
-        dispatcher.start();//Same thread
+        try {
+            dispatcher = new SocketDispatcher(socket);
+            dispatcher.start();
 
-        assertDoesNotThrow(() -> new Socket("localhost", PORT)
-                .close());
+            assertDoesNotThrow(() -> new Socket("localhost", PORT)
+                    .close());
 
-        dispatcher.stopListening();
+        } catch (UncheckedIOException ignored) {
+        }
     }
 }
