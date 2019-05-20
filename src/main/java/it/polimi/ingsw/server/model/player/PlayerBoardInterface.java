@@ -102,4 +102,12 @@ public interface PlayerBoardInterface {
      * @return the marks this board has.
      */
     List<Player> getMarks();
+
+    /**
+     * Returns the damage dealt to the {@linkplain Player}.
+     * Used in final frenzy when we have to decide whether to flip or not the player board.
+     *
+     * @return the players who dealt damage.
+     */
+    List<Player> getDamage();
 }

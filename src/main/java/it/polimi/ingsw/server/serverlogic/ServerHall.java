@@ -23,7 +23,7 @@ public class ServerHall implements Runnable {
     private long startTimer;
 
     /**
-     * Seconds before starting a game >= 3 player
+     * Seconds before starting a game having >= 3 player
      */
     private int seconds;
     /**
@@ -41,10 +41,20 @@ public class ServerHall implements Runnable {
      */
     private DeathmatchController nextGame;
 
-    public ServerHall(int secondsWaitingRoom){
+    /**
+     * Thread wich takes care of user's connection.
+     */
+    private Thread connectionsDispatcher;
+
+    /**
+     * @param secondsWaitingRoom
+     */
+
+    public ServerHall(int secondsWaitingRoom, Thread connectionsDispatcher) {
         this.seconds = secondsWaitingRoom;
         this.connectedUsers = new ArrayList<>();
         statusNextGame = GameStatus.NOTSTARTED;
+        this.connectionsDispatcher = connectionsDispatcher;
     }
 
 

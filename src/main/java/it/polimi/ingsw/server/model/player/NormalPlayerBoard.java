@@ -254,4 +254,13 @@ public class NormalPlayerBoard implements PlayerBoardInterface {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     */
+    public List<Player> getDamage() {
+        return this.damage;
+    }
 }

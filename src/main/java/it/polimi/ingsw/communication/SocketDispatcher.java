@@ -37,6 +37,16 @@ public class SocketDispatcher extends Thread {
     }
 
     /**
+     * Constructor that sets the attributes for this.
+     *
+     * @param serverSocket the socket that will receive the connections
+     */
+    public SocketDispatcher(ServerSocket serverSocket) {
+        this.serverSocket = serverSocket;
+        listening = true;
+    }
+
+    /**
      * Starts listening on the socket, on new connection a thread is created.
      * The child thread creates a {@linkplain User} with a
      * {@linkplain SocketToClient} and calls {@linkplain User#init()}.
@@ -56,7 +66,7 @@ public class SocketDispatcher extends Thread {
                 }).start();
             }
         } catch (IOException | NullPointerException e) {
-            serverMain.notifyException(e);
+            ServerMain.notifyException(e);
         }
     }
 

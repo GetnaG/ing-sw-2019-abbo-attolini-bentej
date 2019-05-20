@@ -1,9 +1,7 @@
 package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.User;
-import it.polimi.ingsw.server.controller.turns.FirstTurn;
-import it.polimi.ingsw.server.controller.turns.NormalTurn;
-import it.polimi.ingsw.server.controller.turns.RespawnTurn;
+import it.polimi.ingsw.server.controller.turns.*;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.board.*;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
@@ -54,6 +52,11 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     private List<Player> suspendedPlayers;
 
     /**
+     * Damageable objects killed during turn.
+     */
+    private List<Damageable> killedInTurn;
+
+    /**
      * Constructs a DeathmatchController with the given users
      * @param users     users in the game. The order of the turns is based on the given list.
      */
@@ -67,6 +70,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         this.gameConfiguration = loadRooms();
         this.board = new GameBoard(new KillshotTrack(skullsLeft), gameConfiguration);
         this.suspendedPlayers = new ArrayList<>();
+        this.killedInTurn = new ArrayList<>();
     }
 
     /**
@@ -78,6 +82,11 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         return new Player(user.getName(),isFirst,figureRes,user,new NormalPlayerBoard(),this,this);
     }
 
+    /**
+     * Returns a configuration of the board (i.e. a list of rooms)
+     *
+     * @return a configuration of the board
+     */
     //TODO There are 4 types of Configurations in the game. This method returns always the same type. However, it has to return the type choosen by the first player.
     private List<Room> loadRooms(){
 
@@ -193,6 +202,11 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         return rooms;
     }
 
+    /**
+     * Constructs a Weapon Market
+     *
+     * @return a Weapon Market
+     */
     private WeaponMarket getWeaponMarketWithCards(){
         List<WeaponCard> cards  = new ArrayList<>();
         try {
@@ -206,6 +220,14 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         return new WeaponMarket(cards);
     }
 
+    /**
+     * Sets the neighbours and borders to the given square.
+     *
+     * @param square           the square
+     * @param neighbours       the neighbours of the square. Represented via a list in wich the index gives information about the orientation of the square.
+     *                         1 means north, 2 means east, 3 means south, 4 means west.
+     * @param borderNeighbours the type of border between the square and the neighbour
+     */
     private void setUpSquare(Square square, List<Square> neighbours, List<Border> borderNeighbours){
         for (Square n : neighbours){
             int orientation = neighbours.indexOf(n);
@@ -222,7 +244,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      */
     private void setNeighboor(Square s1, Square s2, Border borderType, int orientation){
         if (s1 == null || s2 == null)
-                return;
+            return;
 
         switch (orientation){
             case 1:
@@ -252,6 +274,11 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         }
     }
 
+    /**
+     * Adds the users to the game.
+     *
+     * @param connectedUsers    user in the game
+     */
     public void addUsers(List<User> connectedUsers){
         for (User user: connectedUsers){
             players.add(
@@ -261,8 +288,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
                             "FigureRes"+ connectedUsers.indexOf(user)));
         }
     }
+
     /**
-     * Starts the game. The game is diveden in the following four phases:
+     * Starts the game. The game is divided in the following four phases:
      * (1) Initial Turn
      * (2) NormalTurns and RespawnTurns
      * (3) FinalFrenzy
@@ -275,11 +303,11 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         while(!checkFinalFrenzy()){
             currentPlayer = nextPlayer(currentPlayer);
             normalTurn(currentPlayer);
-            if (checkFinalFrenzy()) break;
+            scoreAllKilled();
         }
-        if (checkFinalFrenzy()){
-            finalFrenzyTurn();
-        }
+        // Final frenzy
+        finalFrenzyTurn();
+        // Scoring the game
         score();
     }
 
@@ -298,7 +326,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     }
 
     /**
-     * 
+     * Checks if Final Frenzy has been triggered.
+     *
+     * @return true if Final Frenzy has been triggered, false otherwise.
      */
     private boolean checkFinalFrenzy() {
         return  board.checkFinalFrenzy();
@@ -318,8 +348,22 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
                 II. Or move up to 2 squares, reload, and shoot.
         4. Boards that receive killshots in final frenzy are flipped to the 2-1-1-1 side after they are scored.
      */
-    private void finalFrenzyTurn(){
+    private void finalFrenzyTurn() {
+        // players.stream().filter(p -> p.getPlayerBoard().getDamage().size()==0).forEach(p -> p.getPlayerBoard().flip());
+        Player playerTriggeredFinalFrenzy = currentPlayer;
+        currentPlayer = nextPlayer(currentPlayer);
 
+        while (nextPlayer(currentPlayer) == nextPlayer(playerTriggeredFinalFrenzy)) {
+            // FrenzyTurn differs from those who come before the first player and those who come after.
+            if (players.indexOf(currentPlayer) > players.indexOf(playerTriggeredFinalFrenzy)) {
+                // For those who come before the first player
+                new FrenzyTurnBefore(currentPlayer, board).startTurn(currentPlayer, board);
+            } else {
+                // for those who come after the first player
+                new FrenzyTurnAfter(currentPlayer, board).startTurn(currentPlayer, board);
+            }
+            currentPlayer = nextPlayer(currentPlayer);
+        }
     }
 
     /**
@@ -333,12 +377,17 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
 
     /**
-     * Return the next non-suspended player
+     * Returns the next non-suspended player.
+     *
      * @param p current player
      * @return  next non-suspended player
      */
-    private Player nextPlayer(Player p){
-        Player next =  players.get(players.indexOf(p)+1);
+    private Player nextPlayer(Player p) {
+        Player next;
+        if (players.indexOf(p) + 1 == players.size())
+            next = players.get(0);
+        else
+            next = players.get(players.indexOf(currentPlayer)+1);
         if (suspendedPlayers.contains(next))
             return nextPlayer(next);
         return next;
@@ -355,9 +404,10 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     }
 
     /**
-     * Scores all the game
+     * Scores all the game. This means that each {@linkplain Player} will have his definitive score.
      */
-    private void score(){
+    private void score() {
+        board.scoreBoard();
     }
 
     /**
@@ -375,7 +425,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * @param player    player resumed
      */
     public void playerResumption(Player player) {
-        // TODO implement here
+        suspendedPlayers.remove(player);
     }
 
 
@@ -386,7 +436,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * at the end of the game.
      */
     public void scoreBoard() {
-
+        board.scoreBoard();
     }
 
     /**
@@ -397,7 +447,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * @throws NullPointerException if {@code killed} is null
      */
     public void addKilled(Damageable killed) {
-        // TODO implement here
+        killedInTurn.add(killed);
     }
 
     /**
@@ -408,7 +458,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * emptyKilledList}.
      */
     public void scoreAllKilled() {
-        // TODO implement here
+        killedInTurn.stream().forEach(d -> d.scoreAndResetDamage());
     }
 
 
@@ -421,8 +471,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * @return a list of the objects that will be scored
      */
     public List<Damageable> getKilled() {
-        // TODO implement here
-        return null;
+        return killedInTurn;
     }
 
 
@@ -433,6 +482,6 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * this method will produce no effect.
      */
     public void emptyKilledList() {
-        // TODO implement here
+        killedInTurn.removeAll(killedInTurn);
     }
 }

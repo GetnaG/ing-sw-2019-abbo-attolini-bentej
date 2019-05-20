@@ -17,7 +17,7 @@ public abstract class AbstractTrack {
     public abstract int getSkullsLeft() ;
 
     /**
-     * This method is used to score the Killshot Track.
+     * This method is used to score the Track.
      * Must be called from outside when {@code}skullsLeft is 0.
      * @param
      *
