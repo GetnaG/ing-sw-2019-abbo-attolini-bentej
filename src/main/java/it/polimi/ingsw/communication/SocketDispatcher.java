@@ -1,8 +1,7 @@
 package it.polimi.ingsw.communication;
 
-import it.polimi.ingsw.server.serverlogic.ServerMain;
-
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
@@ -17,24 +16,9 @@ public class SocketDispatcher extends Thread {
      */
     private final ServerSocket serverSocket;
     /**
-     * The class which will be notified if the socket can not start.
-     */
-    private ServerMain serverMain;
-    /**
      * Whether this is running; when false the thread ends its execution.
      */
     private boolean listening;
-
-    /**
-     * Constructor that sets the attributes for this.
-     *
-     * @param serverSocket the socket that will receive the connections
-     */
-    public SocketDispatcher(ServerSocket serverSocket, ServerMain serverMain) {
-        this.serverSocket = serverSocket;
-        this.serverMain = serverMain;
-        listening = true;
-    }
 
     /**
      * Constructor that sets the attributes for this.
@@ -65,8 +49,8 @@ public class SocketDispatcher extends Thread {
                     }
                 }).start();
             }
-        } catch (IOException | NullPointerException e) {
-            ServerMain.notifyException(e);
+        } catch (IOException e) {//FIXME can throw null exception?
+            throw new UncheckedIOException("Error with the socket", e);
         }
     }
 
