@@ -24,8 +24,8 @@ public class Room {
 
         this.spawnSquare = spawnSquare;
 
-        if(squares.get(0)  != this.spawnSquare)
-            swap0(squares, spawnSquare);
+      /*  if(!squares.get(0).equals(this.spawnSquare))
+            swap0(squares, spawnSquare);*/
 
         if(squares.isEmpty())
             throw new IllegalArgumentException();
@@ -79,9 +79,8 @@ public class Room {
         int i=0;
         Square tmp;
 
-        while(!s.get(i).equals(b))
-            i++;
-        
+        i = s.indexOf(b);
+
         tmp = s.get(0);
         s.set(0, b);
         s.set(i, tmp);

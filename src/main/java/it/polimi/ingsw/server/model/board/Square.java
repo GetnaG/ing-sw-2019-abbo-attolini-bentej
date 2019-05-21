@@ -124,7 +124,7 @@ public class Square {
         return northBorder;
     }
 
-    public void setNorthBorder(Border northBorder) {  //--------------------------- check gameboard 4 redundancy!!!!!
+    public void setNorthBorder(Border northBorder) {
         this.northBorder = northBorder;
         if (this.north != null && this.north.getSouthBorder() == null)  // there is a valid square with a non initialized border
             this.north.setSouthBorder(northBorder);
