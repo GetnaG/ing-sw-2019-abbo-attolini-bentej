@@ -48,44 +48,6 @@ class ProtocolMessageTest {
         assertEquals(typeWithOptions, withAnswer.getCommand());
     }
 
-    /*Testing the objects do not have a message.*/
-    @Test
-    void hasMessage_noMessage() {
-        assertFalse(noOptions.hasMessage());
-        assertFalse(withOptions.hasMessage());
-        assertFalse(withNotifications.hasMessage());
-        assertFalse(withUpdates.hasMessage());
-        assertFalse(withAnswer.hasMessage());
-    }
-
-    /*Testing if a message is added.*/
-    @Test
-    void hasMessage_withMessage() {
-        noOptions.setMessage(answer);
-
-        assertTrue(noOptions.hasMessage());
-        assertEquals(answer, noOptions.getMessage());
-    }
-
-    /*Testing no message is returned.*/
-    @Test
-    void getMessage() {
-        assertNull(noOptions.getMessage());
-        assertNull(withOptions.getMessage());
-        assertNull(withNotifications.getMessage());
-        assertNull(withUpdates.getMessage());
-        assertNull(withAnswer.getMessage());
-    }
-
-    /*Testing if the message is set.*/
-    @Test
-    void setMessage() {
-        withUpdates.setMessage(answer);
-
-        assertTrue(withUpdates.hasMessage());
-        assertEquals(answer, withUpdates.getMessage());
-    }
-
     /*Testing notifications*/
     @Test
     void getNotifications() {

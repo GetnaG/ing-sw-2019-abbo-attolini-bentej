@@ -16,9 +16,6 @@ import java.util.List;
  * to determinate whether {@linkplain #options} should contain the
  * available options</li>
  * </ul>
- * <p>
- * This can also have an optional {@linkplain #message}, a string with
- * information on the command.
  *
  * @author Abbo Giulio A.
  * @see MessageType
@@ -30,14 +27,6 @@ class ProtocolMessage {
      * The type of this message.
      */
     private MessageType command;
-    /**
-     * Whether this has an attached message.
-     */
-    private boolean hasMessage;
-    /**
-     * The attached message if present.
-     */
-    private String message;
     /**
      * The user's choice; if there are options this will be the index of the
      * chosen one, otherwise this will be a string containing the user input.
@@ -124,8 +113,6 @@ class ProtocolMessage {
         this.updates = updates;
         this.options = options;
 
-        hasMessage = false;
-        message = null;
         if (command.hasOptions() && (options == null || options.length <= 0)
                 && userChoice == null)
             throw new IllegalArgumentException("Command has options but none " +
@@ -139,34 +126,6 @@ class ProtocolMessage {
      */
     MessageType getCommand() {
         return command;
-    }
-
-    /**
-     * Returns whether this has a message attached.
-     *
-     * @return whether this has a message attached
-     */
-    boolean hasMessage() {
-        return hasMessage;
-    }
-
-    /**
-     * Returns the message attached, null if not present.
-     *
-     * @return the message attached, null if not present
-     */
-    String getMessage() {
-        return message;
-    }
-
-    /**
-     * Sets a message for this.
-     *
-     * @param message the optional message for this.
-     */
-    void setMessage(String message) {
-        hasMessage = true;
-        this.message = message;
     }
 
     /**
