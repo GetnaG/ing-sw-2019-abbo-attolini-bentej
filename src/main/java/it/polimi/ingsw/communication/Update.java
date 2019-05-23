@@ -1,5 +1,7 @@
 package it.polimi.ingsw.communication;
 
+import java.util.List;
+
 /**
  * This represents an update element.
  * Updates are messages that do not expect an answer but modify the game status.
@@ -8,6 +10,7 @@ package it.polimi.ingsw.communication;
  * @see ProtocolMessage
  */
 public class Update {
+
     /**
      * The type of this update, the field modified.
      */
@@ -15,16 +18,40 @@ public class Update {
     /**
      * The new value for the field affected.
      */
-    String[] newValue;
+    List<String> newValue;
     /**
      * Identifies the receiver of the update.
      */
     String nickname;
 
+    public UpdateType getType() {
+        return type;
+    }
+
+    public void setType(UpdateType type) {
+        this.type = type;
+    }
+
+    public List<String> getNewValue() {
+        return newValue;
+    }
+
+    public void setNewValue(List<String> newValue) {
+        this.newValue = newValue;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
     /**
      * The available field that can be modified.
      */
-    enum UpdateType {
+    public enum UpdateType {
         CONFIGURATION_ID,
         AMMOCARD_ARRAY,
         WEAPONCARD_ARRAY,

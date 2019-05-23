@@ -11,6 +11,8 @@ import java.util.List;
  */
 public interface InteractionInterface {
 
+    public void notifyUpdatedState();
+
     String askName();
 
     //TODO: the argument will be a reference to a string
@@ -19,4 +21,6 @@ public interface InteractionInterface {
     //TODO: To replace when user interaction will be implemented
     String tempAsk(String message);
     int tempAsk(String message, String[][] options);
+
+
 }

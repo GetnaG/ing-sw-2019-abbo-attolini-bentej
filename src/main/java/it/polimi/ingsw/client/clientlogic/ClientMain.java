@@ -41,6 +41,11 @@ public class ClientMain {
         }
 
         @Override
+        public void notifyUpdatedState() {
+
+        }
+
+        @Override
         public String askName() {
             return ask(MessageType.NICKNAME.getMessage());
         }
