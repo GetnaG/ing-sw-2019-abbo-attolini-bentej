@@ -11,7 +11,7 @@ public enum GameStatus {
      */
     NOTSTARTED,
     /**
-     * Game is has started and it's waiting for at least 3 users to start the timer
+     * Game has started and it's waiting for at least 3 users to start the timer
      */
     STARTING,
     /**

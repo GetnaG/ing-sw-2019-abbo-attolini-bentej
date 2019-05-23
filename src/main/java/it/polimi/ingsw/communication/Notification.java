@@ -8,7 +8,7 @@ package it.polimi.ingsw.communication;
  * @author Abbo Giulio A.
  * @see ProtocolMessage
  */
-class Notification {
+public class Notification {
     /**
      * The type of this notification.
      */

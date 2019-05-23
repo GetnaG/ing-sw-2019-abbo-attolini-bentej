@@ -10,9 +10,9 @@ import java.util.Scanner;
 /**
  * Mock client
  */
-public class clientMain {
+public class ClientMain {
     /*Socket with mock interactor*/
-    clientMain() {
+    ClientMain() {
         InteractionInterface mock = new MockInteractor();
 
         SocketFromServer fromServer = new SocketFromServer(mock);
@@ -24,7 +24,7 @@ public class clientMain {
     }
 
     public static void main(String[] args) {
-        new clientMain();
+        new ClientMain();
     }
 
     class MockInteractor implements InteractionInterface {

@@ -7,7 +7,7 @@ package it.polimi.ingsw.communication;
  * @author Abbo Giulio A.
  * @see ProtocolMessage
  */
-class Update {
+public class Update {
     /**
      * The type of this update, the field modified.
      */
