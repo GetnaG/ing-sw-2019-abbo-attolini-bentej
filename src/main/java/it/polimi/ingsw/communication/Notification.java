@@ -47,6 +47,10 @@ public class Notification {
         /**
          * Notifies the client that the answer was not valid.
          */
-        ERROR
+        ERROR,
+        /**
+         * Notifies the client that the answer is valid
+         */
+        OK
     }
 }

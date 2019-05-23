@@ -46,6 +46,66 @@ public class ClientMain {
         }
 
         @Override
+        public String chooseEffectSequence(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseSpawn(String something) {
+            return null;
+        }
+
+        @Override
+        public String choosePowerup(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseDestination(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseWeapon(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseWeaponToBuy(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseWeaponToDiscard(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseWeaponToReload(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseAction(String something) {
+            return null;
+        }
+
+        @Override
+        public String choosePowerupForPaying(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseUseTagBack(String something) {
+            return null;
+        }
+
+        @Override
+        public String chooseTarget(String something) {
+            return null;
+        }
+
+        @Override
         public String askName() {
             return ask(MessageType.NICKNAME.getMessage());
         }

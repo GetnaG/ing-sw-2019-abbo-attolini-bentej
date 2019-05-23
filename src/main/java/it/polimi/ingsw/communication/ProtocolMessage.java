@@ -22,7 +22,7 @@ import java.util.List;
  * @see Notification
  * @see Update
  */
-class ProtocolMessage {
+public class ProtocolMessage {
     /**
      * The type of this message.
      */
@@ -50,7 +50,7 @@ class ProtocolMessage {
      *
      * @param command the command for this message
      */
-    ProtocolMessage(MessageType command) {
+    public ProtocolMessage(MessageType command) {
         this(command, null, null, null, null);
     }
 
@@ -60,7 +60,7 @@ class ProtocolMessage {
      * @param command the command for this message
      * @param options the available options
      */
-    ProtocolMessage(MessageType command, List<? extends List<String>> options) {
+    public ProtocolMessage(MessageType command, List<? extends List<String>> options) {
         this(command, null, null, null,
                 options.stream().map(l -> l.toArray(new String[0]))
                         .toArray(String[][]::new));
@@ -72,7 +72,7 @@ class ProtocolMessage {
      * @param command    the command for this message
      * @param userChoice the choice of the user
      */
-    ProtocolMessage(MessageType command, String userChoice) {
+    public ProtocolMessage(MessageType command, String userChoice) {
         this(command, userChoice, null, null, null);
     }
 
@@ -81,7 +81,7 @@ class ProtocolMessage {
      *
      * @param notifications the notifications for this message
      */
-    ProtocolMessage(Notification[] notifications) {
+    public ProtocolMessage(Notification[] notifications) {
         this(MessageType.NOTIFICATION, null, notifications, null, null);
     }
 
@@ -90,7 +90,7 @@ class ProtocolMessage {
      *
      * @param updates the updates for this message
      */
-    ProtocolMessage(Update[] updates) {
+    public ProtocolMessage(Update[] updates) {
         this(MessageType.UPDATE, null, null, updates, null);
     }
 
@@ -103,10 +103,10 @@ class ProtocolMessage {
      * @param updates       the updates for this message
      * @param options       the available options
      */
-    private ProtocolMessage(MessageType command,
-                            String userChoice, Notification[] notifications,
-                            Update[] updates,
-                            String[][] options) {
+    public ProtocolMessage(MessageType command,
+                           String userChoice, Notification[] notifications,
+                           Update[] updates,
+                           String[][] options) {
         this.command = command;
         this.userChoice = userChoice;
         this.notifications = notifications;
@@ -124,7 +124,7 @@ class ProtocolMessage {
      *
      * @return the command of this
      */
-    MessageType getCommand() {
+    public MessageType getCommand() {
         return command;
     }
 
@@ -133,7 +133,7 @@ class ProtocolMessage {
      *
      * @return the notifications, null if not present
      */
-    Notification[] getNotifications() {
+    public Notification[] getNotifications() {
         return notifications;
     }
 
@@ -142,7 +142,7 @@ class ProtocolMessage {
      *
      * @return the updates, null if not present
      */
-    Update[] getUpdates() {
+    public Update[] getUpdates() {
         return updates;
     }
 
@@ -151,7 +151,7 @@ class ProtocolMessage {
      *
      * @return the options, null if not present
      */
-    String[][] getOptions() {
+    public String[][] getOptions() {
         return options;
     }
 
@@ -163,7 +163,7 @@ class ProtocolMessage {
      *
      * @return Returns the user choice
      */
-    String getUserChoice() {
+    public String getUserChoice() {
         return userChoice;
     }
 }

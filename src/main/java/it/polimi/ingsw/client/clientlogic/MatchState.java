@@ -10,6 +10,13 @@ import java.util.stream.Collectors;
 
 /**
  * Represents the state of a Match.
+ *
+ * It uses an Observer/Subscriber pattern to notify to {@linkplain InteractionInterface} that the state has been updated.
+ *
+ * @see InteractionInterface
+ * @see ClientController
+ *
+ * @author Fahed B. Tej
  */
 public class MatchState {
 
