@@ -5,6 +5,7 @@ import it.polimi.ingsw.communication.MessageType;
 import it.polimi.ingsw.communication.SocketFromServer;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.util.Scanner;
 
 /**
@@ -14,10 +15,11 @@ public class ClientMain {
     /*Socket with mock interactor*/
     ClientMain() {
         InteractionInterface mock = new MockInteractor();
-
-        SocketFromServer fromServer = new SocketFromServer(mock);
         try {
-            fromServer.startListening("localhost", 4590);
+            SocketFromServer fromServer =
+                    new SocketFromServer(new ClientController(), new Socket(
+                            "localhost", 4590));
+            fromServer.startListening();
         } catch (IOException e) {
             e.printStackTrace();
         }

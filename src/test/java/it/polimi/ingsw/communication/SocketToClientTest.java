@@ -307,7 +307,7 @@ class SocketToClientTest {
         R apply(T t) throws ToClientException;
     }
 
-    class MockSocket extends Socket {
+    private class MockSocket extends Socket {
         private ByteArrayOutputStream toClient;
         private ByteArrayOutputStream toServer;
 
@@ -356,7 +356,7 @@ class SocketToClientTest {
         }
     }
 
-    class MockDamageable implements Damageable {
+    private class MockDamageable implements Damageable {
         private String id;
 
         MockDamageable(String id) {
@@ -404,7 +404,7 @@ class SocketToClientTest {
         }
     }
 
-    class MockSquare extends Square {
+    private class MockSquare extends Square {
         private String id;
 
         MockSquare(String id) {
@@ -417,7 +417,7 @@ class SocketToClientTest {
         }
     }
 
-    class MockEffect implements EffectInterface {
+    private class MockEffect implements EffectInterface {
         EffectInterface next;
         String name;
 
