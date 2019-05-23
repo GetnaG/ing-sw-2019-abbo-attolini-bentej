@@ -12,55 +12,224 @@ import java.util.Arrays;
  */
 public class ClientController {
 
+    /**
+     * Represents the state of the Game.
+     */
     private MatchState matchState;
 
-
+    /**
+     * Handles notifications. Notifications are defined as events that don't change the state of the game
+     *
+     * @param notifications events that don't change the state of the game
+     */
     public void handleNotifications(Notification[] notifications) {
 
 
     }
 
+    /**
+     * Handles updates. Updates are events that change the state of the game.
+     *
+     * @param updates events that change the state of the game.
+     */
     public void handleUpdates(Update[] updates) {
         Arrays.asList(updates).forEach(matchState::handleUpdate);
-
     }
 
-    public String handleQuestion(ProtocolMessage message) {
+    /**
+     * Handles a question. It takes care of asking the user of the answer and returns it to the caller.
+     *
+     * @param message a question
+     * @return the index of the answer. In case of notifications and updates, it returns 0.
+     */
+    public int handleQuestion(ProtocolMessage message) {
         switch (message.getCommand()) {
             case NOTIFICATION:
                 handleNotifications(message.getNotifications());
+                break;
             case UPDATE:
                 handleUpdates(message.getUpdates());
+                break;
             case EFFECTS_SEQUENCE:
-                // TODO: handle case
+                chooseEffectSequence(message.getCommand(), message.getOptions());
+                break;
             case SPAWN:
-                // TODO: handle case
+                chooseSpawn(message.getCommand(), message.getOptions());
+                break;
             case POWERUP:
-                // TODO: handle case
+                chooseSpawn(message.getCommand(), message.getOptions());
+                break;
             case DESTINATION:
-                // TODO: handle case
+                chooseDestination(message.getCommand(), message.getOptions());
+                break;
             case WEAPON:
-                // TODO: handle case
+                chooseWeapon(message.getCommand(), message.getOptions());
+                break;
             case WEAPON_TO_BUY:
-                // TODO: handle case
+                chooseWeaponToBuy(message.getCommand(), message.getOptions());
+                break;
             case WEAPON_TO_DISCARD:
-                // TODO: handle case
+                chooseWeaponToDiscard(message.getCommand(), message.getOptions());
+                break;
             case WEAPON_TO_RELOAD:
-                // TODO: handle case
+                chooseWeaponToReload(message.getCommand(), message.getOptions());
+                break;
             case ACTION:
-                // TODO: handle case
+                chooseAction(message.getCommand(), message.getOptions());
+                break;
             case POWERUP_FOR_PAYING:
-                // TODO: handle case
+                choosePowerup(message.getCommand(), message.getOptions());
+                break;
             case USE_TAGBACK:
-                // TODO: handle case
+                chooseUseTagback(message.getCommand(), message.getOptions());
+                break;
             case TARGET:
-                // TODO: handle case
+                chooseTarget(message.getCommand(), message.getOptions());
             default:
                 // nothing
 
 
         }
-        return null;
+        return 0;
+    }
+
+    /**
+     * Chooses an Effect from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return
+     */
+    public int chooseEffectSequence(MessageType message, String[][] options) {
+        return 0;
+    }
+
+    /**
+     * Chooses an Spawn from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseSpawn(MessageType message, String[][] options) {
+        return 0;
+    }
+
+    /**
+     * Chooses a Powerup from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int choosePowerup(MessageType message, String[][] options) {
+        return 0;
+    }
+
+    /**
+     * Chooses a Destination from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseDestination(MessageType message, String[][] options) {
+        return 0;
+    }
+
+    /**
+     * Chooses a Weapon from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseWeapon(MessageType message, String[][] options) {
+        return 0;
+    }
+
+    /**
+     * Chooses a Weapon to buy from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseWeaponToBuy(MessageType message, String[][] options) {
+
+        return 0;
+    }
+
+    /**
+     * Chooses a Weapon to discard from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseWeaponToDiscard(MessageType message, String[][] options) {
+
+        return 0;
+    }
+
+    /**
+     * Chooses a Weapon to reload from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseWeaponToReload(MessageType message, String[][] options) {
+
+        return 0;
+    }
+
+    /**
+     * Chooses an action from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseAction(MessageType message, String[][] options) {
+
+        return 0;
+    }
+
+    /**
+     * Chooses a Powerup for pating from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int choosePowerupForPaying(MessageType message, String[][] options) {
+
+        return 0;
+    }
+
+    /**
+     * Chooses a tagback use from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseUseTagback(MessageType message, String[][] options) {
+
+        return 0;
+    }
+
+    /**
+     * Chooses a target from the given options
+     *
+     * @param message type of question
+     * @param options possible answers
+     * @return the index of the answer
+     */
+    public int chooseTarget(MessageType message, String[][] options) {
+
+        return 0;
     }
 
 }
