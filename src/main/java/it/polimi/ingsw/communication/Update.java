@@ -24,28 +24,40 @@ public class Update {
      */
     String nickname;
 
-    public UpdateType getType() {
-        return type;
+    /**
+     * Creates an update that involves a specific player.
+     *
+     * @param type     the field modified
+     * @param newValue the new value for the field
+     * @param nickname the name of the involved player
+     */
+    public Update(UpdateType type, List<String> newValue, String nickname) {
+        this.type = type;
+        this.newValue = newValue;
+        this.nickname = nickname;
     }
 
-    public void setType(UpdateType type) {
+    /**
+     * Creates an update that does not involve a specific player.
+     *
+     * @param type     the field modified
+     * @param newValue the new value for the field
+     */
+    public Update(UpdateType type, List<String> newValue) {
         this.type = type;
+        this.newValue = newValue;
+    }
+
+    public UpdateType getType() {
+        return type;
     }
 
     public List<String> getNewValue() {
         return newValue;
     }
 
-    public void setNewValue(List<String> newValue) {
-        this.newValue = newValue;
-    }
-
     public String getNickname() {
         return nickname;
-    }
-
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
     }
 
     /**

@@ -44,49 +44,46 @@ public class ClientController {
      * @param message a question
      * @return the index of the answer. In case of notifications and updates, it returns 0.
      */
-    public int handleQuestion(ProtocolMessage message) {
-        switch (message.getCommand()) {
+    public int handleQuestion(MessageType message, String[][] options) {
+        switch (message) {
             case NOTIFICATION:
-                handleNotifications(message.getNotifications());
-                break;
             case UPDATE:
-                handleUpdates(message.getUpdates());
-                break;
+                throw new IllegalArgumentException("This method does not handle Notifications or Updates");
             case EFFECTS_SEQUENCE:
-                chooseEffectSequence(message.getCommand(), message.getOptions());
+                chooseEffectSequence(message, options);
                 break;
             case SPAWN:
-                chooseSpawn(message.getCommand(), message.getOptions());
+                chooseSpawn(message, options);
                 break;
             case POWERUP:
-                chooseSpawn(message.getCommand(), message.getOptions());
+                chooseSpawn(message, options);
                 break;
             case DESTINATION:
-                chooseDestination(message.getCommand(), message.getOptions());
+                chooseDestination(message, options);
                 break;
             case WEAPON:
-                chooseWeapon(message.getCommand(), message.getOptions());
+                chooseWeapon(message, options);
                 break;
             case WEAPON_TO_BUY:
-                chooseWeaponToBuy(message.getCommand(), message.getOptions());
+                chooseWeaponToBuy(message, options);
                 break;
             case WEAPON_TO_DISCARD:
-                chooseWeaponToDiscard(message.getCommand(), message.getOptions());
+                chooseWeaponToDiscard(message, options);
                 break;
             case WEAPON_TO_RELOAD:
-                chooseWeaponToReload(message.getCommand(), message.getOptions());
+                chooseWeaponToReload(message, options);
                 break;
             case ACTION:
-                chooseAction(message.getCommand(), message.getOptions());
+                chooseAction(message, options);
                 break;
             case POWERUP_FOR_PAYING:
-                choosePowerup(message.getCommand(), message.getOptions());
+                choosePowerup(message, options);
                 break;
             case USE_TAGBACK:
-                chooseUseTagback(message.getCommand(), message.getOptions());
+                chooseUseTagback(message, options);
                 break;
             case TARGET:
-                chooseTarget(message.getCommand(), message.getOptions());
+                chooseTarget(message, options);
             default:
                 // nothing
 

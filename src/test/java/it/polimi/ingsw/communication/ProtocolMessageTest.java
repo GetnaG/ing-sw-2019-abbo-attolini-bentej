@@ -16,10 +16,9 @@ class ProtocolMessageTest {
     /*Values used for testing.*/
     private final MessageType typeNoOptions = MessageType.NICKNAME;
     private final MessageType typeWithOptions = MessageType.WEAPON;
-    private final List<List<String>> options = Arrays.asList(
-            Arrays.asList("a"), Arrays.asList("b", "c"));
+    private final List<List<String>> options = Arrays.asList(Arrays.asList("a"), Arrays.asList("b", "c"));
     private final Notification[] notifications = {new Notification(Notification.NotificationType.QUIT)};
-    private final Update[] updates = {new Update()};
+    private final Update[] updates = {new Update(Update.UpdateType.LOADED_WEAPONS, Arrays.asList("A", "B"))};
     private final String answer = "1";
 
     /*Tested objects.*/

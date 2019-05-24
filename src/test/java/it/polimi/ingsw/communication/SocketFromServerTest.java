@@ -3,54 +3,100 @@ package it.polimi.ingsw.communication;
 import com.google.gson.Gson;
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 /*
  * Author: Abbo Giulio A.
- * Testing: the getter for the type.
+ * Testing: that the controller is notified correctly and the server receives
+ *  the intended answer.
  */
-@Disabled
 class SocketFromServerTest {
-    private static final String DEFAULT_CHOICE = "0";
+    private static final int DEFAULT_CHOICE = 0;
     private SocketFromServer fromServer;
+    private MockClientController controller;
+    private MockSocket server;
 
     @BeforeEach
     void setUp() {
+        controller = new MockClientController();
+        server = new MockSocket();
+        fromServer = new SocketFromServer(controller, server);
     }
 
     /*Testing that it receives and handle an update*/
     @Test
     void startListening_update() {
-        MockClientController controller = new MockClientController();
-        MockSocket server = new MockSocket();
-        server.put(new ProtocolMessage(new Update[] {new Update()}));
-        SocketFromServer fromServer = new SocketFromServer(controller, server);
+        Update[] updates = {
+                new Update(Update.UpdateType.DAMAGE_ARRAY, Arrays.asList("A",
+                        "B"), "BOB"),
+                new Update(Update.UpdateType.LOADED_WEAPONS, Arrays.asList("A",
+                        "B"))
+        };
+        send(new ProtocolMessage(updates));
+        Update[] controllerReceived = controller.updates;
+        for (int i = 0; i < updates.length; i++) {
+            assertEquals(updates[i].nickname, controllerReceived[i].nickname);
+            assertEquals(updates[i].type, controllerReceived[i].type);
+            assertEquals(updates[i].newValue, controllerReceived[i].newValue);
+        }
+    }
+
+    /*Testing that it receives and handle a notification*/
+    @Test
+    void startListening_notification() {
+        Notification[] notifications = {
+                new Notification(Notification.NotificationType.QUIT),
+                new Notification(Notification.NotificationType.GREET)
+        };
+        send(new ProtocolMessage(notifications));
+        Notification[] controllerReceived = controller.notifications;
+        for (int i = 0; i < notifications.length; i++) {
+            assertEquals(notifications[i].getType(), controllerReceived[i].getType());
+        }
+    }
+
+    /*Testing that it receives and handle a question with options*/
+    @Test
+    void startListening_question() {
+        List<List<String>> options = Arrays.asList(
+                Arrays.asList("aa", "ab"),
+                Arrays.asList("bb")
+        );
+        MessageType type = MessageType.ACTION;
+        send(new ProtocolMessage(type, options));
+        String[][] controllerReceived = controller.options;
+        MessageType typeReceived = controller.message;
+        for (int i = 0; i < options.size(); i++) {
+            for (int j = 0; j < options.get(i).size(); j++) {
+                assertEquals(options.get(i).get(j), controllerReceived[i][j]);
+            }
+        }
+        assertEquals(type, typeReceived);
+        int choice = Integer.parseInt(server.contents().getUserChoice());
+        for (int i = 0; i < options.get(DEFAULT_CHOICE).size(); i++) {
+            assertEquals(options.get(DEFAULT_CHOICE).get(i),
+                    options.get(choice).get(i));
+        }
+    }
+
+    /*Sends the message to the client, after this the controller and the
+    server socket can be queried for data*/
+    private void send(ProtocolMessage message) {
+        server.put(message);
         try {
             fromServer.startListening();
         } catch (IOException e) {
             fail(e);
         }
-    }
-
-    @Test
-    void startListening_notification() {
-    }
-
-    @Test
-    void startListening_question() {
-    }
-
-    @Test
-    void stopListening() {
     }
 
     private class MockClientController extends ClientController {
@@ -62,34 +108,21 @@ class SocketFromServerTest {
         @Override
         public void handleNotifications(Notification[] notifications) {
             this.notifications = notifications;
+            fromServer.stopListening();
         }
 
         @Override
         public void handleUpdates(Update[] updates) {
             this.updates = updates;
+            fromServer.stopListening();
         }
 
-        //@Override
-        public String handleQuestion(MessageType message, String[][] options) {
+        @Override
+        public int handleQuestion(MessageType message, String[][] options) {
             this.message = message;
             this.options = options;
+            fromServer.stopListening();
             return DEFAULT_CHOICE;
-        }
-
-        public Notification[] getNotifications() {
-            return notifications;
-        }
-
-        public Update[] getUpdates() {
-            return updates;
-        }
-
-        public MessageType getMessage() {
-            return message;
-        }
-
-        public String[][] getOptions() {
-            return options;
         }
     }
 

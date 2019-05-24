@@ -32,7 +32,7 @@ public class SocketFromServer {
      * Creates a new instance with the provided controller and socket.
      *
      * @param controller the controller for the new instance
-     * @param socket the socket connected with the server
+     * @param socket     the socket connected with the server
      */
     public SocketFromServer(ClientController controller, Socket socket) {
         this.controller = controller;
@@ -86,7 +86,7 @@ public class SocketFromServer {
 
     /**
      * Stops listening to the socket.
-     *
+     * <p>
      * Note: if this is not called when handling a message from the server,
      * then the execution could get stuck listening for one last command.
      */
@@ -104,10 +104,10 @@ public class SocketFromServer {
     }
 
     private String handleQuestion(MessageType command) {
-        return null;//Integer.toString(controller.handleQuestion(command));
+        return Integer.toString(controller.handleQuestion(command, null));
     }
 
     private String handleQuestion(MessageType command, String[][] options) {
-        return null;//Integer.toString(controller.handleQuestion(command), options);
+        return Integer.toString(controller.handleQuestion(command, options));
     }
 }
