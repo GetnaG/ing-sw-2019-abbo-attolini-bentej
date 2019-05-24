@@ -9,6 +9,8 @@ import java.util.Arrays;
 
 /**
  * Represents the Controller of the client. It elaborates the received Notifications, Updates and Commands .
+ *
+ * @author Fahed B. Tej
  */
 public class ClientController {
 

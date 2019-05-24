@@ -48,63 +48,68 @@ public class ClientMain {
         }
 
         @Override
-        public String chooseEffectSequence(String something) {
-            return null;
+        public int chooseEffectSequence(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseSpawn(String something) {
-            return null;
+        public int chooseSpawn(String something) {
+            return 0;
         }
 
         @Override
-        public String choosePowerup(String something) {
-            return null;
+        public int choosePowerup(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseDestination(String something) {
-            return null;
+        public int chooseDestination(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseWeapon(String something) {
-            return null;
+        public int chooseWeapon(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseWeaponToBuy(String something) {
-            return null;
+        public int chooseWeaponToBuy(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseWeaponToDiscard(String something) {
-            return null;
+        public int chooseWeaponToDiscard(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseWeaponToReload(String something) {
-            return null;
+        public int chooseWeaponToReload(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseAction(String something) {
-            return null;
+        public int chooseAction(String something) {
+            return 0;
         }
 
         @Override
-        public String choosePowerupForPaying(String something) {
-            return null;
+        public int choosePowerupForPaying(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseUseTagBack(String something) {
-            return null;
+        public int chooseUseTagBack(String something) {
+            return 0;
         }
 
         @Override
-        public String chooseTarget(String something) {
-            return null;
+        public int chooseTarget(String something) {
+            return 0;
+        }
+
+        @Override
+        public void drawState(MatchState state) {
+
         }
 
         @Override
