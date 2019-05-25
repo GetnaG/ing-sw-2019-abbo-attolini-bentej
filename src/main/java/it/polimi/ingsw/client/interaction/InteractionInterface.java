@@ -1,7 +1,6 @@
 package it.polimi.ingsw.client.interaction;
 
 import it.polimi.ingsw.client.clientlogic.MatchState;
-import it.polimi.ingsw.server.controller.effects.EffectInterface;
 
 import java.util.List;
 
@@ -14,42 +13,35 @@ import java.util.List;
  */
 public interface InteractionInterface {
 
-    public void notifyUpdatedState();
+    void notifyUpdatedState();
 
-    public int chooseEffectSequence(String something);
+    int chooseEffectSequence(List<List<String>> optionKeys);
 
-    public int chooseSpawn(String something);
+    int chooseSpawn(List<List<String>> optionKeys);
 
-    public int choosePowerup(String something);
+    int choosePowerup(List<List<String>> optionKeys);
 
-    public int chooseDestination(String something);
+    int chooseDestination(List<List<String>> optionKeys);
 
-    public int chooseWeapon(String something);
+    int chooseWeapon(List<List<String>> optionKeys);
 
-    public int chooseWeaponToBuy(String something);
+    int chooseWeaponToBuy(List<List<String>> optionKeys);
 
-    public int chooseWeaponToDiscard(String something);
+    int chooseWeaponToDiscard(List<List<String>> optionKeys);
 
-    public int chooseWeaponToReload(String something);
+    int chooseWeaponToReload(List<List<String>> optionKeys);
 
-    public int chooseAction(String something);
+    int chooseAction(List<List<String>> optionKeys);
 
-    public int choosePowerupForPaying(String something);
+    int choosePowerupForPaying(List<List<String>> optionKeys);
 
-    public int chooseUseTagBack(String something);
+    int chooseUseTagBack(List<List<String>> optionKeys);
 
-    public int chooseTarget(String something);
+    int chooseTarget(List<List<String>> optionKeys);
 
-    public void drawState(MatchState state);
+    void drawState(MatchState state);
 
     String askName();
 
-    //TODO: the argument will be a reference to a string
-    void sendNotification(String message);
-
-    //TODO: To replace when user interaction will be implemented
-    String tempAsk(String message);
-    int tempAsk(String message, String[][] options);
-
-
+    void sendNotification(String notificationKey);
 }
