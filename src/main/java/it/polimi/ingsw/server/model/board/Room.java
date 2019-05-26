@@ -16,6 +16,10 @@ public class Room {
     private SpawnSquare spawnSquare;
 
 
+    /**
+     * @param squares is the list of the normal (ammo) squares
+     * @param spawnSquare is considered a single element
+     */
     public Room( List<Square> squares, SpawnSquare spawnSquare ) {
 
         this.squares = squares;
@@ -23,9 +27,6 @@ public class Room {
             i.setRoom(this);
 
         this.spawnSquare = spawnSquare;
-
-      /*  if(!squares.get(0).equals(this.spawnSquare))
-            swap0(squares, spawnSquare);*/
 
         if(squares.isEmpty())
             throw new IllegalArgumentException();
@@ -54,9 +55,7 @@ public class Room {
     }
 
     public boolean hasSpawnSquare() {
-        if(getSpawnSquare() != null)
-            return true;
-        return false;
+        return (getSpawnSquare() != null);
     }
 
     public SpawnSquare getSpawnSquare() {
@@ -66,27 +65,15 @@ public class Room {
 
     /**
      * @param obj is a room
-     * @return true if two rooms have the same list of squares
+     * @return true if two rooms have the same list of squares and the same spawnSquare
      */
     @Override
     public boolean equals(Object obj) {
-        return (obj instanceof Room) && (((Room) obj).getSquares().equals(squares));
-    }
-    
-    
-
-    private List<Square> swap0(List<Square> s, Square b){
-        int i=0;
-        Square tmp;
-
-        i = s.indexOf(b);
-
-        tmp = s.get(0);
-        s.set(0, b);
-        s.set(i, tmp);
-
-        return s;
+        if(this.getSpawnSquare() != null)
+            return (obj instanceof Room) && (((Room) obj).getSquares().equals(squares) && ((Room) obj).getSpawnSquare().equals(spawnSquare));
+        else
+            return (obj instanceof Room) && (((Room) obj).getSquares().equals(squares));
     }
 
 
-}
+ }

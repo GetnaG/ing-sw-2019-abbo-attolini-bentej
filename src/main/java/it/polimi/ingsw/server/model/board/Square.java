@@ -407,4 +407,13 @@ public class Square {
         return false;
 
     }
+
+    public void squareBuilder(Square n, Square e, Border nb, Border eb){
+        if(n != null) this.setNorth(n);
+        if(e != null) this.setEast(e);
+        if(nb != null) this.setNorthBorder(nb);
+        if(eb != null) this.setEastBorder(eb);
+    }
+
+
 }
