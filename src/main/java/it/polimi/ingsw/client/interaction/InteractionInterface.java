@@ -39,7 +39,7 @@ public interface InteractionInterface {
 
     int chooseTarget(List<List<String>> optionKeys);
 
-    void drawState(MatchState state);
+    void drawState();
 
     String askName();
 

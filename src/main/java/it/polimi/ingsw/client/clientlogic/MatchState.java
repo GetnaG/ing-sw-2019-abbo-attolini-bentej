@@ -27,6 +27,8 @@ public class MatchState {
     public MatchState(List<PlayerState> playersState, BoardState boardState) {
         this.playersState = playersState;
         this.boardState = boardState;
+
+        subscribedIntercationInterfaces = new ArrayList<>();
     }
 
     public void subscribe(InteractionInterface interactionInterface) {
