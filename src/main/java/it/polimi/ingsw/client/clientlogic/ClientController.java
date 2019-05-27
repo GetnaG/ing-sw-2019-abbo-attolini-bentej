@@ -3,7 +3,9 @@ package it.polimi.ingsw.client.clientlogic;
 import it.polimi.ingsw.communication.*;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 /**
  * Represents the Controller of the client. It elaborates the received Notifications, Updates and Commands .
@@ -253,9 +255,31 @@ public class ClientController {
 
     }
 
+    /**
+     * Used to check if the given username is valid
+     *
+     * @param username username in question
+     * @return 0 if it's avaiable,
+     * 1 if it's not avaiable and player is online,
+     * 2 if it's not avaibale and the player is offline
+     */
     public int checkUsername(String username) {
         //TODO Implement
         return 0;
+    }
+
+    /**
+     * Gets the players in the hall of the server
+     * @return players in the hall of the server
+     */
+    public List<String> getPlayersInHall() {
+        //TODO Implement
+        List<String> players = new ArrayList<>();
+        players.add("Alice");
+        players.add("Bob");
+        players.add("Charlie");
+
+        return players;
     }
 
 }
