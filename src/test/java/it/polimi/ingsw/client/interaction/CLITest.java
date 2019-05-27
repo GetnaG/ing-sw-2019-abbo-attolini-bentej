@@ -37,7 +37,7 @@ class CLITest {
         in = new MockInput();
         out = new MockOutput();
         model = new MockModel();
-        cli = new CLI(out, in, model);
+        cli = new CLI(out, in);
         options = Arrays.asList(
                 Arrays.asList("gameTest", "gameTest", "gameTest"),
                 Arrays.asList("gameTest"),

@@ -1,33 +1,39 @@
 package it.polimi.ingsw.client.clientlogic;
 
+import it.polimi.ingsw.client.interaction.InteractionFactory;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
-import it.polimi.ingsw.communication.MessageType;
-import it.polimi.ingsw.communication.SocketFromServer;
 
 import java.io.IOException;
-import java.net.Socket;
-import java.util.List;
-import java.util.Scanner;
+import java.util.logging.Logger;
 
 /**
- * Mock client
+ * Sets up the client.
+ *
+ * @author Abbo Giulio A.
+ * @see InteractionInterface
+ * @see MatchState
+ * @see ClientController
  */
 public class ClientMain {
-    /*Socket with mock interactor*/
-    ClientMain() {
-/*        InteractionInterface mock = new MockInteractor();
-        try {
-            SocketFromServer fromServer =
-                    new SocketFromServer(new ClientController(), new Socket(
-                            "localhost", 4590));
-            fromServer.startListening();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
-    }
+    private static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
+
 
     public static void main(String[] args) {
-        new ClientMain();
+        try {
+            InteractionInterface interaction =
+                    InteractionFactory.getInteractionInterface(args);
+        } catch (IOException | NullPointerException | IllegalArgumentException e) {
+            LOG.severe(e.getMessage());
+            return;
+        }
+
+        /*
+        TODO: set the model for the view
+        TODO: choose the connection mode
+        TODO: Connect
+        TODO: wait for commands
+         */
     }
 }
+
 
