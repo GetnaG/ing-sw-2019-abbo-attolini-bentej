@@ -75,18 +75,15 @@ public class CLI implements InteractionInterface {
     /**
      * Creates a CLI interface that uses the provided input and output, and
      * retrieves data from the provided model.
-     * This also subscribes itself to the provided model.@
      * <p>
      * Starts a thread that listens for the user input, and calls
      * {@linkplain #newInput(String)} when detects one.
      *
-     * @param out   where the text will be displayed
-     * @param in    the input from the user
-     * @param model the class that will keep the match status
+     * @param out where the text will be displayed
+     * @param in  the input from the user
      */
-    public CLI(PrintStream out, InputStream in, MatchState model) {
+    public CLI(PrintStream out, InputStream in) {
         this.out = out;
-        this.model = model;
         lineSeparator = System.lineSeparator();
         inputMon = new Object();
         currentsMon = new Object();
@@ -95,9 +92,6 @@ public class CLI implements InteractionInterface {
         waitingForInput = false;
         handlingQuestion = false;
         input = null;
-
-        /*Subscribing this to the model*/
-        model.subscribe(this);
 
         /*A new thread that listens for the input and calls newInput()*/
         new Thread(() -> {
@@ -110,6 +104,19 @@ public class CLI implements InteractionInterface {
                 }
             }
         }).start();
+    }
+
+    /**
+     * Sets the model for this view.
+     * This also subscribes this class to the provided model.
+     *
+     * @param model the class that will keep the match status
+     */
+    public void setModel(MatchState model) {
+        this.model = model;
+
+        /*Subscribing this to the model*/
+        model.subscribe(this);
     }
 
     /**
