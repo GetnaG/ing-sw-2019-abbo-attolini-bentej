@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.interaction;
 
+import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -27,7 +28,14 @@ import java.util.List;
  * @author Fahed B. Tej
  */
 public class GUI extends Application implements InteractionInterface {
-    Scene masterScene;
+    /**
+     * The scene used during the game
+     */
+    private Scene masterScene;
+    /**
+     * Controller of the view
+     */
+    private ClientController controller;
 
     @Override
     public void start(Stage stage) {
@@ -101,13 +109,38 @@ public class GUI extends Application implements InteractionInterface {
         logText.setFill(Color.WHITE);
         socketRadio.setTextFill(Color.WHITE);
         rmiRadio.setTextFill(Color.WHITE);
+        socketRadio.setSelected(true);
         //  Setting Button Event
-        loginButton.setOnAction(e -> buildHallPane(stage));
+        loginButton.setOnAction(e -> {
+
+            // telling the controller the connection type
+            if (socketRadio.isSelected()) {
+                controller.setConnectionType(0);
+            } else {
+                controller.setConnectionType(1);
+            }
+            //telling the controller the username
+            switch (controller.checkUsername(inputUsername.getText())) {
+                case 0:
+                    // username is avaiable
+                    logText.setText("Username is avaiable. You are now being connected to the Hall");
+                case 1:
+                    // username is already taken and the player is online
+                    logText.setText("Username is already take and player is online. Choose another username.");
+                case 2:
+                    // username is already taken and the player is not online
+                    logText.setText("Username is already taken and the player is offline You are now being connected to the game.");
+            }
+
+
+            buildHallPane(stage);
+        });
 
         masterScene = new Scene(rootStackPane, 1000, 1000);
         stage.setTitle("Adrenaline");
         stage.setScene(masterScene);
     }
+
 
     private void buildHallPane(Stage stage) {
         StackPane rootStackPane = new StackPane();

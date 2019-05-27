@@ -1,10 +1,8 @@
 package it.polimi.ingsw.client.clientlogic;
 
-import it.polimi.ingsw.communication.MessageType;
-import it.polimi.ingsw.communication.Notification;
-import it.polimi.ingsw.communication.ProtocolMessage;
-import it.polimi.ingsw.communication.Update;
+import it.polimi.ingsw.communication.*;
 
+import java.net.Socket;
 import java.util.Arrays;
 
 /**
@@ -18,6 +16,15 @@ public class ClientController {
      * Represents the state of the Game.
      */
     private MatchState matchState;
+
+    /**
+     * Represent the coket connection to the server
+     */
+    private SocketFromServer socketFromServer;
+
+    public ClientController(MatchState model) {
+        this.matchState = model;
+    }
 
     /**
      * Handles notifications. Notifications are defined as events that don't change the state of the game
@@ -228,6 +235,26 @@ public class ClientController {
      */
     public int chooseTarget(MessageType message, String[][] options) {
 
+        return 0;
+    }
+
+    /**
+     * Sets up a connection with the server accoring to the given type
+     *
+     * @param type 0 means socket, 1 means RMI
+     */
+    public void setConnectionType(int type) {
+        if (type == 0) {
+            // socket
+            //TODO Implement
+        } else {
+            //RMI
+        }
+
+    }
+
+    public int checkUsername(String username) {
+        //TODO Implement
         return 0;
     }
 
