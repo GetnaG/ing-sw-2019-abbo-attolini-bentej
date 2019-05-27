@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.interaction;
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
+import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -23,8 +24,11 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
+ * Represents the GUI interface of the game.
+ *
  * @author Fahed B. Tej
  */
 public class GUI extends Application implements InteractionInterface {
@@ -36,14 +40,33 @@ public class GUI extends Application implements InteractionInterface {
      * Controller of the view
      */
     private ClientController controller;
+    /**
+     * log text in the GUI
+     */
+    private Text logText;
+    /**
+     * Users in the hall
+     */
+    private HBox usersBox;
 
+    /**
+     * Starts the GUI. Never call directly.
+     *
+     * @param stage stage (O.S dependent)
+     */
     @Override
     public void start(Stage stage) {
+        controller = new ClientController(null);
         setUpLoginScene(stage);
         stage.show();
 
     }
 
+    /**
+     * Sets up a login scene in the given stage.
+     *
+     * @param stage
+     */
     private void setUpLoginScene(Stage stage) {
 
         StackPane rootStackPane = new StackPane();
@@ -53,7 +76,7 @@ public class GUI extends Application implements InteractionInterface {
         HBox usernameHBox = new HBox();
         HBox loginAndRadioBox = new HBox();
         StackPane logWindow = new StackPane();
-        Text logText = new Text("The username chosen is already taken in game");
+        Text logText = new Text("Insert a username ");
         Rectangle logRectangle = new Rectangle(400, 40);
 
         rootStackPane.getChildren().add(border);
@@ -65,8 +88,8 @@ public class GUI extends Application implements InteractionInterface {
         logWindow.getChildren().addAll(logText, logRectangle);
 
         // Set up background image
-        Image img = new Image("http://www.gioconauta.it/wp-content/uploads/2016/12/adrenaline-e1481789187635.jpg");
-        Background background = new Background(new BackgroundImage(img, null, null, null, null));
+        BackgroundImage img = new BackgroundImage(R.image("logo"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        Background background = new Background(img);
         rootStackPane.setBackground(background);
         // setting opacity factor
         vertical.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-background-radius: 10;");
@@ -91,7 +114,7 @@ public class GUI extends Application implements InteractionInterface {
         logRectangle.setArcHeight(20);
         logRectangle.setArcWidth(20);
         // Setting architecture ( padding, border, margin, ...)
-        border.setPadding(new Insets(100, 100, 100, 100));
+        //border.setPadding(new Insets(100, 100, 100, 100));
         loginButton.setPadding(new Insets(10, 5, 10, 5));
         loginAndRadioBox.setSpacing(50);
         vertical.setPrefWidth(border.getWidth() - 50);
@@ -122,36 +145,57 @@ public class GUI extends Application implements InteractionInterface {
             //telling the controller the username
             switch (controller.checkUsername(inputUsername.getText())) {
                 case 0:
-                    // username is avaiable
                     logText.setText("Username is avaiable. You are now being connected to the Hall");
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    buildHallPane(stage);
                 case 1:
-                    // username is already taken and the player is online
                     logText.setText("Username is already take and player is online. Choose another username.");
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+
                 case 2:
                     // username is already taken and the player is not online
                     logText.setText("Username is already taken and the player is offline You are now being connected to the game.");
+                    try {
+                        TimeUnit.SECONDS.sleep(5);
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
+                    // TODO implement this case
             }
 
 
             buildHallPane(stage);
+
         });
 
-        masterScene = new Scene(rootStackPane, 1000, 1000);
+        masterScene = new Scene(rootStackPane, 1200, 1200);
         stage.setTitle("Adrenaline");
         stage.setScene(masterScene);
     }
 
-
+    /**
+     * Builds a Hall in the given stage.
+     *
+     * @param stage
+     */
     private void buildHallPane(Stage stage) {
         StackPane rootStackPane = new StackPane();
         BorderPane border = new BorderPane();
         VBox vertical = new VBox();
         Text topText = new Text("Hall");
         StackPane logWindow = new StackPane();
-        Text logText = new Text("Match starting in 27 seconds...");
+        logText = new Text("Match starting in 27 seconds...");
         Rectangle logRectangle = new Rectangle(400, 40);
         Text textUserBox = new Text("The following users are connected:");
-        HBox usersBox = new HBox();
+        usersBox = new HBox();
         Button debugSkip = new Button("debug skip");
 
 
@@ -159,11 +203,11 @@ public class GUI extends Application implements InteractionInterface {
         border.setCenter(vertical);
         vertical.getChildren().addAll(topText, textUserBox, usersBox, logWindow);
         logWindow.getChildren().addAll(logText, logRectangle, debugSkip);
-        getPlayersWaiting().forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
+        controller.getPlayersInHall().forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
 
         // Set up background image
-        Image img = new Image("http://www.gioconauta.it/wp-content/uploads/2016/12/adrenaline-e1481789187635.jpg");
-        Background background = new Background(new BackgroundImage(img, null, null, null, null));
+        BackgroundImage img = new BackgroundImage(R.image("logo"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
+        Background background = new Background(img);
         rootStackPane.setBackground(background);
         // setting opacity factor
         vertical.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-background-radius: 10;");
@@ -177,7 +221,7 @@ public class GUI extends Application implements InteractionInterface {
         logRectangle.setArcWidth(20);
 
         // Setting architecture ( padding, border, margin, ...)
-        border.setPadding(new Insets(100, 100, 100, 100));
+        //border.setPadding(new Insets(100, 100, 100, 100));
         vertical.setPrefWidth(border.getWidth() - 50);
         vertical.setSpacing(100);
         logWindow.setPadding(new Insets(0, 0, 50, 0));
@@ -194,13 +238,15 @@ public class GUI extends Application implements InteractionInterface {
         textUserBox.setFill(Color.WHITE);
 
         // Setting event
-        debugSkip.setOnAction(e -> buildGamePane());
+        debugSkip.setOnAction(e -> buildGamePane(null));
 
         masterScene.setRoot(rootStackPane);
     }
 
-
-    private void buildGamePane() {
+    /**
+     * Builds a Game Pane in the given stage/
+     */
+    private void buildGamePane(Stage stage) {
 
         StackPane rootStackPane = new StackPane();
         BorderPane borderPane = new BorderPane();
@@ -217,9 +263,12 @@ public class GUI extends Application implements InteractionInterface {
 
         masterScene.setRoot(rootStackPane);
 
-
     }
 
+    /**
+     * Build the Top part of the given border pane
+     * @param borderPane
+     */
     private void buildTop(BorderPane borderPane) {
         HBox hbox = new HBox(getKillshotTrack(), getPlayerTile());
         borderPane.setTop(hbox);
@@ -228,6 +277,10 @@ public class GUI extends Application implements InteractionInterface {
         hbox.setSpacing(30);
     }
 
+    /**
+     * Build the Bottom part of the given border pane
+     * @param borderPane
+     */
     private void buildBottom(BorderPane borderPane) {
         VBox vbox = new VBox();
         borderPane.setBottom(vbox);
@@ -239,6 +292,10 @@ public class GUI extends Application implements InteractionInterface {
 
     }
 
+    /**
+     * Builds the center part of the given border pane
+     * @param borderPane
+     */
     private void buildCenter(BorderPane borderPane) {
         BorderPane centerBorderPane = new BorderPane();
         borderPane.setCenter(centerBorderPane);
@@ -251,6 +308,10 @@ public class GUI extends Application implements InteractionInterface {
 
     }
 
+    /**
+     * Builds the left part of the given border pane
+     * @param borderPane
+     */
     private void buildLeft(BorderPane borderPane) {
         VBox vbox = new VBox();
         borderPane.setLeft(vbox);
@@ -265,6 +326,10 @@ public class GUI extends Application implements InteractionInterface {
 
     }
 
+    /**
+     * Build the right part of the given border pane
+     * @param borderPane
+     */
     private void buildRight(BorderPane borderPane) {
         VBox vbox = new VBox();
         borderPane.setRight(vbox);
@@ -279,6 +344,7 @@ public class GUI extends Application implements InteractionInterface {
 
 
     }
+
 
     private Node getPlayerTile() {
         // load the image
@@ -495,5 +561,10 @@ public class GUI extends Application implements InteractionInterface {
     @Override
     public void sendNotification(String notificationKey) {
 
+    }
+
+    public void updateHall(int seconds) {
+        controller.getPlayersInHall().forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
+        logText.setText("Match starting in " + seconds + "seconds...");
     }
 }

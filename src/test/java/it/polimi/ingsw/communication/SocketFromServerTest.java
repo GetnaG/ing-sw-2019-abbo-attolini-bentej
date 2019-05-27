@@ -2,6 +2,7 @@ package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.client.clientlogic.ClientController;
+import it.polimi.ingsw.client.clientlogic.MatchState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ class SocketFromServerTest {
 
     @BeforeEach
     void setUp() {
-        controller = new MockClientController();
+        controller = new MockClientController(null);
         server = new MockSocket();
         fromServer = new SocketFromServer(controller, server);
     }
@@ -104,6 +105,10 @@ class SocketFromServerTest {
         private Update[] updates;
         private MessageType message;
         private String[][] options;
+
+        public MockClientController(MatchState model) {
+            super(model);
+        }
 
         @Override
         public void handleNotifications(Notification[] notifications) {
