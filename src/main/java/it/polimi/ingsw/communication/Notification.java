@@ -35,7 +35,7 @@ public class Notification {
     /**
      * The possible types of notification.
      */
-    enum NotificationType {
+    public enum NotificationType {
         /**
          * Asks the client to close the connection.
          */

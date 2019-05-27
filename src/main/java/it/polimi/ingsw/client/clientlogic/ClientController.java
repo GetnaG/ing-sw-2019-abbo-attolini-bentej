@@ -1,277 +1,151 @@
 package it.polimi.ingsw.client.clientlogic;
 
-import it.polimi.ingsw.communication.*;
+import it.polimi.ingsw.client.interaction.InteractionInterface;
+import it.polimi.ingsw.communication.MessageType;
+import it.polimi.ingsw.communication.Notification;
+import it.polimi.ingsw.communication.SocketFromServer;
+import it.polimi.ingsw.communication.Update;
 
+import java.io.IOException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Represents the Controller of the client. It elaborates the received Notifications, Updates and Commands .
+ * Represents the Controller of the client. It elaborates the received Notifications, Updates and Commands.
+ * A controller receives orders from the servers and redirects them to the
+ * local model and to the user through the view.
+ * <p>
+ * (The view is receives orders from the controller and is notified by the
+ * view; the model receives orders from the controller and notifies the view).
  *
  * @author Fahed B. Tej
+ * @author Abbo Giulio A.
  */
 public class ClientController {
 
     /**
-     * Represents the state of the Game.
+     * Represents the state of the game.
      */
-    private MatchState matchState;
+    private MatchState model;
+    /**
+     * Represents the view, interacts with the user.
+     */
+    private InteractionInterface view;
 
     /**
-     * Represent the coket connection to the server
+     * Creates a controller with the provided arguments.
+     *
+     * @param model represents the state of the game
+     * @param view  the view, interacts with the user
      */
-    private SocketFromServer socketFromServer;
-
-    public ClientController(MatchState model) {
-        this.matchState = model;
+    public ClientController(MatchState model, InteractionInterface view) {
+        this.model = model;
+        this.view = view;
     }
 
     /**
-     * Handles notifications. Notifications are defined as events that don't change the state of the game
+     * Handles notifications.
+     * Notifications are defined as events that don't change the state of the game.
      *
      * @param notifications events that don't change the state of the game
      */
     public void handleNotifications(Notification[] notifications) {
-
-
+        for (Notification n : notifications)
+            view.sendNotification(n.getType().name());
     }
 
     /**
      * Handles updates. Updates are events that change the state of the game.
      *
-     * @param updates events that change the state of the game.
+     * @param updates events that change the state of the game
      */
     public void handleUpdates(Update[] updates) {
-        Arrays.asList(updates).forEach(matchState::handleUpdate);
+        Arrays.asList(updates).forEach(model::handleUpdate);
     }
 
     /**
-     * Handles a question. It takes care of asking the user of the answer and returns it to the caller.
+     * Handles a question.
+     * It takes care of asking the user of the answer and returns it to the caller.
      *
      * @param message a question
-     * @return the index of the answer. In case of notifications and updates, it returns 0.
+     * @return the index of the answer
      */
     public int handleQuestion(MessageType message, String[][] options) {
+        List<List<String>> optionsList = new ArrayList<>();
+        for (String[] sequence : options)
+            optionsList.add(new ArrayList<>(Arrays.asList(sequence)));
+
         switch (message) {
             case NOTIFICATION:
             case UPDATE:
                 throw new IllegalArgumentException("This method does not handle Notifications or Updates");
             case EFFECTS_SEQUENCE:
-                chooseEffectSequence(message, options);
-                break;
+                return view.chooseEffectSequence(optionsList);
             case SPAWN:
-                chooseSpawn(message, options);
-                break;
+                return view.chooseSpawn(optionsList);
             case POWERUP:
-                chooseSpawn(message, options);
-                break;
+                return view.choosePowerup(optionsList);
             case DESTINATION:
-                chooseDestination(message, options);
-                break;
+                return view.chooseDestination(optionsList);
             case WEAPON:
-                chooseWeapon(message, options);
-                break;
+                return view.chooseWeapon(optionsList);
             case WEAPON_TO_BUY:
-                chooseWeaponToBuy(message, options);
-                break;
+                return view.chooseWeaponToBuy(optionsList);
             case WEAPON_TO_DISCARD:
-                chooseWeaponToDiscard(message, options);
-                break;
+                return view.chooseWeaponToDiscard(optionsList);
             case WEAPON_TO_RELOAD:
-                chooseWeaponToReload(message, options);
-                break;
+                return view.chooseWeaponToReload(optionsList);
             case ACTION:
-                chooseAction(message, options);
-                break;
+                return view.chooseAction(optionsList);
             case POWERUP_FOR_PAYING:
-                choosePowerup(message, options);
-                break;
+                return view.choosePowerupForPaying(optionsList);
             case USE_TAGBACK:
-                chooseUseTagback(message, options);
-                break;
+                return view.chooseUseTagBack(optionsList);
             case TARGET:
-                chooseTarget(message, options);
+                return view.chooseTarget(optionsList);
             default:
-                // nothing
-
-
+                throw new IllegalArgumentException("Unhandled argument: " + message);
         }
-        return 0;
     }
 
     /**
-     * Chooses an Effect from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return
+     * Sets up an RMI connection.
      */
-    public int chooseEffectSequence(MessageType message, String[][] options) {
-        return 0;
+    public void setConnection() {
+        //TODO: implement RMI
     }
 
     /**
-     * Chooses an Spawn from the given options
+     * Sets up a socket connection.
      *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
+     * @param ip   the ip of the server
+     * @param port the port of the server
      */
-    public int chooseSpawn(MessageType message, String[][] options) {
-        return 0;
+    public void setConnection(String ip, int port) throws IOException {
+        SocketFromServer fromServer = new SocketFromServer(this,
+                new Socket(ip, port));
+        fromServer.startListening();
     }
 
     /**
-     * Chooses a Powerup from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
+     * @deprecated THE CLIENT CONTROLLER CAN NOT SEND REQUESTS TO THE SERVER!!!
+     * this is why we should use SyncGUI
      */
-    public int choosePowerup(MessageType message, String[][] options) {
-        return 0;
-    }
-
-    /**
-     * Chooses a Destination from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int chooseDestination(MessageType message, String[][] options) {
-        return 0;
-    }
-
-    /**
-     * Chooses a Weapon from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int chooseWeapon(MessageType message, String[][] options) {
-        return 0;
-    }
-
-    /**
-     * Chooses a Weapon to buy from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int chooseWeaponToBuy(MessageType message, String[][] options) {
-
-        return 0;
-    }
-
-    /**
-     * Chooses a Weapon to discard from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int chooseWeaponToDiscard(MessageType message, String[][] options) {
-
-        return 0;
-    }
-
-    /**
-     * Chooses a Weapon to reload from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int chooseWeaponToReload(MessageType message, String[][] options) {
-
-        return 0;
-    }
-
-    /**
-     * Chooses an action from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int chooseAction(MessageType message, String[][] options) {
-
-        return 0;
-    }
-
-    /**
-     * Chooses a Powerup for pating from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int choosePowerupForPaying(MessageType message, String[][] options) {
-
-        return 0;
-    }
-
-    /**
-     * Chooses a tagback use from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int chooseUseTagback(MessageType message, String[][] options) {
-
-        return 0;
-    }
-
-    /**
-     * Chooses a target from the given options
-     *
-     * @param message type of question
-     * @param options possible answers
-     * @return the index of the answer
-     */
-    public int chooseTarget(MessageType message, String[][] options) {
-
-        return 0;
-    }
-
-    /**
-     * Sets up a connection with the server accoring to the given type
-     *
-     * @param type 0 means socket, 1 means RMI
-     */
-    public void setConnectionType(int type) {
-        if (type == 0) {
-            // socket
-            //TODO Implement
-        } else {
-            //RMI
-        }
-
-    }
-
-    /**
-     * Used to check if the given username is valid
-     *
-     * @param username username in question
-     * @return 0 if it's avaiable,
-     * 1 if it's not avaiable and player is online,
-     * 2 if it's not avaibale and the player is offline
-     */
-    public int checkUsername(String username) {
-        //TODO Implement
+    @Deprecated(forRemoval = true)
+    public int checkUsername(String text) {
         return 0;
     }
 
     /**
      * Gets the players in the hall of the server
      * @return players in the hall of the server
+     *
+     * @deprecated THE CLIENT CONTROLLER CAN NOT SEND REQUESTS TO THE SERVER!!!
+     * this is why we should use SyncGUI
      */
+    @Deprecated(forRemoval = true)
     public List<String> getPlayersInHall() {
         //TODO Implement
         List<String> players = new ArrayList<>();

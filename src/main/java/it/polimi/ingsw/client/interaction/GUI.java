@@ -56,7 +56,7 @@ public class GUI extends Application implements InteractionInterface {
      */
     @Override
     public void start(Stage stage) {
-        controller = new ClientController(null);
+        controller = new ClientController(null, this);
         setUpLoginScene(stage);
         stage.show();
 
@@ -138,9 +138,9 @@ public class GUI extends Application implements InteractionInterface {
 
             // telling the controller the connection type
             if (socketRadio.isSelected()) {
-                controller.setConnectionType(0);
+                controller.setConnection();
             } else {
-                controller.setConnectionType(1);
+                //TODO: controller.setConnection("localhost", 101010);
             }
             //telling the controller the username
             switch (controller.checkUsername(inputUsername.getText())) {

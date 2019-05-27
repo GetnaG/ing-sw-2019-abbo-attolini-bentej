@@ -17,7 +17,6 @@ import java.util.logging.Logger;
 public class ClientMain {
     private static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
 
-
     public static void main(String[] args) {
         try {
             InteractionInterface interaction =

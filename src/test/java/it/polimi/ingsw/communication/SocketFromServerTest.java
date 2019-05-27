@@ -28,7 +28,7 @@ class SocketFromServerTest {
 
     @BeforeEach
     void setUp() {
-        controller = new MockClientController(null);
+        controller = new MockClientController();
         server = new MockSocket();
         fromServer = new SocketFromServer(controller, server);
     }
@@ -106,8 +106,8 @@ class SocketFromServerTest {
         private MessageType message;
         private String[][] options;
 
-        public MockClientController(MatchState model) {
-            super(model);
+        MockClientController() {
+            super(null, null);
         }
 
         @Override
