@@ -80,6 +80,7 @@ public class Update {
         IS_CONNECTED,
         LOADED_WEAPONS,
         UNLOADED_WEAPON,
-        POWERUPS
+        POWERUPS,
+        CONNECTED_PLAYERS_IN_THE_HALL_OF_THIS_GAME
     }
 }

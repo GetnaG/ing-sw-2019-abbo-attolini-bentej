@@ -70,6 +70,23 @@ public class ClientController {
      * It takes care of asking the user of the answer and returns it to the caller.
      *
      * @param message a question
+     * @return the answer
+     */
+    public String handleQuestion(MessageType message) {
+        switch (message) {
+            case NICKNAME:
+                return view.askName();
+            default:
+                throw new IllegalArgumentException("Unhandled argument: " + message);
+        }
+    }
+
+    /**
+     * Handles a question with options.
+     * It takes care of asking the user of the answer and returns it to the caller.
+     *
+     * @param message a question
+     * @param options the options to choose from
      * @return the index of the answer
      */
     public int handleQuestion(MessageType message, String[][] options) {
@@ -140,8 +157,8 @@ public class ClientController {
 
     /**
      * Gets the players in the hall of the server
-     * @return players in the hall of the server
      *
+     * @return players in the hall of the server
      * @deprecated THE CLIENT CONTROLLER CAN NOT SEND REQUESTS TO THE SERVER!!!
      * this is why we should use SyncGUI
      */
