@@ -92,6 +92,7 @@ public class CLI implements InteractionInterface {
         waitingForInput = false;
         handlingQuestion = false;
         input = null;
+        refresh();
 
         /*A new thread that listens for the input and calls newInput()*/
         new Thread(() -> {

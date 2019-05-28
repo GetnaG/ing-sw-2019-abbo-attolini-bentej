@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 /**
- * Sets up the client.
+ * Sets up the client with model, view and controller.
  *
  * @author Abbo Giulio A.
  * @see InteractionInterface
@@ -19,20 +19,10 @@ public class ClientMain {
 
     public static void main(String[] args) {
         try {
-            InteractionInterface interaction =
-                    InteractionFactory.getInteractionInterface(args);
-            ClientController controller;
+            new ClientController(new MatchState(), InteractionFactory.getInteractionInterface(args));
         } catch (IOException | NullPointerException | IllegalArgumentException e) {
             LOG.severe(e.getMessage());
-            return;
         }
-
-        /*
-        TODO: set the model for the view
-        TODO: choose the connection mode
-        TODO: Connect
-        TODO: wait for commands
-         */
     }
 }
 

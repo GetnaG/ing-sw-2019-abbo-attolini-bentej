@@ -206,10 +206,6 @@ class CLITest {
     }
 
     private class MockModel extends MatchState {
-
-        MockModel() {
-            super(new ArrayList<>(), new BoardState(1, new ArrayList<>(),
-                    new ArrayList<>(), true, new ArrayList<>(), false));
-        }
+        //TODO
     }
 }

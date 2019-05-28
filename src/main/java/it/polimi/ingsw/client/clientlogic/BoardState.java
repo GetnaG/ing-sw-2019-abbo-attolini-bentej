@@ -17,6 +17,9 @@ public class BoardState {
     private List<List<String>> killshotTrack;
     private boolean isActionTileFrenzy;
 
+    public BoardState() {
+    }
+
     public BoardState(int configurationID, List<String> ammoCardsID, List<String> weaponCardsID, boolean isWeaponDeckDrawable, List<List<String>> killshotTrack, boolean isActionTileFrenzy) {
         this.configurationID = configurationID;
         this.ammoCardsID = ammoCardsID;
