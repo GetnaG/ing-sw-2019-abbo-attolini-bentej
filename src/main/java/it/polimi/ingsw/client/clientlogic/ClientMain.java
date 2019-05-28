@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.clientlogic;
 
+import it.polimi.ingsw.client.interaction.GUI;
 import it.polimi.ingsw.client.interaction.InteractionFactory;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 
@@ -17,22 +18,48 @@ import java.util.logging.Logger;
  */
 public class ClientMain {
     private static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
+    private static final String[] s = {"gui"};
+
 
     public static void main(String[] args) {
-        ClientController controller;
-        InteractionInterface view;
-        MatchState model;
+
 
         try {
+            MatchState model;
+            ClientController controller;
+            InteractionInterface view;
+
+
             view = InteractionFactory.getInteractionInterface(args);
             model = new MatchState();
             controller = new ClientController(model, view);
             view.setController(controller);
             view.setModel(model);
 
+
         } catch (IOException | NullPointerException | IllegalArgumentException e) {
             LOG.log(Level.SEVERE, "Socket error",e);
         }
+    }
+
+    public static void setControllerModel(GUI gui) {
+        String[] s = {"gui"};
+
+        MatchState model;
+        ClientController controller;
+        InteractionInterface view = null;
+
+        try {
+            view = InteractionFactory.getInteractionInterface(s);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        model = new MatchState();
+        controller = new ClientController(model, view);
+
+        gui.setModel(model);
+        gui.setController(controller);
+
     }
 }
 

@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.interaction;
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
+import it.polimi.ingsw.client.clientlogic.ClientMain;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Application;
@@ -161,6 +162,8 @@ public class GUI extends Application implements InteractionInterface {
         socketRadio.setSelected(true);
         //  Setting Button Event
         loginButton.setOnAction(e -> {
+// TODO Abbellisci
+            ClientMain.setControllerModel(this);
 
             // telling the controller the connection type
             if (socketRadio.isSelected()) {
