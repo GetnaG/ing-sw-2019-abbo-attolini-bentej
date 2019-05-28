@@ -21,6 +21,7 @@ public class ClientMain {
         try {
             InteractionInterface interaction =
                     InteractionFactory.getInteractionInterface(args);
+            ClientController controller;
         } catch (IOException | NullPointerException | IllegalArgumentException e) {
             LOG.severe(e.getMessage());
             return;

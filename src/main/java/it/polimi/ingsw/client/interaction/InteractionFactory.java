@@ -65,7 +65,7 @@ public class InteractionFactory {
         /*Handling preference*/
         switch (preference) {
             case GUI_ARG:
-                return new GUI();//FIXME
+                return new SyncGUI();
             case CLI_ARG:
                 return new CLI(System.out, System.in);
             default:
