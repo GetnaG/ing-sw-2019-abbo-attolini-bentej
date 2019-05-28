@@ -59,7 +59,7 @@ public class Nicknames implements SuspensionListener {
         if (!onlineNames.contains(nickname) && !offlineNames.contains(nickname)) {
             onlineNames.add(nickname);
 
-            System.out.println("lista attuale: " + onlineNames.get(0));
+            System.out.println("lista attuale: ");
 
             return 1;
         }

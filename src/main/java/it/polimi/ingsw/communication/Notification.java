@@ -55,7 +55,7 @@ public class Notification {
         /**
          * Notifies that the username is available
          */
-        USERNAME_AVAIlABLE,
+        USERNAME_AVAILABLE,
         /**
          * Notifies that the username is taken and offline
          */
