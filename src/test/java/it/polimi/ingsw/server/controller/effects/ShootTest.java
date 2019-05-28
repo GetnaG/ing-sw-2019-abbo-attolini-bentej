@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.communication.Notification;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.server.controller.ScoreListener;
@@ -210,6 +211,11 @@ class ShootTest {
 
             @Override
             public void quit() throws ToClientException {
+
+            }
+
+            @Override
+            public void sendNotification(Notification.NotificationType type) throws ToClientException {
 
             }
 

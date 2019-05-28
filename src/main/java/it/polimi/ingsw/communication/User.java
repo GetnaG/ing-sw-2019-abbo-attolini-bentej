@@ -72,9 +72,21 @@ public class User implements ToClientInterface {
      * Makes the user choose a name
      */
     public void init(){
-        name = this.chooseUserName();
-        ServerMain.getLog().info("Connected: " + name);
-        ServerMain.getServerHall().addUser(this);
+        name = chooseUserName();
+        int result = Nicknames.getInstance().addNickname(name);
+        switch (result) {
+            case 0:
+                /*Taken*/
+                break;
+            case 1:
+                /*Success*/
+                ServerMain.getLog().info("Connected: " + name);
+                ServerMain.getServerHall().addUser(this);
+                break;
+            case -1:
+                /*Active*/
+                break;
+        }
     }
 
     public void addSuspensionListener(SuspensionListener suspensionListener){
@@ -297,6 +309,11 @@ public class User implements ToClientInterface {
         } catch (ToClientException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void sendNotification(Notification.NotificationType type) throws ToClientException{
+        toClient.sendNotification(type);
     }
 
 }

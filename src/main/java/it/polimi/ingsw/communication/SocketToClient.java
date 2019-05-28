@@ -105,7 +105,8 @@ public class SocketToClient implements ToClientInterface {
      * @param notification the notification to be sent
      * @throws ToClientException if there are problems with the socket
      */
-    private void sendNotification(Notification.NotificationType notification) throws ToClientException {
+    @Override
+    public void sendNotification(Notification.NotificationType notification) throws ToClientException {
         send(new ProtocolMessage(new Notification[]{
                 new Notification(notification)}));
     }

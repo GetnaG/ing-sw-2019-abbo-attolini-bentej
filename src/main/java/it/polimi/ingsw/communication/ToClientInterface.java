@@ -166,4 +166,13 @@ public interface ToClientInterface {
      *                           or the client does not answer in time
      */
     void quit() throws ToClientException;
+
+    /**
+     * Sends the provided notification to the client.
+     *
+     * @param type the type of the notification
+     * @throws ToClientException if there are problems with the communication
+     *                           or the client does not answer in time
+     */
+    void sendNotification(Notification.NotificationType type) throws ToClientException;
 }

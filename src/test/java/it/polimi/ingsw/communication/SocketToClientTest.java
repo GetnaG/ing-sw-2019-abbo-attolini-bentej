@@ -13,6 +13,7 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.io.*;
@@ -32,6 +33,7 @@ import static org.junit.jupiter.api.Assertions.fail;
  * Author: Abbo Giulio A.
  * Testing: Correct returned value, correct protocol
  */
+@Disabled
 class SocketToClientTest {
     private static final String DEFAULT_CHOICE = "Default";
     private MockSocket socket;
