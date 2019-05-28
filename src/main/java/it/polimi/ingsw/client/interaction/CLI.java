@@ -72,6 +72,10 @@ public class CLI implements InteractionInterface {
      * Holds the last user input if one was expected.
      */
     private String input;
+    /**
+     * The controller, used only in the initial setup.
+     */
+    private ClientController controller;
 
     /**
      * Creates a CLI interface that uses the provided input and output, and
@@ -106,6 +110,23 @@ public class CLI implements InteractionInterface {
                 }
             }
         }).start();
+    }
+
+    private void askConnection() {
+        if (controller != null) {
+            String connection = handleQuestion("chooseConnection", null);
+            if (connection.equals("socket")) {
+                try {
+                    controller.setConnection(
+                            handleQuestion("chooseIP", null),
+                            Integer.parseInt(handleQuestion("choosePort", null))
+                    );
+                } catch (IOException e) {
+                    handleNotification("GenericError");
+                }
+            } else
+                handleNotification("GenericError");
+        }
     }
 
     /**
@@ -486,6 +507,7 @@ public class CLI implements InteractionInterface {
     }
 
     public void setController(ClientController controller) {
-        //TODO Implement
+        this.controller = controller;
+        askConnection();
     }
 }

@@ -56,11 +56,14 @@ public class SocketToClient implements ToClientInterface {
         synchronized (socket) {
 
             /*Try-with-resources will call close() automatically*/
-            try (BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true)
-            ) {
+            try {
+                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 out.println(new Gson().toJson(message));
-                answer = new Gson().fromJson(in.readLine(), ProtocolMessage.class);
+                String input = null;
+                while (input == null)
+                    input = in.readLine();
+                answer = new Gson().fromJson(input, ProtocolMessage.class);
             } catch (IOException e) {
                 throw new ToClientException("Socket exception", e);
             } catch (JsonSyntaxException e) {

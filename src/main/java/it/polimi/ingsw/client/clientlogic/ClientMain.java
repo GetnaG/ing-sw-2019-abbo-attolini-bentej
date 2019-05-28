@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.interaction.InteractionFactory;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 
 import java.io.IOException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -26,7 +27,7 @@ public class ClientMain {
             view.setController(controller);
 
         } catch (IOException | NullPointerException | IllegalArgumentException e) {
-            LOG.severe(e.getMessage());
+            LOG.log(Level.SEVERE, "Socket error",e);
         }
     }
 }

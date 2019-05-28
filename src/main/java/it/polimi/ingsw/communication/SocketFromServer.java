@@ -58,6 +58,8 @@ public class SocketFromServer {
 
                 /*Parsing each input*/
                 input = in.readLine();
+                if (input == null)
+                    continue;
                 ProtocolMessage message = new Gson().fromJson(input, ProtocolMessage.class);
 
                 /*Handling the message and returning the answer*/
@@ -104,7 +106,7 @@ public class SocketFromServer {
     }
 
     private String handleQuestion(MessageType command) {
-        return Integer.toString(controller.handleQuestion(command, null));
+        return controller.handleQuestion(command);
     }
 
     private String handleQuestion(MessageType command, String[][] options) {

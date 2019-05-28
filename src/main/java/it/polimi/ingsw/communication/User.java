@@ -13,6 +13,7 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
 import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.*;
+import java.util.logging.Level;
 
 /**
  * It's the middle man between the server and the actual client. Takes care of checking timeouts and/or connections lost.
@@ -72,6 +73,7 @@ public class User implements ToClientInterface {
      */
     public void init(){
         name = this.chooseUserName();
+        ServerMain.getLog().info("Connected: " + name);
         ServerMain.getServerHall().addUser(this);
     }
 
@@ -280,7 +282,7 @@ public class User implements ToClientInterface {
         try {
             return task.get(30, TimeUnit.SECONDS);
         } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
+            ServerMain.getLog().log(Level.SEVERE, "asking name", e);
         }
         return null;
     }
