@@ -2,14 +2,10 @@ package it.polimi.ingsw.server.serverlogic;
 
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
-import it.polimi.ingsw.communication.User;
-import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.player.Player;
 
-import java.nio.channels.InterruptedByTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.Callable;
 
 /**
  * Represents all the nicknames in the game.
@@ -18,6 +14,7 @@ import java.util.concurrent.Callable;
  * @author Silvio Attolini
  */
 public class Nicknames implements SuspensionListener {
+    private static Nicknames instance;
     /**
      * List of the names of the players in the game. It includes connected players.
      */
@@ -37,36 +34,48 @@ public class Nicknames implements SuspensionListener {
     /**
      * Default constructor
      */
-    public Nicknames(){
+    private Nicknames() {
         this.onlineNames = new ArrayList<>();
         this.offlineNames = new ArrayList<>();
         this.waitingRoomNames = new ArrayList<>();
     }
 
+    public static Nicknames getInstance() {
+
+        if (instance == null)
+            instance = new Nicknames();
+        return instance;
+    }
+
     /**
      * Adds the given nickname to the registered nicknames.
-     * @param nickname      requested nickname
-     * @return  1 if operation was successful, 0 if taken by an offline player or -1 if taken by an online player.
+     *
+     * @param nickname requested nickname
+     * @return 1 if operation was successful, 0 if taken by an offline player or -1 if taken by an online player.
      */
     synchronized public int addNickname(String nickname) {
 
 
-            if (!onlineNames.contains(nickname) && !offlineNames.contains(nickname)) {
-                onlineNames.add(nickname);
-                return 1;
-            }
-            if (offlineNames.contains(nickname))
-                return 0;
+        if (!onlineNames.contains(nickname) && !offlineNames.contains(nickname)) {
+            onlineNames.add(nickname);
 
-            return -1;
+            System.out.println("lista attuale: " + onlineNames.get(0));
 
-        //conrolli sui deadlock
+            return 1;
+        }
+        if (offlineNames.contains(nickname))
+            return 0;
+
+        return -1;
+
+        //deadlock checks
 
     }
 
     /**
      * Sets the given player's status to disconnected
-     * @param player    disconnected player
+     *
+     * @param player disconnected player
      */
     @Override
     synchronized public void playerSuspension(Player player) {
@@ -76,7 +85,8 @@ public class Nicknames implements SuspensionListener {
 
     /**
      * Sets the given player's status to (re)connected
-     * @param player    reconnected player
+     *
+     * @param player reconnected player
      */
     @Override
     synchronized public void playerResumption(Player player) {
@@ -94,13 +104,14 @@ public class Nicknames implements SuspensionListener {
 
     /**
      * Removes the given players from the waiting room list
-     * @param players   nicknames of players to be removed
+     *
+     * @param players nicknames of players to be removed
      */
-    public void removeFromWaitingRoom(List<Player> players){
+    public void removeFromWaitingRoom(List<Player> players) {
         waitingRoomNames.removeAll(players);
     }
 
-    public String getNicknameFirstPlayer(){
+    public String getNicknameFirstPlayer() {
         return waitingRoomNames.get(0);
     }
 
