@@ -1,6 +1,5 @@
 package it.polimi.ingsw.server.model.board;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -18,7 +17,7 @@ class ConfigurationHelperTest {
 
         List<Room>m1 = ch.boardCreator();
 
-        for(Room r:m1){
+       /* for(Room r:m1){
 
                 if(r.getSpawnSquare() != null) {
                     System.out.println("SpawnSquare " + r.getSpawnSquare().getID());
@@ -60,18 +59,18 @@ class ConfigurationHelperTest {
 
             }
 
-        }
+        }*/
 
         assertEquals(m1.size(), 5);
 
 
-        System.out.println("-------------------------------------------------------------------------------------");
+       // System.out.println("-------------------------------------------------------------------------------------");
 
         ch = new ConfigurationHelper(Configurations.STANDARD2);
 
         List<Room> m2 = ch.boardCreator();
 
-        for(Room r: m2){
+        /*for(Room r: m2){
 
                 if(r.getSpawnSquare() != null) {
                     System.out.println("SpawnSquare " + r.getSpawnSquare().getID());
@@ -113,19 +112,19 @@ class ConfigurationHelperTest {
 
             }
 
-        }
+        }*/
 
         assertEquals(m2.size(), 5);
 
 
-        System.out.println("-------------------------------------------------------------------------------------");
+      // System.out.println("-------------------------------------------------------------------------------------");
 
 
         ch = new ConfigurationHelper(Configurations.ADVISED34);
 
         List<Room> m3 = ch.boardCreator();
 
-        for(Room r: m3){
+       /* for(Room r: m3){
 
             if(r.getSpawnSquare() != null) {
                 System.out.println("SpawnSquare " + r.getSpawnSquare().getID());
@@ -167,20 +166,20 @@ class ConfigurationHelperTest {
 
             }
 
-        }
+        }*/
 
         assertEquals(m3.size(), 5);
 
 
 
-        System.out.println("-------------------------------------------------------------------------------------");
+        //System.out.println("-------------------------------------------------------------------------------------");
 
 
         ch = new ConfigurationHelper(Configurations.ADVISED45);
 
         List<Room> m4 = ch.boardCreator();
 
-        for(Room r: m4){
+       /* for(Room r: m4){
 
             if(r.getSpawnSquare() != null) {
                 System.out.println("SpawnSquare " + r.getSpawnSquare().getID());
@@ -222,7 +221,7 @@ class ConfigurationHelperTest {
 
             }
 
-        }
+        }*/
 
         assertEquals(m4.size(), 6);
 

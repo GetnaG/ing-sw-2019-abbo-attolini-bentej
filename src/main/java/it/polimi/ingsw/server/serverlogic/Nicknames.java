@@ -1,19 +1,25 @@
 package it.polimi.ingsw.server.serverlogic;
 
+import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.ToClientInterface;
+import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.player.Player;
 
+import java.nio.channels.InterruptedByTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
 
 /**
  * Represents all the nicknames in the game.
  *
  * @author Fahed B. Tej.
+ * @author Silvio Attolini
  */
 public class Nicknames implements SuspensionListener {
     /**
-     * List of the names of the players in the game. It include connected and disconnected players.
+     * List of the names of the players in the game. It includes connected players.
      */
     private List<String> onlineNames;
 
@@ -42,14 +48,20 @@ public class Nicknames implements SuspensionListener {
      * @param nickname      requested nickname
      * @return  1 if operation was successful, 0 if taken by an offline player or -1 if taken by an online player.
      */
-    public int addNickname(String nickname) {
-        if (!onlineNames.contains(nickname)  && !offlineNames.contains(nickname)){
-            onlineNames.add(nickname);
-            return 1;
-        }
-        if (offlineNames.contains(nickname))
-            return 0;
-        return -1;
+    synchronized public int addNickname(String nickname) {
+
+
+            if (!onlineNames.contains(nickname) && !offlineNames.contains(nickname)) {
+                onlineNames.add(nickname);
+                return 1;
+            }
+            if (offlineNames.contains(nickname))
+                return 0;
+
+            return -1;
+
+        //conrolli sui deadlock
+
     }
 
     /**
@@ -57,19 +69,27 @@ public class Nicknames implements SuspensionListener {
      * @param player    disconnected player
      */
     @Override
-    public void playerSuspension(Player player) {
+    synchronized public void playerSuspension(Player player) {
         onlineNames.remove(player.getName());
         offlineNames.add(player.getName());
     }
 
     /**
-     * Sets the given player's status to disconnected
+     * Sets the given player's status to (re)connected
      * @param player    reconnected player
      */
     @Override
-    public void playerResumption(Player player) {
+    synchronized public void playerResumption(Player player) {
         onlineNames.add(player.getName());
         offlineNames.remove(player.getName());
+
+        //kill the old user
+        ToClientInterface cliInterface = player.getToClient();
+        try {
+            cliInterface.quit();
+        } catch (ToClientException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -83,5 +103,6 @@ public class Nicknames implements SuspensionListener {
     public String getNicknameFirstPlayer(){
         return waitingRoomNames.get(0);
     }
+
 
 }
