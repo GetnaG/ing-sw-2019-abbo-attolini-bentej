@@ -22,6 +22,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -48,6 +49,16 @@ public class GUI extends Application implements InteractionInterface {
      * Users in the hall
      */
     private HBox usersBox;
+
+
+    /**
+     * Construct the GUI
+     *
+     * @param controller
+     */
+    public GUI(ClientController controller) {
+        this.controller = controller;
+    }
 
     /**
      * Starts the GUI. Never call directly.
@@ -140,39 +151,13 @@ public class GUI extends Application implements InteractionInterface {
             if (socketRadio.isSelected()) {
                 controller.setConnection();
             } else {
-                //TODO: controller.setConnection("localhost", 101010);
+                try {
+                    controller.setConnection("localhost", 101010);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
-            //telling the controller the username
-            switch (controller.checkUsername(inputUsername.getText())) {
-                case 0:
-                    logText.setText("Username is avaiable. You are now being connected to the Hall");
-                    try {
-                        TimeUnit.SECONDS.sleep(5);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    buildHallPane(stage);
-                case 1:
-                    logText.setText("Username is already take and player is online. Choose another username.");
-                    try {
-                        TimeUnit.SECONDS.sleep(5);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-
-                case 2:
-                    // username is already taken and the player is not online
-                    logText.setText("Username is already taken and the player is offline You are now being connected to the game.");
-                    try {
-                        TimeUnit.SECONDS.sleep(5);
-                    } catch (InterruptedException ex) {
-                        ex.printStackTrace();
-                    }
-                    // TODO implement this case
-            }
-
-
-            buildHallPane(stage);
+            logText.setText("Checking username...");
 
         });
 

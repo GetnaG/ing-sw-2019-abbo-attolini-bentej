@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.server.serverlogic.Nicknames;
 import it.polimi.ingsw.server.serverlogic.ServerMain;
 import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 import it.polimi.ingsw.server.controller.effects.Action;

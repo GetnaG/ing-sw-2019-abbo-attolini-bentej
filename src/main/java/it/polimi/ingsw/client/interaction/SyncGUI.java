@@ -1,15 +1,25 @@
 package it.polimi.ingsw.client.interaction;
 
 
+import it.polimi.ingsw.client.clientlogic.ClientController;
+import javafx.application.Application;
+
 import java.util.List;
 
 public class SyncGUI implements InteractionInterface{
 
+    private GUI gui;
+    private ClientController controller;
     /**
      * Creates and runs the GUI
      */
     public SyncGUI() {
+    }
 
+    public void setController(ClientController controller) {
+        this.controller = controller;
+        this.gui = new GUI(controller);
+        Application.launch(GUI.class);
     }
 
     @Override
