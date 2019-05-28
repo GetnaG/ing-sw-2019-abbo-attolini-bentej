@@ -150,4 +150,10 @@ public interface InteractionInterface {
      * Setting model
      */
     public void setModel(MatchState model);
+
+
+
+    default void setGUI(GUI gui) {
+
+    }
 }

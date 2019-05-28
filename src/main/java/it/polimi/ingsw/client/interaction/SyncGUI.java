@@ -128,4 +128,9 @@ public class SyncGUI implements InteractionInterface{
     public void drawState() {
 
     }
+
+    @Override
+    public void setGUI(GUI gui) {
+        this.gui = gui;
+    }
 }

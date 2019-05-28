@@ -60,6 +60,7 @@ public class ClientMain {
         gui.setModel(model);
         gui.setController(controller);
 
+        view.setGUI(gui);
     }
 }
 

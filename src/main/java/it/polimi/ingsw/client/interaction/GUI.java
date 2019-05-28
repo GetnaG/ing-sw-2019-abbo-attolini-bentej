@@ -167,20 +167,21 @@ public class GUI extends Application implements InteractionInterface {
 
             // telling the controller the connection type
             if (socketRadio.isSelected()) {
-                controller.setConnection();
-            } else {
                 try {
                     controller.setConnection("localhost", 9000);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+            } else {
+                controller.setConnection();
+
             }
             logText.setText("Checking username...");
             buildHallPane(stage);
 
         });
 
-        masterScene = new Scene(rootStackPane, 1200, 1200);
+        masterScene = new Scene(rootStackPane, 1000, 1000);
         stage.setTitle("Adrenaline");
         stage.setScene(masterScene);
     }
