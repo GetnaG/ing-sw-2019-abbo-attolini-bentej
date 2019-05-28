@@ -42,6 +42,14 @@ public class GUI extends Application implements InteractionInterface {
      */
     private ClientController controller;
     /**
+     * Players in hall
+     */
+    List<String> playersInHall;
+    /**
+     * The model of the game
+     */
+    private MatchState model;
+    /**
      * Sync GUI
      */
     private SyncGUI sync;
@@ -57,6 +65,10 @@ public class GUI extends Application implements InteractionInterface {
      * Login input username
      */
     private TextField inputUsername;
+    /**
+     * Stage of the windows
+     */
+    private Stage stage;
 
 
     public GUI() {
@@ -70,6 +82,7 @@ public class GUI extends Application implements InteractionInterface {
      */
     @Override
     public void start(Stage stage) {
+        this.stage = stage;
         controller = new ClientController(null, this);
         setUpLoginScene(stage);
         stage.show();
@@ -155,12 +168,13 @@ public class GUI extends Application implements InteractionInterface {
                 controller.setConnection();
             } else {
                 try {
-                    controller.setConnection("localhost", 101010);
+                    controller.setConnection("localhost", 9000);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
             }
             logText.setText("Checking username...");
+            buildHallPane(stage);
 
         });
 
@@ -247,7 +261,7 @@ public class GUI extends Application implements InteractionInterface {
         buildLeft(borderPane);
         buildRight(borderPane);
 
-        rootStackPane.setBackground(new Background(new BackgroundFill(Color.DARKGREY, null, null)));
+        rootStackPane.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
 
         masterScene.setRoot(rootStackPane);
 
@@ -473,7 +487,7 @@ public class GUI extends Application implements InteractionInterface {
 
     @Override
     public void notifyUpdatedState() {
-
+        updateHall(10);
     }
 
     @Override
@@ -551,6 +565,7 @@ public class GUI extends Application implements InteractionInterface {
         this.controller = controller;
     }
 
+
     @Override
     public String askName() {
 
@@ -564,11 +579,48 @@ public class GUI extends Application implements InteractionInterface {
 
     @Override
     public void sendNotification(String notificationKey) {
+        switch (notificationKey) {
+            /**
+             * case USERNAME_AVAIABLE:
+             *  buildHallPane(stage);
+             *  break;
+             * case USERNAME_TAKEN_AND_OFFLINE:
+             *  buildHallPane(stage);
+             *  break;
+             * case USERNAME_TAKEN_AND_ONLINE:
+             *   logText.setText("Username taken and offline");
+             *   break;
+             *
+             */
+
+        }
 
     }
 
     public void updateHall(int seconds) {
-        controller.getPlayersInHall().forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
+        List<String> playersInHallRecent = controller.getPlayersInHall();
+        if (playersInHall != null) {
+            // sau that there was a player disconected
+            for (String p : playersInHall) {
+                if (!playersInHallRecent.contains(p)) {
+                    // user was disconected
+                    logText.setText("The following users are disconnected: " + p);
+                }
+            }
+        }
+        playersInHallRecent.add("hello");
+        usersBox.getChildren().removeAll();
+        playersInHall.forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
         logText.setText("Match starting in " + seconds + "seconds...");
     }
+
+    public void setSynchGUI(SyncGUI sync) {
+        this.sync = sync;
+    }
+
+    public void setModel(MatchState model) {
+        this.model = model;
+    }
+
+
 }

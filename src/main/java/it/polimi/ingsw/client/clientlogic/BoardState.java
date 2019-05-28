@@ -16,6 +16,8 @@ public class BoardState {
     private boolean isWeaponDeckDrawable;
     private List<List<String>> killshotTrack;
     private boolean isActionTileFrenzy;
+    private List<String> connectedPlayers;
+
 
     public BoardState() {
     }
@@ -75,5 +77,13 @@ public class BoardState {
 
     public void setIsActionTileFrenzy(boolean isActionTileFrenzy) {
         this.isActionTileFrenzy = isActionTileFrenzy;
+    }
+
+    public List<String> getConnectedPlayers() {
+        return connectedPlayers;
+    }
+
+    public void setConnectedPlayers(List<String> connectedPlayers) {
+        this.connectedPlayers = connectedPlayers;
     }
 }

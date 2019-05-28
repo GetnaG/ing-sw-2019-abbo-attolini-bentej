@@ -81,6 +81,6 @@ public class Update {
         LOADED_WEAPONS,
         UNLOADED_WEAPON,
         POWERUPS,
-        CONNECTED_PLAYERS_IN_THE_HALL_OF_THIS_GAME
+        CONNECTED_PLAYERS
     }
 }

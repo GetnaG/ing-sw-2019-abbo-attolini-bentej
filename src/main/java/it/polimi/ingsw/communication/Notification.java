@@ -51,6 +51,18 @@ public class Notification {
         /**
          * Notifies the client that the answer is valid
          */
-        OK
+        OK,
+        /**
+         * Notifies that the username is available
+         */
+        USERNAME_AVAIlABLE,
+        /**
+         * Notifies that the username is taken and offline
+         */
+        USERNAME_TAKEN_AND_OFFLINE,
+        /**
+         * Notifies that the username is taken and online
+         */
+        USERNAME_TAKEN_AND_ONLINE
     }
 }

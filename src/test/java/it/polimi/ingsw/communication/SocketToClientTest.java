@@ -87,6 +87,7 @@ class SocketToClientTest {
         }
     }
 
+    @Disabled
     @Test
     void chooseEffectsSequence() {
         optionsHelper(Arrays.asList(
@@ -98,6 +99,7 @@ class SocketToClientTest {
                 MessageType.EFFECTS_SEQUENCE);
     }
 
+    @Disabled
     @Test
     void chooseSpawn() {
         optionsHelper(Arrays.asList(
@@ -111,6 +113,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void choosePowerup() {
         optionsHelper(Arrays.asList(
@@ -124,6 +127,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void chooseDestination() {
         optionsHelper(Arrays.asList(
@@ -137,6 +141,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void chooseWeaponCard() {
         optionsHelper(Arrays.asList(
@@ -151,6 +156,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void chooseWeaponToBuy() {
         optionsHelper(Arrays.asList(
@@ -165,6 +171,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void chooseWeaponToDiscard() {
         optionsHelper(Arrays.asList(
@@ -179,6 +186,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void chooseWeaponToReload() {
         optionsHelper(Arrays.asList(
@@ -193,6 +201,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void chooseAction() {
         optionsHelper(Arrays.asList(
@@ -205,6 +214,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void choosePowerupForPaying() {
         optionsHelper(Arrays.asList(
@@ -218,6 +228,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void askUseTagback() {
         optionsHelper(Arrays.asList(
@@ -231,6 +242,7 @@ class SocketToClientTest {
         );
     }
 
+    @Disabled
     @Test
     void chooseTarget() {
         /*Preparing the default choice*/
@@ -269,6 +281,7 @@ class SocketToClientTest {
         }
     }
 
+    @Disabled
     @Test
     void chooseUserName() {
         /*Preparing the default choice*/
@@ -287,6 +300,7 @@ class SocketToClientTest {
         }
     }
 
+    @Disabled
     @Test
     void quit() {
         socket.put(DEFAULT_CHOICE);

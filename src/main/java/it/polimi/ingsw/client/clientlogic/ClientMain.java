@@ -21,10 +21,14 @@ public class ClientMain {
     public static void main(String[] args) {
         ClientController controller;
         InteractionInterface view;
+        MatchState model;
+
         try {
             view = InteractionFactory.getInteractionInterface(args);
-            controller = new ClientController(new MatchState(), view);
+            model = new MatchState();
+            controller = new ClientController(model, view);
             view.setController(controller);
+            view.setModel(model);
 
         } catch (IOException | NullPointerException | IllegalArgumentException e) {
             LOG.log(Level.SEVERE, "Socket error",e);

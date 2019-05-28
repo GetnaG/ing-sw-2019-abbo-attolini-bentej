@@ -1,6 +1,8 @@
 package it.polimi.ingsw.client.interaction;
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
+import it.polimi.ingsw.client.clientlogic.MatchState;
+import javafx.css.Match;
 
 import java.util.List;
 
@@ -143,4 +145,9 @@ public interface InteractionInterface {
      * @param controller
      */
     public void setController(ClientController controller);
+
+    /**
+     * Setting model
+     */
+    public void setModel(MatchState model);
 }

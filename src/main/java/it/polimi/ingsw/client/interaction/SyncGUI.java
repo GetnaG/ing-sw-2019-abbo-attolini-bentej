@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.interaction;
 
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
+import it.polimi.ingsw.client.clientlogic.MatchState;
 import javafx.application.Application;
 
 import java.util.List;
@@ -10,7 +11,9 @@ public class SyncGUI implements InteractionInterface{
 
     private GUI gui;
     private ClientController controller;
-    /**
+    private MatchState model;
+
+    /*
      * Creates and runs the GUI
      */
     public SyncGUI() {
@@ -18,12 +21,31 @@ public class SyncGUI implements InteractionInterface{
 
     public void setController(ClientController controller) {
         this.controller = controller;
-        //this.gui = new GUI(controller,this);
-        Application.launch(GUI.class, "");
+        this.gui = new GUI();
+        this.gui.setController(controller);
+        this.gui.setSynchGUI(this);
+        new Thread() {
+            @Override
+            public void run() {
+                javafx.application.Application.launch(GUI.class);
+            }
+        }.start();
+    }
+
+    /**
+     * Setting model
+     *
+     * @param model
+     */
+    @Override
+    public void setModel(MatchState model) {
+        this.model = model;
+        gui.setModel(model);
     }
 
     @Override
     public void notifyUpdatedState() {
+        gui.notifyUpdatedState();
 
     }
 
@@ -99,7 +121,7 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public void sendNotification(String notificationKey) {
-
+        gui.sendNotification(notificationKey);
     }
 
     @Override

@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.clientlogic;
 
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import it.polimi.ingsw.communication.Update;
+import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -81,6 +82,8 @@ public class MatchState {
                 getReceiverState(update).setUnloadedWeapons(update.getNewValue());
             case POWERUPS:
                 getReceiverState(update).setPowerups(update.getNewValue());
+            case CONNECTED_PLAYERS:
+                boardState.setConnectedPlayers(update.getNewValue());
             default:
                 // nothing
         }
@@ -93,4 +96,37 @@ public class MatchState {
                 .filter(p -> p.getNickname().equals(update.getNickname()))
                 .collect(Collectors.toList()).get(0);
     }
+
+    public int getConfigurationID() {
+        return boardState.getConfigurationID();
+    }
+
+    public List<String> getAmmoCardsID() {
+        return boardState.getAmmoCardsID();
+    }
+
+    public List<String> getWeaponsCArdsID() {
+        return boardState.getAmmoCardsID();
+    }
+
+    public boolean getIsWeaponDeckDrawable() {
+        return boardState.isIsWeaponDeckDrawable();
+    }
+
+    public List<List<String>> getKillshotTrack() {
+        return boardState.getKillshotTrack();
+    }
+
+    public boolean getIsActionTileFrenzy() {
+        return boardState.isIsActionTileFrenzy();
+    }
+
+    public List<PlayerState> getPlayersState() {
+        return playersState;
+    }
+
+    public List<String> getConnectedPlayers() {
+        return boardState.getConnectedPlayers();
+    }
+
 }

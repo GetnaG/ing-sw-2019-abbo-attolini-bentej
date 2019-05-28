@@ -147,30 +147,13 @@ public class ClientController {
     }
 
     /**
-     * @deprecated THE CLIENT CONTROLLER CAN NOT SEND REQUESTS TO THE SERVER!!!
-     * this is why we should use SyncGUI
-     */
-    @Deprecated(forRemoval = true)
-    public int checkUsername(String text) {
-        return 0;
-    }
-
-    /**
      * Gets the players in the hall of the server
      *
      * @return players in the hall of the server
-     * @deprecated THE CLIENT CONTROLLER CAN NOT SEND REQUESTS TO THE SERVER!!!
      * this is why we should use SyncGUI
      */
-    @Deprecated(forRemoval = true)
     public List<String> getPlayersInHall() {
-        //TODO Implement
-        List<String> players = new ArrayList<>();
-        players.add("Alice");
-        players.add("Bob");
-        players.add("Charlie");
-
-        return players;
+        return model.getConnectedPlayers();
     }
 
 }
