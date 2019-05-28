@@ -1,5 +1,7 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.server.serverlogic.ServerMain;
+
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.net.ServerSocket;
@@ -39,13 +41,13 @@ public class SocketDispatcher extends Thread {
     public void run() {
         try (serverSocket) {
             while (listening) {
-                System.out.println("Socket is ready and listening.");
+                ServerMain.getLog().info("Socket is ready and listening.");
                 Socket socket = serverSocket.accept();
                 new Thread(() -> {
                     try {
                         new User(new SocketToClient(socket)).init();
                     } catch (ToClientException e) {
-                        System.out.println("Socket died.");
+                        ServerMain.getLog().severe("Socket died.");
                     }
                 }).start();
             }
