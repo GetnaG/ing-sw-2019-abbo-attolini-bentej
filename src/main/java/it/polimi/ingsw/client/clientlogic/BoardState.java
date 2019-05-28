@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.clientlogic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +21,7 @@ public class BoardState {
 
 
     public BoardState() {
+        this.connectedPlayers = new ArrayList<>();
     }
 
     public BoardState(int configurationID, List<String> ammoCardsID, List<String> weaponCardsID, boolean isWeaponDeckDrawable, List<List<String>> killshotTrack, boolean isActionTileFrenzy) {

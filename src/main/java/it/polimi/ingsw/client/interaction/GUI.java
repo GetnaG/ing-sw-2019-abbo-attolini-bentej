@@ -83,7 +83,6 @@ public class GUI extends Application implements InteractionInterface {
     @Override
     public void start(Stage stage) {
         this.stage = stage;
-        controller = new ClientController(null, this);
         setUpLoginScene(stage);
         stage.show();
 
