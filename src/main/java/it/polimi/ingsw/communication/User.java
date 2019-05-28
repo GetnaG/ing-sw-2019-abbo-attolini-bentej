@@ -74,18 +74,26 @@ public class User implements ToClientInterface {
     public void init(){
         name = chooseUserName();
         int result = Nicknames.getInstance().addNickname(name);
-        switch (result) {
-            case 0:
-                /*Taken*/
-                break;
-            case 1:
-                /*Success*/
-                ServerMain.getLog().info("Connected: " + name);
-                ServerMain.getServerHall().addUser(this);
-                break;
-            case -1:
-                /*Active*/
-                break;
+
+        try {
+            switch (result) {
+                case 0:
+                    /*Taken*/
+                    toClient.sendNotification(Notification.NotificationType.USERNAME_TAKEN_AND_OFFLINE);
+                    break;
+                case 1:
+                    /*Success*/
+                    ServerMain.getLog().info("Connected: " + name);
+                    ServerMain.getServerHall().addUser(this);
+                    toClient.sendNotification(Notification.NotificationType.USERNAME_AVAILABLE);
+                    break;
+                case -1:
+                    /*Active*/
+                    toClient.sendNotification(Notification.NotificationType.USERNAME_TAKEN_AND_ONLINE);
+                    break;
+            }
+        } catch (ToClientException e) {
+            e.printStackTrace();
         }
     }
 
