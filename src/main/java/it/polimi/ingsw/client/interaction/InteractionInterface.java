@@ -1,5 +1,7 @@
 package it.polimi.ingsw.client.interaction;
 
+import it.polimi.ingsw.client.clientlogic.ClientController;
+
 import java.util.List;
 
 /**
@@ -134,4 +136,11 @@ public interface InteractionInterface {
      * Asks the view to redraw the state.
      */
     void drawState();//FIXME
+
+    /**
+     * Sets controller in the view.
+     *
+     * @param controller
+     */
+    public void setController(ClientController controller);
 }

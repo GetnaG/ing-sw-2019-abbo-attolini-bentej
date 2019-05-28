@@ -18,8 +18,8 @@ public class SyncGUI implements InteractionInterface{
 
     public void setController(ClientController controller) {
         this.controller = controller;
-        this.gui = new GUI(controller);
-        Application.launch(GUI.class);
+        //this.gui = new GUI(controller,this);
+        Application.launch(GUI.class, "");
     }
 
     @Override
@@ -89,7 +89,12 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public String askName() {
-        return null;
+        String name = gui.askName();
+        while (name == "ERROR") {
+            name = gui.askName();
+        }
+
+        return name;
     }
 
     @Override

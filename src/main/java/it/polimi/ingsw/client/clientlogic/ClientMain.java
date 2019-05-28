@@ -18,8 +18,13 @@ public class ClientMain {
     private static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
 
     public static void main(String[] args) {
+        ClientController controller;
+        InteractionInterface view;
         try {
-            new ClientController(new MatchState(), InteractionFactory.getInteractionInterface(args));
+            view = InteractionFactory.getInteractionInterface(args);
+            controller = new ClientController(new MatchState(), view);
+            view.setController(controller);
+
         } catch (IOException | NullPointerException | IllegalArgumentException e) {
             LOG.severe(e.getMessage());
         }

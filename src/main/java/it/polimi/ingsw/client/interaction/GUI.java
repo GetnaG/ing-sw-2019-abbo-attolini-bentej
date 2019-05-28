@@ -42,6 +42,10 @@ public class GUI extends Application implements InteractionInterface {
      */
     private ClientController controller;
     /**
+     * Sync GUI
+     */
+    private SyncGUI sync;
+    /**
      * log text in the GUI
      */
     private Text logText;
@@ -49,15 +53,14 @@ public class GUI extends Application implements InteractionInterface {
      * Users in the hall
      */
     private HBox usersBox;
-
-
     /**
-     * Construct the GUI
-     *
-     * @param controller
+     * Login input username
      */
-    public GUI(ClientController controller) {
-        this.controller = controller;
+    private TextField inputUsername;
+
+
+    public GUI() {
+
     }
 
     /**
@@ -106,7 +109,7 @@ public class GUI extends Application implements InteractionInterface {
         vertical.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-background-radius: 10;");
         // Set up usernameHBox
         Label usernameLabel = new Label("Username");
-        TextField inputUsername = new TextField();
+        inputUsername = new TextField();
         usernameHBox.getChildren().addAll(usernameLabel);
         usernameHBox.getChildren().addAll(inputUsername);
         //Set up loginAndRadioBox
@@ -538,9 +541,25 @@ public class GUI extends Application implements InteractionInterface {
 
     }
 
+    /**
+     * Sets controller in the view.
+     *
+     * @param controller
+     */
+    @Override
+    public void setController(ClientController controller) {
+        this.controller = controller;
+    }
+
     @Override
     public String askName() {
-        return null;
+
+        if (inputUsername.getText().length() > 1 && inputUsername.getText().length() < 18) {
+            return inputUsername.getText();
+        } else {
+            logText.setText("Insert valid username");
+            return "ERROR";
+        }
     }
 
     @Override

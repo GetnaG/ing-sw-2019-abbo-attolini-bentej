@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.interaction;
 
+import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
 
@@ -482,5 +483,9 @@ public class CLI implements InteractionInterface {
         return new StringBuilder()
                 .append(R.string(requestKey))
                 .append(lineSeparator);
+    }
+
+    public void setController(ClientController controller) {
+        //TODO Implement
     }
 }
