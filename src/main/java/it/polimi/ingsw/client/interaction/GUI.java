@@ -175,7 +175,7 @@ public class GUI extends Application implements InteractionInterface {
 
                 try {
                     controller.setConnection("localhost", 9000);
-                    //buildHallPane(stage);
+                    buildHallPane(stage);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

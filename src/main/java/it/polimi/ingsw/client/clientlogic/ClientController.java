@@ -143,9 +143,16 @@ public class ClientController {
      * @param port the port of the server
      */
     public void setConnection(String ip, int port) throws IOException {
-        SocketFromServer fromServer = new SocketFromServer(this,
-                new Socket(ip, port));
-        fromServer.startListening();
+        new Thread(() -> {
+            try {
+                SocketFromServer fromServer = new SocketFromServer(this,
+                        new Socket(ip, port));
+                fromServer.startListening();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }).start();
+
     }
 
     /**
