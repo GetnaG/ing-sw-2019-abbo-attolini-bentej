@@ -71,6 +71,8 @@ public class GUI extends Application implements InteractionInterface {
      */
     private Stage stage;
 
+    private StackPane rootStackPane;
+
 
     public GUI() {
 
@@ -85,6 +87,9 @@ public class GUI extends Application implements InteractionInterface {
     public void start(Stage stage) {
         this.stage = stage;
         setUpLoginScene(stage);
+        masterScene = new Scene(rootStackPane, 1000, 1000);
+        stage.setTitle("Adrenaline");
+        stage.setScene(masterScene);
         stage.show();
 
     }
@@ -96,7 +101,7 @@ public class GUI extends Application implements InteractionInterface {
      */
     private void setUpLoginScene(Stage stage) {
 
-        StackPane rootStackPane = new StackPane();
+        rootStackPane = new StackPane();
         BorderPane border = new BorderPane();
         VBox vertical = new VBox();
         Text topText = new Text("Welcome To Adrenaline");
@@ -167,23 +172,21 @@ public class GUI extends Application implements InteractionInterface {
 
             // telling the controller the connection type
             if (socketRadio.isSelected()) {
+
                 try {
                     controller.setConnection("localhost", 9000);
+                    //buildHallPane(stage);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
+
+
             } else {
                 controller.setConnection();
-
             }
-            logText.setText("Checking username...");
-            buildHallPane(stage);
-
         });
 
-        masterScene = new Scene(rootStackPane, 1000, 1000);
-        stage.setTitle("Adrenaline");
-        stage.setScene(masterScene);
+
     }
 
     /**
@@ -192,7 +195,8 @@ public class GUI extends Application implements InteractionInterface {
      * @param stage
      */
     private void buildHallPane(Stage stage) {
-        StackPane rootStackPane = new StackPane();
+
+        StackPane rootStackPaneHall = new StackPane();
         BorderPane border = new BorderPane();
         VBox vertical = new VBox();
         Text topText = new Text("Hall");
@@ -204,16 +208,18 @@ public class GUI extends Application implements InteractionInterface {
         Button debugSkip = new Button("debug skip");
 
 
-        rootStackPane.getChildren().add(border);
+        rootStackPaneHall.getChildren().add(border);
         border.setCenter(vertical);
         vertical.getChildren().addAll(topText, textUserBox, usersBox, logWindow);
         logWindow.getChildren().addAll(logText, logRectangle, debugSkip);
-        controller.getPlayersInHall().forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
+        updateHall(10);
+        //playersInHall = controller.getPlayersInHall();
+        //playersInHall.forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
 
         // Set up background image
         BackgroundImage img = new BackgroundImage(R.image("logo"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
         Background background = new Background(img);
-        rootStackPane.setBackground(background);
+        rootStackPaneHall.setBackground(background);
         // setting opacity factor
         vertical.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-background-radius: 10;");
         // Set up playersBox
@@ -245,7 +251,8 @@ public class GUI extends Application implements InteractionInterface {
         // Setting event
         debugSkip.setOnAction(e -> buildGamePane(null));
 
-        masterScene.setRoot(rootStackPane);
+
+        stage.getScene().setRoot(rootStackPaneHall);
     }
 
     /**
@@ -583,36 +590,24 @@ public class GUI extends Application implements InteractionInterface {
     @Override
     public void sendNotification(String notificationKey) {
         switch (notificationKey) {
-            /**
-             * case USERNAME_AVAIABLE:
-             *  buildHallPane(stage);
-             *  break;
-             * case USERNAME_TAKEN_AND_OFFLINE:
-             *  buildHallPane(stage);
-             *  break;
-             * case USERNAME_TAKEN_AND_ONLINE:
-             *   logText.setText("Username taken and offline");
-             *   break;
-             *
-             */
-
+            case "GREET":
+                break;
+            case "USERNAME_AVAILABLE":
+                //buildHallPane(stage);
+                break;
+            case "USERNAME_TAKEN_AND_OFFLINE":
+                //  buildHallPane(stage);
+                break;
+            case "USERNAME_TAKEN_AND_ONLINE":
+                //        logText.setText("Username taken and offline");
+                break;
         }
 
     }
 
     public void updateHall(int seconds) {
-        List<String> playersInHallRecent = controller.getPlayersInHall();
-        if (playersInHall != null) {
-            // sau that there was a player disconected
-            for (String p : playersInHall) {
-                if (!playersInHallRecent.contains(p)) {
-                    // user was disconected
-                    logText.setText("The following users are disconnected: " + p);
-                }
-            }
-        }
-        playersInHallRecent.add("hello");
         usersBox.getChildren().removeAll();
+        playersInHall = model.getConnectedPlayers();
         playersInHall.forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
         logText.setText("Match starting in " + seconds + "seconds...");
     }

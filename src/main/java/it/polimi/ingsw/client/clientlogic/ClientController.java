@@ -77,7 +77,8 @@ public class ClientController {
             case NICKNAME:
                 return view.askName();
             default:
-                throw new IllegalArgumentException("Unhandled argument: " + message);
+                return "";
+            //throw new IllegalArgumentException("Unhandled argument: " + message);
         }
     }
 
@@ -123,7 +124,8 @@ public class ClientController {
             case TARGET:
                 return view.chooseTarget(optionsList);
             default:
-                throw new IllegalArgumentException("Unhandled argument: " + message);
+                return 0;
+            //  throw new IllegalArgumentException("Unhandled argument: " + message);
         }
     }
 

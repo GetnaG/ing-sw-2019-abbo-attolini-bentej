@@ -57,6 +57,7 @@ public class ClientMain {
         model = new MatchState();
         controller = new ClientController(model, view);
 
+
         gui.setModel(model);
         gui.setController(controller);
 
