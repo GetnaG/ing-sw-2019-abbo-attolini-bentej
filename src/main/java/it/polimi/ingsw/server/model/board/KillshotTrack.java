@@ -139,7 +139,7 @@ public class KillshotTrack extends AbstractTrack {
     @Override
     public void addTokens(List<Player> tokens) {
 
-        tokenTrack.add(new ArrayList(tokens));
+        tokenTrack.add(new ArrayList<>(tokens));
     }
 
     /**

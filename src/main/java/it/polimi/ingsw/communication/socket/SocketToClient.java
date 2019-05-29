@@ -1,7 +1,13 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.socket;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.ToClientInterface;
+import it.polimi.ingsw.communication.protocol.MessageType;
+import it.polimi.ingsw.communication.protocol.Notification;
+import it.polimi.ingsw.communication.protocol.ProtocolMessage;
+import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.Damageable;
@@ -38,7 +44,7 @@ public class SocketToClient implements ToClientInterface {
      *
      * @param socket the socket through which communicate
      */
-    SocketToClient(Socket socket) throws ToClientException {
+    public SocketToClient(Socket socket) throws ToClientException {
         this.socket = socket;
         sendNotification(Notification.NotificationType.GREET);
     }
@@ -54,12 +60,16 @@ public class SocketToClient implements ToClientInterface {
     private ProtocolMessage send(ProtocolMessage message) throws ToClientException {
         ProtocolMessage answer;
         synchronized (socket) {
-
-            /*Try-with-resources will call close() automatically*/
             try {
+
+                /*Setting up*/
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+                /*Sending*/
                 out.println(new Gson().toJson(message));
+
+                /*Waiting answer*/
                 String input = null;
                 while (input == null)
                     input = in.readLine();
@@ -100,28 +110,6 @@ public class SocketToClient implements ToClientInterface {
     }
 
     /**
-     * Handles the communication when there are notifications.
-     *
-     * @param notification the notification to be sent
-     * @throws ToClientException if there are problems with the socket
-     */
-    @Override
-    public void sendNotification(Notification.NotificationType notification) throws ToClientException {
-        send(new ProtocolMessage(new Notification[]{
-                new Notification(notification)}));
-    }
-
-    /**
-     * Handles the communication when there are updates.
-     *
-     * @param update the update to be sent
-     * @throws ToClientException if there are problems with the socket
-     */
-    private void sendUpdate(Update update) throws ToClientException {
-        send(new ProtocolMessage(new Update[]{update}));
-    }
-
-    /**
      * Handles the interaction using {@linkplain EffectInterface}.
      * Each choice could be a chain of effects.
      *
@@ -131,7 +119,7 @@ public class SocketToClient implements ToClientInterface {
      * @throws ToClientException if there are problems with the socket
      */
     private EffectInterface askEffect(MessageType command,
-                                      List<EffectInterface> options)
+                                      List<? extends EffectInterface> options)
             throws ToClientException {
 
         /*Creating a list of names for each chain of effects*/
@@ -156,7 +144,7 @@ public class SocketToClient implements ToClientInterface {
      * @throws ToClientException if there are problems with the socket
      */
     private PowerupCard askPowerup(MessageType command,
-                                   List<PowerupCard> options)
+                                   List<? extends PowerupCard> options)
             throws ToClientException {
         return options.get(sendAndCheck(command, options.stream()
                 .map(PowerupCard::getId).map(Arrays::
@@ -171,7 +159,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected square
      * @throws ToClientException if there are problems with the socket
      */
-    private Square askSquare(MessageType command, List<Square> options)
+    private Square askSquare(MessageType command, List<? extends Square> options)
             throws ToClientException {
         return options.get(sendAndCheck(command, options.stream()
                 .map(Square::getID).map(Arrays::
@@ -187,7 +175,7 @@ public class SocketToClient implements ToClientInterface {
      * @throws ToClientException if there are problems with the socket
      */
     private WeaponCard askWeapon(MessageType command,
-                                 List<WeaponCard> options)
+                                 List<? extends WeaponCard> options)
             throws ToClientException {
         return options.get(sendAndCheck(command, options.stream()
                 .map(WeaponCard::getId).map(Arrays::
@@ -202,7 +190,7 @@ public class SocketToClient implements ToClientInterface {
      * @return the selected action
      * @throws ToClientException if there are problems with the socket
      */
-    private Action askAction(MessageType command, List<Action> options)
+    private Action askAction(MessageType command, List<? extends Action> options)
             throws ToClientException {
         return options.get(sendAndCheck(command, options.stream()
                 .map(Action::getName).map(Arrays::
@@ -218,7 +206,7 @@ public class SocketToClient implements ToClientInterface {
      * @throws ToClientException if there are problems with the socket
      */
     private List<Damageable> askDamageableList(MessageType command,
-                                               List<List<Damageable>> options)
+                                               List<? extends List<Damageable>> options)
             throws ToClientException {
         int choice = sendAndCheck(command, options.stream()
                 .map(o -> o.stream()
@@ -391,5 +379,28 @@ public class SocketToClient implements ToClientInterface {
     @Override
     public void quit() throws ToClientException {
         sendNotification(Notification.NotificationType.QUIT);
+    }
+
+    /**
+     * {@inheritDoc}
+     * This stops the execution until the clients sends an ack.
+     *
+     * @throws ToClientException if there are problems with the socket
+     */
+    @Override
+    public void sendNotification(Notification.NotificationType notification) throws ToClientException {
+        send(new ProtocolMessage(new Notification[]{
+                new Notification(notification)}));
+    }
+
+    /**
+     * {@inheritDoc}
+     * This stops the execution until the clients sends an ack.
+     *
+     * @throws ToClientException if there are problems with the socket
+     */
+    @Override
+    public void sendUpdate(Update update) throws ToClientException {
+        send(new ProtocolMessage(new Update[]{update}));
     }
 }

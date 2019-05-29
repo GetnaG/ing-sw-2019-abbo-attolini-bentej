@@ -1,5 +1,9 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.communication.protocol.MessageType;
+import it.polimi.ingsw.communication.protocol.Notification;
+import it.polimi.ingsw.communication.protocol.ProtocolMessage;
+import it.polimi.ingsw.communication.protocol.Update;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

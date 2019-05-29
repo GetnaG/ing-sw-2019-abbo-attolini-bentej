@@ -1,7 +1,7 @@
 package it.polimi.ingsw.server.serverlogic;
 
-import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
+import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
@@ -53,7 +53,7 @@ public class Nicknames implements SuspensionListener {
      * @param nickname requested nickname
      * @return 1 if operation was successful, 0 if taken by an offline player or -1 if taken by an online player.
      */
-    synchronized public int addNickname(String nickname) {
+    public synchronized int addNickname(String nickname) {
 
 
         if (!onlineNames.contains(nickname) && !offlineNames.contains(nickname)) {
@@ -63,7 +63,7 @@ public class Nicknames implements SuspensionListener {
 
             return 1;
         }
-        if (offlineNames.contains(nickname))
+        if (offlineNames.contains(nickname))//TODO set the old matchlistener
             return 0;
 
         return -1;
@@ -76,11 +76,13 @@ public class Nicknames implements SuspensionListener {
      * Sets the given player's status to disconnected
      *
      * @param player disconnected player
+     * @param user
      */
     @Override
-    synchronized public void playerSuspension(Player player) {
-        onlineNames.remove(player.getName());
-        offlineNames.add(player.getName());
+    public synchronized void playerSuspension(String player, ToClientInterface user) {
+        //FIXME what if the player was not in onlineNames?
+        onlineNames.remove(player);
+        offlineNames.add(player);
     }
 
     /**
@@ -89,17 +91,18 @@ public class Nicknames implements SuspensionListener {
      * @param player reconnected player
      */
     @Override
-    synchronized public void playerResumption(Player player) {
-        onlineNames.add(player.getName());
-        offlineNames.remove(player.getName());
+    public synchronized void playerResumption(String player) {
+        onlineNames.add(player);
+        offlineNames.remove(player);
 
-        //kill the old user
-        ToClientInterface cliInterface = player.getToClient();
-        try {
-            cliInterface.quit();
-        } catch (ToClientException e) {
-            e.printStackTrace();
-        }
+        //TODO: kill the old user
+        //ToClientInterface cliInterface = player.getToClient();
+        //cliInterface.quit();
+    }
+
+    @Override
+    public void playerUpdate(String player, ToClientInterface newConnection) {
+        //TODO implement
     }
 
     /**

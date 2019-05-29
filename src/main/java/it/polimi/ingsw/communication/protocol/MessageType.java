@@ -1,7 +1,9 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.protocol;
 
 /**
  * This class defines the type of messages exchanged.
+ * The type can be {@linkplain #NOTIFICATION} or {@linkplain #UPDATE}, or
+ * other commands.
  *
  * @author Abbo Giulio A.
  * @see ProtocolMessage
@@ -10,65 +12,63 @@ public enum MessageType {
     /**
      * Choose between sequences of effects.
      */
-    EFFECTS_SEQUENCE("Please choose an effect sequence.", true),
+    EFFECTS_SEQUENCE(true),
     /**
      * Choose where to spawn.
      */
-    SPAWN("Please choose a card to use for spawning.", true),
+    SPAWN(true),
     /**
      * Choose what powerup to use.
      */
-    POWERUP("Please choose a powerup", true),
+    POWERUP(true),
     /**
      * Choose a square.
      */
-    DESTINATION("Please choose a square.", true),
+    DESTINATION(true),
     /**
      * Choose a weapon.
      */
-    WEAPON("Please choose a weapon.", true),
+    WEAPON(true),
     /**
      * Choose which weapon to buy.
      */
-    WEAPON_TO_BUY("Please choose a weapon to be bought.", true),
+    WEAPON_TO_BUY(true),
     /**
      * Choose which weapon to discard.
      */
-    WEAPON_TO_DISCARD("Please choose a weapon to be discarded.", true),
+    WEAPON_TO_DISCARD(true),
     /**
      * Choose which weapon to reload.
      */
-    WEAPON_TO_RELOAD("Please choose a weapon to be reloaded.", true),
+    WEAPON_TO_RELOAD(true),
     /**
      * Choose an action.
      */
-    ACTION("Please choose an action.", true),
+    ACTION(true),
     /**
      * Choose which powerup to use for paying.
      */
-    POWERUP_FOR_PAYING("Please choose a powerup to cover the cost.", true),
+    POWERUP_FOR_PAYING(true),
     /**
      * Choose which tagback card to use.
      */
-    USE_TAGBACK("Please choose which tagback to use.", true),
+    USE_TAGBACK(true),
     /**
      * Choose a target.
      */
-    TARGET("Please select a target.", true),
+    TARGET(true),
     /**
      * Choose a nickname.
      */
-    NICKNAME("Please choose a nickname.", false),
+    NICKNAME(false),
     /**
      * The message contains some updates.
      */
-    UPDATE("Update", false),
+    UPDATE(false),
     /**
      * The message contains some notifications.
      */
-    NOTIFICATION("Notification", false);
-
-    private final String message;//TODO: remove
+    NOTIFICATION(false);
 
     /**
      * Whether this value allows the user choose between provided options.
@@ -78,22 +78,11 @@ public enum MessageType {
     /**
      * This constructor allows to specify fields for the enum.
      *
-     * @param message    the string that will be sent
      * @param hasOptions whether the user is expected to choose between
      *                   provided options
      */
-    MessageType(String message, boolean hasOptions) {
-        this.message = message;
+    MessageType(boolean hasOptions) {
         this.hasOptions = hasOptions;
-    }
-
-    /**
-     * Returns the string associated with this constant.
-     *
-     * @return the string associated with this
-     */
-    public String getMessage() {
-        return message;
     }
 
     /**

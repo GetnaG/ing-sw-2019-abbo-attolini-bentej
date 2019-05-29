@@ -1,10 +1,10 @@
 package it.polimi.ingsw.client.clientlogic;
 
 import it.polimi.ingsw.client.interaction.InteractionInterface;
-import it.polimi.ingsw.communication.MessageType;
-import it.polimi.ingsw.communication.Notification;
-import it.polimi.ingsw.communication.SocketFromServer;
-import it.polimi.ingsw.communication.Update;
+import it.polimi.ingsw.communication.protocol.MessageType;
+import it.polimi.ingsw.communication.protocol.Notification;
+import it.polimi.ingsw.communication.socket.SocketFromServer;
+import it.polimi.ingsw.communication.protocol.Update;
 
 import java.io.IOException;
 import java.net.Socket;

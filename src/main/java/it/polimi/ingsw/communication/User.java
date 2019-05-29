@@ -1,327 +1,373 @@
 package it.polimi.ingsw.communication;
 
-import it.polimi.ingsw.server.serverlogic.Nicknames;
-import it.polimi.ingsw.server.serverlogic.ServerMain;
-import it.polimi.ingsw.server.serverlogic.SuspensionListener;
+import it.polimi.ingsw.communication.protocol.Notification;
+import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
+import it.polimi.ingsw.server.serverlogic.Nicknames;
+import it.polimi.ingsw.server.serverlogic.ServerMain;
+import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 
 import java.util.List;
-import java.util.Timer;
 import java.util.concurrent.*;
-import java.util.logging.Level;
 
 /**
- * It's the middle man between the server and the actual client. Takes care of checking timeouts and/or connections lost.
+ * This is the middle man between the server and the actual client.
+ * This will takes care of checking timeouts and connections lost.
+ * This also asks to choose the username.
  *
  * @author Fahed B. Tej
+ * @author Abbo Giulio A.
  */
-
 public class User implements ToClientInterface {
-
     /**
-     * User's name
+     * How much time the user has for making a choice.
+     */
+    private static int waitingTime;
+    /**
+     * User's name.
      */
     private String name;
-
     /**
-     * Timer lasts 30 seconds. //FIXME Make it parametric
-     */
-    private Timer timer;
-
-    /**
-     * Suspension listener to update in case of connection's lost
+     * Server suspension listener to update in case of connection lost.
+     * This should keep track of all the players on the server, for future
+     * reconnection.
      */
     private SuspensionListener serverSuspensionListener;
-
+    /**
+     * Match suspension listener to update in case of connection lost.
+     * This should make suspended users skip their turn.
+     */
+    private SuspensionListener matchSuspensionListener;
     /**
      * The underlying ToClientInterface
      */
     private ToClientInterface toClient;
-    /**
-     * Constructs a User
-     * @param toClient            underlying connection interface
-     * @param suspensionListener  suspension listener
-     */
-    public User(ToClientInterface toClient, SuspensionListener suspensionListener) {
-        this.toClient = toClient;
-        this.serverSuspensionListener = suspensionListener;
-    }
 
     /**
-     * Constructs a User
-     * @param toClient            underlying connection interface
+     * Constructs a User with the provided interface and the server
+     * suspension listener.
+     *
+     * @param toClient underlying connection interface
      */
     public User(ToClientInterface toClient) {
         this.toClient = toClient;
+        serverSuspensionListener = Nicknames.getInstance();
+        matchSuspensionListener = null;
+        name = null;
+    }
+
+    /**
+     * Sets the amount of time the users have to make a choice.
+     *
+     * @param waitingTime the time in seconds
+     */
+    public static void setWaitingTime(int waitingTime) {
+        User.waitingTime = waitingTime;
+    }
+
+    /**
+     * Makes the user choose a name and adds it to the hall.
+     */
+    public void init() {
+        try {
+            name = chooseUserName();
+        } catch (ToClientException e) {
+
+            /* The client was not able to choose: no action is necessary*/
+            ServerMain.getLog().info("User disconnected before setting name");
+            return;
+        }
+
+        /*Checking if a nickname is already taken*/
+        int result = Nicknames.getInstance().addNickname(name);
+        switch (result) {
+
+            /*Taken and the player is offline: swapping with the old one*/
+            case 0:
+                try {
+                    toClient.sendNotification(Notification.NotificationType.USERNAME_TAKEN_AND_OFFLINE);
+                } catch (ToClientException e) {
+
+                    /*User offline again: will not swap with the old*/
+                    serverSuspensionListener.playerSuspension(name, this);
+                    return;
+                }
+
+                /*Notifying match listener only if the match was started*/
+                if (matchSuspensionListener != null)
+                    matchSuspensionListener.playerUpdate(name, this);
+                break;
+
+            /*Success: adding to the hall*/
+            case 1:
+                try {
+                    toClient.sendNotification(Notification.NotificationType.USERNAME_AVAILABLE);
+                } catch (ToClientException e) {
+
+                    /*Freeing the nickname*/
+                    serverSuspensionListener.playerSuspension(name, this);
+                    return;
+                }
+                ServerMain.getLog().info(() -> "Connected: " + name);
+                ServerMain.getServerHall().addUser(this);
+                break;
+
+            /*Taken and the player is online: asking again*/
+            case -1:
+                try {
+                    toClient.sendNotification(Notification.NotificationType.USERNAME_TAKEN_AND_ONLINE);
+                } catch (ToClientException e) {
+
+                    /*The old user is online: no action taken*/
+                    return;
+                }
+                init();
+                break;
+            default:
+                throw new IllegalStateException("Unexpected value: " + result);
+        }
     }
 
     /**
      * Gets the nickname of the user
-     * @return  nickname of the user
+     *
+     * @return nickname of the user
      */
     public String getName() {
         return name;
     }
 
     /**
-     * Makes the user choose a name
+     * Returns the match SuspensionListener of this user.
+     * This is useful when a user is suspended and a new one has to take his
+     * place.
+     *
+     * @return the match SuspensionListener of this user
      */
-    public void init(){
-        name = chooseUserName();
-        int result = Nicknames.getInstance().addNickname(name);
-
-        try {
-            switch (result) {
-                case 0:
-                    /*Taken*/
-                    toClient.sendNotification(Notification.NotificationType.USERNAME_TAKEN_AND_OFFLINE);
-                    break;
-                case 1:
-                    /*Success*/
-                    ServerMain.getLog().info("Connected: " + name);
-                    ServerMain.getServerHall().addUser(this);
-                    toClient.sendNotification(Notification.NotificationType.USERNAME_AVAILABLE);
-                    break;
-                case -1:
-                    /*Active*/
-                    toClient.sendNotification(Notification.NotificationType.USERNAME_TAKEN_AND_ONLINE);
-                    break;
-            }
-        } catch (ToClientException e) {
-            e.printStackTrace();
-        }
+    public SuspensionListener getMatchSuspensionListener() {
+        return matchSuspensionListener;
     }
 
-    public void addSuspensionListener(SuspensionListener suspensionListener){
-        this.serverSuspensionListener = suspensionListener;
+    /**
+     * Sets the match SuspensionListener for this user.
+     *
+     * @param matchSuspensionListener the match SuspensionListener for this user
+     */
+    public void setMatchSuspensionListener(SuspensionListener matchSuspensionListener) {
+        this.matchSuspensionListener = matchSuspensionListener;
+    }
+
+    /**
+     * This is done in order to handle the timing of the interactions in a
+     * single place.
+     *
+     * @param callable the function that will interact with the user, should
+     *                 throw {@linkplain ToClientException} in case of problems
+     * @param <T>      the type returned by the {@code callable} parameter
+     * @return the user's choice
+     * @throws ToClientException if there are problems with the communication
+     *                           or the client did not answer in time (in either
+     *                           cases it is suspended, this is thrown to
+     *                           allow calling methods to handle the
+     *                           disconnection)
+     */
+    private <T> T genericInteraction(Callable<T> callable) throws ToClientException {
+        Future<T> task = Executors.newSingleThreadExecutor().submit(callable);
+        try {
+            return task.get(waitingTime, TimeUnit.SECONDS);
+        } catch (InterruptedException e) {
+
+            /*Computation canceled: interrupt*/
+            Thread.currentThread().interrupt();
+            throw new IllegalStateException("Interrupted", e);
+        } catch (ExecutionException e) {
+
+            /*Over with exception: suspending the player*/
+            serverSuspensionListener.playerSuspension(name, this);
+            if (matchSuspensionListener != null)
+                matchSuspensionListener.playerSuspension(name, this);
+            throw new ToClientException("Exception while interacting", e);
+        } catch (TimeoutException e) {
+
+            /*Over because time out: same as disconnection*/
+            serverSuspensionListener.playerSuspension(name, this);
+            if (matchSuspensionListener != null)
+                matchSuspensionListener.playerSuspension(name, this);
+            throw new ToClientException("Time over while interacting", e);
+        }
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
-    @Override //TODO Make all interactions with client throw a NotReachableException
-    public EffectInterface chooseEffectsSequence(List<EffectInterface> options) {
-
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<EffectInterface> task =executorService.submit(()-> toClient.chooseEffectsSequence(options));
-
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-        return null;
+    @Override
+    public EffectInterface chooseEffectsSequence(List<EffectInterface> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseEffectsSequence(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public PowerupCard chooseSpawn(List<PowerupCard> option) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<PowerupCard> task =executorService.submit(()-> toClient.chooseSpawn(option));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
-
+    public PowerupCard chooseSpawn(List<PowerupCard> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseSpawn(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public PowerupCard choosePowerup(List<PowerupCard> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<PowerupCard> task =executorService.submit(()-> toClient.choosePowerup(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-
-        return null;
+    public PowerupCard choosePowerup(List<PowerupCard> options) throws ToClientException {
+        return genericInteraction(() -> toClient.choosePowerup(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public Square chooseDestination(List<Square> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<Square> task =executorService.submit(()-> toClient.chooseDestination(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
+    public Square chooseDestination(List<Square> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseDestination(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public WeaponCard chooseWeaponCard(List<WeaponCard> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<WeaponCard> task =executorService.submit(()-> toClient.chooseWeaponCard(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
+    public WeaponCard chooseWeaponCard(List<WeaponCard> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseWeaponCard(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public WeaponCard chooseWeaponToBuy(List<WeaponCard> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<WeaponCard> task =executorService.submit(()-> toClient.chooseWeaponToBuy(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
+    public WeaponCard chooseWeaponToBuy(List<WeaponCard> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseWeaponToBuy(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<WeaponCard> task =executorService.submit(()-> toClient.chooseWeaponToDiscard(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-        return null;
+    public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseWeaponToDiscard(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public WeaponCard chooseWeaponToReload(List<WeaponCard> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<WeaponCard> task =executorService.submit(()-> toClient.chooseWeaponToReload(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
+    public WeaponCard chooseWeaponToReload(List<WeaponCard> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseWeaponToReload(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public Action chooseAction(List<Action> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<Action> task =executorService.submit(()-> toClient.chooseAction(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
+    public Action chooseAction(List<Action> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseAction(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public PowerupCard choosePowerupForPaying(List<PowerupCard> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<PowerupCard> task =executorService.submit(()-> toClient.choosePowerupForPaying(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
+    public PowerupCard choosePowerupForPaying(List<PowerupCard> options) throws ToClientException {
+        return genericInteraction(() -> toClient.choosePowerupForPaying(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public PowerupCard askUseTagback(List<PowerupCard> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<PowerupCard> task =executorService.submit(()-> toClient.askUseTagback(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
+    public PowerupCard askUseTagback(List<PowerupCard> options) throws ToClientException {
+        return genericInteraction(() -> toClient.askUseTagback(options));
     }
 
     /**
      * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public List<Damageable> chooseTarget(List<List<Damageable>> options) {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<List<Damageable>> task =executorService.submit(()-> toClient.chooseTarget(options));
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-//         throw new NotReachableException
-        }
-
-        return null;
-    }
-
-    @Override
-    public String chooseUserName() {
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<String> task =executorService.submit(()-> toClient.chooseUserName());
-        try {
-            return task.get(30, TimeUnit.SECONDS);
-        } catch (InterruptedException | ExecutionException | TimeoutException e) {
-            ServerMain.getLog().log(Level.SEVERE, "asking name", e);
-        }
-        return null;
+    public List<Damageable> chooseTarget(List<List<Damageable>> options) throws ToClientException {
+        return genericInteraction(() -> toClient.chooseTarget(options));
     }
 
     /**
-     * Closes the connection.
+     * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public void quit() {
-        try {
+    public String chooseUserName() throws ToClientException {
+        return genericInteraction(() -> toClient.chooseUserName());
+    }
+
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to send an ack.
+     */
+    @Override
+    public void quit() throws ToClientException {
+        genericInteraction(() -> {
             toClient.quit();
-        } catch (ToClientException e) {
-            e.printStackTrace();
-        }
+            return null;
+        });
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to send an ack.
+     */
     @Override
-    public void sendNotification(Notification.NotificationType type) throws ToClientException{
-        toClient.sendNotification(type);
+    public void sendNotification(Notification.NotificationType type) throws ToClientException {
+        genericInteraction(() -> {
+            toClient.sendNotification(type);
+            return null;
+        });
     }
 
+    /**
+     * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to send an ack.
+     */
+    @Override
+    public void sendUpdate(Update update) throws ToClientException {
+        genericInteraction(() -> {
+            toClient.sendUpdate(update);
+            return null;
+        });
+    }
 }

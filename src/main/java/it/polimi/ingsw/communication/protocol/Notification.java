@@ -1,4 +1,4 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.protocol;
 
 /**
  * This represents a notification element.
@@ -19,7 +19,7 @@ public class Notification {
      *
      * @param type the type of this notification.
      */
-    Notification(NotificationType type) {
+    public Notification(NotificationType type) {
         this.type = type;
     }
 
@@ -49,19 +49,19 @@ public class Notification {
          */
         ERROR,
         /**
-         * Notifies the client that the answer is valid
+         * Notifies the client that the answer is valid.
          */
         OK,
         /**
-         * Notifies that the username is available
+         * Notifies that the username is available.
          */
         USERNAME_AVAILABLE,
         /**
-         * Notifies that the username is taken and offline
+         * Notifies that the username is taken and offline.
          */
         USERNAME_TAKEN_AND_OFFLINE,
         /**
-         * Notifies that the username is taken and online
+         * Notifies that the username is taken and online.
          */
         USERNAME_TAKEN_AND_ONLINE
     }

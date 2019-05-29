@@ -66,8 +66,8 @@ public class ServerHall implements Runnable {
     @Override
     public void run() {
 
-        //noinspection InfiniteLoopStatement
-        do {
+        //FIXME infinite loop --> this is why pc fans speed up
+/*        do {
 
             if (statusNextGame == GameStatus.NOTSTARTED && !connectedUsers.isEmpty()) {
                 nextGame = new DeathmatchController(new ArrayList<>(), 8);
@@ -92,7 +92,7 @@ public class ServerHall implements Runnable {
             }
 
 
-        } while (true);
+        } while (true);*/
 
     }
 

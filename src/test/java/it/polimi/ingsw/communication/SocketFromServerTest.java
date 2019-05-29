@@ -2,7 +2,11 @@ package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.client.clientlogic.ClientController;
-import it.polimi.ingsw.client.clientlogic.MatchState;
+import it.polimi.ingsw.communication.protocol.MessageType;
+import it.polimi.ingsw.communication.protocol.Notification;
+import it.polimi.ingsw.communication.protocol.ProtocolMessage;
+import it.polimi.ingsw.communication.protocol.Update;
+import it.polimi.ingsw.communication.socket.SocketFromServer;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -45,9 +49,9 @@ class SocketFromServerTest {
         send(new ProtocolMessage(updates));
         Update[] controllerReceived = controller.updates;
         for (int i = 0; i < updates.length; i++) {
-            assertEquals(updates[i].nickname, controllerReceived[i].nickname);
-            assertEquals(updates[i].type, controllerReceived[i].type);
-            assertEquals(updates[i].newValue, controllerReceived[i].newValue);
+            assertEquals(updates[i].getNickname(), controllerReceived[i].getNickname());
+            assertEquals(updates[i].getType(), controllerReceived[i].getType());
+            assertEquals(updates[i].getNewValue(), controllerReceived[i].getNewValue());
         }
     }
 

@@ -1,8 +1,9 @@
 package it.polimi.ingsw.server.model.player;
 
-import it.polimi.ingsw.communication.Notification;
+import it.polimi.ingsw.communication.protocol.Notification;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
+import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.ScoreListener;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
@@ -609,6 +610,11 @@ class PlayerTest {
 
         @Override
         public void sendNotification(Notification.NotificationType type) throws ToClientException {
+
+        }
+
+        @Override
+        public void sendUpdate(Update update) throws ToClientException {
 
         }
     }

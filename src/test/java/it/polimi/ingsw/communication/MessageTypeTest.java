@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.communication.protocol.MessageType;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication;
 
+import it.polimi.ingsw.communication.socket.SocketDispatcher;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
@@ -70,6 +71,7 @@ class SocketDispatcherTest {
 
     /*Testing socket disconnected*/
     @Test
+    @Disabled
     void run_socketDisconnected() {
         try {
             dispatcher = new SocketDispatcher(socket);

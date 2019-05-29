@@ -1,5 +1,7 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.socket;
 
+import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.server.serverlogic.ServerMain;
 
 import java.io.IOException;
@@ -51,7 +53,7 @@ public class SocketDispatcher extends Thread {
                     }
                 }).start();
             }
-        } catch (IOException e) {//FIXME can throw null exception?
+        } catch (IOException e) {
             throw new UncheckedIOException("Error with the socket", e);
         }
     }
@@ -61,5 +63,10 @@ public class SocketDispatcher extends Thread {
      */
     public void stopListening() {
         listening = false;
+        try {
+            serverSocket.close();
+        } catch (IOException ignored) {
+            /*Ignoring errors*/
+        }
     }
 }

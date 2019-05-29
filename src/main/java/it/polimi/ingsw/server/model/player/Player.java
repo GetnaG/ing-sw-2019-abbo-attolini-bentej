@@ -297,6 +297,14 @@ public class Player implements Damageable {
         return nickname;
     }
 
+    public void suspend() {
+        suspension.playerSuspension(nickname, toClient);
+    }
+
+    public void setToClient(ToClientInterface toClient) {
+        this.toClient = toClient;
+    }
+
     /**
      * Returns a list with the available adrenaline actions.
      *

@@ -1,6 +1,10 @@
 package it.polimi.ingsw.communication;
 
 import com.google.gson.Gson;
+import it.polimi.ingsw.communication.protocol.MessageType;
+import it.polimi.ingsw.communication.protocol.Notification;
+import it.polimi.ingsw.communication.protocol.ProtocolMessage;
+import it.polimi.ingsw.communication.socket.SocketToClient;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.controller.effects.EffectIterator;

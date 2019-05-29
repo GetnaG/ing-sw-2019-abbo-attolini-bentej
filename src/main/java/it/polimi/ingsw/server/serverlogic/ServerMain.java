@@ -1,8 +1,8 @@
 package it.polimi.ingsw.server.serverlogic;
 
 import it.polimi.ingsw.client.clientlogic.ClientMain;
-import it.polimi.ingsw.communication.SocketDispatcher;
-import it.polimi.ingsw.server.controller.DeathmatchController;
+import it.polimi.ingsw.communication.User;
+import it.polimi.ingsw.communication.socket.SocketDispatcher;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -52,6 +52,8 @@ public class ServerMain {
         }
         PORT = Integer.parseInt(args[0]);
         secondsWaitingRoom = Integer.parseInt(args[1]);
+
+        User.setWaitingTime(30);//TODO: set from commandline
 
         /*Setting up Socket*/
         try {

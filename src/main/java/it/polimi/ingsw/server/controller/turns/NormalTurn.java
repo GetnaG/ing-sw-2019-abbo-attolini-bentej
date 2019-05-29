@@ -94,7 +94,7 @@ public class NormalTurn implements TurnInterface {
         } catch (ToClientException e) {
             // (1) default move : nothing
             // (2) suspend player
-            player.getSuspensionListener().playerSuspension(player);
+            player.suspend();
             return;
         }
 
@@ -127,7 +127,7 @@ public class NormalTurn implements TurnInterface {
         } catch (ToClientException e) {
             // (1) default move : does nothing
             // (2) suspend player
-            player.getSuspensionListener().playerSuspension(player);
+            player.suspend();
             return;
         }
 
@@ -156,7 +156,7 @@ public class NormalTurn implements TurnInterface {
         } catch (ToClientException e) {
             // (1) default move : nothing
             // (2) suspend player
-            player.getSuspensionListener().playerSuspension(player);
+            player.suspend();
             return;
         }
     }

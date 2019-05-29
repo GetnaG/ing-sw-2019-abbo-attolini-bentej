@@ -1,8 +1,7 @@
 package it.polimi.ingsw.client.clientlogic;
 
 import it.polimi.ingsw.client.interaction.InteractionInterface;
-import it.polimi.ingsw.communication.Update;
-import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.communication.protocol.Update;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -41,9 +40,9 @@ public class MatchState {
             case CONFIGURATION_ID:
                 boardState.setConfigurationID(Integer.parseInt(update.getNewValue().get(0)));
                 break;
-            case AMMOCARD_ARRAY:
+            case AMMO_CARD_ARRAY:
                 boardState.setAmmoCardsID(update.getNewValue());
-            case WEAPONCARD_ARRAY:
+            case WEAPON_CARD_ARRAY:
                 boardState.setWeaponCardID(update.getNewValue());
             case IS_WEAPON_DECK_DRAWABLE:
                 boardState.setIsWeaponDeckDrawable(
@@ -64,7 +63,7 @@ public class MatchState {
                 getReceiverState(update).setSquarePosition(Integer.parseInt(update.getNewValue().get(0)));
             case NICKNAME:
                 //
-            case AMMOCUBE_ARRAY:
+            case AMMO_CUBE_ARRAY:
                 getReceiverState(update).setAmmoCubes(
                         update.getNewValue().stream().map(Integer::parseInt).collect(Collectors.toList())
                 );

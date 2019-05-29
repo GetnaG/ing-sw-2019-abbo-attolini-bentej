@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller;
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.server.controller.turns.*;
 import it.polimi.ingsw.server.model.*;
@@ -415,8 +416,12 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      *
      * @param player    player to be suspended
      */
-    public void playerSuspension(Player player) {
-        suspendedPlayers.add(player);
+    public void playerSuspension(String player, ToClientInterface user) {
+        for (Player p : players)
+            if (p.getName().equals(player)) {
+                suspendedPlayers.add(p);
+                return;
+            }
     }
 
     /**
@@ -424,11 +429,22 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      *
      * @param player    player resumed
      */
-    public void playerResumption(Player player) {
-        suspendedPlayers.remove(player);
+    public void playerResumption(String player) {
+        for (Player p : players)
+            if (p.getName().equals(player)) {
+                suspendedPlayers.remove(p);
+                return;
+            }
     }
 
-
+    public void playerUpdate(String player, ToClientInterface newConnection) {
+        for (Player p : players)
+            if (p.getName().equals(player)) {
+                suspendedPlayers.remove(p);
+                p.setToClient(newConnection);
+                return;
+            }
+    }
 
 
     /**

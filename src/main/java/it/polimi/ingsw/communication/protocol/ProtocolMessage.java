@@ -1,4 +1,4 @@
-package it.polimi.ingsw.communication;
+package it.polimi.ingsw.communication.protocol;
 
 import java.util.List;
 
@@ -103,10 +103,10 @@ public class ProtocolMessage {
      * @param updates       the updates for this message
      * @param options       the available options
      */
-    public ProtocolMessage(MessageType command,
-                           String userChoice, Notification[] notifications,
-                           Update[] updates,
-                           String[][] options) {
+    private ProtocolMessage(MessageType command,
+                            String userChoice, Notification[] notifications,
+                            Update[] updates,
+                            String[][] options) {
         this.command = command;
         this.userChoice = userChoice;
         this.notifications = notifications;
@@ -157,7 +157,7 @@ public class ProtocolMessage {
 
     /**
      * Returns the user choice.
-     * If there are options, this should return the index of the choosen option.
+     * If there are options, this should return the index of the chosen option.
      * Otherwise the user's input is returned.
      * This can return null if no choice was made.
      *

@@ -51,7 +51,7 @@ public class FirstTurn implements TurnInterface {
             cardChosen = drawnPowerups.get(0);
             board.putPowerupCard(drawnPowerups.get(1));
             // (2) taking him offline
-            currentPlayer.getSuspensionListener().playerSuspension(currentPlayer);
+            currentPlayer.suspend();
 
         }
 
