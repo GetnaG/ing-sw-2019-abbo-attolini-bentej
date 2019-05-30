@@ -110,7 +110,7 @@ public class GUI extends Application implements InteractionInterface {
         HBox loginAndRadioBox = new HBox();
         StackPane logWindow = new StackPane();
         Text logText = new Text("Insert a username ");
-        Rectangle logRectangle = new Rectangle(400, 40);
+        Rectangle logRectangle = new Rectangle(800, 100);
 
         rootStackPane.getChildren().add(border);
         border.setCenter(vertical);
@@ -157,11 +157,11 @@ public class GUI extends Application implements InteractionInterface {
         usernameHBox.setAlignment(Pos.CENTER);
         loginAndRadioBox.setAlignment(Pos.CENTER);
         // Setting text proprieties
-        topText.setFont(new Font("Cambria", 20));
+        topText.setFont(new Font("Arial", 20));
         topText.setFill(Color.WHITE);
-        usernameLabel.setFont(new Font("Cambria", 20));
+        usernameLabel.setFont(new Font("Arial", 20));
         usernameLabel.setTextFill(Color.WHITE);
-        logText.setFont(new Font("Cambria", 15));
+        logText.setFont(new Font("Arial", 15));
         logText.setFill(Color.WHITE);
         socketRadio.setTextFill(Color.WHITE);
         rmiRadio.setTextFill(Color.WHITE);
@@ -201,7 +201,7 @@ public class GUI extends Application implements InteractionInterface {
         VBox vertical = new VBox();
         Text topText = new Text("Hall");
         StackPane logWindow = new StackPane();
-        logText = new Text("Match starting in 27 seconds...");
+        logText = new Text("");
         Rectangle logRectangle = new Rectangle(400, 40);
         Text textUserBox = new Text("The following users are connected:");
         usersBox = new HBox();
@@ -608,12 +608,29 @@ public class GUI extends Application implements InteractionInterface {
     }
 
     public void updateHall(int seconds) {
-        usersBox.getChildren().removeAll(usersBox.getChildren());
+        if (playersInHall == null)
+            playersInHall = new ArrayList<>();
+
+        List<String> oldPlayers = new ArrayList<>();
+        playersInHall.addAll(playersInHall);
         playersInHall = model.getConnectedPlayers();
+
+        usersBox.getChildren().removeAll(usersBox.getChildren());
         for (String name : playersInHall) {
             usersBox.getChildren().add(getPlayerBox(name));
         }
-        logText.setText("Match starting in " + seconds + "seconds...");
+
+        // Find disconections
+        for (String name : oldPlayers) {
+            if (!playersInHall.contains(name)) {
+                logText.setText(logText.getText() + "\n" + name + " has disconnected");
+            }
+        }
+
+        // Find new connections
+        for (String name : playersInHall)
+            if (!oldPlayers.contains(name))
+                logText.setText(logText.getText() + "\n" + name + " is connected");
     }
 
     public void setSynchGUI(SyncGUI sync) {
