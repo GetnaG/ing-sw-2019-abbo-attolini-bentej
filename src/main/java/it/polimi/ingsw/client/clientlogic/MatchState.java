@@ -83,11 +83,12 @@ public class MatchState {
                 getReceiverState(update).setPowerups(update.getNewValue());
             case CONNECTED_PLAYERS:
                 boardState.setConnectedPlayers(update.getNewValue());
+                subscribedIntercationInterfaces.forEach(i -> i.notifyUpdatedState());
+
             default:
                 // nothing
         }
 
-        subscribedIntercationInterfaces.forEach(i -> i.notifyUpdatedState());
     }
 
     private PlayerState getReceiverState(Update update) {

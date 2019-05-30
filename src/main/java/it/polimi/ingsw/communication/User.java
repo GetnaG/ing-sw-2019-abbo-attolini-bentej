@@ -359,15 +359,15 @@ public class User implements ToClientInterface {
     }
 
     /**
-     * {@inheritDoc}
-     * <p>
-     * The client will have {@linkplain #waitingTime} seconds to send an ack.
+     * Sends the provided update to the client.
+     *
+     * @param update the update to send
+     * @throws ToClientException if there are problems with the communication
+     *                           or the client does not answer in time
      */
     @Override
     public void sendUpdate(Update update) throws ToClientException {
-        genericInteraction(() -> {
-            toClient.sendUpdate(update);
-            return null;
-        });
+        toClient.sendUpdate(update);
     }
+
 }

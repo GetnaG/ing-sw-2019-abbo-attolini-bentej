@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.clientlogic.ClientMain;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -175,7 +176,6 @@ public class GUI extends Application implements InteractionInterface {
 
                 try {
                     controller.setConnection("localhost", 9000);
-                    buildHallPane(stage);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
@@ -497,7 +497,9 @@ public class GUI extends Application implements InteractionInterface {
 
     @Override
     public void notifyUpdatedState() {
-        updateHall(10);
+        Platform.runLater(
+                () -> updateHall(2)
+        );
     }
 
     @Override
@@ -593,7 +595,7 @@ public class GUI extends Application implements InteractionInterface {
             case "GREET":
                 break;
             case "USERNAME_AVAILABLE":
-                //buildHallPane(stage);
+                buildHallPane(stage);
                 break;
             case "USERNAME_TAKEN_AND_OFFLINE":
                 //  buildHallPane(stage);
@@ -606,9 +608,11 @@ public class GUI extends Application implements InteractionInterface {
     }
 
     public void updateHall(int seconds) {
-        usersBox.getChildren().removeAll();
+        usersBox.getChildren().removeAll(usersBox.getChildren());
         playersInHall = model.getConnectedPlayers();
-        playersInHall.forEach(p -> usersBox.getChildren().add(getPlayerBox(p)));
+        for (String name : playersInHall) {
+            usersBox.getChildren().add(getPlayerBox(name));
+        }
         logText.setText("Match starting in " + seconds + "seconds...");
     }
 

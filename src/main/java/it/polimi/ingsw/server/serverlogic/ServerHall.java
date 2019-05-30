@@ -1,12 +1,17 @@
 package it.polimi.ingsw.server.serverlogic;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.User;
+import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.DeathmatchController;
 
+import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 /**
  * Represents the place where Users gather to create a Game.
@@ -66,8 +71,8 @@ public class ServerHall implements Runnable {
     @Override
     public void run() {
 
-        //FIXME infinite loop --> this is why pc fans speed up
-/*        do {
+        //noinspection InfiniteLoopStatement
+        do {
 
             if (statusNextGame == GameStatus.NOTSTARTED && !connectedUsers.isEmpty()) {
                 nextGame = new DeathmatchController(new ArrayList<>(), 8);
@@ -91,8 +96,13 @@ public class ServerHall implements Runnable {
                 statusNextGame = GameStatus.STARTING;
             }
 
+            try {
+                TimeUnit.MILLISECONDS.sleep(100);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        } while (true);*/
+        } while (true);
 
     }
 
@@ -102,6 +112,13 @@ public class ServerHall implements Runnable {
      */
     public void addUser(User user){
         connectedUsers.add(user);
+        for (User u : connectedUsers) {
+            try {
+                u.sendUpdate(createUpdateHall());
+            } catch (ToClientException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -113,7 +130,13 @@ public class ServerHall implements Runnable {
 
     }
 
-
+    /**
+     * Creates an Update containing the connected players.
+     */
+    private Update createUpdateHall() {
+        List<String> nicknames = connectedUsers.stream().map(u -> u.getName()).collect(Collectors.toList());
+        return new Update(Update.UpdateType.CONNECTED_PLAYERS, nicknames);
+    }
 
 
 

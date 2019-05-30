@@ -4,6 +4,7 @@ package it.polimi.ingsw.client.interaction;
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import javafx.application.Application;
+import javafx.application.Platform;
 
 import java.util.List;
 
@@ -121,7 +122,7 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public void sendNotification(String notificationKey) {
-        gui.sendNotification(notificationKey);
+        Platform.runLater(() -> gui.sendNotification(notificationKey));
     }
 
     @Override
