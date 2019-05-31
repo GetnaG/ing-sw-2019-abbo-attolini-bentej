@@ -65,9 +65,9 @@ public class ServerMain {
             System.exit(1);
         }
 
-        secondsWaitingRoom = Integer.parseInt(args[0]);
+        secondsWaitingRoom = Integer.parseInt(args[1]);
         User.setWaitingTime(Integer.parseInt(args[2]));
-        new ServerMain(Integer.parseInt(args[1]));
+        new ServerMain(Integer.parseInt(args[0]));
     }
 
     /**

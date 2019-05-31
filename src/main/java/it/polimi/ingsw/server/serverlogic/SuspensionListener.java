@@ -42,8 +42,8 @@ public interface SuspensionListener {
      *
      * @param player        the nickname of the player that is back online
      * @param newConnection the class that will handle the communication from
-     *                      now on
+     * @return true if the player was successfully updated
      */
-    void playerUpdate(String player, ToClientInterface newConnection);
+    boolean playerUpdate(String player, ToClientInterface newConnection);
 
 }

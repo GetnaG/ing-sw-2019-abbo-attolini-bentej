@@ -99,8 +99,9 @@ public class Nicknames implements SuspensionListener {
     }
 
     @Override
-    public void playerUpdate(String player, ToClientInterface newConnection) {
+    public boolean playerUpdate(String player, ToClientInterface newConnection) {
         //TODO implement
+        return false;
     }
 
     /**

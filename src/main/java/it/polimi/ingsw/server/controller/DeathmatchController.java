@@ -434,13 +434,14 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             }
     }
 
-    public void playerUpdate(String player, ToClientInterface newConnection) {
+    public boolean playerUpdate(String player, ToClientInterface newConnection) {
         for (Player p : players)
             if (p.getName().equals(player)) {
                 suspendedPlayers.remove(p);
                 p.setToClient(newConnection);
-                return;
+                return true;
             }
+        return false;
     }
 
 

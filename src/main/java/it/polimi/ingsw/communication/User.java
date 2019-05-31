@@ -99,9 +99,8 @@ public class User implements ToClientInterface {
                     return;
                 }
 
-                /*Notifying match listener only if the match was started*/
-                if (matchSuspensionListener != null)
-                    matchSuspensionListener.playerUpdate(name, this);
+                /*Retrieving the matchSuspensionListener and notifying it*/
+                ServerMain.getDeathMatchHall().notifyMatchesPlayerResumption(name, this);
                 break;
 
             /*Success: adding to the hall*/
@@ -127,6 +126,8 @@ public class User implements ToClientInterface {
                     /*The old user is online: no action taken*/
                     return;
                 }
+
+                /*Asking again*/
                 init();
                 break;
             default:

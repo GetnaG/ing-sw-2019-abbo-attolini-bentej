@@ -5,133 +5,249 @@ import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.DeathmatchController;
 
-import java.sql.Time;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
 import java.util.List;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 /**
  * Represents the place where Users gather to create a Game.
  * <p>
- * A Game is created when at least 3 users are connected and the time is elapsed.
+ * A Game is created when at least {@linkplain #MINIMUM_PLAYERS} users
+ * are connected and {@linkplain #secondsWaitingRoom} are elapsed, or when
+ * {@linkplain #MAXIMUM_PLAYERS} are connected.
  *
  * @author Fahed B. Tej
+ * @author Abbo Giulio A.
  */
 public class ServerHall implements Runnable {
+    /**
+     * The minimum number of player for a match to start.
+     */
+    private static final int MINIMUM_PLAYERS = 3;
+    /**
+     * The maximum number of player for a match to start.
+     */
+    private static final int MAXIMUM_PLAYERS = 5;
 
     /**
-     * Timer used to build a Game
+     * The seconds before starting a game having enough players.
      */
-    private long startTimer;
-
+    private int secondsWaitingRoom;
     /**
-     * Seconds before starting a game having >= 3 player
-     */
-    private int seconds;
-    /**
-     * Connected Users
+     * Connected Users waiting for a match to start.
      */
     private List<User> connectedUsers;
-
     /**
-     * Status of the nextGame;
+     * All the matches running.
+     */
+    private List<DeathmatchController> startedGames;
+    /**
+     * Status of the hall.
      */
     private GameStatus statusNextGame;
+    /**
+     * Whether the hall is still running.
+     */
+    private boolean running;
+    /**
+     * The task that will fire {@linkplain #timeOut()} after a delay.
+     */
+    private Future timer;
 
     /**
-     * Match controller
+     * Constructs a server hall for a death match with the provided waiting time.
+     *
+     * @param secondsWaitingRoom the amount of seconds to wait for a match
+     *                           with the minimum number of players to start
      */
-    private DeathmatchController nextGame;
-
-    /**
-     * @param secondsWaitingRoom
-     */
-
-    public ServerHall(int secondsWaitingRoom) {
-        this.seconds = secondsWaitingRoom;
-        this.connectedUsers = new ArrayList<>();
-        statusNextGame = GameStatus.NOTSTARTED;
+    ServerHall(int secondsWaitingRoom) {
+        this.secondsWaitingRoom = secondsWaitingRoom;
+        connectedUsers = new ArrayList<>();
+        startedGames = new ArrayList<>();
+        statusNextGame = GameStatus.NOT_STARTED;
+        timer = null;
     }
 
-
     /**
-     * This method represent the ServerHall Thread. It takes care of collecting the players together and creates a Game.
-     *
-     * @see Thread#run()
+     * This method can be run in another thread, handles the state of the hall.
      */
     @Override
     public void run() {
-
-        //noinspection InfiniteLoopStatement
-        do {
-
-            if (statusNextGame == GameStatus.NOTSTARTED && !connectedUsers.isEmpty()) {
-                nextGame = new DeathmatchController(new ArrayList<>(), 8);
-                statusNextGame = GameStatus.STARTING;
-                startTimer = System.currentTimeMillis();
-            }
-
-            if (statusNextGame == GameStatus.STARTING && connectedUsers.size() >= 3) {
-                statusNextGame = GameStatus.STARTINGTIMER;
-                startTimer = System.currentTimeMillis();
-            }
-
-            if (statusNextGame == GameStatus.STARTINGTIMER && connectedUsers.size() >= 3 && System.currentTimeMillis() - startTimer >= seconds * 1000) {
-                nextGame.addUsers(connectedUsers);
-                nextGame.start();
-                statusNextGame = GameStatus.NOTSTARTED;
-            }
-
-            // se esiste un nextGame && i giocatori sono meno di 3 allora ferma l'eventuale timer e cambia stato gioco
-            if (statusNextGame == GameStatus.STARTINGTIMER && connectedUsers.size() < 3) {
-                statusNextGame = GameStatus.STARTING;
-            }
-
-            try {
-                TimeUnit.MILLISECONDS.sleep(100);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-
-        } while (true);
-
-    }
-
-    /**
-     * Adds the connected user to the waiting room
-     * @param user  connected user
-     */
-    public void addUser(User user){
-        connectedUsers.add(user);
-        for (User u : connectedUsers) {
-            try {
-                u.sendUpdate(createUpdateHall());
-            } catch (ToClientException e) {
-                e.printStackTrace();
+        running = true;
+        synchronized (this) {
+            while (running) {
+                statusNextGame = statusNextGame.nextState(connectedUsers);
+                statusNextGame.act(this);
+                try {
+                    wait();
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
     }
 
     /**
-     * Removes the disconnected user from the waiting room
-     * @param user  disconnected user
+     * Adds the connected user to the waiting room.
+     * If the maximum number of user is reached the match starts.
+     *
+     * @param user the connected user
      */
-    public void removeUser(User user){
-        connectedUsers.remove(user);
-
+    public synchronized void addUser(User user) {
+        connectedUsers.add(user);
+        updateAll();
+        if (connectedUsers.size() >= MAXIMUM_PLAYERS)
+            startMatch();
+        notifyAll();
     }
 
     /**
-     * Creates an Update containing the connected players.
+     * Notifies that the specified match controller is no longer active.
+     *
+     * @param controller the controller of the match that is over
      */
-    private Update createUpdateHall() {
-        List<String> nicknames = connectedUsers.stream().map(u -> u.getName()).collect(Collectors.toList());
-        return new Update(Update.UpdateType.CONNECTED_PLAYERS, nicknames);
+    public synchronized void removeMatch(DeathmatchController controller) {
+        startedGames.remove(controller);
     }
 
+    /**
+     * Notifies all running match controllers that a player is back online.
+     * If the player is in one of the active matches, his match suspension
+     * listener is updated.
+     *
+     * @param name    the name of the player that is back online
+     * @param newUser the new user that takes the place of the one offline
+     */
+    public synchronized void notifyMatchesPlayerResumption(String name, User newUser) {
+        for (DeathmatchController controller : startedGames) {
+            if (controller.playerUpdate(name, newUser))
+                newUser.setMatchSuspensionListener(controller);
+        }
+    }
 
+    /**
+     * Sends am update to all the users that are waiting.
+     * The update contains a list of all the users waiting.
+     */
+    private void updateAll() {
+        Update update = new Update(
+                Update.UpdateType.CONNECTED_PLAYERS,
+                connectedUsers.stream().map(User::getName).collect(Collectors.toList()));
+        for (User u : connectedUsers) {
+            try {
+                u.sendUpdate(update);
+            } catch (ToClientException e) {
+                connectedUsers.remove(u);
+                updateAll();
+                break;
+            }
+        }
+    }
 
+    /**
+     * Starts a death match.
+     */
+    private synchronized void startMatch() {
+        stopTimer();
+        DeathmatchController controller = new DeathmatchController(connectedUsers, 8);
+        startedGames.add(controller);
+        for (User u : connectedUsers)
+            u.setMatchSuspensionListener(controller);
+        connectedUsers.clear();
+        statusNextGame = GameStatus.NOT_STARTED;
+        ServerMain.getLog().info("Match starting");
+    }
+
+    /**
+     * Ensures that the timer after which the match will start is running.
+     */
+    private void startTimer() {
+        if (timer == null || timer.isDone()) {
+            timer = Executors.newSingleThreadScheduledExecutor().schedule(
+                    this::timeOut, secondsWaitingRoom, TimeUnit.SECONDS);
+            ServerMain.getLog().info("Timer starting");
+        }
+    }
+
+    /**
+     * Ensure that the timer after which the match will start is not running.
+     */
+    private void stopTimer() {
+        if (timer != null) {
+            timer.cancel(false);
+            timer = null;
+        }
+    }
+
+    /**
+     * This method is called when the time is over: if there are still enough
+     * players the match is started.
+     */
+    private synchronized void timeOut() {
+        updateAll();
+        if (connectedUsers.size() >= MINIMUM_PLAYERS)
+            startMatch();
+        notifyAll();
+    }
+
+    /**
+     * Represents the status of the {@linkplain ServerHall}.
+     */
+    private enum GameStatus {
+        /**
+         * Game is not started.
+         */
+        NOT_STARTED {
+            @Override
+            void act(ServerHall hall) {
+                hall.stopTimer();
+            }
+        },
+        /**
+         * Game has started and it's waiting for the minimum number of players.
+         */
+        WAITING {
+            @Override
+            void act(ServerHall hall) {
+                hall.stopTimer();
+            }
+        },
+        /**
+         * Game is waiting for the timer to expire so it can start the game.
+         */
+        TIMER_STARTED {
+            @Override
+            void act(ServerHall hall) {
+                hall.startTimer();
+            }
+        };
+
+        /**
+         * Runs the right commands based on the state.
+         *
+         * @param hall the server hall that is calling this
+         */
+        abstract void act(ServerHall hall);
+
+        /**
+         * Returns the next state of the hall.
+         * The state returned is based on the number of connected users and
+         * the current state.
+         *
+         * @param connected the list of connected users
+         * @return the next state
+         */
+        private GameStatus nextState(List connected) {
+            if (connected.isEmpty()) {
+                return NOT_STARTED;
+            }
+            if (connected.size() < MINIMUM_PLAYERS) {
+                return WAITING;
+            }
+            return TIMER_STARTED;
+        }
+    }
 }
