@@ -13,7 +13,7 @@ public class Update {
     /**
      * The separator that must be put between elements of the same sequence.
      */
-    private static final String SEPARATOR = "|@|";
+    public static final String SEPARATOR = "|@|";
 
     /**
      * The type of this update, the field modified.

@@ -47,19 +47,13 @@ public class ServerHall implements Runnable {
     private DeathmatchController nextGame;
 
     /**
-     * Thread wich takes care of user's connection.
-     */
-    private Thread connectionsDispatcher;
-
-    /**
      * @param secondsWaitingRoom
      */
 
-    public ServerHall(int secondsWaitingRoom, Thread connectionsDispatcher) {
+    public ServerHall(int secondsWaitingRoom) {
         this.seconds = secondsWaitingRoom;
         this.connectedUsers = new ArrayList<>();
         statusNextGame = GameStatus.NOTSTARTED;
-        this.connectionsDispatcher = connectionsDispatcher;
     }
 
 

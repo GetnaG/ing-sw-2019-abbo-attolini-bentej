@@ -1,7 +1,6 @@
 package it.polimi.ingsw.server.serverlogic;
 
 import it.polimi.ingsw.communication.ToClientInterface;
-import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
@@ -74,12 +73,11 @@ public class Nicknames implements SuspensionListener {
 
     /**
      * Sets the given player's status to disconnected
-     *
-     * @param player disconnected player
-     * @param user
+     *  @param player disconnected player
+     * @param marchSuspensionListener
      */
     @Override
-    public synchronized void playerSuspension(String player, ToClientInterface user) {
+    public synchronized void playerSuspension(String player, SuspensionListener marchSuspensionListener) {
         //FIXME what if the player was not in onlineNames?
         onlineNames.remove(player);
         offlineNames.add(player);

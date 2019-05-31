@@ -72,6 +72,7 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
                         effect.getName());
 
         /*Adding the other effects*/
+        //FIXME: Action does not behave like other effects
         moveSelfEffects = new ArrayList<>();
         moveSelfEffects.add(new Action("cyberblade_shadowstep", new Move()));
         moveSelfEffects.add(new Action("rocketLauncher_rocketJump",

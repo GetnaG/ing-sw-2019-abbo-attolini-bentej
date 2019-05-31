@@ -19,7 +19,7 @@ import java.util.ResourceBundle;
  * This also expects to find another folder, {@linkplain #IMAGES_PATH},
  * containing the images with their key as name and the extension as
  * {@linkplain #IMAGE_EXTENSION}.
- *
+ * <p>
  * This allows classes to load {@link Properties}, the files must be located
  * in a folder at {@linkplain #PROPERTIES_PATH}.
  *
@@ -60,6 +60,12 @@ public class R {
      * The bundle for interface labels.
      */
     private static ResourceBundle uiBundle;
+
+    /**
+     * Hides the implicit public constructor with a package one.
+     */
+    R() {
+    }
 
     /**
      * Returns the localized value associated with the provided {@code key}.
@@ -119,7 +125,7 @@ public class R {
         Properties properties = new Properties();
         try {
             properties.load(R.class.getResourceAsStream(
-                    PROPERTIES_EXTENSION + fileName + PROPERTIES_EXTENSION));
+                    PROPERTIES_PATH + fileName + PROPERTIES_EXTENSION));
         } catch (IOException e) {
             throw new MissingResourceException("Could not find file: " + fileName,
                     R.class.getName(), fileName);

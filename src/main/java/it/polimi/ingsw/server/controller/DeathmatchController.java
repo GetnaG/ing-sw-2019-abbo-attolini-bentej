@@ -1,11 +1,9 @@
 package it.polimi.ingsw.server.controller;
-import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.server.controller.turns.*;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.board.*;
-import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.NormalPlayerBoard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -13,9 +11,7 @@ import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -415,8 +411,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * Changes the given player status to suspended.
      *
      * @param player    player to be suspended
+     * @param marchSuspensionListener
      */
-    public void playerSuspension(String player, ToClientInterface user) {
+    public void playerSuspension(String player, SuspensionListener marchSuspensionListener) {
         for (Player p : players)
             if (p.getName().equals(player)) {
                 suspendedPlayers.add(p);

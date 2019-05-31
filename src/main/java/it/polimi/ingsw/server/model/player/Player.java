@@ -106,7 +106,7 @@ public class Player implements Damageable {
     /**
      * Suspension listner is called when a player has to be suspended.
      */
-    private SuspensionListener suspension;
+    private SuspensionListener suspension;//FIXME: the suspension listeners are called by the User class, non by the player.
 
     /**
      * Constructor for testing purposes.
@@ -298,7 +298,7 @@ public class Player implements Damageable {
     }
 
     public void suspend() {
-        suspension.playerSuspension(nickname, toClient);
+        //FIXME, player should be already suspended. suspension.playerSuspension (nickname, toClient);
     }
 
     public void setToClient(ToClientInterface toClient) {

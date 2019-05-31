@@ -41,6 +41,7 @@ public class User implements ToClientInterface {
     /**
      * Match suspension listener to update in case of connection lost.
      * This should make suspended users skip their turn.
+     * Null if the match has not started yet.
      */
     private SuspensionListener matchSuspensionListener;
     /**
@@ -94,7 +95,7 @@ public class User implements ToClientInterface {
                 } catch (ToClientException e) {
 
                     /*User offline again: will not swap with the old*/
-                    serverSuspensionListener.playerSuspension(name, this);
+                    serverSuspensionListener.playerSuspension(name, matchSuspensionListener);
                     return;
                 }
 
@@ -110,11 +111,11 @@ public class User implements ToClientInterface {
                 } catch (ToClientException e) {
 
                     /*Freeing the nickname*/
-                    serverSuspensionListener.playerSuspension(name, this);
+                    serverSuspensionListener.playerSuspension(name, matchSuspensionListener);
                     return;
                 }
                 ServerMain.getLog().info(() -> "Connected: " + name);
-                ServerMain.getServerHall().addUser(this);
+                ServerMain.getDeathMatchHall().addUser(this);
                 break;
 
             /*Taken and the player is online: asking again*/
@@ -188,16 +189,17 @@ public class User implements ToClientInterface {
         } catch (ExecutionException e) {
 
             /*Over with exception: suspending the player*/
-            serverSuspensionListener.playerSuspension(name, this);
+            serverSuspensionListener.playerSuspension(name, matchSuspensionListener);
             if (matchSuspensionListener != null)
-                matchSuspensionListener.playerSuspension(name, this);
+                matchSuspensionListener.playerSuspension(name, matchSuspensionListener);
             throw new ToClientException("Exception while interacting", e);
         } catch (TimeoutException e) {
 
-            /*Over because time out: same as disconnection*/
-            serverSuspensionListener.playerSuspension(name, this);
+            /*Over because time out: closing connection and suspending*/
+            toClient.quit();
+            serverSuspensionListener.playerSuspension(name, matchSuspensionListener);
             if (matchSuspensionListener != null)
-                matchSuspensionListener.playerSuspension(name, this);
+                matchSuspensionListener.playerSuspension(name, matchSuspensionListener);
             throw new ToClientException("Time over while interacting", e);
         }
     }
@@ -359,15 +361,15 @@ public class User implements ToClientInterface {
     }
 
     /**
-     * Sends the provided update to the client.
-     *
-     * @param update the update to send
-     * @throws ToClientException if there are problems with the communication
-     *                           or the client does not answer in time
+     * {@inheritDoc}
+     * <p>
+     * The client will have {@linkplain #waitingTime} seconds to send an ack.
      */
     @Override
     public void sendUpdate(Update update) throws ToClientException {
-        toClient.sendUpdate(update);
+        genericInteraction(() -> {
+            toClient.sendUpdate(update);
+            return null;
+        });
     }
-
 }
