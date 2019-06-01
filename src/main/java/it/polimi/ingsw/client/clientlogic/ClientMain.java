@@ -41,29 +41,6 @@ public class ClientMain {
             LOG.log(Level.SEVERE, "Socket error",e);
         }
     }
-
-    public static void setControllerModel(GUI gui) {
-        String[] s = {"gui"};
-
-        MatchState model;
-        ClientController controller;
-        InteractionInterface view = null;
-
-        try {
-            view = InteractionFactory.getInteractionInterface(s);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        model = new MatchState();
-        controller = new ClientController(model, view);
-        model.subscribe(gui);
-
-
-        gui.setModel(model);
-        gui.setController(controller);
-
-        view.setGUI(gui);
-    }
 }
 
 
