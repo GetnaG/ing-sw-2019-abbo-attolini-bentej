@@ -574,7 +574,7 @@ public class CardEffect implements EffectInterface {
      * @param collector where all the possible combinations will be stored
      */
     private void combinations(List<Damageable> elements, int min, int max,
-                              List<List<Damageable>> collector) {
+                              List<? super List<Damageable>> collector) {
 
         /*Adding this element only if it has the right length and is not
         already present*/

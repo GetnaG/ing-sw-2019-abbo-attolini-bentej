@@ -93,8 +93,7 @@ public class NormalTurn implements TurnInterface {
             card = player.getToClient().choosePowerup(player.getAllPowerup());
         } catch (ToClientException e) {
             // (1) default move : nothing
-            // (2) suspend player
-            player.suspend();
+            // (2) suspend player: already done by the User class (calls matchSuspensionListener)
             return;
         }
 
@@ -126,8 +125,7 @@ public class NormalTurn implements TurnInterface {
             chosenAction = player.getToClient().chooseAction(actions);
         } catch (ToClientException e) {
             // (1) default move : does nothing
-            // (2) suspend player
-            player.suspend();
+            // (2) suspend player: already done by the User class (calls matchSuspensionListener)
             return;
         }
 
@@ -155,8 +153,7 @@ public class NormalTurn implements TurnInterface {
                 player.reload(cardToReload);
         } catch (ToClientException e) {
             // (1) default move : nothing
-            // (2) suspend player
-            player.suspend();
+            // (2) suspend player: already done by the User class (calls matchSuspensionListener)
             return;
         }
     }

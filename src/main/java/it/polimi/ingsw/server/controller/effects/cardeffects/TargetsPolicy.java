@@ -43,7 +43,7 @@ enum TargetsPolicy {
      */
     Set<Damageable> getValidTargets(Player subject,
                                     Set<Damageable> allTargets,
-                                    List<Damageable> alreadyTargeted,
+                                    List<? extends Damageable> alreadyTargeted,
                                     GameBoard board) {
 
         Set<Damageable> valid = getAllValidTargets(subject, allTargets,
@@ -65,7 +65,7 @@ enum TargetsPolicy {
      */
     private Set<Damageable> getAllValidTargets(Player subject,
                                                Set<Damageable> allTargets,
-                                               List<Damageable> alreadyTargeted,
+                                               List<? extends Damageable> alreadyTargeted,
                                                GameBoard board) {
         switch (this) {
             case VISIBLE:
@@ -90,7 +90,7 @@ enum TargetsPolicy {
      * @return the targets visible by the provided target
      */
     private Set<Damageable> getVisibleTargetsBy(Damageable target,
-                                                Set<Damageable> allTargets,
+                                                Set<? extends Damageable> allTargets,
                                                 GameBoard board) {
         Set<Damageable> targets = new HashSet<>();
         for (Square s : target.getPosition().listOfVisibles(board))

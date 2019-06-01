@@ -76,7 +76,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * @return      player relative to the user
      */
     private Player buildPlayer(User user, boolean isFirst, String figureRes){
-        return new Player(user.getName(),isFirst,figureRes,user,new NormalPlayerBoard(),this,this);
+        return new Player(user.getName(),isFirst,figureRes,user,new NormalPlayerBoard(),this);
     }
 
     /**

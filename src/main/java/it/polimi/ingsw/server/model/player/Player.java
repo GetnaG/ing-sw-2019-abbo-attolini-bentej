@@ -3,14 +3,17 @@ package it.polimi.ingsw.server.model.player;
 import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.server.controller.ScoreListener;
 import it.polimi.ingsw.server.controller.effects.Action;
+import it.polimi.ingsw.server.controller.effects.Grab;
+import it.polimi.ingsw.server.controller.effects.Move;
+import it.polimi.ingsw.server.controller.effects.Shoot;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
-import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -46,67 +49,51 @@ public class Player implements Damageable {
      * The name of this player.
      */
     private String nickname;
-
     /**
      * The total score of this player.
      */
     private int score;
-
     /**
      * Whether this is the player who started the game.
      */
     private boolean firstPlayer;
-
     /**
      * Info on the resources associated with this player.
      */
     private String figureRes;
-
     /**
      * Handles the communication with this player.
      */
     private ToClientInterface toClient;
-
     /**
      * Handles the cards fot this player.
      */
     private HandManager hand;
-
     /**
      * Handles the cubes for this player.
      */
     private AmmoBox ammoBox;
-
     /**
      * Handles damage and scoring for this player.
      */
     private PlayerBoardInterface playerBoard;
-
     /**
      * The position if this player.
      */
     private Square position;
-
     /**
      * The first adrenaline action available.
      */
     private Action adrenaline1;
-
     /**
      * The second adrenaline action available.
      */
     private Action adrenaline2;
-
     /**
      * Will be notified of the death of this player and will call a scoring
      * method when necessary.
      */
     private ScoreListener scorer;
-
-    /**
-     * Suspension listner is called when a player has to be suspended.
-     */
-    private SuspensionListener suspension;//FIXME: the suspension listeners are called by the User class, non by the player.
 
     /**
      * Constructor for testing purposes.
@@ -147,39 +134,8 @@ public class Player implements Damageable {
         hand = new HandManager();
         ammoBox = new AmmoBox();
 
-        //FIXME To be specified, maybe add from json?
-        adrenaline1 = new Action();
-        adrenaline2 = new Action();
-    }
-
-    /**
-     * Instantiates a player with the given parameters.
-     *
-     * @param nickname    the name of this player
-     * @param firstPlayer true if this is the first player
-     * @param figureRes   info on the resources associated with this
-     * @param toClient    communication interface with the player
-     * @param playerBoard the board that will handle the damage
-     * @param scorer      the interface that handles the scoring
-     */
-    public Player(String nickname, boolean firstPlayer, String figureRes,
-                  ToClientInterface toClient,
-                  PlayerBoardInterface playerBoard, ScoreListener scorer, SuspensionListener suspension) {
-        this.nickname = nickname;
-        this.firstPlayer = firstPlayer;
-        this.figureRes = figureRes;
-        this.toClient = toClient;
-        this.playerBoard = playerBoard;
-        this.scorer = scorer;
-        this.suspension = suspension;
-
-        score = 0;
-        hand = new HandManager();
-        ammoBox = new AmmoBox();
-
-        //FIXME To be specified, maybe add from json?
-        adrenaline1 = new Action();
-        adrenaline2 = new Action();
+        adrenaline1 = new Action("adr1", Arrays.asList(new Move(), new Move(), new Grab()));
+        adrenaline2 = new Action("adr2", Arrays.asList(new Move(), new Shoot()));
     }
 
     /**
@@ -193,10 +149,8 @@ public class Player implements Damageable {
      * @param scorer      the interface that handles the scoring
      */
     public Player(String nickname, boolean firstPlayer, String figureRes,
-                  ToClientInterface toClient,
-                  ScoreListener scorer) {
-        this(nickname, firstPlayer, figureRes, toClient,
-                new NormalPlayerBoard(), scorer);
+                  ToClientInterface toClient, ScoreListener scorer) {
+        this(nickname, firstPlayer, figureRes, toClient, new NormalPlayerBoard(), scorer);
     }
 
     /**
@@ -295,14 +249,6 @@ public class Player implements Damageable {
     @Override
     public String getName() {
         return nickname;
-    }
-
-    public void suspend() {
-        //FIXME, player should be already suspended. suspension.playerSuspension (nickname, toClient);
-    }
-
-    public void setToClient(ToClientInterface toClient) {
-        this.toClient = toClient;
     }
 
     /**
@@ -425,7 +371,7 @@ public class Player implements Damageable {
      * @throws IllegalArgumentException if the player can not afford to buy
      *                                  the card
      */
-    public void buy(WeaponCard card, List<PowerupCard> asCubes) {
+    public void buy(WeaponCard card, List<? extends PowerupCard> asCubes) {
 
         List<AmmoCube> cost = new ArrayList<>(card.getCost().subList(1,
                 card.getCost().size()));
@@ -560,15 +506,6 @@ public class Player implements Damageable {
     }
 
     /**
-     * Returns a reference to the suspension listener associated with this player.
-     *
-     * @return a reference to the suspension listener associated with this player.
-     */
-    public SuspensionListener getSuspensionListener(){
-        return suspension;
-    }
-
-    /**
      * Returns the {@linkplain ToClientInterface} used to communicate with
      * this player.
      *
@@ -577,6 +514,19 @@ public class Player implements Damageable {
      */
     public ToClientInterface getToClient() {
         return toClient;
+    }
+
+    public void setToClient(ToClientInterface toClient) {
+        this.toClient = toClient;
+    }
+
+    /**
+     * Gets the Board of the player.
+     *
+     * @return Bord of the player.
+     */
+    public PlayerBoardInterface getPlayerBoard() {
+        return playerBoard;
     }
 
     /**
@@ -589,13 +539,5 @@ public class Player implements Damageable {
         List<Player> marks = this.playerBoard.getMarks();
         this.playerBoard = playerBoard;
         this.playerBoard.addMarks(marks);
-    }
-
-    /**
-     * Gets the Board of the player.
-     * @return Bord of the player.
-     */
-    public PlayerBoardInterface getPlayerBoard(){
-        return playerBoard;
     }
 }

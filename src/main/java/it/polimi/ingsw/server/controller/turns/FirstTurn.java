@@ -50,9 +50,7 @@ public class FirstTurn implements TurnInterface {
             // (1) making a default move
             cardChosen = drawnPowerups.get(0);
             board.putPowerupCard(drawnPowerups.get(1));
-            // (2) taking him offline
-            currentPlayer.suspend();
-
+            // (2) taking him offline: already done by the User class (calls matchSuspensionListener)
         }
 
         currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));

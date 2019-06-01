@@ -261,6 +261,6 @@ public class NormalPlayerBoard implements PlayerBoardInterface {
      * @return {@inheritDoc}
      */
     public List<Player> getDamage() {
-        return this.damage;
+        return damage;
     }
 }

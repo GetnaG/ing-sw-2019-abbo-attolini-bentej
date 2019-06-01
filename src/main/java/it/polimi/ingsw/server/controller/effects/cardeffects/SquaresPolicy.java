@@ -54,7 +54,7 @@ enum SquaresPolicy {
      * @return all the valid squares, null if squares are not relevant
      */
     Set<Square> getValidDestinations(Player subject, GameBoard board,
-                                     List<Damageable> alreadyTargeted) {
+                                     List<? extends Damageable> alreadyTargeted) {
         switch (this) {
             case VISIBLE:
                 return new HashSet<>(subject.getPosition().listOfVisibles(board));
@@ -83,7 +83,7 @@ enum SquaresPolicy {
      * @param target      the target to be affected
      * @param destination a set containing the chosen destination
      */
-    void apply(Player subject, Damageable target, Set<Square> destination) {
+    void apply(Player subject, Damageable target, Set<? extends Square> destination) {
         switch (this) {
             case TO_SUBJECT:
                 target.setPosition(subject.getPosition());
