@@ -72,16 +72,14 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public int chooseWeapon(List<List<String>> optionKeys) {
-
         GUI.chooseWeapon(optionKeys);
         while (true) {
             if (GUI.isAnswerGiven())
                 break;
         }
-        int buttonPressed = GUI.getAnswer();
-        return buttonPressed;
-
-
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        return indexButtonPressed;
     }
 
     @Override
@@ -101,7 +99,14 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public int chooseAction(List<List<String>> optionKeys) {
-        return 0;
+        GUI.chooseAction(optionKeys);
+        while (true) {
+            if (GUI.isAnswerGiven())
+                break;
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        return indexButtonPressed;
     }
 
     @Override

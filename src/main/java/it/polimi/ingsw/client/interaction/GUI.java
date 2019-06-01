@@ -236,7 +236,7 @@ public class GUI extends Application {
         BorderPane centerBorderPane = new BorderPane();
         borderPane.setCenter(centerBorderPane);
 
-        centerBorderPane.setCenter(getMap());
+        centerBorderPane.setCenter(new MapGUI(0));
         insertOtherPlayers(centerBorderPane);
 
         centerBorderPane.setAlignment(centerBorderPane, Pos.CENTER);
@@ -625,7 +625,6 @@ public class GUI extends Application {
         this.stage = stage;
         setUpLoginScene(stage);
         masterScene = new Scene(rootStackPane, 1000, 1000);
-        buildGamePane(null);
         stage.setTitle("Adrenaline");
         stage.setScene(masterScene);
         stage.show();
@@ -725,30 +724,8 @@ public class GUI extends Application {
 
     }
 
-    /**
-     * Builds the options and puts them in the Answer Box
-     *
-     * @param options
-     * @return
-     */
-    private Node getDumbAnswerBox(List<List<String>> options) {
-        answerBox = new HBox();
-        Button answer1 = new Button("Shoot");
-        Button answer2 = new Button("Grab");
-        Button answer3 = new Button("Move");
-        ImageView imgBox = new ImageView();
-
-        imgBox.setTranslateY(-40);
-        createCardAnimation(answer1, "", imgBox);
-
-        answerBox.getChildren().addAll(answer1, answer2, answer3, imgBox);
-        answerBox.setSpacing(10);
-        answerBox.setAlignment(Pos.CENTER);
-        return answerBox;
-    }
-
-    private String fromResIDToName(String resID) {
-        return "A"; // TODO Implement
+    public static void setAnswerGiven(boolean isAnwerGiven) {
+        answerGiven = isAnwerGiven;
     }
 
 }
