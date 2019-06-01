@@ -63,9 +63,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
                         buildPlayer(u,users.indexOf(u)==0, "FigureRes"+users.indexOf(u))) //TODO Make FigureRes parametric
                 .collect(Collectors.toList());
 
+        this.board = new GameBoard(new KillshotTrack(skullsLeft), null);
         this.gameConfiguration = loadRooms();
-        this.gameConfiguration = loadRooms();
-        this.board = new GameBoard(new KillshotTrack(skullsLeft), gameConfiguration);
+        this.board.setConfiguration(this.gameConfiguration);
         this.suspendedPlayers = new ArrayList<>();
         this.killedInTurn = new ArrayList<>();
     }

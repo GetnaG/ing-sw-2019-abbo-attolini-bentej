@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 public class MatchState {
 
     private List<PlayerState> playersState;
+
     private BoardState boardState;
     private List<InteractionInterface> subscribedIntercationInterfaces;
 
@@ -127,6 +128,14 @@ public class MatchState {
 
     public List<String> getConnectedPlayers() {
         return boardState.getConnectedPlayers();
+    }
+
+    public List<String> getDisconnectedPlayers() {
+        return boardState.getDisconnectedPlayers();
+    }
+
+    public List<String> getJustConnectedPlayers() {
+        return boardState.getJustConnectedPlayers();
     }
 
 }

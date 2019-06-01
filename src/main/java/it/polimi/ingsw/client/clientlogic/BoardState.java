@@ -18,10 +18,12 @@ public class BoardState {
     private List<List<String>> killshotTrack;
     private boolean isActionTileFrenzy;
     private List<String> connectedPlayers;
+    private List<String> oldConnectedPlayer;
 
 
     public BoardState() {
         this.connectedPlayers = new ArrayList<>();
+        this.oldConnectedPlayer = new ArrayList<>();
     }
 
     public BoardState(int configurationID, List<String> ammoCardsID, List<String> weaponCardsID, boolean isWeaponDeckDrawable, List<List<String>> killshotTrack, boolean isActionTileFrenzy) {
@@ -31,6 +33,7 @@ public class BoardState {
         this.isWeaponDeckDrawable = isWeaponDeckDrawable;
         this.killshotTrack = killshotTrack;
         this.isActionTileFrenzy = isActionTileFrenzy;
+        this.oldConnectedPlayer = new ArrayList<>();
     }
 
     public int getConfigurationID() {
@@ -85,7 +88,29 @@ public class BoardState {
         return connectedPlayers;
     }
 
-    public void setConnectedPlayers(List<String> connectedPlayers) {
-        this.connectedPlayers = connectedPlayers;
+    public void setConnectedPlayers(List<String> newStateConnectedPlayers) {
+        this.oldConnectedPlayer = new ArrayList<>();
+        oldConnectedPlayer.addAll(this.connectedPlayers);
+        this.connectedPlayers = newStateConnectedPlayers;
+    }
+
+    public List<String> getDisconnectedPlayers() {
+        List<String> disconnected = new ArrayList<>();
+        for (String name : oldConnectedPlayer) {
+            if (!connectedPlayers.contains(name)) {
+                disconnected.add(name);
+            }
+        }
+        return disconnected;
+    }
+
+    public List<String> getJustConnectedPlayers() {
+        List<String> connected = new ArrayList<>();
+        for (String name : connectedPlayers) {
+            if (!oldConnectedPlayer.contains(name)) {
+                connected.add(name);
+            }
+        }
+        return connected;
     }
 }

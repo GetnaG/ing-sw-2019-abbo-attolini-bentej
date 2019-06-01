@@ -159,6 +159,10 @@ public class Update {
         /**
          * The list of connected players.
          */
-        CONNECTED_PLAYERS
+        CONNECTED_PLAYERS,
+        /**
+         * Time for Hall
+         */
+        HALL_TIMER
     }
 }

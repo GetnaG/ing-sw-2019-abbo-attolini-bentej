@@ -10,7 +10,6 @@ import java.util.List;
 
 public class SyncGUI implements InteractionInterface{
 
-    private GUI gui;
     private ClientController controller;
     private MatchState model;
 
@@ -18,19 +17,20 @@ public class SyncGUI implements InteractionInterface{
      * Creates and runs the GUI
      */
     public SyncGUI() {
-    }
-
-    public void setController(ClientController controller) {
-        this.controller = controller;
-        this.gui = new GUI();
-        this.gui.setController(controller);
-        this.gui.setSynchGUI(this);
         new Thread() {
             @Override
             public void run() {
                 javafx.application.Application.launch(GUI.class);
             }
         }.start();
+    }
+
+    public void setController(ClientController controller) {
+        this.controller = controller;
+
+        GUI.setController(controller);
+        GUI.setSynchGUI(this);
+
     }
 
     /**
@@ -41,12 +41,12 @@ public class SyncGUI implements InteractionInterface{
     @Override
     public void setModel(MatchState model) {
         this.model = model;
-        gui.setModel(model);
+        GUI.setModel(model);
     }
 
     @Override
     public void notifyUpdatedState() {
-        gui.notifyUpdatedState();
+        GUI.notifyUpdatedState();
 
     }
 
@@ -72,7 +72,16 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public int chooseWeapon(List<List<String>> optionKeys) {
-        return 0;
+
+        GUI.chooseWeapon(optionKeys);
+        while (true) {
+            if (GUI.isAnswerGiven())
+                break;
+        }
+        int buttonPressed = GUI.getAnswer();
+        return buttonPressed;
+
+
     }
 
     @Override
@@ -112,9 +121,9 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public String askName() {
-        String name = gui.askName();
+        String name = GUI.askName();
         while (name == "ERROR") {
-            name = gui.askName();
+            name = GUI.askName();
         }
 
         return name;
@@ -122,7 +131,7 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public void sendNotification(String notificationKey) {
-        Platform.runLater(() -> gui.sendNotification(notificationKey));
+        Platform.runLater(() -> GUI.sendNotification(notificationKey));
     }
 
     @Override
@@ -132,6 +141,5 @@ public class SyncGUI implements InteractionInterface{
 
     @Override
     public void setGUI(GUI gui) {
-        this.gui = gui;
     }
 }

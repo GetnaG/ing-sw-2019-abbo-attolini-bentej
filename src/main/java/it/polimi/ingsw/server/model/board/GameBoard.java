@@ -86,6 +86,10 @@ public class GameBoard implements ReplaceListener {
         return configuration;
     }
 
+    public void setConfiguration(List<Room> configuration) {
+        this.configuration = configuration;
+    }
+
     /**
      * Gets a random Ammo Card from the Ammo Deck. Note that Ammo Card can always be drawn. {@see AmmoDeck}
      *
