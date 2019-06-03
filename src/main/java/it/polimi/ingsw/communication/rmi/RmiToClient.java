@@ -1,13 +1,10 @@
-package it.polimi.ingsw.communication.socket;
+package it.polimi.ingsw.communication.rmi;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import it.polimi.ingsw.communication.CommunicationHelper;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.communication.protocol.MessageType;
 import it.polimi.ingsw.communication.protocol.Notification;
-import it.polimi.ingsw.communication.protocol.ProtocolMessage;
 import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
@@ -16,107 +13,69 @@ import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * This class handles the communication through socket, server side.
- * This also ensures that only one communication with the client happens at one
- * time.
+ * This class adapts the remote object provided by the client to the
+ * mechanics of the server.
  *
  * @author Abbo Giulio A.
- * @see ProtocolMessage
  */
-public class SocketToClient implements ToClientInterface {
+public class RmiToClient implements ToClientInterface {
     /**
-     * The socket through which communicate.
+     * The remote object provided by the client.
      */
-    private final Socket socket;
+    private RmiFromClientInterface client;
 
     /**
-     * This sets the socket and sends a test notification.
+     * Creates an object with the provided remote object.
      *
-     * @param socket the socket through which communicate
+     * @param fromClient the remote object provided by the client
      */
-    public SocketToClient(Socket socket) throws ToClientException {
-        this.socket = socket;
-        sendNotification(Notification.NotificationType.GREET);
+    RmiToClient(RmiFromClientInterface fromClient) {
+        client = fromClient;
     }
 
     /**
-     * Sends the provided message through the socket ans returns the response.
-     * This should be used when there are no options tho choose from.
+     * Ask a question to the client, with options.
      *
-     * @param message the message to be sent
-     * @return the client's answer
-     * @throws ToClientException if there are problems with the socket
+     * @param type    the type of question
+     * @param options the possible sequences to choose
+     * @return the index of the selected sequence
+     * @throws ToClientException if there are problems with RMi
      */
-    private ProtocolMessage send(ProtocolMessage message) throws ToClientException {
-        ProtocolMessage answer;
-        synchronized (socket) {
-            try {
-
-                /*Setting up*/
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-
-                /*Sending*/
-                out.println(new Gson().toJson(message));
-
-                /*Waiting answer*/
-                String input = null;
-                while (input == null)
-                    input = in.readLine();
-                answer = new Gson().fromJson(input, ProtocolMessage.class);
-            } catch (IOException e) {
-                throw new ToClientException("Socket exception", e);
-            } catch (JsonSyntaxException e) {
-
-                /*Ignoring the answer, asking again*/
-                return send(message);
-            }
-        }
-        return answer;
-    }
-
-    /**
-     * Handles the communication when there are options attached to the message.
-     *
-     * @param command the message to be sent
-     * @param options the options to choose from
-     * @return the index of the selected option
-     * @throws ToClientException if there are problems with the socket
-     */
-    private int sendAndCheck(MessageType command, List<? extends List<String>> options) throws ToClientException {
+    private int askAndCheck(MessageType type,
+                            List<? extends List<String>> options) throws ToClientException {
         try {
-            int choice = Integer.parseInt(send(new ProtocolMessage(command, options)).getUserChoice());
+            int choice = client.handleQuestion(type, options.stream()
+                    .map(a -> a.toArray(new String[]{}))
+                    .collect(Collectors.toList())
+                    .toArray(new String[][]{{}}));
 
             /*Checking if the answer is valid*/
             if (choice >= 0 && choice < options.size())
                 return choice;
-        } catch (NumberFormatException ignored) {
-            /*Continuing if the answer was not a number*/
-        }
 
-        /*The answer is not valid: sending an error and asking again*/
-        sendNotification(Notification.NotificationType.ERROR);
-        return sendAndCheck(command, options);
+            /*The answer is not valid: sending an error and asking again*/
+            sendNotification(Notification.NotificationType.ERROR);
+            return askAndCheck(type, options);
+        } catch (RemoteException e) {
+            throw new ToClientException("Rmi exception, question with options", e);
+        }
     }
 
     /**
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public EffectInterface chooseEffectsSequence(List<EffectInterface> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.EFFECTS_SEQUENCE,
+        return options.get(askAndCheck(MessageType.EFFECTS_SEQUENCE,
                 new CommunicationHelper().askEffect(options)));
     }
 
@@ -124,12 +83,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public PowerupCard chooseSpawn(List<PowerupCard> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.SPAWN,
+        return options.get(askAndCheck(MessageType.SPAWN,
                 new CommunicationHelper().askPowerup(options)));
     }
 
@@ -137,12 +96,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public PowerupCard choosePowerup(List<PowerupCard> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.POWERUP,
+        return options.get(askAndCheck(MessageType.POWERUP,
                 new CommunicationHelper().askPowerup(options)));
     }
 
@@ -150,12 +109,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public Square chooseDestination(List<Square> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.DESTINATION,
+        return options.get(askAndCheck(MessageType.DESTINATION,
                 new CommunicationHelper().askSquare(options)));
     }
 
@@ -163,12 +122,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public WeaponCard chooseWeaponCard(List<WeaponCard> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.WEAPON,
+        return options.get(askAndCheck(MessageType.WEAPON,
                 new CommunicationHelper().askWeapon(options)));
     }
 
@@ -176,12 +135,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public WeaponCard chooseWeaponToBuy(List<WeaponCard> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.WEAPON_TO_BUY,
+        return options.get(askAndCheck(MessageType.WEAPON_TO_BUY,
                 new CommunicationHelper().askWeapon(options)));
     }
 
@@ -189,12 +148,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.WEAPON_TO_DISCARD,
+        return options.get(askAndCheck(MessageType.WEAPON_TO_DISCARD,
                 new CommunicationHelper().askWeapon(options)));
     }
 
@@ -202,12 +161,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public WeaponCard chooseWeaponToReload(List<WeaponCard> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.WEAPON_TO_RELOAD,
+        return options.get(askAndCheck(MessageType.WEAPON_TO_RELOAD,
                 new CommunicationHelper().askWeapon(options)));
     }
 
@@ -215,12 +174,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public Action chooseAction(List<Action> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.ACTION,
+        return options.get(askAndCheck(MessageType.ACTION,
                 new CommunicationHelper().askAction(options)));
     }
 
@@ -228,12 +187,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public PowerupCard choosePowerupForPaying(List<PowerupCard> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.POWERUP_FOR_PAYING,
+        return options.get(askAndCheck(MessageType.POWERUP_FOR_PAYING,
                 new CommunicationHelper().askPowerup(options)));
     }
 
@@ -241,12 +200,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public PowerupCard askUseTagback(List<PowerupCard> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.USE_TAGBACK,
+        return options.get(askAndCheck(MessageType.USE_TAGBACK,
                 new CommunicationHelper().askPowerup(options)));
     }
 
@@ -254,12 +213,12 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public List<Damageable> chooseTarget(List<List<Damageable>> options)
             throws ToClientException {
-        return options.get(sendAndCheck(MessageType.TARGET,
+        return options.get(askAndCheck(MessageType.TARGET,
                 new CommunicationHelper().askDamageableList(options)));
     }
 
@@ -267,18 +226,22 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the client responds.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException if there are problems whit RMI
      */
     @Override
     public String chooseUserName() throws ToClientException {
-        return send(new ProtocolMessage(MessageType.NICKNAME)).getUserChoice();
+        try {
+            return client.handleQuestion(MessageType.NICKNAME);
+        } catch (RemoteException e) {
+            throw new ToClientException("Rmi exception when asking", e);
+        }
     }
 
     /**
      * {@inheritDoc}
      * This stops the execution until the connection is closed.
      *
-     * @throws ToClientException if there are problems with the socket
+     * @throws ToClientException if there are problems with RMI
      */
     @Override
     public void quit() throws ToClientException {
@@ -289,22 +252,29 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the clients sends an ack.
      *
-     * @throws ToClientException if there are problems with the socket
+     * @throws ToClientException if there are problems with RMI
      */
     @Override
-    public void sendNotification(Notification.NotificationType notification) throws ToClientException {
-        send(new ProtocolMessage(new Notification[]{
-                new Notification(notification)}));
+    public void sendNotification(Notification.NotificationType type) throws ToClientException {
+        try {
+            client.handleNotifications(new Notification[]{new Notification(type)});
+        } catch (RemoteException e) {
+            throw new ToClientException("Rmi exception in notifications", e);
+        }
     }
 
     /**
      * {@inheritDoc}
      * This stops the execution until the clients sends an ack.
      *
-     * @throws ToClientException if there are problems with the socket
+     * @throws ToClientException if there are problems with RMI
      */
     @Override
     public void sendUpdate(Update update) throws ToClientException {
-        send(new ProtocolMessage(new Update[]{update}));
+        try {
+            client.handleUpdates(new Update[]{update});
+        } catch (RemoteException e) {
+            throw new ToClientException("Rmi exception in updates", e);
+        }
     }
 }

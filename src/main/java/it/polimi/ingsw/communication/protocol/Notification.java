@@ -1,5 +1,7 @@
 package it.polimi.ingsw.communication.protocol;
 
+import java.io.Serializable;
+
 /**
  * This represents a notification element.
  * Notifications are messages that do not expect an answer and do not modify
@@ -8,7 +10,7 @@ package it.polimi.ingsw.communication.protocol;
  * @author Abbo Giulio A.
  * @see ProtocolMessage
  */
-public class Notification {
+public class Notification implements Serializable {
     /**
      * The type of this notification.
      */

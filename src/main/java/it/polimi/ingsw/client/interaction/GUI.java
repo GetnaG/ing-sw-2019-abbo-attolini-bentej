@@ -1,10 +1,8 @@
 package it.polimi.ingsw.client.interaction;
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
-import it.polimi.ingsw.client.clientlogic.ClientMain;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
-import javafx.animation.PauseTransition;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.geometry.Insets;
@@ -17,8 +15,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.WritableImage;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -26,13 +22,10 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
-import javax.swing.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * Represents the GUI interface of the game.
@@ -710,14 +703,18 @@ public class GUI extends Application {
             if (socketRadio.isSelected()) {
 
                 try {
-                    controllerGUI.setConnection("localhost", 9000);
+                    controllerGUI.setSocket("localhost", 9000);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }
 
 
             } else {
-                controllerGUI.setConnection();
+                try {
+                    controllerGUI.setRmi("localhost");//FIXME
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
             }
         });
 

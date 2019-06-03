@@ -3,11 +3,17 @@ package it.polimi.ingsw.client.clientlogic;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import it.polimi.ingsw.communication.protocol.MessageType;
 import it.polimi.ingsw.communication.protocol.Notification;
-import it.polimi.ingsw.communication.socket.SocketFromServer;
 import it.polimi.ingsw.communication.protocol.Update;
+import it.polimi.ingsw.communication.rmi.RmiFromClientInterface;
+import it.polimi.ingsw.communication.rmi.RmiInversionInterface;
+import it.polimi.ingsw.communication.socket.SocketFromServer;
 
 import java.io.IOException;
+import java.io.UncheckedIOException;
 import java.net.Socket;
+import java.rmi.NotBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -23,7 +29,7 @@ import java.util.List;
  * @author Fahed B. Tej
  * @author Abbo Giulio A.
  */
-public class ClientController {
+public class ClientController implements RmiFromClientInterface {
 
     /**
      * Represents the state of the game.
@@ -46,32 +52,26 @@ public class ClientController {
     }
 
     /**
-     * Handles notifications.
-     * Notifications are defined as events that don't change the state of the game.
-     *
-     * @param notifications events that don't change the state of the game
+     * {@inheritDoc}
      */
+    @Override
     public void handleNotifications(Notification[] notifications) {
         for (Notification n : notifications)
             view.sendNotification(n.getType().name());
     }
 
     /**
-     * Handles updates. Updates are events that change the state of the game.
-     *
-     * @param updates events that change the state of the game
+     * {@inheritDoc}
      */
+    @Override
     public void handleUpdates(Update[] updates) {
         Arrays.asList(updates).forEach(model::handleUpdate);
     }
 
     /**
-     * Handles a question.
-     * It takes care of asking the user of the answer and returns it to the caller.
-     *
-     * @param message a question
-     * @return the answer
+     * {@inheritDoc}
      */
+    @Override
     public String handleQuestion(MessageType message) {
         switch (message) {
             case NICKNAME:
@@ -83,13 +83,9 @@ public class ClientController {
     }
 
     /**
-     * Handles a question with options.
-     * It takes care of asking the user of the answer and returns it to the caller.
-     *
-     * @param message a question
-     * @param options the options to choose from
-     * @return the index of the answer
+     * {@inheritDoc}
      */
+    @Override
     public int handleQuestion(MessageType message, String[][] options) {
         List<List<String>> optionsList = new ArrayList<>();
         for (String[] sequence : options)
@@ -131,9 +127,16 @@ public class ClientController {
 
     /**
      * Sets up an RMI connection.
+     *
+     * @param ip the ip of the registry
      */
-    public void setConnection() {
-        //TODO: implement RMI
+    public void setRmi(String ip) throws IOException {
+        try {
+            ((RmiInversionInterface) LocateRegistry.getRegistry(ip).lookup(
+                    "inversion")).invert(this);
+        } catch (RemoteException | NotBoundException e) {
+            throw new IOException(e);
+        }
     }
 
     /**
@@ -142,27 +145,19 @@ public class ClientController {
      * @param ip   the ip of the server
      * @param port the port of the server
      */
-    public void setConnection(String ip, int port) throws IOException {
-        new Thread(() -> {
-            try {
-                SocketFromServer fromServer = new SocketFromServer(this,
-                        new Socket(ip, port));
-                fromServer.startListening();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }).start();
-
+    public void setSocket(String ip, int port) throws IOException {
+        try {
+            new Thread(() -> {
+                try {
+                    SocketFromServer fromServer = new SocketFromServer(this,
+                            new Socket(ip, port));
+                    fromServer.startListening();
+                } catch (IOException e) {
+                    throw new UncheckedIOException(e);
+                }
+            }).start();
+        } catch (UncheckedIOException e) {
+            throw new IOException(e);
+        }
     }
-
-    /**
-     * Gets the players in the hall of the server
-     *
-     * @return players in the hall of the server
-     * this is why we should use SyncGUI
-     */
-    public List<String> getPlayersInHall() {
-        return model.getConnectedPlayers();
-    }
-
 }

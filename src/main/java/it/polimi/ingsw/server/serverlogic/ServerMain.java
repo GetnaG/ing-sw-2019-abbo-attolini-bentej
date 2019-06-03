@@ -2,10 +2,16 @@ package it.polimi.ingsw.server.serverlogic;
 
 import it.polimi.ingsw.client.clientlogic.ClientMain;
 import it.polimi.ingsw.communication.User;
+import it.polimi.ingsw.communication.rmi.RmiInversion;
 import it.polimi.ingsw.communication.socket.SocketDispatcher;
 
 import java.io.IOException;
 import java.net.ServerSocket;
+import java.rmi.AlreadyBoundException;
+import java.rmi.RemoteException;
+import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -40,34 +46,43 @@ public class ServerMain {
      * This constructor will fire two thread, for socket and RMI.
      * After this call the server will be ready to handle connections.
      *
-     * @param port the port to which socket connection are accepted.
+     * @param socketPort the port to which socket connection are accepted
+     * @param rmiPort    the port for rmi
      */
-    private ServerMain(int port) {
+    private ServerMain(int socketPort, int rmiPort) {
         /*Setting up Socket*/
         try {
-            new SocketDispatcher(new ServerSocket(port)).start();
+            new SocketDispatcher(new ServerSocket(socketPort)).start();
         } catch (IOException e) {
-            LOG.severe(e.getMessage());
+            LOG.log(Level.SEVERE, "Exception when setting up socket", e);
             System.exit(-1);
         }
 
-        //TODO: setup RMI
+        /*Setting up RMI*/
+        try {
+            LocateRegistry.createRegistry(1099);
+            LocateRegistry.getRegistry().bind("inversion",
+                    UnicastRemoteObject.exportObject(new RmiInversion(), rmiPort));
+        } catch (RemoteException | AlreadyBoundException e) {
+            LOG.log(Level.SEVERE, "Exception when setting up RMI", e);
+        }
     }
 
     /**
      * Starts the Server with command line arguments.
      *
-     * @param args Usage: java ServerMain <port> <seconds for waiting room> <seconds for user choice>
+     * @param args Usage: java ServerMain <socketPort> <rmiPort> <seconds for
+     *             waiting room> <seconds for user choice>
      */
     public static void main(String[] args) {
-        if (args.length != 3) {
-            LOG.severe("Usage: java ServerMain <port> <seconds for waiting room> <seconds for user choice>");
+        if (args.length != 4) {
+            LOG.severe("Usage: java ServerMain <socketPort> <rmiPort> <seconds for waiting room> <seconds for user choice>");
             System.exit(1);
         }
 
-        secondsWaitingRoom = Integer.parseInt(args[1]);
-        User.setWaitingTime(Integer.parseInt(args[2]));
-        new ServerMain(Integer.parseInt(args[0]));
+        secondsWaitingRoom = Integer.parseInt(args[2]);
+        User.setWaitingTime(Integer.parseInt(args[3]));
+        new ServerMain(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
     }
 
     /**

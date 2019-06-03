@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication.protocol;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -9,7 +10,7 @@ import java.util.List;
  * @author Abbo Giulio A.
  * @see ProtocolMessage
  */
-public class Update {
+public class Update implements Serializable {
     /**
      * The separator that must be put between elements of the same sequence.
      */

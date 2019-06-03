@@ -5,6 +5,7 @@ import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
 
 import java.io.*;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 import java.util.List;
 
@@ -117,15 +118,26 @@ public class CLI implements InteractionInterface {
             String connection = handleQuestion("chooseConnection", null);
             if (connection.equals("socket")) {
                 try {
-                    controller.setConnection(
+                    controller.setSocket(
                             handleQuestion("chooseIP", null),
                             Integer.parseInt(handleQuestion("choosePort", null))
                     );
                 } catch (IOException e) {
                     handleNotification("GenericError");
                 }
-            } else
+            } else if (connection.equals("rmi")) {
+                try {
+                    UnicastRemoteObject.exportObject(controller, 0);
+                    controller.setRmi(
+                            handleQuestion("chooseIP", null));
+                } catch (IOException e) {
+
+                    e.printStackTrace();
+                    handleNotification("GenericError");
+                }
+            } else {
                 handleNotification("GenericError");
+            }
         }
     }
 
