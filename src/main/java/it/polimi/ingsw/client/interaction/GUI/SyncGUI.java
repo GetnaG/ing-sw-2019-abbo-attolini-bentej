@@ -7,9 +7,10 @@ import it.polimi.ingsw.client.interaction.GUI.GUI;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import javafx.application.Platform;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class SyncGUI implements InteractionInterface {
+public class SyncGUI implements InteractionInterface, Serializable {
 
     private ClientController controller;
     private MatchState model;

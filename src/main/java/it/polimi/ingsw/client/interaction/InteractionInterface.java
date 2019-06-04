@@ -4,6 +4,7 @@ import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.interaction.GUI.GUI;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  * @see GUI
  * @see CLI
  */
-public interface InteractionInterface {
+public interface InteractionInterface extends Serializable {
 
     /**
      * This method is called by the model when it is updated.

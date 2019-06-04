@@ -3,6 +3,7 @@ package it.polimi.ingsw.client.clientlogic;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import it.polimi.ingsw.communication.protocol.Update;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -18,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * @author Fahed B. Tej
  */
-public class MatchState {
+public class MatchState implements Serializable {
 
     private List<PlayerState> playersState;
 
