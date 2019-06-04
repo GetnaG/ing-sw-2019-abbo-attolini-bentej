@@ -28,7 +28,7 @@ public class GameBoard implements ReplaceListener {
     /**
      * The configuration of the rooms. Note that there exists only 4 possible configurations.
      */
-    private List<Room> configuration;
+    private static List<Room> configuration;
     /**
      * Powerup Deck used during the game.
      */
@@ -449,4 +449,55 @@ public class GameBoard implements ReplaceListener {
                         flatMap(List::stream)
                 .collect(Collectors.toSet());
     }
+
+    public static Room getRoom(Square square) {
+        Room targetRoom = null;
+        for (Room room : configuration) {
+            for (Square s : room.getSquares()) {
+                if (s.getID() == square.getID())
+                    targetRoom = room;
+            }
+        }
+        return targetRoom;
+    }
+
+    /**
+     * @param destination is the square that will be checked
+     * @return 1 if the destination square is visible from the calling square, 0 otherwise
+     */
+/*
+    public static boolean checkVisible(Square departure,Square destination) {
+
+        if (getRoom(departure) == getRoom(destination))
+            return true;
+
+        else {
+            if (departure.getNorthBorder() != Border.WALL && departure.getNorthBorder() != null) {
+                if (getRoom(departure.getNorth())==getRoom(destination) || departure.getNorthBorder() == Border.CORRIDOR)
+                    return true;
+
+            }
+
+
+            if (this.southBorder != Border.WALL && this.southBorder != null) {
+                if (this.south.room == destination.room || this.southBorder == Border.CORRIDOR)
+                    return true;
+            }
+
+            if (this.eastBorder != Border.WALL && this.eastBorder != null) {
+                if (this.east.room == destination.room || this.eastBorder == Border.CORRIDOR)
+                    return true;
+            }
+
+            if (this.westBorder != Border.WALL && this.westBorder != null) {
+                if (this.west.room == destination.room || this.westBorder == Border.CORRIDOR)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+ */
+
 }

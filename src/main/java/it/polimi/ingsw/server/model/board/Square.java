@@ -12,7 +12,6 @@ public class Square {
 
 
     protected ReplaceListener replacer;
-    private Room room;
     private AmmoCard ammoCard;
     private SquareColor squareColor;
     private int ID;
@@ -30,7 +29,6 @@ public class Square {
      * Default constructor of a physical square
      */
     public Square(SquareColor squareColor) {
-        room = null;
         north = null;
         south = null;
         east = null;
@@ -178,11 +176,12 @@ public class Square {
     }
 
     public Room getRoom() {
-        return room;
+        return GameBoard.getRoom(this);
     }
 
     public void setRoom(Room room) {
-        this.room = room;
+
+        //this.room = room; TODO Consider delete
     }
 
 
@@ -261,41 +260,7 @@ public class Square {
         return cardinals;
     }
 
-    /**
-     * @param destination is the square that will be checked
-     * @return 1 if the destination square is visible from the calling square, 0 otherwise
-     */
-    public boolean checkVisible(Square destination) {
 
-        if (this.room == destination.room)
-            return true;
-
-        else {
-            if (this.northBorder != Border.WALL && this.northBorder != null) {
-                if (this.north.room == destination.room || this.northBorder == Border.CORRIDOR)
-                    return true;
-
-            }
-
-
-            if (this.southBorder != Border.WALL && this.southBorder != null) {
-                if (this.south.room == destination.room || this.southBorder == Border.CORRIDOR)
-                    return true;
-            }
-
-            if (this.eastBorder != Border.WALL && this.eastBorder != null) {
-                if (this.east.room == destination.room || this.eastBorder == Border.CORRIDOR)
-                    return true;
-            }
-
-            if (this.westBorder != Border.WALL && this.westBorder != null) {
-                if (this.west.room == destination.room || this.westBorder == Border.CORRIDOR)
-                    return true;
-            }
-        }
-
-        return false;
-    }
 
 
     /**
@@ -313,7 +278,7 @@ public class Square {
 
         for (Room r : config) {
             temp = r.getSquares().get(i);
-            if (this.checkVisible(temp)) {
+            if (/*this.checkVisible(temp)*/ 1 == 1) {
                 visibleSquares.addAll(j, r.getSquares());
                 j = j + r.getSquares().size();
             }
