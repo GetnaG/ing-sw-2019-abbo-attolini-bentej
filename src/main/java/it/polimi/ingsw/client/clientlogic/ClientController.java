@@ -15,6 +15,7 @@ import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,7 +31,7 @@ import java.util.List;
  * @author Fahed B. Tej
  * @author Abbo Giulio A.
  */
-public class ClientController implements RmiFromClientInterface, Serializable {
+public class ClientController extends UnicastRemoteObject implements RmiFromClientInterface {
 
     /**
      * Represents the state of the game.
@@ -47,7 +48,8 @@ public class ClientController implements RmiFromClientInterface, Serializable {
      * @param model represents the state of the game
      * @param view  the view, interacts with the user
      */
-    public ClientController(MatchState model, InteractionInterface view) {
+    public ClientController(MatchState model, InteractionInterface view) throws RemoteException {
+        super();
         this.model = model;
         this.view = view;
     }
