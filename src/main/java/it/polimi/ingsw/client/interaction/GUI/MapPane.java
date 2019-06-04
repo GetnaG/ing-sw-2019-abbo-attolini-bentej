@@ -12,12 +12,16 @@ public class MapPane extends GridPane {
         switch (mapID) {
             case 0:
                 buildMap0();
+                break;
             case 1:
                 buildMap1();
+                break;
             case 2:
                 buildMap2();
+                break;
             case 3:
                 buildMap3();
+                break;
         }
     }
 

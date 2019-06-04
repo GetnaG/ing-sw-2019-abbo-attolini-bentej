@@ -5,24 +5,12 @@ import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -66,14 +54,24 @@ public class GUI extends Application {
      * Stage of the windows
      */
     private static Stage stage;
-
+    /**
+     * Tells if answer is ready
+     */
     private static boolean answerGiven;
-
+    /**
+     * Index of the answer choosen
+     */
     private static int answer;
-
+    /**
+     * The options are presented in an answer box. Each sublist of options is shown as a group of labels while the main option is a button
+     */
     private static HBox answerBox;
-
+    /**
+     * The question shown to the player
+     */
     private static Text questionText;
+
+    private static LoginPane loginPane;
 
     public GUI() {
 
@@ -100,23 +98,37 @@ public class GUI extends Application {
 
     }
 
+    /**
+     * Method called  by {@linkplain MatchState} when there is an update.
+     */
     public static void notifyUpdatedState() {
         Platform.runLater(
                 () -> HallPane.updateHall(2)
         );
     }
 
+    /**
+     * Asks the player to choose a powerup
+     *
+     * @param optionKeys
+     * @return
+     */
     public static int choosePowerup(List<List<String>> optionKeys) {
         return choosePowerupWithQuestion(optionKeys, R.string("askPowerup"));
     }
 
+    /**
+     * General method used to ask to choose a powerup using the given question.
+     * @param optionKeys
+     * @param question
+     * @return
+     */
     public static int choosePowerupWithQuestion(List<List<String>> optionKeys, String question) {
         answerGiven = false;
         GamePane.changeAnswerBox(optionKeys);
         questionText.setText(question);
         return 0;
     }
-
     public static int chooseEffectSequence(List<List<String>> optionKeys) {
         return 0;
     }
@@ -193,9 +205,10 @@ public class GUI extends Application {
     }
 
     public static String askName() {
+        String input = loginPane.getInputUsername();
 
-        if (inputUsername.getText().length() > 1 && inputUsername.getText().length() < 18) {
-            return inputUsername.getText();
+        if (input.length() > 1 && input.length() < 18) {
+            return input;
         } else {
             logText.setText("Insert valid username");
             return "ERROR";
@@ -246,7 +259,8 @@ public class GUI extends Application {
      * @param stage
      */
     private void setUpLoginScene(Stage stage) {
-        StackPane loginGUI = new LoginPane(controllerGUI);
-        masterScene = new Scene(loginGUI, 1000, 1000);
+        inputUsername = new TextField();
+        loginPane = new LoginPane(controllerGUI);
+        masterScene = new Scene(loginPane, 1000, 1000);
     }
 }

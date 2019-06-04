@@ -18,12 +18,14 @@ import javafx.scene.text.Text;
 import java.io.IOException;
 
 public class LoginPane extends StackPane {
+    private String username;
 
-    private Text logText;
+
+    private TextField inputUsername;
 
     public LoginPane(ClientController controllerGUI) {
         super();
-        this.logText = logText;
+        inputUsername = new TextField();
         BorderPane border = new BorderPane();
         VBox vertical = new VBox();
         Text topText = new Text(R.string("GUIWelcomeText"));
@@ -50,7 +52,6 @@ public class LoginPane extends StackPane {
         vertical.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-background-radius: 10;");
         // Set up usernameHBox
         Label usernameLabel = new Label(R.string("username"));
-        TextField inputUsername = new TextField();
         usernameHBox.getChildren().addAll(usernameLabel);
         usernameHBox.getChildren().addAll(inputUsername);
         //Set up loginAndRadioBox
@@ -91,7 +92,7 @@ public class LoginPane extends StackPane {
         socketRadio.setSelected(true);
         //  Setting Button Event
         loginButton.setOnAction(e -> {
-
+            System.out.println(inputUsername.getText());
             // telling the controller the connection type
             if (socketRadio.isSelected()) {
 
@@ -114,5 +115,7 @@ public class LoginPane extends StackPane {
 
     }
 
-
+    public String getInputUsername() {
+        return inputUsername.getText();
+    }
 }
