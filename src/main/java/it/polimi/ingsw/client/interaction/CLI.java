@@ -127,7 +127,6 @@ public class CLI implements InteractionInterface {
                 }
             } else if (connection.equals("rmi")) {
                 try {
-                    UnicastRemoteObject.exportObject(controller, 0);
                     controller.setRmi(
                             handleQuestion("chooseIP", null));
                 } catch (IOException e) {

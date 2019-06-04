@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.*;
 import java.net.Socket;
+import java.rmi.RemoteException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -32,7 +33,11 @@ class SocketFromServerTest {
 
     @BeforeEach
     void setUp() {
-        controller = new MockClientController();
+        try {
+            controller = new MockClientController();
+        } catch (RemoteException e) {
+            fail(e);
+        }
         server = new MockSocket();
         fromServer = new SocketFromServer(controller, server);
     }
@@ -110,7 +115,7 @@ class SocketFromServerTest {
         private MessageType message;
         private String[][] options;
 
-        MockClientController() {
+        MockClientController() throws RemoteException {
             super(null, null);
         }
 
