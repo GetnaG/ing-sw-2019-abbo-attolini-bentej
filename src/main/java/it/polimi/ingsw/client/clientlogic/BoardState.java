@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.clientlogic;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,7 @@ import java.util.List;
  * @author Fahed B. Tej
  * @see MatchState
  */
-public class BoardState {
+public class BoardState implements Serializable {
 
     private int configurationID;
     private List<String> ammoCardsID;

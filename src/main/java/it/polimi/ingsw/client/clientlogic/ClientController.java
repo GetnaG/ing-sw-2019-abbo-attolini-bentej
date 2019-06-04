@@ -9,6 +9,7 @@ import it.polimi.ingsw.communication.rmi.RmiInversionInterface;
 import it.polimi.ingsw.communication.socket.SocketFromServer;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.net.Socket;
 import java.rmi.NotBoundException;
@@ -29,7 +30,7 @@ import java.util.List;
  * @author Fahed B. Tej
  * @author Abbo Giulio A.
  */
-public class ClientController implements RmiFromClientInterface {
+public class ClientController implements RmiFromClientInterface, Serializable {
 
     /**
      * Represents the state of the game.
