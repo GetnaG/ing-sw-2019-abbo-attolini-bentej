@@ -1,14 +1,15 @@
-package it.polimi.ingsw.client.interaction;
+package it.polimi.ingsw.client.interaction.GUI;
 
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
-import javafx.application.Application;
+import it.polimi.ingsw.client.interaction.GUI.GUI;
+import it.polimi.ingsw.client.interaction.InteractionInterface;
 import javafx.application.Platform;
 
 import java.util.List;
 
-public class SyncGUI implements InteractionInterface{
+public class SyncGUI implements InteractionInterface {
 
     private ClientController controller;
     private MatchState model;

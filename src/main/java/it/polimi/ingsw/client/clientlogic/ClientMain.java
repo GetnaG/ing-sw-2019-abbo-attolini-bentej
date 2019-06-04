@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.clientlogic;
 
-import it.polimi.ingsw.client.interaction.GUI;
 import it.polimi.ingsw.client.interaction.InteractionFactory;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 

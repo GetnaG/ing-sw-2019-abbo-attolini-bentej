@@ -1,12 +1,12 @@
-package it.polimi.ingsw.client.interaction;
+package it.polimi.ingsw.client.interaction.GUI;
 
 import it.polimi.ingsw.client.resources.R;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
-public class MapGUI extends GridPane {
+public class MapPane extends GridPane {
 
-    public MapGUI(int mapID) {
+    public MapPane(int mapID) {
         super();
 
         switch (mapID) {

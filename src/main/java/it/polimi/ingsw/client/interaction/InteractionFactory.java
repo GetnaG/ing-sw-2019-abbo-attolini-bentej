@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.interaction;
 
-import it.polimi.ingsw.client.clientlogic.ClientController;
+import it.polimi.ingsw.client.interaction.GUI.GUI;
+import it.polimi.ingsw.client.interaction.GUI.SyncGUI;
 import it.polimi.ingsw.client.resources.R;
 
 import java.io.IOException;
