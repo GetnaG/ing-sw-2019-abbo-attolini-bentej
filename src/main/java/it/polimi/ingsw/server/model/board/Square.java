@@ -278,7 +278,7 @@ public class Square {
 
         for (Room r : config) {
             temp = r.getSquares().get(i);
-            if (/*this.checkVisible(temp)*/ 1 == 1) {
+            if (gb.checkVisible(this, temp)) {
                 visibleSquares.addAll(j, r.getSquares());
                 j = j + r.getSquares().size();
             }

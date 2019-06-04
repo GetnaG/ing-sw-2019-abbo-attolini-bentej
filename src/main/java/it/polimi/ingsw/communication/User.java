@@ -95,7 +95,7 @@ public class User implements ToClientInterface {
                 } catch (ToClientException e) {
 
                     /*User offline again: will not swap with the old*/
-                    serverSuspensionListener.playerSuspension(name, matchSuspensionListener);
+                    serverSuspensionListener.playerSuspension(name);
                     return;
                 }
 
@@ -110,7 +110,7 @@ public class User implements ToClientInterface {
                 } catch (ToClientException e) {
 
                     /*Freeing the nickname*/
-                    serverSuspensionListener.playerSuspension(name, matchSuspensionListener);
+                    serverSuspensionListener.playerSuspension(name);
                     return;
                 }
                 ServerMain.getLog().info(() -> "Connected: " + name);
@@ -190,17 +190,17 @@ public class User implements ToClientInterface {
         } catch (ExecutionException e) {
 
             /*Over with exception: suspending the player*/
-            serverSuspensionListener.playerSuspension(name, matchSuspensionListener);
+            serverSuspensionListener.playerSuspension(name);
             if (matchSuspensionListener != null)
-                matchSuspensionListener.playerSuspension(name, matchSuspensionListener);
+                matchSuspensionListener.playerSuspension(name);
             throw new ToClientException("Exception while interacting", e);
         } catch (TimeoutException e) {
 
             /*Over because time out: closing connection and suspending*/
             toClient.quit();
-            serverSuspensionListener.playerSuspension(name, matchSuspensionListener);
+            serverSuspensionListener.playerSuspension(name);
             if (matchSuspensionListener != null)
-                matchSuspensionListener.playerSuspension(name, matchSuspensionListener);
+                matchSuspensionListener.playerSuspension(name);
             throw new ToClientException("Time over while interacting", e);
         }
     }

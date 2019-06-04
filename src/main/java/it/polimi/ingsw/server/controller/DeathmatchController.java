@@ -57,14 +57,14 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * Constructs a DeathmatchController with the given users
      * @param users     users in the game. The order of the turns is based on the given list.
      */
-    public DeathmatchController(List<User> users, int skullsLeft){
+    public DeathmatchController(List<User> users, int skullsLeft /*, Configurations c*/){
         this.players = users.stream()
                 .map(u ->
                         buildPlayer(u,users.indexOf(u)==0, "FigureRes"+users.indexOf(u))) //TODO Make FigureRes parametric
                 .collect(Collectors.toList());
 
         this.board = new GameBoard(new KillshotTrack(skullsLeft), null);
-        this.gameConfiguration = loadRooms();
+        this.gameConfiguration = loadRooms(); /*new ConfigurationHelper(c).boardCreator();*/
         this.board.setConfiguration(this.gameConfiguration);
         this.suspendedPlayers = new ArrayList<>();
         this.killedInTurn = new ArrayList<>();
@@ -79,13 +79,16 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         return new Player(user.getName(),isFirst,figureRes,user,new NormalPlayerBoard(),this);
     }
 
+
+
+
     /**
      * Returns a configuration of the board (i.e. a list of rooms)
      *
      * @return a configuration of the board
      */
     //TODO There are 4 types of Configurations in the game. This method returns always the same type. However, it has to return the type choosen by the first player.
-    private List<Room> loadRooms(){
+    private List<Room> loadRooms(){    //----------------------------use configuration helper instead
 
         //Creating the squares with an ammo card
         Square sq1 = new Square(SquareColor.GREEN, board.getAmmoCard());
@@ -409,11 +412,10 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
     /**
      * Changes the given player status to suspended.
+     *  @param player    player to be suspended
      *
-     * @param player    player to be suspended
-     * @param marchSuspensionListener
      */
-    public void playerSuspension(String player, SuspensionListener marchSuspensionListener) {
+    public void playerSuspension(String player) {
         for (Player p : players)
             if (p.getName().equals(player)) {
                 suspendedPlayers.add(p);

@@ -18,12 +18,10 @@ public interface SuspensionListener {
      * <p>
      * The nickname of the player will become available for future
      * connections that will take his place, and the player will skip his turn.
+     *  @param player                  the nickname of the suspended player
      *
-     * @param player                  the nickname of the suspended player
-     * @param marchSuspensionListener will put the player back in the right
-     *                                match
      */
-    void playerSuspension(String player, SuspensionListener marchSuspensionListener);
+    void playerSuspension(String player);
 
     /**
      * Notifies that a suspended player is back online on the old connection.

@@ -3,11 +3,15 @@ package it.polimi.ingsw.client.interaction;
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
+import it.polimi.ingsw.server.model.AmmoCube;
+import it.polimi.ingsw.server.model.board.*;
 
 import java.io.*;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Command line interface, handles the communication with the user via text.
@@ -451,13 +455,17 @@ public class CLI implements InteractionInterface {
 
     /**
      * Takes the status from the model and puts it into a string in the right
-     * lenguage.
+     * language.
      *
      * @return a string containing the status to be displayed
      */
     private StringBuilder translateStatus() {
-        //TODO translate status
-        return new StringBuilder().append("PUT STATUS HERE").append(lineSeparator);
+        StringBuilder stringBuilder = new StringBuilder();
+
+        //drawBoard(model.getConfigurationID());
+
+        //stringBuilder.append(model.getWeaponsCardsID().stream().map(a -> R.string(a)).collect(Collectors.toList()));
+        return stringBuilder;
     }
 
     /**
@@ -521,4 +529,15 @@ public class CLI implements InteractionInterface {
         this.controller = controller;
         askConnection();
     }
+
+    private void drawBoard(Configurations c){
+
+        SquareColor[][] map = new SquareColor[4][3];
+
+        map[3][2] = SquareColor.BLUE;
+
+        //ecc
+    }
+
+
 }

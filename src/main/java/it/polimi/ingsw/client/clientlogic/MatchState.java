@@ -24,17 +24,17 @@ public class MatchState implements Serializable {
     private List<PlayerState> playersState;
 
     private BoardState boardState;
-    private List<InteractionInterface> subscribedIntercationInterfaces;
+    private List<InteractionInterface> subscribedInteractionInterfaces;
 
     public MatchState() {
         this.playersState = new ArrayList<>();
         this.boardState = new BoardState();
 
-        subscribedIntercationInterfaces = new ArrayList<>();
+        subscribedInteractionInterfaces = new ArrayList<>();
     }
 
     public void subscribe(InteractionInterface interactionInterface) {
-        subscribedIntercationInterfaces.add(interactionInterface);
+        subscribedInteractionInterfaces.add(interactionInterface);
     }
 
     public void handleUpdate(Update update) {
@@ -85,7 +85,7 @@ public class MatchState implements Serializable {
                 getReceiverState(update).setPowerups(update.getNewValue());
             case CONNECTED_PLAYERS:
                 boardState.setConnectedPlayers(update.getNewValue());
-                subscribedIntercationInterfaces.forEach(i -> i.notifyUpdatedState());
+                subscribedInteractionInterfaces.forEach(i -> i.notifyUpdatedState());
 
             default:
                 // nothing
@@ -107,8 +107,8 @@ public class MatchState implements Serializable {
         return boardState.getAmmoCardsID();
     }
 
-    public List<String> getWeaponsCArdsID() {
-        return boardState.getAmmoCardsID();
+    public List<String> getWeaponsCardsID() {
+            return boardState.getAmmoCardsID();
     }
 
     public boolean getIsWeaponDeckDrawable() {

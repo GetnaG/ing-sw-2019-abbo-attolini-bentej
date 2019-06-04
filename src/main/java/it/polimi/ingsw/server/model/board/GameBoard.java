@@ -465,7 +465,7 @@ public class GameBoard implements ReplaceListener {
      * @param destination is the square that will be checked
      * @return 1 if the destination square is visible from the calling square, 0 otherwise
      */
-/*
+
     public static boolean checkVisible(Square departure,Square destination) {
 
         if (getRoom(departure) == getRoom(destination))
@@ -479,18 +479,18 @@ public class GameBoard implements ReplaceListener {
             }
 
 
-            if (this.southBorder != Border.WALL && this.southBorder != null) {
-                if (this.south.room == destination.room || this.southBorder == Border.CORRIDOR)
+            if (departure.getSouthBorder() != Border.WALL && departure.getSouthBorder() != null) {
+                if (departure.getSouth().getRoom() == destination.getRoom() || departure.getSouthBorder() == Border.CORRIDOR)
                     return true;
             }
 
-            if (this.eastBorder != Border.WALL && this.eastBorder != null) {
-                if (this.east.room == destination.room || this.eastBorder == Border.CORRIDOR)
+            if (departure.getEastBorder() != Border.WALL && departure.getEastBorder() != null) {
+                if (departure.getEast().getRoom() == destination.getRoom() || departure.getEastBorder() == Border.CORRIDOR)
                     return true;
             }
 
-            if (this.westBorder != Border.WALL && this.westBorder != null) {
-                if (this.west.room == destination.room || this.westBorder == Border.CORRIDOR)
+            if (departure.getWestBorder() != Border.WALL && departure.getWestBorder() != null) {
+                if (departure.getWest().getRoom() == destination.getRoom() || departure.getWestBorder() == Border.CORRIDOR)
                     return true;
             }
         }
@@ -498,6 +498,6 @@ public class GameBoard implements ReplaceListener {
         return false;
     }
 
- */
+ 
 
 }
