@@ -153,7 +153,8 @@ public class ServerHall implements Runnable {
      */
     private synchronized void startMatch() {
         stopTimer();
-        DeathmatchController controller = new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1);
+        DeathmatchController controller =
+                new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1);//TODO: how to change the configuration
         startedGames.add(controller);
         for (User u : connectedUsers)
             u.setMatchSuspensionListener(controller);

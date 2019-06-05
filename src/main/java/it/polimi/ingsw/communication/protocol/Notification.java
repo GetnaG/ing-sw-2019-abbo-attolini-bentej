@@ -65,6 +65,14 @@ public class Notification implements Serializable {
         /**
          * Notifies that the username is taken and online.
          */
-        USERNAME_TAKEN_AND_ONLINE
+        USERNAME_TAKEN_AND_ONLINE,
+        /**
+         * Notifies that a user will skip his turn.
+         */
+        USER_WILL_SKIP,
+        /**
+         * Notifies all the players that the game is over.
+         */
+        GAME_OVER
     }
 }

@@ -124,7 +124,7 @@ public class Player implements Damageable {
                   ToClientInterface toClient,
                   PlayerBoardInterface playerBoard, ScoreListener scorer) {
         this.nickname = nickname;
-        this.firstPlayer = firstPlayer;
+        this.firstPlayer = firstPlayer;//TODO: is this necessary?
         this.figureRes = figureRes;
         this.toClient = toClient;
         this.playerBoard = playerBoard;
