@@ -15,7 +15,6 @@ public class Room {
     private List<Square> squares;
     private SpawnSquare spawnSquare;
 
-
     /**
      * @param squares is the list of the normal (ammo) squares
      * @param spawnSquare is considered a single element
@@ -34,8 +33,6 @@ public class Room {
             for(Square x: squares)
                 if(squares.get(0).getSquareColor() != x.getSquareColor())
                     throw new IllegalArgumentException();
-
-
     }
 
     public Room( List<Square> squares ) {
@@ -75,5 +72,9 @@ public class Room {
             return (obj instanceof Room) && (((Room) obj).getSquares().equals(squares));
     }
 
-
+    public void refresh(List<Room> rooms) {
+        squares.forEach(s -> s.refresh(rooms));
+        if (this.hasSpawnSquare())
+            spawnSquare.refesh();
+    }
  }

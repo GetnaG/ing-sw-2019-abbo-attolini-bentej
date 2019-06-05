@@ -1,9 +1,12 @@
 package it.polimi.ingsw.server.persistency;
 
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
+import it.polimi.ingsw.server.model.board.Room;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
+
+import java.util.List;
 
 /**
  * Ensures that the resources from file are loaded in the right order.
@@ -34,6 +37,10 @@ public class FromFile {
      * The position of the json for the effects.
      */
     private static final String EFFECTS = "effects.json";
+    /**
+     * The position of the json for the maps.
+     */
+    private static final String MAPS = "maps.json";
 
     /**
      * The only instance of an ammo card loader.
@@ -51,6 +58,10 @@ public class FromFile {
      * The only instance of an effects loader.
      */
     private static EffectLoader effectLoader;
+    /**
+     * The only instance of an effects loader.
+     */
+    private static MapLoader mapLoader;
 
     /**
      * Private constructor: this class can not be instantiated.
@@ -103,6 +114,17 @@ public class FromFile {
     }
 
     /**
+     * Returns a basic loader for the effects.
+     *
+     * @return a basic loader for the effects
+     */
+    public static synchronized BasicLoader<List<Room>> maps() {
+        if (mapLoader == null)
+            setup();
+        return mapLoader;
+    }
+
+    /**
      * Loads the  resources from file in the right order.
      */
     private static void setup() {
@@ -114,5 +136,7 @@ public class FromFile {
                 new PowerupLoader(FromFile.class.getResourceAsStream(POWERUP_CARDS));
         ammoCardLoader =
                 new AmmoCardLoader(FromFile.class.getResourceAsStream(AMMO_CARDS));
+        mapLoader =
+                new MapLoader(FromFile.class.getResourceAsStream(MAPS));
     }
 }

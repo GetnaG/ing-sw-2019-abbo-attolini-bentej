@@ -57,14 +57,14 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * Constructs a DeathmatchController with the given users
      * @param users     users in the game. The order of the turns is based on the given list.
      */
-    public DeathmatchController(List<User> users, int skullsLeft /*, Configurations c*/){
+    public DeathmatchController(List<User> users, int skullsLeft, Configurations c) {
         this.players = users.stream()
                 .map(u ->
                         buildPlayer(u,users.indexOf(u)==0, "FigureRes"+users.indexOf(u))) //TODO Make FigureRes parametric
                 .collect(Collectors.toList());
 
         this.board = new GameBoard(new KillshotTrack(skullsLeft), null);
-        this.gameConfiguration = loadRooms(); /*new ConfigurationHelper(c).boardCreator();*/
+        this.gameConfiguration = ConfigurationHelper.boardCreator(c);
         this.board.setConfiguration(this.gameConfiguration);
         this.suspendedPlayers = new ArrayList<>();
         this.killedInTurn = new ArrayList<>();

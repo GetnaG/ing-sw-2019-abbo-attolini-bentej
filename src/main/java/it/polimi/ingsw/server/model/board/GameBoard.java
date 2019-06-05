@@ -498,6 +498,13 @@ public class GameBoard implements ReplaceListener {
         return false;
     }
 
+    public static Square getSquare(int idSquare) {
+        for (Room room : configuration)
+            for (Square s : room.getSquares())
+                if (Integer.parseInt(s.getID()) == idSquare)
+                    return s;
+        return null;
+    }
  
 
 }

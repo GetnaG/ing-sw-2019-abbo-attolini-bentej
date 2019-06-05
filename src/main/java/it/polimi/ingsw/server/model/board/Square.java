@@ -16,9 +16,13 @@ public class Square {
     private SquareColor squareColor;
     private int ID;
     private Square north;
+    private int idNorth;
     private Square south;
+    private int idSouth;
     private Square east;
+    private int idEast;
     private Square west;
+    private int idWest;
     private Border northBorder;
     private Border southBorder;
     private Border eastBorder;
@@ -29,15 +33,6 @@ public class Square {
      * Default constructor of a physical square
      */
     public Square(SquareColor squareColor) {
-        north = null;
-        south = null;
-        east = null;
-        west = null;
-        northBorder = null;
-        southBorder = null;
-        eastBorder = null;
-        westBorder = null;
-        replacer = null;
         this.squareColor = squareColor;
     }
 
@@ -380,5 +375,50 @@ public class Square {
         if(eb != null) this.setEastBorder(eb);
     }
 
+    public void refresh(List<Room> rooms) {
+        this.north = getSquare(rooms, idNorth);
+        this.east = getSquare(rooms, idEast);
+        this.south = getSquare(rooms, idSouth);
+        this.west = getSquare(rooms, idWest);
+    }
 
+    private Square getSquare(List<Room> rooms, int idSquare) {
+        for (Room room : rooms)
+            for (Square s : room.getSquares())
+                if (Integer.parseInt(s.getID()) == idSquare)
+                    return s;
+        return null;
+    }
+
+    public int getIdNorth() {
+        return idNorth;
+    }
+
+    public void setIdNorth(int idNorth) {
+        this.idNorth = idNorth;
+    }
+
+    public int getIdSouth() {
+        return idSouth;
+    }
+
+    public void setIdSouth(int idSouth) {
+        this.idSouth = idSouth;
+    }
+
+    public int getIdEast() {
+        return idEast;
+    }
+
+    public void setIdEast(int idEast) {
+        this.idEast = idEast;
+    }
+
+    public int getIdWest() {
+        return idWest;
+    }
+
+    public void setIdWest(int idWest) {
+        this.idWest = idWest;
+    }
 }

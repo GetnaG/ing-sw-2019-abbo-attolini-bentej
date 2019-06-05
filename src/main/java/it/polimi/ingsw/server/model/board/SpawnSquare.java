@@ -3,6 +3,8 @@ package it.polimi.ingsw.server.model.board;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
+import java.util.ArrayList;
+
 /**
  * 
  */
@@ -73,6 +75,13 @@ public class SpawnSquare extends Square {
         if (c == SquareColor.YELLOW)
             return AmmoCube.YELLOW;
         return AmmoCube.ANY;
+    }
+
+    /**
+     * After maps are loaded from json, a refresh is needed.
+     */
+    public void refesh() {
+        market = new WeaponMarket(new ArrayList<>());
     }
 
 }

@@ -4,6 +4,7 @@ import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.DeathmatchController;
+import it.polimi.ingsw.server.model.board.Configurations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -152,7 +153,7 @@ public class ServerHall implements Runnable {
      */
     private synchronized void startMatch() {
         stopTimer();
-        DeathmatchController controller = new DeathmatchController(connectedUsers, 8);
+        DeathmatchController controller = new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1);
         startedGames.add(controller);
         for (User u : connectedUsers)
             u.setMatchSuspensionListener(controller);
