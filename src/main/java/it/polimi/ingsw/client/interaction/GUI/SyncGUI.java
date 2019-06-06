@@ -3,14 +3,13 @@ package it.polimi.ingsw.client.interaction.GUI;
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
-import it.polimi.ingsw.client.interaction.GUI.GUI;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import javafx.application.Platform;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class SyncGUI implements InteractionInterface, Serializable {
+public class SyncGUI implements InteractionInterface {
 
     private ClientController controller;
     private MatchState model;
@@ -141,12 +140,4 @@ public class SyncGUI implements InteractionInterface, Serializable {
         Platform.runLater(() -> GUI.sendNotification(notificationKey));
     }
 
-    @Override
-    public void drawState() {
-
-    }
-
-    @Override
-    public void setGUI(GUI gui) {
-    }
 }

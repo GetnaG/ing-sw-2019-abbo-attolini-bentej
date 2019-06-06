@@ -59,7 +59,7 @@ public class FromFile {
      */
     private static EffectLoader effectLoader;
     /**
-     * The only instance of an effects loader.
+     * The only instance of a map loader.
      */
     private static MapLoader mapLoader;
 
@@ -114,9 +114,9 @@ public class FromFile {
     }
 
     /**
-     * Returns a basic loader for the effects.
+     * Returns a basic loader for the map.
      *
-     * @return a basic loader for the effects
+     * @return a basic loader for the map
      */
     public static synchronized BasicLoader<List<Room>> maps() {
         if (mapLoader == null)

@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  *
  * @author Fahed B. Tej
  */
-public class MatchState implements Serializable {
+public class MatchState {
 
     private List<PlayerState> playersState;
 

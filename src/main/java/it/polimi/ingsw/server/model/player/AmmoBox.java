@@ -14,7 +14,7 @@ import java.util.Map;
  * @author Abbo Giulio A.
  * @see AmmoCube
  */
-public class AmmoBox {
+class AmmoBox {
 
     /**
      * The maximum number of cubes of each color.
@@ -39,7 +39,7 @@ public class AmmoBox {
     /**
      * Instantiates an empty ammo box.
      */
-    public AmmoBox() {
+    AmmoBox() {
         blue = 0;
         red = 0;
         yellow = 0;

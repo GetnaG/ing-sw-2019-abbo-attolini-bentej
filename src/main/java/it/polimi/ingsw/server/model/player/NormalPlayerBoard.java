@@ -72,7 +72,7 @@ public class NormalPlayerBoard implements PlayerBoardInterface {
     /**
      * Constructor with no skulls, no damage, no marks.
      */
-    public NormalPlayerBoard() {
+    NormalPlayerBoard() {
         skulls = 0;
         damage = new ArrayList<>();
         marks = new ArrayList<>();

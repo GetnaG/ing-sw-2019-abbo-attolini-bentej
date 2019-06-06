@@ -17,7 +17,7 @@ import java.util.List;
  * @see GUI
  * @see CLI
  */
-public interface InteractionInterface extends Serializable {
+public interface InteractionInterface {
 
     /**
      * This method is called by the model when it is updated.
@@ -123,7 +123,7 @@ public interface InteractionInterface extends Serializable {
     /**
      * Asks to choose a name.
      *
-     * @return the choosen name
+     * @return the chosen name
      */
     String askName();
 
@@ -136,25 +136,16 @@ public interface InteractionInterface extends Serializable {
     void sendNotification(String notificationKey);
 
     /**
-     * Asks the view to redraw the state.
-     */
-    void drawState();//FIXME
-
-    /**
-     * Sets controller in the view.
+     * Sets the controller in the view.
      *
-     * @param controller
+     * @param controller the controller to set
      */
-    public void setController(ClientController controller);
+    void setController(ClientController controller);
 
     /**
-     * Setting model
+     * Sets the model in the view.
+     *
+     * @param model the model to set
      */
-    public void setModel(MatchState model);
-
-
-
-    default void setGUI(GUI gui) {
-
-    }
+    void setModel(MatchState model);
 }

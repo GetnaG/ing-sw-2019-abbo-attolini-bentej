@@ -15,6 +15,7 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * This class represents a player in the game.
@@ -54,10 +55,6 @@ public class Player implements Damageable {
      */
     private int score;
     /**
-     * Whether this is the player who started the game.
-     */
-    private boolean firstPlayer;
-    /**
      * Info on the resources associated with this player.
      */
     private String figureRes;
@@ -94,6 +91,10 @@ public class Player implements Damageable {
      * method when necessary.
      */
     private ScoreListener scorer;
+    /**
+     * Whether this is waiting to be put in frenzy mode.
+     */
+    private boolean waitingFrenzy;
 
     /**
      * Constructor for testing purposes.
@@ -114,17 +115,15 @@ public class Player implements Damageable {
      * Instantiates a player with the given parameters.
      *
      * @param nickname    the name of this player
-     * @param firstPlayer true if this is the first player
      * @param figureRes   info on the resources associated with this
      * @param toClient    communication interface with the player
      * @param playerBoard the board that will handle the damage
      * @param scorer      the interface that handles the scoring
      */
-    public Player(String nickname, boolean firstPlayer, String figureRes,
+    public Player(String nickname, String figureRes,
                   ToClientInterface toClient,
                   PlayerBoardInterface playerBoard, ScoreListener scorer) {
         this.nickname = nickname;
-        this.firstPlayer = firstPlayer;//TODO: is this necessary?
         this.figureRes = figureRes;
         this.toClient = toClient;
         this.playerBoard = playerBoard;
@@ -133,6 +132,8 @@ public class Player implements Damageable {
         score = 0;
         hand = new HandManager();
         ammoBox = new AmmoBox();
+        position = null;
+        waitingFrenzy = false;
 
         adrenaline1 = new Action("adr1", Arrays.asList(new Move(), new Move(), new Grab()));
         adrenaline2 = new Action("adr2", Arrays.asList(new Move(), new Shoot()));
@@ -142,15 +143,14 @@ public class Player implements Damageable {
      * Instantiates a player with the given parameters and a
      * {@linkplain NormalPlayerBoard}.
      *
-     * @param nickname    the name of this player
-     * @param firstPlayer true if this is the first player
-     * @param figureRes   info on the resources associated with this
-     * @param toClient    communication interface with the player
-     * @param scorer      the interface that handles the scoring
+     * @param nickname  the name of this player
+     * @param figureRes info on the resources associated with this
+     * @param toClient  communication interface with the player
+     * @param scorer    the interface that handles the scoring
      */
-    public Player(String nickname, boolean firstPlayer, String figureRes,
+    public Player(String nickname, String figureRes,
                   ToClientInterface toClient, ScoreListener scorer) {
-        this(nickname, firstPlayer, figureRes, toClient, new NormalPlayerBoard(), scorer);
+        this(nickname, figureRes, toClient, new NormalPlayerBoard(), scorer);
     }
 
     /**
@@ -159,7 +159,7 @@ public class Player implements Damageable {
      * @param nickname the name of this player
      */
     public Player(String nickname) {
-        this(nickname, false, null, null, null);
+        this(nickname, null, null, null);
     }
 
     /**
@@ -173,8 +173,13 @@ public class Player implements Damageable {
     @Override
     public void giveDamage(List<Player> shooters) {
         playerBoard.addDamage(shooters);
-        if (playerBoard.isDead())
+        if (playerBoard.isDead()) {
             scorer.addKilled(this);
+            if (waitingFrenzy) {
+                setPlayerBoard(new FrenzyPlayerBoard());
+                waitingFrenzy = false;
+            }
+        }
     }
 
     /**
@@ -488,15 +493,6 @@ public class Player implements Damageable {
     }
 
     /**
-     * Returns whether this is the first player to start the game.
-     *
-     * @return true if this is the first player
-     */
-    public boolean isFirstPlayer() {
-        return firstPlayer;
-    }
-
-    /**
      * Returns a reference to the resources associated with this player.
      *
      * @return a reference to the resources associated with this player
@@ -516,17 +512,13 @@ public class Player implements Damageable {
         return toClient;
     }
 
+    /**
+     * Sets the client interface for this.
+     *
+     * @param toClient the new client interface
+     */
     public void setToClient(ToClientInterface toClient) {
         this.toClient = toClient;
-    }
-
-    /**
-     * Gets the Board of the player.
-     *
-     * @return Bord of the player.
-     */
-    public PlayerBoardInterface getPlayerBoard() {
-        return playerBoard;
     }
 
     /**
@@ -535,9 +527,34 @@ public class Player implements Damageable {
      *
      * @param playerBoard the new board
      */
-    public void setPlayerBoard(PlayerBoardInterface playerBoard) {
+    void setPlayerBoard(PlayerBoardInterface playerBoard) {
         List<Player> marks = this.playerBoard.getMarks();
         this.playerBoard = playerBoard;
         this.playerBoard.addMarks(marks);
+    }
+
+    public void setupFinalFrenzy() {
+        if (playerBoard.getDamage().isEmpty()) {
+
+            /*No damage: setting the player board*/
+            setPlayerBoard(new FrenzyPlayerBoard());
+        } else {
+
+            /*The board will be set when the player is killed*/
+            waitingFrenzy = true;
+        }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Player)) return false;
+        Player player = (Player) o;
+        return Objects.equals(nickname, player.nickname);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nickname);
     }
 }

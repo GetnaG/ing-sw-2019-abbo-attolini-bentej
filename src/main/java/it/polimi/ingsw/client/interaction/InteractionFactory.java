@@ -28,6 +28,12 @@ public class InteractionFactory {
     private static final String CLI_ARG = "cli";
 
     /**
+     * Hiding the public constructor.
+     */
+    private InteractionFactory() {
+    }
+
+    /**
      * Returns the appropriate interaction interface.
      *
      * @param lineArgs the arguments from the command line

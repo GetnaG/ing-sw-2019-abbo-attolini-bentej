@@ -3,15 +3,11 @@ package it.polimi.ingsw.client.interaction;
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
-import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.board.*;
 
 import java.io.*;
-import java.rmi.server.UnicastRemoteObject;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Command line interface, handles the communication with the user via text.
@@ -368,11 +364,6 @@ public class CLI implements InteractionInterface {
         } catch (NumberFormatException e) {
             return -1;
         }
-    }
-
-    @Override
-    public void drawState() {
-        refresh();
     }
 
     @Override

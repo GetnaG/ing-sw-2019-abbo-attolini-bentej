@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  * Loads all maps from a json file.
  * <p>
  * The file must contain an array of arrays of {@link Room }. Each array of rooms
- * reprensents a configuration.
+ * represents a configuration.
  *
  * @author Fahed B. Tej
  * @see Room

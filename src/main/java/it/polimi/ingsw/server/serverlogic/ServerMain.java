@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.clientlogic.ClientMain;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.communication.rmi.RmiInversion;
 import it.polimi.ingsw.communication.socket.SocketDispatcher;
-import it.polimi.ingsw.server.persistency.FromFile;
 
 import java.io.IOException;
 import java.net.ServerSocket;

@@ -4,121 +4,167 @@ import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.communication.protocol.Notification;
+import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.turns.*;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.ConfigurationHelper;
 import it.polimi.ingsw.server.model.board.Configurations;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.KillshotTrack;
-import it.polimi.ingsw.server.model.player.NormalPlayerBoard;
 import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.serverlogic.ServerMain;
 import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * Controls the flow of the Game.
+ * Controls the flow of the game.
+ * The game is seen as a sequence of turns. The order of the turns follows
+ * the order of the {@link User}s list provided with the constructor.
  * <p>
- * The Game is seen as a sequence of turns. The order of the turns follows the order of connection.
+ * At first each player will take a <i>first turn</i>, he is prompted to
+ * spawn and to run a <i>normal turn</i>; then follow <i>normal turns</i>
+ * until the final frenzy triggers; everyone gets one more <i>final frenzy
+ * turn</i> and finally everything is scored.
+ * The game will also stop when there are less than <b>three</b> players
+ * connected.
+ * <p>
+ * This will also act as a {@link ScoreListener}, it is notified when a
+ * player is killed and needs to be scored, which happens at the end of the
+ * turn for {@link Damageable}s and at the end of the game for the
+ * {@link GameBoard}.
+ * <p>
+ * As a {@link SuspensionListener}, this will be notified when a player is
+ * suspended, and will ensure that will skip his turns.
  *
  * @author Fahed B. Tej
+ * @author Abbo Giulio A.
+ * @see Player
+ * @see GameBoard
+ * @see TurnInterface
  */
 public class DeathmatchController implements SuspensionListener, ScoreListener {
+    /**
+     * The prefix used for retrieving the player's resource.
+     * To this is appended a number from 0 to the max number of players.
+     */
     private static final String PLAYER_RESOURCE_PREFIX = "figureRes";
     /**
-     * Players in the Game
+     * The players in the Game.
      */
     private List<Player> players;
     /**
-     * Game Board used in the game
+     * The board used in the game.
      */
     private GameBoard board;
     /**
-     * Suspended Players
+     * The suspended Players.
      */
     private List<Player> suspendedPlayers;
     /**
-     * Damageable objects killed during turn.
+     * Damageable objects killed in the turn, they will eventually be scored.
      */
     private List<Damageable> killedInTurn;
+    private boolean gameOver;
 
     /**
-     * Constructs a DeathmatchController with the given users
+     * Constructs a controller with the provided parameters.
+     * The players are created from the given users and their order will
+     * determine the order of the turns.
      *
-     * @param users users in the game. The order of the turns is based on the given list.
+     * @param users         the users that will be the players of the game
+     * @param skullsLeft    the number of initial skulls on the board
+     * @param configuration the configuration of the squares on the board
      */
     public DeathmatchController(List<? extends User> users, int skullsLeft, Configurations configuration) {
+
+        /*Constructing the players from the users*/
         players = new ArrayList<>();
-        for (int i = 0; i < users.size(); i++) {
-            User currentUser = users.get(i);
-            players.add(new Player(currentUser.getName(),
-                    i == 0, PLAYER_RESOURCE_PREFIX + i, currentUser,
-                    new NormalPlayerBoard(), this));
-        }
-        board = new GameBoard(new KillshotTrack(skullsLeft),
-                ConfigurationHelper.boardCreator(configuration));
-        // boards
+        users.forEach(u -> players.add(new Player(u.getName(), PLAYER_RESOURCE_PREFIX + users.indexOf(u), u, this)));
+
+        //TODO: can I use directly the loader?
+        board = new GameBoard(new KillshotTrack(skullsLeft), ConfigurationHelper.boardCreator(configuration));
         suspendedPlayers = new ArrayList<>();
         killedInTurn = new ArrayList<>();
+        gameOver = false;
     }
 
     /**
-     * Starts the game. The game is divided in the following four phases:
-     * (1) Initial Turn
-     * (2) NormalTurns and RespawnTurns
-     * (3) FinalFrenzy
-     * (4) Scoring
+     * Starts the game and handles the turns.
+     * The game is divided in the following four phases:<ul>
+     * <li>First turn</li>
+     * <li>NormalTurns and spawn</li>
+     * <li>Final frenzy</li>
+     * <li>Final scoring</li></ul>
      */
     public void start() {
+
+        /*Ensuring that the board has all the cards*/
         board.replaceAll();
         Player currentPlayer = players.get(0);
 
-        // First turn
-        //FIXME: set default location to suspended
+        /*First turn for the players not suspended*/
         Iterator<Player> iterator = new PlayerIterator(players.get(0), false);
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
             new FirstTurn().startTurn(currentPlayer, board);
-            normalTurn(currentPlayer);
+            turn(new NormalTurn(currentPlayer, board), currentPlayer);
         }
 
-        // A series of normal turns interrupted by Final Frenzy
+        /*Ensuring that all the players are on the board, the default is the blue spawn*/
+        for (Player p : players)
+            if (p.getPosition() == null)
+                p.setPosition(board.findSpawn(AmmoCube.BLUE));
+
+        /*A series of normal turns interrupted by Final Frenzy*/
         iterator = new PlayerIterator(players.get(0), true);
         while (!board.checkFinalFrenzy() && iterator.hasNext()) {
             currentPlayer = iterator.next();
-            normalTurn(currentPlayer);
+            turn(new NormalTurn(currentPlayer, board), currentPlayer);
         }
 
-        //TODO setup finalfrenzy
+        /*Setting up final frenzy*/
         int whoTriggered = players.indexOf(currentPlayer);
         currentPlayer = iterator.next();
+        players.forEach(Player::setupFinalFrenzy);
 
-        // Final frenzy
+        /*Final frenzy from the player after who started it*/
         iterator = new PlayerIterator(currentPlayer, false);
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
             if (players.indexOf(currentPlayer) > whoTriggered) {
-                // For those who come before the first player
-                new FrenzyTurnBefore(currentPlayer, board).startTurn(currentPlayer, board);
+
+                /*For those who are before the first player*/
+                turn(new FrenzyTurnBefore(currentPlayer, board), currentPlayer);
             } else {
-                // for those who come after the first player
-                new FrenzyTurnAfter(currentPlayer, board).startTurn(currentPlayer, board);
+
+                /*For those who are after the first player and him*/
+                turn(new FrenzyTurnAfter(currentPlayer, board), currentPlayer);
             }
         }
 
-        finalScore();
-    }
-
-    private void finalScore() {
+        /*Scoring all the players and the board*/
+        notifyAllPlayers(Notification.NotificationType.GAME_OVER);
         players.forEach(this::addKilled);
         scoreAllKilled();
+        emptyKilledList();
         scoreBoard();
+
+        /*Notifying who won and ending the match*/
+        List<String> rank = players.stream()
+                .sorted(Comparator.comparingInt(Player::getScore))
+                .map(Player::getName).collect(Collectors.toList());
+        updateAllPlayers(new Update(Update.UpdateType.GAME_OVER, rank));
+        ServerMain.getDeathMatchHall().removeMatch(this);
     }
 
+    /**
+     * Notifies all not suspended players.
+     *
+     * @param notificationType the notification to send
+     */
     public void notifyAllPlayers(Notification.NotificationType notificationType) {
         for (Player p : players) {
             if (!suspendedPlayers.contains(p)) {
@@ -132,49 +178,60 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     }
 
     /**
-     * Deals with the normal turn of the {@code currentPlayer}.
+     * Updates all not suspended players.
+     *
+     * @param update the update to send
      */
-    private void normalTurn(Player currentPlayer) {
-        new NormalTurn(currentPlayer, board).startTurn(currentPlayer, board);
-        scoreAllKilled();
-        board.replaceAll();
-        respawnDeadPlayers();
-    }
-
-
-    /**
-     * Respawns all dead players. Each player gets to play a Respawn Turn.
-     */
-    private void respawnDeadPlayers() {//TODO
-        List<Player> toBeRespawned = players.stream().filter(p -> p.getPlayerBoard().isDead()).collect(Collectors.toList());
-        for (Player p : toBeRespawned) {
-            new RespawnTurn().startTurn(p, board);
+    public void updateAllPlayers(Update update) {
+        for (Player p : players) {
+            if (!suspendedPlayers.contains(p)) {
+                try {
+                    p.getToClient().sendUpdate(update);
+                } catch (ToClientException ignored) {
+                    /*Ignored because there is nothing to recover from*/
+                }
+            }
         }
     }
 
     /**
-     * Changes the given player status to suspended.
+     * Deals with the provided turn of the current player.
+     * This also scores all the killed players and respawns them.
+     * After this the board will be ready for the next turn.
      *
-     * @param player player to be suspended
+     * @param turnInterface the turn that will be run
+     * @param currentPlayer the player that will run this turn
+     */
+    private void turn(TurnInterface turnInterface, Player currentPlayer) {
+        turnInterface.startTurn(currentPlayer, board);
+        scoreAllKilled();
+        board.replaceAll();
+
+        /*Respawning*/
+        for (Player p : players) {
+            if (killedInTurn.contains(p))
+                new RespawnTurn().startTurn(p, board);
+        }
+        emptyKilledList();
+    }
+
+    /**
+     * {@inheritDoc}
      */
     @Override
     public void playerSuspension(String player) {
         for (Player p : players)
-            if (p.getName().equals(player)) {
+            if (p.getName().equals(player) && !suspendedPlayers.contains(p)) {
                 suspendedPlayers.add(p);
                 break;
             }
         if (players.size() - suspendedPlayers.size() < 3) {
-            notifyAllPlayers(Notification.NotificationType.GAME_OVER);
-            finalScore();
+            gameOver = true;
         }
-        throw new IllegalArgumentException("Player does not exist: " + player);
     }
 
     /**
-     * Changes the given player to resumed.
-     *
-     * @param player player resumed
+     * {@inheritDoc}
      */
     @Override
     public void playerResumption(String player) {
@@ -185,6 +242,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean playerUpdate(String player, ToClientInterface newConnection) {
         for (Player p : players)
@@ -196,10 +256,8 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         return false;
     }
 
-
     /**
-     * This calls {@code scoreBoard} on the {@linkplain GameBoard}. It is used
-     * at the end of the game.
+     * {@inheritDoc}
      */
     @Override
     public void scoreBoard() {
@@ -207,11 +265,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     }
 
     /**
-     * Adds a {@linkplain Damageable} object to the objects that will be
-     * scored.
-     *
-     * @param killed the {@code Damageable} to be scored
-     * @throws NullPointerException if {@code killed} is null
+     * {@inheritDoc}
      */
     @Override
     public void addKilled(Damageable killed) {
@@ -220,52 +274,67 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     }
 
     /**
-     * Scores all the {@linkplain Damageable} objects added. This method must
-     * also take care of adding the <i>kill shot</i> and
-     * <i>overkill</i> tokens (if applicable) to the {@code GameBoard}.
-     * This affects all the objects added since the last call to {@code
-     * emptyKilledList}.
+     * {@inheritDoc}
      */
     @Override
     public void scoreAllKilled() {
         killedInTurn.forEach(Damageable::scoreAndResetDamage);
     }
 
-
     /**
-     * Returns a {@linkplain List} of the objects that will be scored. These are
-     * the {@linkplain Damageable} added since the last call to {@code
-     * emptyKilledList}.
-     *
-     * @return a list of the objects that will be scored
+     * {@inheritDoc}
+     * <p>
+     * Changes to the returned list will not be reflected on the original.
      */
     @Override
     public List<Damageable> getKilled() {
         return new ArrayList<>(killedInTurn);
     }
 
-
     /**
-     * Clears the list of objects on which scoring will be performed. Invoking
-     * {@code scoreAllKilled} will effect only the objects added after the last
-     * call to this method. A call to {@code scoreAllKilled} immediately after
-     * this method will produce no effect.
+     * {@inheritDoc}
      */
     @Override
     public void emptyKilledList() {
         killedInTurn.clear();
     }
 
+    /**
+     * This iterates over the player in the match that are not suspended.
+     */
     private class PlayerIterator implements Iterator<Player> {
+        /**
+         * Whether the iteration is a loop.
+         */
         private boolean isCircular;
+        /**
+         * The index of the first element.
+         */
         private int start;
+        /**
+         * The index of the {@linkplain #next} element.
+         */
         private int index;
+        /**
+         * The element that will be returned next.
+         */
         private Player next;
 
+        /**
+         * An iterator over the not suspended players.
+         * If {@code isCircular} is true, then the iterator will never stop;
+         * otherwise this will stop when the {@code from} element is reached
+         * again.
+         *
+         * @param from       the first element that will be returned
+         * @param isCircular whether this will be a loop
+         */
         PlayerIterator(Player from, boolean isCircular) {
             this.isCircular = isCircular;
             start = players.indexOf(from);
             index = start;
+
+            /*Setting the first valid next element*/
             next = from;
             while (next != null && suspendedPlayers.contains(next)) {
                 next = circularNext();
@@ -283,17 +352,28 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             if (!hasNext())
                 throw new NoSuchElementException();
             Player toReturn = next;
+
+            /*Setting the first valid next element*/
             next = circularNext();
             while (next != null && suspendedPlayers.contains(next)) {
                 next = circularNext();
                 notifyAllPlayers(Notification.NotificationType.USER_WILL_SKIP);
             }
+
+            /*Returning the memorized element*/
             return toReturn;
         }
 
+        /**
+         * Returns the next player in the list as if it was circular.
+         *
+         * @return the next player in the list as if it was circular or null
+         * if the iteration should stop
+         */
         private Player circularNext() {
             index = ((index + 1) < players.size()) ? (index + 1) : 0;
-            return (isCircular || index != start) ? players.get(index) : null;
+            return (!gameOver && (isCircular || index != start)) ?
+                    players.get(index) : null;
         }
     }
 }

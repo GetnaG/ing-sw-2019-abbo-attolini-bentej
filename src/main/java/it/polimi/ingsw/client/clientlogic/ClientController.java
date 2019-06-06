@@ -9,7 +9,6 @@ import it.polimi.ingsw.communication.rmi.RmiInversionInterface;
 import it.polimi.ingsw.communication.socket.SocketFromServer;
 
 import java.io.IOException;
-import java.io.Serializable;
 import java.io.UncheckedIOException;
 import java.net.Socket;
 import java.rmi.NotBoundException;
@@ -21,18 +20,15 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * Represents the Controller of the client. It elaborates the received Notifications, Updates and Commands.
+ * Represents the Controller of the client.
+ * It elaborates the received Notifications, Updates and Commands.
  * A controller receives orders from the servers and redirects them to the
  * local model and to the user through the view.
- * <p>
- * (The view is receives orders from the controller and is notified by the
- * view; the model receives orders from the controller and notifies the view).
  *
  * @author Fahed B. Tej
  * @author Abbo Giulio A.
  */
 public class ClientController extends UnicastRemoteObject implements RmiFromClientInterface {
-
     /**
      * Represents the state of the game.
      */
@@ -49,7 +45,6 @@ public class ClientController extends UnicastRemoteObject implements RmiFromClie
      * @param view  the view, interacts with the user
      */
     public ClientController(MatchState model, InteractionInterface view) throws RemoteException {
-        super();
         this.model = model;
         this.view = view;
     }
@@ -76,13 +71,10 @@ public class ClientController extends UnicastRemoteObject implements RmiFromClie
      */
     @Override
     public String handleQuestion(MessageType message) {
-        switch (message) {
-            case NICKNAME:
-                return view.askName();
-            default:
-                return "";
-            //throw new IllegalArgumentException("Unhandled argument: " + message);
+        if (message == MessageType.NICKNAME) {
+            return view.askName();
         }
+        throw new IllegalArgumentException("Unhandled argument: " + message);
     }
 
     /**
@@ -123,8 +115,7 @@ public class ClientController extends UnicastRemoteObject implements RmiFromClie
             case TARGET:
                 return view.chooseTarget(optionsList);
             default:
-                return 0;
-            //  throw new IllegalArgumentException("Unhandled argument: " + message);
+                throw new IllegalArgumentException("Unhandled argument: " + message);
         }
     }
 

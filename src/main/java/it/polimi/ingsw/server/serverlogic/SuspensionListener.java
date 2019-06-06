@@ -18,8 +18,8 @@ public interface SuspensionListener {
      * <p>
      * The nickname of the player will become available for future
      * connections that will take his place, and the player will skip his turn.
-     *  @param player                  the nickname of the suspended player
      *
+     * @param player the nickname of the suspended player
      */
     void playerSuspension(String player);
 

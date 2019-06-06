@@ -139,15 +139,6 @@ class CLITest {
 
     @Disabled
     @Test
-    void drawState() {
-        cli.drawState();
-        for (String s : out.get(PRINTLN_IN_REFRESH)) {
-            assertNotNull(s);
-        }
-    }
-
-    @Disabled
-    @Test
     void askName() {
         in.put("name");
         assertEquals("name", cli.askName());

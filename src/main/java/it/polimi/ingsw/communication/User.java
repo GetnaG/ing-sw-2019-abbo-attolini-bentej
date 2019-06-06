@@ -145,17 +145,6 @@ public class User implements ToClientInterface {
     }
 
     /**
-     * Returns the match SuspensionListener of this user.
-     * This is useful when a user is suspended and a new one has to take his
-     * place.
-     *
-     * @return the match SuspensionListener of this user
-     */
-    public SuspensionListener getMatchSuspensionListener() {
-        return matchSuspensionListener;
-    }
-
-    /**
      * Sets the match SuspensionListener for this user.
      *
      * @param matchSuspensionListener the match SuspensionListener for this user

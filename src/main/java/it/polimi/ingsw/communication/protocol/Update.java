@@ -164,6 +164,10 @@ public class Update implements Serializable {
         /**
          * Time for Hall
          */
-        HALL_TIMER
+        HALL_TIMER,
+        /**
+         * Game over, the list of players is ordered, the first is the winner.
+         */
+        GAME_OVER
     }
 }

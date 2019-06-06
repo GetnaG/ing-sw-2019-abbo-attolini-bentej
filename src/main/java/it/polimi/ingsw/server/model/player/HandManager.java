@@ -20,7 +20,7 @@ import java.util.Map;
  * @see WeaponCard
  * @see PowerupCard
  */
-public class HandManager {
+class HandManager {
     /**
      * The maximum number of weapon and powerup cards.
      */
@@ -59,7 +59,7 @@ public class HandManager {
     /**
      * Instantiates a hand manager with no cards.
      */
-    public HandManager() {
+    HandManager() {
         loadedWeapons = new ArrayList<>();
         unloadedWeapons = new ArrayList<>();
         powerups = new ArrayList<>();
@@ -320,7 +320,7 @@ public class HandManager {
      */
     private int getRemainingAndAddPowerups(AmmoCube color, int colorPowerup,
                                            Map<AmmoCube, Integer> price,
-                                           List<PowerupCard> usable) {
+                                           List<? super PowerupCard> usable) {
         if (price.containsKey(color) && price.get(color) > 0) {
             if (colorPowerup < price.get(color))
                 throw new IllegalArgumentException("Not enough powerups");

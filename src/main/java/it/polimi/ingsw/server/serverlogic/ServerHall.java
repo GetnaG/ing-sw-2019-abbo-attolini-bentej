@@ -32,7 +32,6 @@ public class ServerHall implements Runnable {
      * The maximum number of player for a match to start.
      */
     private static final int MAXIMUM_PLAYERS = 5;
-
     /**
      * The seconds before starting a game having enough players.
      */
@@ -118,15 +117,19 @@ public class ServerHall implements Runnable {
      * Notifies all running match controllers that a player is back online.
      * If the player is in one of the active matches, his match suspension
      * listener is updated.
+     * If it is in none of the active matches it is added to the waiting room.
      *
      * @param name    the name of the player that is back online
      * @param newUser the new user that takes the place of the one offline
      */
     public synchronized void notifyMatchesPlayerResumption(String name, User newUser) {
         for (DeathmatchController controller : startedGames) {
-            if (controller.playerUpdate(name, newUser))
+            if (controller.playerUpdate(name, newUser)) {
                 newUser.setMatchSuspensionListener(controller);
+                return;
+            }
         }
+        addUser(newUser);
     }
 
     /**
@@ -160,6 +163,7 @@ public class ServerHall implements Runnable {
             u.setMatchSuspensionListener(controller);
         connectedUsers.clear();
         statusNextGame = GameStatus.NOT_STARTED;
+        new Thread(controller::start).start();
         ServerMain.getLog().info("Match starting");
     }
 

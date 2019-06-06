@@ -10,7 +10,7 @@ import java.util.List;
  * @author Fahed B. Tej
  * @see MatchState
  */
-public class BoardState implements Serializable {
+public class BoardState {
 
     private int configurationID;
     private List<String> ammoCardsID;

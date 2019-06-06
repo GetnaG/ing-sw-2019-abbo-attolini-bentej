@@ -92,4 +92,13 @@ public interface Damageable {
      * @return the name of this damageable
      */
     String getName();
+
+    /**
+     * Returns true if two Damageable have the same name.
+     *
+     * @param obj the object to compare
+     * @return true if it is a damageable and has the same name
+     */
+    @Override
+    boolean equals(Object obj);
 }

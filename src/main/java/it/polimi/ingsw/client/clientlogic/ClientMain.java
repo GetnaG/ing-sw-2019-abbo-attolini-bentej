@@ -16,28 +16,24 @@ import java.util.logging.Logger;
  * @see ClientController
  */
 public class ClientMain {
+    /**
+     * The logger for the client.
+     */
     private static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
-    private static final String[] s = {"gui"};
 
-
+    /**
+     * Starts the client with the specified interface.
+     *
+     * @param args Usage: java ClientMain <interface type>
+     */
     public static void main(String[] args) {
-
-
         try {
-            MatchState model;
-            ClientController controller;
-            InteractionInterface view;
-
-
-            view = InteractionFactory.getInteractionInterface(args);
-            model = new MatchState();
-            controller = new ClientController(model, view);
-            view.setController(controller);
+            InteractionInterface view = InteractionFactory.getInteractionInterface(args);
+            MatchState model = new MatchState();
+            view.setController(new ClientController(model, view));
             view.setModel(model);
-
-
         } catch (IOException | NullPointerException | IllegalArgumentException e) {
-            LOG.log(Level.SEVERE, "Socket error",e);
+            LOG.log(Level.SEVERE, "Socket error", e);
         }
     }
 }

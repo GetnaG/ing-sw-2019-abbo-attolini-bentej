@@ -476,18 +476,10 @@ class PlayerTest {
                 () -> APlayer.addScore(-7));
     }
 
-    /*Testing if the returned value is the right one*/
-    @Test
-    void isFirstPlayer() {
-        Player player = new Player("", true, "", null, null, null);
-
-        assertTrue(player.isFirstPlayer());
-    }
-
     /*Testing if the returned string is the right one*/
     @Test
     void getFigureRes() {
-        Player player = new Player("", true, "Test", null, null, null);
+        Player player = new Player("", "Test", null, null, null);
 
         assertEquals("Test", player.getFigureRes());
     }
@@ -496,7 +488,7 @@ class PlayerTest {
     @Test
     void getToClient() {
         ToClientInterface toClientInterface = new PlayerTest.MyToClientInterface();
-        Player player = new Player("", true, "Test", toClientInterface, null, null);
+        Player player = new Player("", "Test", toClientInterface, null, null);
 
         assertEquals(toClientInterface, player.getToClient());
     }
