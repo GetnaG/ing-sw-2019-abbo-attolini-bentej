@@ -3,9 +3,14 @@ package it.polimi.ingsw.client.interaction;
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.resources.R;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.board.*;
+import it.polimi.ingsw.server.model.player.Player;
 
 import java.io.*;
+import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -366,6 +371,7 @@ public class CLI implements InteractionInterface {
         }
     }
 
+
     @Override
     public String askName() {
         return handleQuestion("askName", null);
@@ -452,11 +458,49 @@ public class CLI implements InteractionInterface {
      */
     private StringBuilder translateStatus() {
         StringBuilder stringBuilder = new StringBuilder();
+       //List<String> momentaryAmmoCardList = model.getAmmoCardsID();
 
-        //drawBoard(model.getConfigurationID());
+        switch (model.getConfigurationID()){
+            case 0:{
+                stringBuilder.append(R.string("configuration1"));
+                break;
+            }
+            case 1:{
+                stringBuilder.append(R.string("configuration2"));
+                break;
+            }
+            case 2: {
+                stringBuilder.append(R.string("configuration3"));
+                break;
+            }
+            case 3: {
+                stringBuilder.append(R.string("configuration4"));
+                break;
+            }
+            default:
+        }
 
-        //stringBuilder.append(model.getWeaponsCardsID().stream().map(a -> R.string(a)).collect(Collectors.toList()));
-        return stringBuilder;
+        /*
+        square infos:
+        square "ID": (color)
+                     [ ammo | market : < weapon1, weapon2, weapon3 > ]
+                     { player1 , player2 , ... }
+         */
+        /*
+        players' boards:
+        player_name: < status: online | offline >
+                     damage [x x x x x x x x x x][+][*]
+                     marks [m m m]
+                     value { 8 | 6 | 4 | 2 | 1 }
+         */
+
+        //TODO
+
+
+       /* for(String s : momentaryAmmoCardList)
+            stringBuilder.append(R.string(s));*/
+
+        return stringBuilder.append("wefwefweggqewe");
     }
 
     /**
@@ -519,15 +563,6 @@ public class CLI implements InteractionInterface {
     public void setController(ClientController controller) {
         this.controller = controller;
         askConnection();
-    }
-
-    private void drawBoard(Configurations c){
-
-        SquareColor[][] map = new SquareColor[4][3];
-
-        map[3][2] = SquareColor.BLUE;
-
-        //ecc
     }
 
 
