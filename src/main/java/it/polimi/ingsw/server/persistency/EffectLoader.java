@@ -1,9 +1,9 @@
 package it.polimi.ingsw.server.persistency;
 
 import com.google.gson.Gson;
-import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
-import it.polimi.ingsw.server.controller.effects.Move;
+import it.polimi.ingsw.server.controller.effects.MoveSelfEffect;
+import it.polimi.ingsw.server.controller.effects.TagbackEffect;
 import it.polimi.ingsw.server.controller.effects.cardeffects.CardEffect;
 
 import java.io.InputStream;
@@ -46,8 +46,10 @@ import java.util.stream.Stream;
 public class EffectLoader implements BasicLoader<EffectInterface> {
     /**
      * The effects not present in the json.
+     * This effects do not have an internal state, thus can be used multiple
+     * times.
      */
-    private List<EffectInterface> moveSelfEffects;
+    private List<EffectInterface> otherEffects;
     /**
      * The loaded effects (could be empty).
      */
@@ -72,18 +74,12 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
                         effect.getName());
 
         /*Adding the other effects*/
-        //FIXME: Action does not behave like other effects
-        moveSelfEffects = new ArrayList<>();
-        moveSelfEffects.add(new Action("cyberblade_shadowstep", new Move()));
-        moveSelfEffects.add(new Action("rocketLauncher_rocketJump",
-                Arrays.asList(new Move(), new Move())));
-        moveSelfEffects.add(new Action("plasmaGun_phaseGlide",
-                Arrays.asList(new Move(), new Move())));
-
-        //FIXME: temporary effects right one to be added
-        moveSelfEffects.add(new Action("teleporter", new Move()));
-        moveSelfEffects.add(new Action("tagbackGrenade", new Move()));
-
+        otherEffects = new ArrayList<>();
+        otherEffects.add(new MoveSelfEffect("cyberblade_shadowstep", 1));
+        otherEffects.add(new MoveSelfEffect("rocketLauncher_rocketJump", 2));
+        otherEffects.add(new MoveSelfEffect("plasmaGun_phaseGlide", 2));
+        otherEffects.add(new MoveSelfEffect("teleporter", -1));
+        otherEffects.add(new TagbackEffect("tagbackGrenade"));
     }
 
     /**
@@ -110,7 +106,7 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
     public synchronized List<EffectInterface> getAll() {
         return Stream.concat(Arrays.stream(cardEffects)
                         .map(CardEffect::new),
-                moveSelfEffects.stream()
+                otherEffects.stream()
         ).collect(Collectors.toList());
     }
 
@@ -124,7 +120,7 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
         return Stream.concat(Arrays.stream(cardEffects)
                         .filter(c -> c.getName().equalsIgnoreCase(id))
                         .map(CardEffect::new),
-                moveSelfEffects.stream()
+                otherEffects.stream()
                         .filter(c -> c.getName().equalsIgnoreCase(id))
         ).collect(Collectors.toList());
     }

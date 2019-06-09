@@ -21,7 +21,8 @@ import java.util.stream.Collectors;
 public class CommunicationHelper {
     /**
      * Handles the interaction using {@linkplain EffectInterface}.
-     * Each choice could be a chain of effects.
+     * Each choice could be a chain of effects; this displays the names
+     * of the elements in the chaim.
      *
      * @param options the options to choose from
      * @return the options as lists of sequences of keys
@@ -76,6 +77,8 @@ public class CommunicationHelper {
 
     /**
      * Handles the interaction using {@linkplain Action}.
+     * This displays only the name of the action, not the names of the single
+     * effects in the chain.
      *
      * @param options the options to choose from
      * @return the options as lists of sequences of keys
