@@ -30,8 +30,8 @@ public class ClientMain {
         try {
             InteractionInterface view = InteractionFactory.getInteractionInterface(args);
             MatchState model = new MatchState();
-            view.setController(new ClientController(model, view));
             view.setModel(model);
+            view.setController(new ClientController(model, view));
         } catch (IOException | NullPointerException | IllegalArgumentException e) {
             LOG.log(Level.SEVERE, "Socket error", e);
         }
