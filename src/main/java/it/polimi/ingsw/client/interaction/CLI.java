@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.interaction;
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
+import it.polimi.ingsw.client.clientlogic.PlayerState;
 import it.polimi.ingsw.client.resources.R;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.board.*;
@@ -82,6 +83,8 @@ public class CLI implements InteractionInterface {
      * The controller, used only in the initial setup.
      */
     private ClientController controller;
+
+    private static final int boardLenght  = 12;
 
     /**
      * Creates a CLI interface that uses the provided input and output, and
@@ -458,49 +461,154 @@ public class CLI implements InteractionInterface {
      */
     private StringBuilder translateStatus() {
         StringBuilder stringBuilder = new StringBuilder();
-       //List<String> momentaryAmmoCardList = model.getAmmoCardsID();
 
-        switch (model.getConfigurationID()){
-            case 0:{
-                stringBuilder.append(R.string("configuration1"));
-                break;
+        if(this.model != null) {
+
+            List<String> momentaryAmmoCardList = new ArrayList<>();
+            if(model.getAmmoCardsID() != null)
+                momentaryAmmoCardList.addAll(0, model.getAmmoCardsID());
+
+            List<List<String>> momentaryKillshotTrack;
+            if(model.getKillshotTrack() != null)
+                momentaryKillshotTrack = model.getKillshotTrack();
+
+            List<String> momentaryWeaponCardList;
+            if(model.getWeaponsCardsID() != null)
+                momentaryWeaponCardList = model.getWeaponsCardsID();
+
+            //if(model.getIsActionTileFrenzy())
+            //TODO
+
+            List<String> momentaryListOfConnectedPlayers = new ArrayList<>();
+            if(model.getConnectedPlayers() != null)
+                momentaryListOfConnectedPlayers = model.getConnectedPlayers();
+
+            //if(model.getIsWeaponDeckDrawable())
+            //TODO
+
+            if(model.getDisconnectedPlayers() != null){
+                for (String s : model.getDisconnectedPlayers())
+                    stringBuilder.append(s);
             }
-            case 1:{
-                stringBuilder.append(R.string("configuration2"));
-                break;
+
+            if(model.getJustConnectedPlayers() != null) {
+                for (String s : model.getJustConnectedPlayers())
+                    stringBuilder.append(s);
             }
-            case 2: {
-                stringBuilder.append(R.string("configuration3"));
-                break;
+
+
+
+            switch (model.getConfigurationID()) {
+                case 0: {
+                    stringBuilder.append(R.string("configuration0"));
+                    break;
+                }
+                case 1: {
+                    stringBuilder.append(R.string("configuration1"));
+                    break;
+                }
+                case 2: {
+                    stringBuilder.append(R.string("configuration2"));
+                    break;
+                }
+                case 3: {
+                    stringBuilder.append(R.string("configuration3"));
+                    break;
+                }
+                default:
             }
-            case 3: {
-                stringBuilder.append(R.string("configuration4"));
-                break;
+
+
+            /*
+            square infos:
+            square "ID": (color)
+                         [ ammo | market : < weapon1, weapon2, weapon3 > ]
+                         { player1 , player2 , ... }
+             */
+            /*
+            players' boards:
+            player_name: < status: online | offline >
+                         damage [x x x x x x x x x x][+][*]
+                         marks [m m m]
+                         value { 8 | 6 | 4 | 2 | 1 }
+                         ammo: [ ] [ ] [ ] [ ]
+                         weapons: { ... }
+             skull track:
+             [ ] [ ] [ ] [ ] [ ]
+             */
+
+            //squares
+
+            stringBuilder.append(lineSeparator);
+            for(int i=0; i < boardLenght; i++) {
+                //get square color, then
+                stringBuilder.append("square ").append(i).append(": (").append(" color ").append(")").append(lineSeparator);
+                //get ammo or market, then
+                stringBuilder.append("[").append(" ammo | market : < weapon1, weapon2, weapon3 > ").append("]").append(lineSeparator);
+                //get list of players in the square
+
+                int pos;
+                if(model.getPlayersState() != null){
+                    stringBuilder.append("{ ");
+                    for(PlayerState ps : model.getPlayersState()) {
+                        pos = ps.getSquarePosition();
+                        if (pos == i)
+                            stringBuilder.append(ps.getNickname()).append(" , ");
+                    }
+                    stringBuilder.append(" }").append(lineSeparator).append(lineSeparator);
+                }
+
             }
-            default:
+
+            //boards
+
+            for(PlayerState ps : model.getPlayersState()) {
+                if(ps.isConnected())
+                    stringBuilder.append(ps.getNickname()).append(": < status: online >").append(lineSeparator);
+                else
+                    stringBuilder.append(ps.getNickname()).append(": < status: offline >").append(lineSeparator);
+
+                stringBuilder.append("damage: ").append(ps.getDamage()).append(lineSeparator);
+
+                //ps.getMarks();-------------------------------------------------------------------------------------------
+
+                //ps.getBoardValue(); -----------------------------------------------------------------------------------------------
+
+                stringBuilder.append("skulls : ").append(ps.getSkullNumber()).append(lineSeparator);
+
+
+
+                for(int i = 0 ; i < ps.getAmmoCubes().size(); i++)
+                    stringBuilder.append(ps.getAmmoCubes().get(i)).append(" -- ");
+
+                stringBuilder.append(lineSeparator);
+
+                for(int i = 0 ; i < ps.getLoadedWeapons().size(); i++ )
+                    stringBuilder.append(ps.getLoadedWeapons().get(i)).append(" -- ");
+
+                stringBuilder.append(lineSeparator);
+
+                for(int i = 0 ; i < ps.getUnloadedWeapons().size(); i++)
+                    stringBuilder.append(ps.getUnloadedWeapons().get(i)).append(" -- ");
+
+                stringBuilder.append(lineSeparator);
+
+                for(int i = 0 ; i < ps.getPowerups().size(); i++)
+                    stringBuilder.append(ps.getPowerups().get(i)).append(" -- ");
+
+                stringBuilder.append(lineSeparator);
+
+            }
+
+            //TODO
+
+
+
+
         }
 
-        /*
-        square infos:
-        square "ID": (color)
-                     [ ammo | market : < weapon1, weapon2, weapon3 > ]
-                     { player1 , player2 , ... }
-         */
-        /*
-        players' boards:
-        player_name: < status: online | offline >
-                     damage [x x x x x x x x x x][+][*]
-                     marks [m m m]
-                     value { 8 | 6 | 4 | 2 | 1 }
-         */
+        return stringBuilder.append(lineSeparator).append("end_of_view");
 
-        //TODO
-
-
-       /* for(String s : momentaryAmmoCardList)
-            stringBuilder.append(R.string(s));*/
-
-        return stringBuilder.append("wefwefweggqewe");
     }
 
     /**
