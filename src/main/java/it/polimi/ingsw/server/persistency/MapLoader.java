@@ -62,7 +62,6 @@ public class MapLoader implements BasicLoader<List<Room>> {
         List<Room[]> tmp = Arrays.asList(maps);
         List<List<Room>> maps = tmp.stream().map(array -> Arrays.asList(array)).collect(Collectors.toList());
         maps.forEach(rooms -> {
-
             rooms.forEach(room -> room.refresh(rooms));
 
         });

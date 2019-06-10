@@ -58,7 +58,14 @@ public class SyncGUI implements InteractionInterface {
 
     @Override
     public int chooseSpawn(List<List<String>> optionKeys) {
-        return 0;
+        GUI.chooseSpawn(optionKeys);
+        while (true) {
+            if (GUI.isAnswerGiven())
+                break;
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        return indexButtonPressed;
     }
 
     @Override

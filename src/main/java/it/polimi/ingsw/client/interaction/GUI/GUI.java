@@ -92,7 +92,8 @@ public class GUI extends Application {
      */
     public static void buildGamePane(Stage stage) {
 
-        StackPane rootStackPane = new GamePane(answerBox, questionText);
+//        StackPane rootStackPane = new GamePane(answerBox, questionText, model.getConfigurationID());
+        StackPane rootStackPane = new GamePane(answerBox, questionText, 0);
 
         masterScene.setRoot(rootStackPane);
 
@@ -125,7 +126,7 @@ public class GUI extends Application {
      */
     public static int choosePowerupWithQuestion(List<List<String>> optionKeys, String question) {
         answerGiven = false;
-        GamePane.changeAnswerBox(optionKeys);
+        GamePane.changeAnswerBoxCards(optionKeys);
         questionText.setText(question);
         return 0;
     }
@@ -134,6 +135,9 @@ public class GUI extends Application {
     }
 
     public static int chooseSpawn(List<List<String>> optionKeys) {
+        answerGiven = false;
+        GamePane.changeAnswerBoxCards(optionKeys);
+        questionText.setText(R.string("askSpawn"));
         return 0;
     }
 
@@ -143,12 +147,15 @@ public class GUI extends Application {
 
     public static int chooseWeaponWithQuestion(List<List<String>> optionKeys, String question) {
         answerGiven = false;
-        GamePane.changeAnswerBox(optionKeys);
+        GamePane.changeAnswerBoxCards(optionKeys);
         questionText.setText(question);
         return 0;
     }
 
     public static int chooseDestination(List<List<String>> optionKeys) {
+        answerGiven = false;
+        GamePane.changeAnswerBoxSquares(optionKeys);
+        questionText.setText(R.string("askSquare"));
         return 0;
     }
 
@@ -185,6 +192,9 @@ public class GUI extends Application {
     }
 
     public static int chooseAction(List<List<String>> optionKeys) {
+        answerGiven = false;
+        GamePane.changeAnswerSimpleOptions(optionKeys);
+        questionText.setText(R.string("askAction"));
         return 0;
     }
 
@@ -193,6 +203,9 @@ public class GUI extends Application {
     }
 
     public static int chooseUseTagBack(List<List<String>> optionKeys) {
+        answerGiven = false;
+        GamePane.changeAnswerSimpleOptions(optionKeys);
+        questionText.setText(R.string("askTagback"));
         return 0;
     }
 
@@ -262,5 +275,9 @@ public class GUI extends Application {
         inputUsername = new TextField();
         loginPane = new LoginPane(controllerGUI);
         masterScene = new Scene(loginPane, 1000, 1000);
+    }
+
+    public static MatchState getModel() {
+        return model;
     }
 }

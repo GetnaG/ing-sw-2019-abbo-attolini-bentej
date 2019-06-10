@@ -19,17 +19,21 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class GamePane extends StackPane {
 
 
     private static HBox answerBox;
     private static Text questionText;
+    private static MapPane map;
 
-    public GamePane(HBox answerBox, Text questionText) {
+    public GamePane(HBox answerBox, Text questionText, int idMap) {
         super();
         this.answerBox = answerBox;
         BorderPane borderPane = new BorderPane();
+        //map = new MapPane(idMap); //TODO Remove following line
+        map = new MapPane(0);
 
         this.getChildren().add(borderPane);
 
@@ -86,7 +90,7 @@ public class GamePane extends StackPane {
         BorderPane centerBorderPane = new BorderPane();
         borderPane.setCenter(centerBorderPane);
 
-        centerBorderPane.setCenter(new MapPane(0));
+        centerBorderPane.setCenter(map);
         insertOtherPlayers(centerBorderPane);
 
         centerBorderPane.setAlignment(centerBorderPane, Pos.CENTER);
@@ -104,9 +108,14 @@ public class GamePane extends StackPane {
         borderPane.setLeft(vbox);
         borderPane.setAlignment(vbox, Pos.CENTER_LEFT);
 
+        /*
         vbox.getChildren().add(getCard("AD_weapons_IT_024"));
         vbox.getChildren().add(getCard("AD_weapons_IT_025"));
         vbox.getChildren().add(getCard("AD_weapons_IT_026"));
+        */
+
+
+        GUI.getModel().getAmmoCardsID().forEach(ammoCardID -> vbox.getChildren().add(getCard(ammoCardID)));
 
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
@@ -123,9 +132,7 @@ public class GamePane extends StackPane {
         borderPane.setRight(vbox);
         borderPane.setAlignment(vbox, Pos.CENTER_RIGHT);
 
-        vbox.getChildren().add(getCard("AD_powerups_IT_026"));
-        vbox.getChildren().add(getCard("AD_powerups_IT_027"));
-        vbox.getChildren().add(getCard("AD_powerups_IT_028"));
+        GUI.getModel().getWeaponsCardsID().forEach(weaponId -> vbox.getChildren().add(getCard(weaponId)));
 
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(10);
@@ -134,6 +141,7 @@ public class GamePane extends StackPane {
     private static Node getPlayerTile() {
         // load the image
         Image image = R.image("PlayerBoard");
+        // if (GUI.getModel().getIsActionTileFrenzy()) TODO implementare
 
         ImageView iv = new ImageView();
         iv.setImage(image);
@@ -146,8 +154,12 @@ public class GamePane extends StackPane {
     }
 
     private static Node getKillshotTrack() {
+        Image image;
         // load the image
-        Image image = R.image("ActionTile");
+        if (GUI.getModel().getIsActionTileFrenzy())
+            image = R.image("actionTileFrenzy");
+        else
+            image = R.image("ActionTile");
 
         ImageView iv = new ImageView();
         iv.setImage(image);
@@ -195,14 +207,86 @@ public class GamePane extends StackPane {
      * @param options
      * @return
      */
-    public static void changeAnswerBox(List<List<String>> options) {
+    public static void changeAnswerBoxSquares(List<List<String>> options) {
+        Platform.runLater(() -> {
+            answerBox.getChildren().removeAll(answerBox.getChildren());
+
+            // Creating a GroupBoxAnswer for each option
+            options.forEach(group -> {
+                HBox groupAnswerBox = getGroupBoxAnswerSquares(group, options.indexOf(group));
+                answerBox.getChildren().add(groupAnswerBox);
+            });
+            answerBox.setSpacing(10);
+            answerBox.setAlignment(Pos.CENTER);
+        });
+
+    }
+
+    private static HBox getGroupBoxAnswerSquares(List<String> group, int groupIndex) {
+        HBox hbox = new HBox();
+        // TOP GROUP Name
+        Button groupNameButton = new Button(groupIndex + "");
+        groupNameButton.setOnMouseClicked(e -> {
+            GUI.setAnswer(groupIndex);
+            GUI.setAnswerGiven(true);
+        });
+        hbox.getChildren().add(groupNameButton);
+
+        groupNameButton.setOnMouseEntered(e -> {
+            map.getCellByID(Integer.parseInt(group.get(0))).setOpacity(0.5);
+        });
+        groupNameButton.setOnMouseExited(e -> {
+            map.getCellByID(Integer.parseInt(group.get(0))).setOpacity(1);
+        });
+
+        return hbox;
+    }
+
+    /**
+     * Builds the options and puts them in the Answer Box
+     *
+     * @param options
+     * @return
+     */
+    public static void changeAnswerSimpleOptions(List<List<String>> options) {
         Platform.runLater(() -> {
             ImageView imgBox = new ImageView();
             answerBox.getChildren().removeAll(answerBox.getChildren());
 
             // Creating a GroupBoxAnswer for each option
             options.forEach(group -> {
-                HBox groupAnswerBox = getGroupBoxAnswer(group, imgBox, options.indexOf(group));
+                HBox hbox = new HBox();
+                // TOP GROUP Name
+                Button groupNameButton = new Button(options.indexOf(group) + "");
+                groupNameButton.setOnMouseClicked(e -> {
+                    GUI.setAnswer(options.indexOf(group));
+                    GUI.setAnswerGiven(true);
+                });
+                hbox.getChildren().add(groupNameButton);
+
+                answerBox.getChildren().add(hbox);
+            });
+
+            answerBox.setSpacing(10);
+            answerBox.setAlignment(Pos.CENTER);
+        });
+
+    }
+
+    /**
+     * Builds the options and puts them in the Answer Box
+     *
+     * @param options
+     * @return
+     */
+    public static void changeAnswerBoxCards(List<List<String>> options) {
+        Platform.runLater(() -> {
+            ImageView imgBox = new ImageView();
+            answerBox.getChildren().removeAll(answerBox.getChildren());
+
+            // Creating a GroupBoxAnswer for each option
+            options.forEach(group -> {
+                HBox groupAnswerBox = getGroupBoxAnswerCards(group, imgBox, options.indexOf(group));
                 answerBox.getChildren().add(groupAnswerBox);
             });
 
@@ -227,7 +311,7 @@ public class GamePane extends StackPane {
         });
     }
 
-    private static HBox getGroupBoxAnswer(List<String> group, ImageView imgBox, int groupIndex) {
+    private static HBox getGroupBoxAnswerCards(List<String> group, ImageView imgBox, int groupIndex) {
         HBox hbox = new HBox();
         // TOP GROUP Name
         Button groupNameButton = new Button(groupIndex + "");
