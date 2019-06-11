@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.turns;
 
+import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.controller.effects.*;
 import it.polimi.ingsw.server.model.Damageable;
@@ -91,7 +92,7 @@ public class NormalTurn implements TurnInterface {
         PowerupCard card = null;
         try {
             card = player.getToClient().choosePowerup(player.getAllPowerup());
-        } catch (ToClientException e) {
+        } catch (ToClientException | ChoiceRefusedException e) {
             // (1) default move : nothing
             // (2) suspend player: already done by the User class (calls matchSuspensionListener)
             return;
@@ -151,7 +152,7 @@ public class NormalTurn implements TurnInterface {
             cardToReload = player.getToClient().chooseWeaponToReload(weaponCards);
             if (cardToReload != null)
                 player.reload(cardToReload);
-        } catch (ToClientException e) {
+        } catch (ToClientException | ChoiceRefusedException e) {
             // (1) default move : nothing
             // (2) suspend player: already done by the User class (calls matchSuspensionListener)
             return;

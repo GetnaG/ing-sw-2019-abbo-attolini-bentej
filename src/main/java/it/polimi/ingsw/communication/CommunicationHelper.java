@@ -9,6 +9,7 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
  * @author Abbo Giulio A.
  */
 public class CommunicationHelper {
+    public static final String CHOICE_REFUSED = "refuse";
+
     /**
      * Handles the interaction using {@linkplain EffectInterface}.
      * Each choice could be a chain of effects; this displays the names
@@ -42,13 +45,17 @@ public class CommunicationHelper {
     /**
      * Handles the interaction using {@linkplain PowerupCard}.
      *
-     * @param options the options to choose from
+     * @param options  the options to choose from
+     * @param optional whether the user will be able to refuse this options
      * @return the options as lists of sequences of keys
      */
-    public List<List<String>> askPowerup(List<? extends PowerupCard> options) {
-        return options.stream()
+    public List<List<String>> askPowerup(List<? extends PowerupCard> options, boolean optional) {
+        List<List<String>> strings = options.stream()
                 .map(PowerupCard::getId).map(Arrays::asList)
                 .collect(Collectors.toList());
+        if (optional)
+            strings.add((Collections.singletonList(CHOICE_REFUSED)));
+        return strings;
     }
 
     /**
@@ -66,13 +73,17 @@ public class CommunicationHelper {
     /**
      * Handles the interaction using {@linkplain WeaponCard}.
      *
-     * @param options the options to choose from
+     * @param options  the options to choose from
+     * @param optional
      * @return the options as lists of sequences of keys
      */
-    public List<List<String>> askWeapon(List<? extends WeaponCard> options) {
-        return options.stream()
+    public List<List<String>> askWeapon(List<? extends WeaponCard> options, boolean optional) {
+        List<List<String>> strings = options.stream()
                 .map(WeaponCard::getId).map(Arrays::asList)
                 .collect(Collectors.toList());
+        if (optional)
+            strings.add((Collections.singletonList(CHOICE_REFUSED)));
+        return strings;
     }
 
     /**

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.communication.rmi;
 
+import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.CommunicationHelper;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
@@ -67,6 +68,25 @@ public class RmiToClient implements ToClientInterface {
     }
 
     /**
+     * Ask a question to the client, with options, that can be refused.
+     *
+     * @param type    the type of question
+     * @param options the possible sequences to choose, with the refuse option
+     * @return the index of the selected sequence
+     * @throws ToClientException      if there are problems with RMi
+     * @throws ChoiceRefusedException if the user refuses
+     */
+    private int refusableAskAndCheck(MessageType type, List<? extends List<String>> options)
+            throws ToClientException, ChoiceRefusedException {
+        int choice = askAndCheck(type, options);
+
+        if (options.get(choice).get(0).equals(CommunicationHelper.CHOICE_REFUSED))
+            throw new ChoiceRefusedException();
+
+        return choice;
+    }
+
+    /**
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
@@ -89,7 +109,7 @@ public class RmiToClient implements ToClientInterface {
     public PowerupCard chooseSpawn(List<PowerupCard> options)
             throws ToClientException {
         return options.get(askAndCheck(MessageType.SPAWN,
-                new CommunicationHelper().askPowerup(options)));
+                new CommunicationHelper().askPowerup(options, false)));
     }
 
     /**
@@ -100,9 +120,9 @@ public class RmiToClient implements ToClientInterface {
      */
     @Override
     public PowerupCard choosePowerup(List<PowerupCard> options)
-            throws ToClientException {
-        return options.get(askAndCheck(MessageType.POWERUP,
-                new CommunicationHelper().askPowerup(options)));
+            throws ToClientException, ChoiceRefusedException {
+        return options.get(refusableAskAndCheck(MessageType.POWERUP,
+                new CommunicationHelper().askPowerup(options, true)));
     }
 
     /**
@@ -128,7 +148,7 @@ public class RmiToClient implements ToClientInterface {
     public WeaponCard chooseWeaponCard(List<WeaponCard> options)
             throws ToClientException {
         return options.get(askAndCheck(MessageType.WEAPON,
-                new CommunicationHelper().askWeapon(options)));
+                new CommunicationHelper().askWeapon(options, false)));
     }
 
     /**
@@ -141,7 +161,7 @@ public class RmiToClient implements ToClientInterface {
     public WeaponCard chooseWeaponToBuy(List<WeaponCard> options)
             throws ToClientException {
         return options.get(askAndCheck(MessageType.WEAPON_TO_BUY,
-                new CommunicationHelper().askWeapon(options)));
+                new CommunicationHelper().askWeapon(options, false)));
     }
 
     /**
@@ -154,7 +174,7 @@ public class RmiToClient implements ToClientInterface {
     public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options)
             throws ToClientException {
         return options.get(askAndCheck(MessageType.WEAPON_TO_DISCARD,
-                new CommunicationHelper().askWeapon(options)));
+                new CommunicationHelper().askWeapon(options, false)));
     }
 
     /**
@@ -165,9 +185,9 @@ public class RmiToClient implements ToClientInterface {
      */
     @Override
     public WeaponCard chooseWeaponToReload(List<WeaponCard> options)
-            throws ToClientException {
-        return options.get(askAndCheck(MessageType.WEAPON_TO_RELOAD,
-                new CommunicationHelper().askWeapon(options)));
+            throws ToClientException, ChoiceRefusedException {
+        return options.get(refusableAskAndCheck(MessageType.WEAPON_TO_RELOAD,
+                new CommunicationHelper().askWeapon(options, true)));
     }
 
     /**
@@ -193,7 +213,7 @@ public class RmiToClient implements ToClientInterface {
     public PowerupCard choosePowerupForPaying(List<PowerupCard> options)
             throws ToClientException {
         return options.get(askAndCheck(MessageType.POWERUP_FOR_PAYING,
-                new CommunicationHelper().askPowerup(options)));
+                new CommunicationHelper().askPowerup(options, false)));
     }
 
     /**
@@ -204,9 +224,9 @@ public class RmiToClient implements ToClientInterface {
      */
     @Override
     public PowerupCard askUseTagback(List<PowerupCard> options)
-            throws ToClientException {
-        return options.get(askAndCheck(MessageType.USE_TAGBACK,
-                new CommunicationHelper().askPowerup(options)));
+            throws ToClientException, ChoiceRefusedException {
+        return options.get(refusableAskAndCheck(MessageType.USE_TAGBACK,
+                new CommunicationHelper().askPowerup(options, true)));
     }
 
     /**

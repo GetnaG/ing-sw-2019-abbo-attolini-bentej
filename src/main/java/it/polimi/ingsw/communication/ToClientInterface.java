@@ -53,13 +53,15 @@ public interface ToClientInterface {
 
     /**
      * Asks the client to choose one of the powerups from the provided list.
+     * The client is allowed to choose none.
      *
      * @param options the possible choices
      * @return the client's choice, one of the options
-     * @throws ToClientException if there are problems with the communication
-     *                           or the client does not answer in time
+     * @throws ToClientException      if there are problems with the communication
+     *                                or the client does not answer in time
+     * @throws ChoiceRefusedException if the client refuses the options
      */
-    PowerupCard choosePowerup(List<PowerupCard> options) throws ToClientException;
+    PowerupCard choosePowerup(List<PowerupCard> options) throws ToClientException, ChoiceRefusedException;
 
     /**
      * Asks the client to choose one of the squares from the provided list.
@@ -103,13 +105,15 @@ public interface ToClientInterface {
 
     /**
      * Asks the client to choose which of the weapons he wants to reload.
+     * The client is allowed to choose none.
      *
      * @param options the possible choices
      * @return the client's choice, one of the options
-     * @throws ToClientException if there are problems with the communication
-     *                           or the client does not answer in time
+     * @throws ToClientException      if there are problems with the communication
+     *                                or the client does not answer in time
+     * @throws ChoiceRefusedException if the client refuses the options
      */
-    WeaponCard chooseWeaponToReload(List<WeaponCard> options) throws ToClientException;
+    WeaponCard chooseWeaponToReload(List<WeaponCard> options) throws ToClientException, ChoiceRefusedException;
 
     /**
      * Asks the client to choose one of the actions from the provided list.
@@ -134,13 +138,15 @@ public interface ToClientInterface {
 
     /**
      * Asks the client to choose one of the {@code Tagback Grenades}.
+     * The client is allowed to choose none.
      *
      * @param options the possible choices
      * @return the client's choice, one of the options
-     * @throws ToClientException if there are problems with the communication
-     *                           or the client does not answer in time
+     * @throws ToClientException      if there are problems with the communication
+     *                                or the client does not answer in time
+     * @throws ChoiceRefusedException if the client refuses the options
      */
-    PowerupCard askUseTagback(List<PowerupCard> options) throws ToClientException;
+    PowerupCard askUseTagback(List<PowerupCard> options) throws ToClientException, ChoiceRefusedException;
 
     /**
      * Asks the client to choose a set of targets to hit.

@@ -167,7 +167,7 @@ public class User implements ToClientInterface {
      *                           allow calling methods to handle the
      *                           disconnection)
      */
-    private <T> T genericInteraction(Callable<T> callable) throws ToClientException {
+    private <T> T genericInteraction(Callable<T> callable) throws ToClientException, ChoiceRefusedException {
         Future<T> task = Executors.newSingleThreadExecutor().submit(callable);
         try {
             return task.get(waitingTime, TimeUnit.SECONDS);
@@ -177,12 +177,22 @@ public class User implements ToClientInterface {
             Thread.currentThread().interrupt();
             throw new IllegalStateException("Interrupted", e);
         } catch (ExecutionException e) {
+            if (e.getCause().getClass().equals(ToClientException.class)) {
 
-            /*Over with exception: suspending the player*/
-            serverSuspensionListener.playerSuspension(name);
-            if (matchSuspensionListener != null)
-                matchSuspensionListener.playerSuspension(name);
-            throw new ToClientException("Exception while interacting", e);
+                /*Over with exception: suspending the player*/
+                serverSuspensionListener.playerSuspension(name);
+                if (matchSuspensionListener != null)
+                    matchSuspensionListener.playerSuspension(name);
+                throw new ToClientException("Exception while interacting", e);
+            }
+            if (e.getCause().getClass().equals(ChoiceRefusedException.class)) {
+
+                /*User refused*/
+                throw new ChoiceRefusedException();
+            }
+
+            /*Unexpected exception*/
+            throw new UnsupportedOperationException(e);
         } catch (TimeoutException e) {
 
             /*Over because time out: closing connection and suspending*/
@@ -201,7 +211,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public EffectInterface chooseEffectsSequence(List<EffectInterface> options) throws ToClientException {
-        return genericInteraction(() -> toClient.chooseEffectsSequence(options));
+        try {
+            return genericInteraction(() -> toClient.chooseEffectsSequence(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -211,7 +225,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public PowerupCard chooseSpawn(List<PowerupCard> options) throws ToClientException {
-        return genericInteraction(() -> toClient.chooseSpawn(options));
+        try {
+            return genericInteraction(() -> toClient.chooseSpawn(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -220,7 +238,7 @@ public class User implements ToClientInterface {
      * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public PowerupCard choosePowerup(List<PowerupCard> options) throws ToClientException {
+    public PowerupCard choosePowerup(List<PowerupCard> options) throws ToClientException, ChoiceRefusedException {
         return genericInteraction(() -> toClient.choosePowerup(options));
     }
 
@@ -231,7 +249,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public Square chooseDestination(List<Square> options) throws ToClientException {
-        return genericInteraction(() -> toClient.chooseDestination(options));
+        try {
+            return genericInteraction(() -> toClient.chooseDestination(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -241,7 +263,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public WeaponCard chooseWeaponCard(List<WeaponCard> options) throws ToClientException {
-        return genericInteraction(() -> toClient.chooseWeaponCard(options));
+        try {
+            return genericInteraction(() -> toClient.chooseWeaponCard(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -251,7 +277,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public WeaponCard chooseWeaponToBuy(List<WeaponCard> options) throws ToClientException {
-        return genericInteraction(() -> toClient.chooseWeaponToBuy(options));
+        try {
+            return genericInteraction(() -> toClient.chooseWeaponToBuy(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -261,7 +291,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options) throws ToClientException {
-        return genericInteraction(() -> toClient.chooseWeaponToDiscard(options));
+        try {
+            return genericInteraction(() -> toClient.chooseWeaponToDiscard(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -270,7 +304,7 @@ public class User implements ToClientInterface {
      * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public WeaponCard chooseWeaponToReload(List<WeaponCard> options) throws ToClientException {
+    public WeaponCard chooseWeaponToReload(List<WeaponCard> options) throws ToClientException, ChoiceRefusedException {
         return genericInteraction(() -> toClient.chooseWeaponToReload(options));
     }
 
@@ -281,7 +315,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public Action chooseAction(List<Action> options) throws ToClientException {
-        return genericInteraction(() -> toClient.chooseAction(options));
+        try {
+            return genericInteraction(() -> toClient.chooseAction(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -291,7 +329,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public PowerupCard choosePowerupForPaying(List<PowerupCard> options) throws ToClientException {
-        return genericInteraction(() -> toClient.choosePowerupForPaying(options));
+        try {
+            return genericInteraction(() -> toClient.choosePowerupForPaying(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -300,7 +342,7 @@ public class User implements ToClientInterface {
      * The client will have {@linkplain #waitingTime} seconds to answer.
      */
     @Override
-    public PowerupCard askUseTagback(List<PowerupCard> options) throws ToClientException {
+    public PowerupCard askUseTagback(List<PowerupCard> options) throws ToClientException, ChoiceRefusedException {
         return genericInteraction(() -> toClient.askUseTagback(options));
     }
 
@@ -311,7 +353,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public List<Damageable> chooseTarget(List<List<Damageable>> options) throws ToClientException {
-        return genericInteraction(() -> toClient.chooseTarget(options));
+        try {
+            return genericInteraction(() -> toClient.chooseTarget(options));
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -321,7 +367,11 @@ public class User implements ToClientInterface {
      */
     @Override
     public String chooseUserName() throws ToClientException {
-        return genericInteraction(() -> toClient.chooseUserName());
+        try {
+            return genericInteraction(() -> toClient.chooseUserName());
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -331,10 +381,14 @@ public class User implements ToClientInterface {
      */
     @Override
     public void quit() throws ToClientException {
-        genericInteraction(() -> {
-            toClient.quit();
-            return null;
-        });
+        try {
+            genericInteraction(() -> {
+                toClient.quit();
+                return null;
+            });
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -344,10 +398,14 @@ public class User implements ToClientInterface {
      */
     @Override
     public void sendNotification(Notification.NotificationType type) throws ToClientException {
-        genericInteraction(() -> {
-            toClient.sendNotification(type);
-            return null;
-        });
+        try {
+            genericInteraction(() -> {
+                toClient.sendNotification(type);
+                return null;
+            });
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 
     /**
@@ -357,9 +415,13 @@ public class User implements ToClientInterface {
      */
     @Override
     public void sendUpdate(Update update) throws ToClientException {
-        genericInteraction(() -> {
-            toClient.sendUpdate(update);
-            return null;
-        });
+        try {
+            genericInteraction(() -> {
+                toClient.sendUpdate(update);
+                return null;
+            });
+        } catch (ChoiceRefusedException e) {
+            throw new UnsupportedOperationException(e);
+        }
     }
 }

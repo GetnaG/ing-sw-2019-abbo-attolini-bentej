@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
@@ -71,7 +72,7 @@ public class TagbackEffect implements EffectInterface {
 
                         /*Applying the effect*/
                         subjectPlayer.giveMark(Collections.singletonList(player));
-                    } catch (ToClientException e) {
+                    } catch (ToClientException | ChoiceRefusedException e) {
                         /*Nothing to recover from*/
                     }
                 }

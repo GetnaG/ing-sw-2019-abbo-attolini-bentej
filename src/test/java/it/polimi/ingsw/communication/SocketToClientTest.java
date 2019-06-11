@@ -86,7 +86,7 @@ class SocketToClientTest {
                 assertEquals(nameGetter.apply(options.get(i)),
                         sentOptions[i][0]);
             }
-        } catch (ToClientException e) {
+        } catch (ToClientException | ChoiceRefusedException e) {
             fail(e);
         }
     }
@@ -324,7 +324,7 @@ class SocketToClientTest {
 
     @FunctionalInterface
     interface FunctionException<T, R> {
-        R apply(T t) throws ToClientException;
+        R apply(T t) throws ToClientException, ChoiceRefusedException;
     }
 
     private class MockSocket extends Socket {

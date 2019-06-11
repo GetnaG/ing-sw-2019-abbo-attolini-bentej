@@ -31,7 +31,8 @@ public class RespawnTurn implements TurnInterface {
         // we make the player choose a powerup
         PowerupCard cardChosen = null;
         try {
-            cardChosen = currentPlayer.getToClient().choosePowerup(currentPlayer.getAllPowerup());
+            cardChosen =
+                    currentPlayer.getToClient().chooseSpawn(currentPlayer.getAllPowerup());
         } catch (ToClientException e) {
             //TODO Handle if the user is disconnected
         }

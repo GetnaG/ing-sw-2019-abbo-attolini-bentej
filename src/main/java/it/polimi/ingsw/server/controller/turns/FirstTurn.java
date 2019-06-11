@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.turns;
 
+import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
@@ -37,7 +38,7 @@ public class FirstTurn implements TurnInterface {
         drawnPowerups.add(secondPowerup);
         // Player choosen a card, the other one is discarded.
         try{
-            cardChosen = currentPlayer.getToClient().choosePowerup(drawnPowerups);
+            cardChosen = currentPlayer.getToClient().chooseSpawn(drawnPowerups);
             drawnPowerups.remove(cardChosen);
             if (cardChosen.equals(firstPowerup)) {
                 board.putPowerupCard(secondPowerup);

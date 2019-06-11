@@ -2,6 +2,7 @@ package it.polimi.ingsw.communication.socket;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
+import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.CommunicationHelper;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
@@ -108,6 +109,26 @@ public class SocketToClient implements ToClientInterface {
     }
 
     /**
+     * Handles the communication when there are options attached to the
+     * message and it can be refused.
+     *
+     * @param command the message to be sent
+     * @param options the options to choose from, with the refuse option
+     * @return the index of the selected option
+     * @throws ToClientException      if there are problems with the socket
+     * @throws ChoiceRefusedException if the client refuses
+     */
+    private int refusableSendAndCheck(MessageType command, List<? extends List<String>> options)
+            throws ToClientException, ChoiceRefusedException {
+        int choice = sendAndCheck(command, options);
+
+        if (options.get(choice).get(0).equals(CommunicationHelper.CHOICE_REFUSED))
+            throw new ChoiceRefusedException();
+
+        return choice;
+    }
+
+    /**
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
@@ -130,20 +151,21 @@ public class SocketToClient implements ToClientInterface {
     public PowerupCard chooseSpawn(List<PowerupCard> options)
             throws ToClientException {
         return options.get(sendAndCheck(MessageType.SPAWN,
-                new CommunicationHelper().askPowerup(options)));
+                new CommunicationHelper().askPowerup(options, false)));
     }
 
     /**
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException      if there are problems whit the socket
+     * @throws ChoiceRefusedException if the client refuses
      */
     @Override
     public PowerupCard choosePowerup(List<PowerupCard> options)
-            throws ToClientException {
-        return options.get(sendAndCheck(MessageType.POWERUP,
-                new CommunicationHelper().askPowerup(options)));
+            throws ToClientException, ChoiceRefusedException {
+        return options.get(refusableSendAndCheck(MessageType.POWERUP,
+                new CommunicationHelper().askPowerup(options, true)));
     }
 
     /**
@@ -169,7 +191,7 @@ public class SocketToClient implements ToClientInterface {
     public WeaponCard chooseWeaponCard(List<WeaponCard> options)
             throws ToClientException {
         return options.get(sendAndCheck(MessageType.WEAPON,
-                new CommunicationHelper().askWeapon(options)));
+                new CommunicationHelper().askWeapon(options, false)));
     }
 
     /**
@@ -182,7 +204,7 @@ public class SocketToClient implements ToClientInterface {
     public WeaponCard chooseWeaponToBuy(List<WeaponCard> options)
             throws ToClientException {
         return options.get(sendAndCheck(MessageType.WEAPON_TO_BUY,
-                new CommunicationHelper().askWeapon(options)));
+                new CommunicationHelper().askWeapon(options, false)));
     }
 
     /**
@@ -195,20 +217,21 @@ public class SocketToClient implements ToClientInterface {
     public WeaponCard chooseWeaponToDiscard(List<WeaponCard> options)
             throws ToClientException {
         return options.get(sendAndCheck(MessageType.WEAPON_TO_DISCARD,
-                new CommunicationHelper().askWeapon(options)));
+                new CommunicationHelper().askWeapon(options, false)));
     }
 
     /**
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException      if there are problems whit the socket
+     * @throws ChoiceRefusedException if the client refuses
      */
     @Override
     public WeaponCard chooseWeaponToReload(List<WeaponCard> options)
-            throws ToClientException {
-        return options.get(sendAndCheck(MessageType.WEAPON_TO_RELOAD,
-                new CommunicationHelper().askWeapon(options)));
+            throws ToClientException, ChoiceRefusedException {
+        return options.get(refusableSendAndCheck(MessageType.WEAPON_TO_RELOAD,
+                new CommunicationHelper().askWeapon(options, true)));
     }
 
     /**
@@ -234,20 +257,21 @@ public class SocketToClient implements ToClientInterface {
     public PowerupCard choosePowerupForPaying(List<PowerupCard> options)
             throws ToClientException {
         return options.get(sendAndCheck(MessageType.POWERUP_FOR_PAYING,
-                new CommunicationHelper().askPowerup(options)));
+                new CommunicationHelper().askPowerup(options, false)));
     }
 
     /**
      * {@inheritDoc}
      * This stops the execution until the client makes the right choice.
      *
-     * @throws ToClientException if there are problems whit the socket
+     * @throws ToClientException      if there are problems whit the socket
+     * @throws ChoiceRefusedException if the client refuses
      */
     @Override
     public PowerupCard askUseTagback(List<PowerupCard> options)
-            throws ToClientException {
-        return options.get(sendAndCheck(MessageType.USE_TAGBACK,
-                new CommunicationHelper().askPowerup(options)));
+            throws ToClientException, ChoiceRefusedException {
+        return options.get(refusableSendAndCheck(MessageType.USE_TAGBACK,
+                new CommunicationHelper().askPowerup(options, true)));
     }
 
     /**
