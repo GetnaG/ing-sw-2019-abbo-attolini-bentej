@@ -159,4 +159,9 @@ public class KillshotTrack extends AbstractTrack {
         return "Deathmatch";
     }
 
+    @Override
+    public List<List<Player>> getTokens() {
+        return new ArrayList<>(tokenTrack);
+    }
+
 }

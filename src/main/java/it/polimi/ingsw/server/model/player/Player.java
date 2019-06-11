@@ -94,7 +94,7 @@ public class Player implements Damageable {
     /**
      * Whether this is waiting to be put in frenzy mode.
      */
-    private boolean waitingFrenzy;
+    private int frenzyState;
 
     /**
      * Constructor for testing purposes.
@@ -133,7 +133,7 @@ public class Player implements Damageable {
         hand = new HandManager();
         ammoBox = new AmmoBox();
         position = null;
-        waitingFrenzy = false;
+        frenzyState = 0;
 
         adrenaline1 = new Action("adr1", Arrays.asList(new Move(), new Move(), new Grab()));
         adrenaline2 = new Action("adr2", Arrays.asList(new Move(), new Shoot()));
@@ -175,9 +175,9 @@ public class Player implements Damageable {
         playerBoard.addDamage(shooters);
         if (playerBoard.isDead()) {
             scorer.addKilled(this);
-            if (waitingFrenzy) {
+            if (frenzyState == -1) {
                 setPlayerBoard(new FrenzyPlayerBoard());
-                waitingFrenzy = false;
+                frenzyState = 1;
             }
         }
     }
@@ -201,6 +201,10 @@ public class Player implements Damageable {
     @Override
     public Square getPosition() {
         return position;
+    }
+
+    public PlayerBoardInterface getPlayerBoard() {
+        return playerBoard;
     }
 
     /**
@@ -493,6 +497,24 @@ public class Player implements Damageable {
     }
 
     /**
+     * Returns the active ammo cubes.
+     * @return the active ammo cubes
+     */
+    public List<AmmoCube> getAmmoCubes() {
+        List<AmmoCube> cubes = new ArrayList<>();
+        for (int i = 0; i < ammoBox.getBlue(); i++) {
+            cubes.add(AmmoCube.BLUE);
+        }
+        for (int i = 0; i < ammoBox.getRed(); i++) {
+            cubes.add(AmmoCube.RED);
+        }
+        for (int i = 0; i < ammoBox.getYellow(); i++) {
+            cubes.add(AmmoCube.YELLOW);
+        }
+        return cubes;
+    }
+
+    /**
      * Returns a reference to the resources associated with this player.
      *
      * @return a reference to the resources associated with this player
@@ -533,6 +555,10 @@ public class Player implements Damageable {
         this.playerBoard.addMarks(marks);
     }
 
+    public int getSkulls() {
+        return playerBoard.getSkulls();
+    }
+
     public void setupFinalFrenzy() {
         if (playerBoard.getDamage().isEmpty()) {
 
@@ -541,8 +567,12 @@ public class Player implements Damageable {
         } else {
 
             /*The board will be set when the player is killed*/
-            waitingFrenzy = true;
+            frenzyState = -1;
         }
+    }
+
+    public boolean isFrenzy() {
+        return frenzyState == 1;
     }
 
     @Override

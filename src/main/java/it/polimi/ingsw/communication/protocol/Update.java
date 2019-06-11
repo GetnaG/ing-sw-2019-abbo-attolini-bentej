@@ -1,7 +1,9 @@
 package it.polimi.ingsw.communication.protocol;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This represents an update element.
@@ -54,6 +56,17 @@ public class Update implements Serializable {
     }
 
     /**
+     * Creates an update that does not involve a specific player with a
+     * single message.
+     *
+     * @param type     the field modified
+     * @param newValue the new value for the field
+     */
+    public Update(UpdateType type, String newValue) {
+        this (type, Collections.singletonList(newValue));
+    }
+
+    /**
      * Returns the type of this update.
      *
      * @return the type of this update
@@ -90,11 +103,11 @@ public class Update implements Serializable {
          */
         CONFIGURATION_ID,
         /**
-         * The cards in a player's hand.
+         * The ammo cards on the board.
          */
         AMMO_CARD_ARRAY,
         /**
-         * The cards in a player's hand.
+         * The weapons in the markets on the board.
          */
         WEAPON_CARD_ARRAY,
         /**
@@ -109,7 +122,7 @@ public class Update implements Serializable {
          */
         KILLSHOT_TRACK,
         /**
-         * Whether the action tile for the provided player is frenzy.
+         * Whether frenzy mode is active.
          */
         IS_ACTION_TILE_FRENZY,
         /**
@@ -124,13 +137,13 @@ public class Update implements Serializable {
         /**
          * The nicknames of the players.
          */
-        NICKNAME,
+        NICKNAME,//TODO: same as turn position?
         /**
          * The active ammo cubes for the player, BLUE, RED, YELLOW.
          */
         AMMO_CUBE_ARRAY,
         /**
-         * Whether frenzy mode is active.
+         * Whether the player's board is frenzy.
          */
         IS_PLAYER_BOARD_FRENZY,
         /**
@@ -144,7 +157,7 @@ public class Update implements Serializable {
         /**
          * Whether the player specified is connected.
          */
-        IS_CONNECTED,
+        IS_CONNECTED,//TODO: same as connected
         /**
          * The cards in a player's hand.
          */

@@ -2,10 +2,7 @@ package it.polimi.ingsw.communication.socket;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonSyntaxException;
-import it.polimi.ingsw.communication.ChoiceRefusedException;
-import it.polimi.ingsw.communication.CommunicationHelper;
-import it.polimi.ingsw.communication.ToClientException;
-import it.polimi.ingsw.communication.ToClientInterface;
+import it.polimi.ingsw.communication.*;
 import it.polimi.ingsw.communication.protocol.MessageType;
 import it.polimi.ingsw.communication.protocol.Notification;
 import it.polimi.ingsw.communication.protocol.ProtocolMessage;
@@ -326,9 +323,10 @@ public class SocketToClient implements ToClientInterface {
      * This stops the execution until the clients sends an ack.
      *
      * @throws ToClientException if there are problems with the socket
+     * @param update
      */
     @Override
-    public void sendUpdate(Update update) throws ToClientException {
-        send(new ProtocolMessage(new Update[]{update}));
+    public void sendUpdate(UpdateBuilder update) throws ToClientException {
+        send(new ProtocolMessage(update.build()));
     }
 }

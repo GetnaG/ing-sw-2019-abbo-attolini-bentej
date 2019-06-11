@@ -2,9 +2,9 @@ package it.polimi.ingsw.server.controller;
 
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
+import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.communication.protocol.Notification;
-import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.turns.*;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
@@ -68,6 +68,8 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      */
     private List<Damageable> killedInTurn;
     private boolean gameOver;
+    private Configurations configuration;
+    private boolean frenzy;
 
     /**
      * Constructs a controller with the provided parameters.
@@ -89,6 +91,10 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         suspendedPlayers = new ArrayList<>();
         killedInTurn = new ArrayList<>();
         gameOver = false;
+        this.configuration = configuration;
+        frenzy = false;
+
+        updateAllPlayers(fullUpdate());
     }
 
     /**
@@ -109,8 +115,8 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         Iterator<Player> iterator = new PlayerIterator(players.get(0), false);
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
-            new FirstTurn().startTurn(currentPlayer, board);
-            turn(new NormalTurn(currentPlayer, board), currentPlayer);
+            new FirstTurn(this::updateAllPlayers).startTurn(currentPlayer, board);
+            turn(new NormalTurn(currentPlayer, board, this::updateAllPlayers), currentPlayer);
         }
 
         /*Ensuring that all the players are on the board, the default is the blue spawn*/
@@ -122,12 +128,13 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         iterator = new PlayerIterator(players.get(0), true);
         while (!board.checkFinalFrenzy() && iterator.hasNext()) {
             currentPlayer = iterator.next();
-            turn(new NormalTurn(currentPlayer, board), currentPlayer);
+            turn(new NormalTurn(currentPlayer, board, this::updateAllPlayers), currentPlayer);
         }
 
         /*Setting up final frenzy*/
         int whoTriggered = players.indexOf(currentPlayer);
         currentPlayer = iterator.next();
+        frenzy = true;
         players.forEach(Player::setupFinalFrenzy);
 
         /*Final frenzy from the player after who started it*/
@@ -137,11 +144,13 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             if (players.indexOf(currentPlayer) > whoTriggered) {
 
                 /*For those who are before the first player*/
-                turn(new FrenzyTurnBefore(currentPlayer, board), currentPlayer);
+                turn(new FrenzyTurnBefore(currentPlayer, board, this::updateAllPlayers),
+                        currentPlayer);
             } else {
 
                 /*For those who are after the first player and him*/
-                turn(new FrenzyTurnAfter(currentPlayer, board), currentPlayer);
+                turn(new FrenzyTurnAfter(currentPlayer, board, this::updateAllPlayers),
+                        currentPlayer);
             }
         }
 
@@ -153,10 +162,8 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         scoreBoard();
 
         /*Notifying who won and ending the match*/
-        List<String> rank = players.stream()
-                .sorted(Comparator.comparingInt(Player::getScore))
-                .map(Player::getName).collect(Collectors.toList());
-        updateAllPlayers(new Update(Update.UpdateType.GAME_OVER, rank));
+        updateAllPlayers(new UpdateBuilder().setWinners(players.stream()
+                .sorted(Comparator.comparingInt(Player::getScore)).collect(Collectors.toList())));
         ServerMain.getDeathMatchHall().removeMatch(this);
     }
 
@@ -182,7 +189,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      *
      * @param update the update to send
      */
-    public void updateAllPlayers(Update update) {
+    public void updateAllPlayers(UpdateBuilder update) {
         for (Player p : players) {
             if (!suspendedPlayers.contains(p)) {
                 try {
@@ -192,6 +199,29 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
                 }
             }
         }
+    }
+
+    private UpdateBuilder fullUpdate() {
+        UpdateBuilder updateBuilder = new UpdateBuilder()
+                .setConfigurationId(configuration.getId())
+                .setAmmoCards(board)
+                .setWeaponsOnBoard(board)
+                .setWeaponDrawable(!board.isWeaponDeckEmpty())
+                .setKillshotTrack(board.getKillshotTrack())
+                .setMatchFrenzy(frenzy)
+                .setPlayers(players);
+        for (Player p : players) {
+            updateBuilder.setPlayerPosition(p, p.getPosition())
+                    .setActiveCubes(p, p.getAmmoCubes())
+                    .setIsPlayerFrenzy(p, p.isFrenzy())
+                    .setSkullsOnBoard(p, p.getSkulls())
+                    .setPlayerDamage(p, p.getPlayerBoard().getDamage())
+                    .setIsConnected(p, !suspendedPlayers.contains(p))
+                    .setLoadedWeapons(p, p.getLoadedWeapons())
+                    .setUnloadedWeapon(p, p.getReloadableWeapons())
+                    .setPowerupsInHand(p, p.getAllPowerup());
+        }
+        return updateBuilder;
     }
 
     /**
@@ -210,7 +240,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         /*Respawning*/
         for (Player p : players) {
             if (killedInTurn.contains(p))
-                new RespawnTurn().startTurn(p, board);
+                new RespawnTurn(this::updateAllPlayers).startTurn(p, board);
         }
         emptyKilledList();
     }
@@ -238,6 +268,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         for (Player p : players)
             if (p.getName().equals(player)) {
                 suspendedPlayers.remove(p);
+                updateAllPlayers(fullUpdate());
                 return;
             }
     }
@@ -251,6 +282,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             if (p.getName().equals(player)) {
                 suspendedPlayers.remove(p);
                 p.setToClient(newConnection);
+                updateAllPlayers(fullUpdate());
                 return true;
             }
         return false;

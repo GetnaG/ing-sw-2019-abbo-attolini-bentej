@@ -71,8 +71,20 @@ public class Notification implements Serializable {
          */
         USER_WILL_SKIP,
         /**
+         * Notifies that the timer for the match is starting.
+         */
+        TIMER_STARTING,
+        /**
+         * Notifies that the timer for the match has stopped.
+         */
+        TIMER_STOPPED,
+        /**
+         * Notifies that the match is starting.
+         */
+        GAME_STARTING,
+        /**
          * Notifies all the players that the game is over.
          */
-        GAME_OVER
+        GAME_OVER,
     }
 }

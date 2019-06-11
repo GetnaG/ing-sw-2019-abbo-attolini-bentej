@@ -178,4 +178,9 @@ public class DominationTrack extends AbstractTrack {
         return "Domination";
     }
 
+    @Override
+    public List<List<Player>> getTokens() {
+        return new ArrayList<>();
+    }
+
 }

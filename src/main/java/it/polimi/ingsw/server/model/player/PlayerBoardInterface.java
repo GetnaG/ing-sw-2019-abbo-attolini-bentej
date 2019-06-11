@@ -110,4 +110,6 @@ public interface PlayerBoardInterface {
      * @return the players who dealt damage.
      */
     List<Player> getDamage();
+
+    int getSkulls();
 }

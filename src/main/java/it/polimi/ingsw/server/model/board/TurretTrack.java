@@ -86,5 +86,10 @@ public class TurretTrack extends AbstractTrack {
         return "Turret";
     }
 
+    @Override
+    public List<List<Player>> getTokens() {
+        return new ArrayList<>();
+    }
+
 
 }

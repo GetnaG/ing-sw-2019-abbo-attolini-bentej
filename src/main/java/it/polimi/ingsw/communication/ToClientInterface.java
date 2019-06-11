@@ -1,7 +1,6 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.communication.protocol.Notification;
-import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.Damageable;
@@ -185,11 +184,11 @@ public interface ToClientInterface {
     void sendNotification(Notification.NotificationType type) throws ToClientException;
 
     /**
-     * Sends the provided update to the client.
+     * Sends the provided updates to the client.
      *
      * @param update the update to send
      * @throws ToClientException if there are problems with the communication
      *                           or the client does not answer in time
      */
-    void sendUpdate(Update update) throws ToClientException;
+    void sendUpdate(UpdateBuilder update) throws ToClientException;
 }

@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller.turns;
 
 import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.server.controller.effects.*;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
@@ -11,6 +12,7 @@ import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 /**
@@ -42,15 +44,19 @@ public class NormalTurn implements TurnInterface {
      */
     private boolean isFinalFrenzyTriggered;
 
+    private Consumer<UpdateBuilder> updater;
+
     /**
      * Creates a normal turn.
      */
-    public NormalTurn(Player currentPlayer, GameBoard board){
+    public NormalTurn(Player currentPlayer, GameBoard board,
+                      Consumer<UpdateBuilder> updater){
         this.player = currentPlayer;
         this.board = board;
         this.alreadyTargeted = new ArrayList<>();
         this.actions = new ArrayList<>();
         this.isFinalFrenzyTriggered = false;
+        this.updater = updater;
     }
 
     /**
@@ -76,6 +82,8 @@ public class NormalTurn implements TurnInterface {
                 return -1;
         }
         askAndReload();
+
+        updater.accept(new UpdateBuilder()); //TODO: add here what changed
         return 0;
     }
 

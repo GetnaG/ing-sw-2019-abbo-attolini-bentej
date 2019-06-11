@@ -131,7 +131,7 @@ public class GameBoard implements ReplaceListener {
      * @param color the color of the spawn to find
      * @return a {@code Square} which contains the {@code Spawn} of the given {@code SquareColor}
      */
-    public Square findSpawn(AmmoCube color) {
+    public SpawnSquare findSpawn(AmmoCube color) {
         List<SpawnSquare> spawns = configuration.stream()
                 .filter(Room::hasSpawnSquare).map(x -> x.getSpawnSquare()).filter(x -> x.getSpawnColor() == color).collect(Collectors.toList());
 
@@ -245,6 +245,14 @@ public class GameBoard implements ReplaceListener {
     public void addTokensAndRemoveSkull(List<Player> tokens) {
         track.removeSkull();
         track.addTokens(tokens);
+    }
+
+    /**
+     * Returns the killshot track.
+     * @return the killshot track
+     */
+    public List<List<Player>> getKillshotTrack() {
+        return track.getTokens();
     }
 
     /**
@@ -505,6 +513,5 @@ public class GameBoard implements ReplaceListener {
                     return s;
         return null;
     }
- 
 
 }

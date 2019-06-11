@@ -27,7 +27,7 @@ class RespawnTurnTest {
     @Disabled // Implement once player has toClientInterface actually implemented.
     @Test
     void startTurn() {
-        RespawnTurn rt = new RespawnTurn();
+        RespawnTurn rt = new RespawnTurn(builder -> {});
         rt.startTurn(player, board);
         assertEquals(player.getAllPowerup().get(0).getCube(), player.getPosition().getSquareColor());
 

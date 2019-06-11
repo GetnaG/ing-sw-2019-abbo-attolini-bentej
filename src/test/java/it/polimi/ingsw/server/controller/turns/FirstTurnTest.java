@@ -29,7 +29,7 @@ class FirstTurnTest {
     @Disabled
     @Test
     void startTurn() {
-         FirstTurn ft = new FirstTurn();
+         FirstTurn ft = new FirstTurn(builder -> {});
          ft.startTurn(player, board);
          assertEquals(player.getAllPowerup().get(0).getCube(), player.getPosition().getSquareColor());
     }

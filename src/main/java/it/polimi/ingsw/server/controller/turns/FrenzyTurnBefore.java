@@ -1,12 +1,14 @@
 package it.polimi.ingsw.server.controller.turns;
 
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.server.controller.effects.*;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * Once Final Frenzy is triggered, every player has one extra turn.
@@ -28,12 +30,16 @@ public class FrenzyTurnBefore implements TurnInterface {
      */
     private GameBoard board;
 
+    private Consumer<UpdateBuilder> updater;
+
     /**
      * Construct a FrenzyTurn
      */
-    public FrenzyTurnBefore(Player currentPlayer, GameBoard board) {
+    public FrenzyTurnBefore(Player currentPlayer, GameBoard board,
+                            Consumer<UpdateBuilder> updater) {
         this.currentPlayer = currentPlayer;
         this.board = board;
+        this.updater = updater;
     }
 
     /**
@@ -63,6 +69,7 @@ public class FrenzyTurnBefore implements TurnInterface {
             //TODO Handle if the user is disconnected
         }
 
+        updater.accept(new UpdateBuilder());//TODO: put here things that could change
         return 0;
     }
 

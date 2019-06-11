@@ -1,7 +1,9 @@
 package it.polimi.ingsw.server.serverlogic;
 
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.communication.User;
+import it.polimi.ingsw.communication.protocol.Notification;
 import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.DeathmatchController;
 import it.polimi.ingsw.server.model.board.Configurations;
@@ -137,16 +139,40 @@ public class ServerHall implements Runnable {
      * The update contains a list of all the users waiting.
      */
     private void updateAll() {
-        Update update = new Update(
-                Update.UpdateType.CONNECTED_PLAYERS,
+        UpdateBuilder builder = new UpdateBuilder().setPlayersNames(
                 connectedUsers.stream().map(User::getName).collect(Collectors.toList()));
         for (User u : connectedUsers) {
             try {
-                u.sendUpdate(update);
+                u.sendUpdate(builder);
             } catch (ToClientException e) {
                 connectedUsers.remove(u);
                 updateAll();
                 break;
+            }
+        }
+    }
+
+    /**
+     * Sends am update to all the users that are waiting.
+     */
+    private void updateAll(UpdateBuilder builder) {
+        for (User u : connectedUsers) {
+            try {
+                u.sendUpdate(builder);
+            } catch (ToClientException e) {
+                connectedUsers.remove(u);
+                updateAll();
+            }
+        }
+    }
+
+    private void notifyAll(Notification.NotificationType type) {
+        for (User u : connectedUsers) {
+            try {
+                u.sendNotification(type);
+            } catch (ToClientException e) {
+                connectedUsers.remove(u);
+                updateAll();
             }
         }
     }
@@ -163,6 +189,7 @@ public class ServerHall implements Runnable {
             u.setMatchSuspensionListener(controller);
         connectedUsers.clear();
         statusNextGame = GameStatus.NOT_STARTED;
+        notifyAll(Notification.NotificationType.GAME_STARTING);
         new Thread(controller::start).start();
         ServerMain.getLog().info("Match starting");
     }
@@ -175,6 +202,8 @@ public class ServerHall implements Runnable {
             timer = Executors.newSingleThreadScheduledExecutor().schedule(
                     this::timeOut, secondsWaitingRoom, TimeUnit.SECONDS);
             ServerMain.getLog().info("Timer starting");
+            notifyAll(Notification.NotificationType.TIMER_STARTING);
+            updateAll(new UpdateBuilder().setTimer(secondsWaitingRoom));
         }
     }
 
@@ -185,6 +214,8 @@ public class ServerHall implements Runnable {
         if (timer != null) {
             timer.cancel(false);
             timer = null;
+            ServerMain.getLog().info("Timer stopped");
+            notifyAll(Notification.NotificationType.TIMER_STOPPED);
         }
     }
 

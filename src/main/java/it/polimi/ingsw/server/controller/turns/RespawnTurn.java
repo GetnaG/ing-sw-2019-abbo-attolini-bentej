@@ -1,9 +1,12 @@
 package it.polimi.ingsw.server.controller.turns;
 
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.player.Player;
+
+import java.util.function.Consumer;
 
 /**
  * Once a player is dead, at the end of the active player, we have to:
@@ -15,13 +18,17 @@ import it.polimi.ingsw.server.model.player.Player;
  * @author Fahed Ben Tej
  */
 public class RespawnTurn implements TurnInterface {
+    private Consumer<UpdateBuilder> updater;
 
+    public RespawnTurn(Consumer<UpdateBuilder> updater) {
+        this.updater = updater;
+    }
 
     /**
      * Makes the player draw a powerup card. He chooses the powerup which determines his next spawn.
-     * @param currentPlayer player respawning.
-     * @param board GameBoard used in the board.
      *
+     * @param currentPlayer player respawning.
+     * @param board         GameBoard used in the board.
      * @return -1 if Final Frenzy is triggered, else 0
      */
     public int startTurn(Player currentPlayer, GameBoard board) {
@@ -41,6 +48,9 @@ public class RespawnTurn implements TurnInterface {
         // set the player position in the spawn determined by that square
         currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
 
+        updater.accept(new UpdateBuilder()
+                .setPowerupsInHand(currentPlayer, currentPlayer.getAllPowerup())
+                .setPlayerPosition(currentPlayer, currentPlayer.getPosition()));
         return 0;
     }
 

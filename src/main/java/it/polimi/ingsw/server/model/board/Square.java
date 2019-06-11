@@ -198,6 +198,10 @@ public class Square {
         return null;
     }
 
+    public AmmoCard peekAmmoCard() {
+        return ammoCard;
+    }
+
     public AmmoCard getAmmoCard() {
         replacer.addSquare(this);
         AmmoCard tmp = ammoCard;

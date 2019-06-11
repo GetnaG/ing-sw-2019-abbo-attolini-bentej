@@ -263,4 +263,9 @@ public class NormalPlayerBoard implements PlayerBoardInterface {
     public List<Player> getDamage() {
         return damage;
     }
+
+    @Override
+    public int getSkulls() {
+        return skulls;
+    }
 }

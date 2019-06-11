@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller.turns;
 
 import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.PowerupDeck;
@@ -10,6 +11,7 @@ import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 
 /**
  * In the first turn of the game, a Player has to draw two cards from the Powerup Deck and choose only one.
@@ -18,6 +20,11 @@ import java.util.List;
  * @author Fahed Ben Tej
  */
 public class FirstTurn implements TurnInterface {
+    private Consumer<UpdateBuilder> updater;
+
+    public FirstTurn(Consumer<UpdateBuilder> updater) {
+        this.updater = updater;
+    }
 
     /**
      * Once the player draws two cards from the powerup deck, he chooses one which defines the Spawn.
@@ -55,6 +62,9 @@ public class FirstTurn implements TurnInterface {
         }
 
         currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
+        updater.accept(new UpdateBuilder()
+                .setPowerupsInHand(currentPlayer, currentPlayer.getAllPowerup())
+                .setPlayerPosition(currentPlayer, currentPlayer.getPosition()));
         return 0;
     }
 

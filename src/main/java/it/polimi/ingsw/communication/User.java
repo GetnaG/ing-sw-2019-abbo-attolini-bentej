@@ -1,7 +1,6 @@
 package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.communication.protocol.Notification;
-import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.Damageable;
@@ -412,9 +411,10 @@ public class User implements ToClientInterface {
      * {@inheritDoc}
      * <p>
      * The client will have {@linkplain #waitingTime} seconds to send an ack.
+     * @param update
      */
     @Override
-    public void sendUpdate(Update update) throws ToClientException {
+    public void sendUpdate(UpdateBuilder update) throws ToClientException {
         try {
             genericInteraction(() -> {
                 toClient.sendUpdate(update);

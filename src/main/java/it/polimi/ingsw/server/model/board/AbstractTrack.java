@@ -42,4 +42,5 @@ public abstract class AbstractTrack {
      */
     public abstract String getGameMode();
 
+    public abstract List<List<Player>> getTokens();
 }

@@ -1,9 +1,6 @@
 package it.polimi.ingsw.communication.rmi;
 
-import it.polimi.ingsw.communication.ChoiceRefusedException;
-import it.polimi.ingsw.communication.CommunicationHelper;
-import it.polimi.ingsw.communication.ToClientException;
-import it.polimi.ingsw.communication.ToClientInterface;
+import it.polimi.ingsw.communication.*;
 import it.polimi.ingsw.communication.protocol.MessageType;
 import it.polimi.ingsw.communication.protocol.Notification;
 import it.polimi.ingsw.communication.protocol.Update;
@@ -288,11 +285,12 @@ public class RmiToClient implements ToClientInterface {
      * This stops the execution until the clients sends an ack.
      *
      * @throws ToClientException if there are problems with RMI
+     * @param update
      */
     @Override
-    public void sendUpdate(Update update) throws ToClientException {
+    public void sendUpdate(UpdateBuilder update) throws ToClientException {
         try {
-            client.handleUpdates(new Update[]{update});
+            client.handleUpdates(update.build());
         } catch (RemoteException e) {
             throw new ToClientException("Rmi exception in updates", e);
         }
