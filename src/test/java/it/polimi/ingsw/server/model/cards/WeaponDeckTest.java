@@ -29,7 +29,7 @@ class WeaponDeckTest {
 
     @Test
     void drawCard() {
-        int NOCARDS = 3;
+        int NOCARDS = 21;
         List<WeaponCard> drawnCards = new ArrayList<>();
 
         //Testing that a deck doesn't contain the same card twice (using deck2).

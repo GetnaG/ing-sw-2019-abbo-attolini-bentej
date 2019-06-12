@@ -541,10 +541,8 @@ public class CLI implements InteractionInterface {
 
             stringBuilder.append(lineSeparator);
             for(int i=0; i < boardLenght; i++) {
-                //get square color, then
-                stringBuilder.append("square ").append(i).append(": (").append(" color ").append(")").append(lineSeparator);
                 //get ammo or market, then
-                stringBuilder.append("[").append(" ammo | market : < weapon1, weapon2, weapon3 > ").append("]").append(lineSeparator);
+                stringBuilder.append("square ").append(i).append(": ").append("[").append(" ammo | market : < weapon1, weapon2, weapon3 > ").append("]").append("  ||  ");
                 //get list of players in the square
 
                 int pos;
@@ -555,7 +553,7 @@ public class CLI implements InteractionInterface {
                         if (pos == i)
                             stringBuilder.append(ps.getNickname()).append(" , ");
                     }
-                    stringBuilder.append(" }").append(lineSeparator).append(lineSeparator);
+                    stringBuilder.append(" }").append(lineSeparator);
                 }
 
             }
@@ -574,7 +572,7 @@ public class CLI implements InteractionInterface {
 
                 //ps.getBoardValue(); -----------------------------------------------------------------------------------------------
 
-                stringBuilder.append("skulls : ").append(ps.getSkullNumber()).append(lineSeparator);
+                stringBuilder.append("skulls: ").append(ps.getSkullNumber()).append(lineSeparator);
 
 
 

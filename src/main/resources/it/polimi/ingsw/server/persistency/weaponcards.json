@@ -48,5 +48,306 @@
     ],
     "onlySpecifiedOrder": true,
     "resourceId": "AD_weapons_IT_024"
+  },
+  {
+    "cost": [
+      "YELLOW",
+      "YELLOW"
+    ],
+    "effectIdSequences": [
+      [
+        "shotgun"
+      ],
+      [
+        "shotgun_longBarrel"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_025"
+  },
+  {
+    "cost": [
+      "YELLOW",
+      "YELLOW",
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "railgun"
+      ],
+      [
+        "railgun_piercing"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_026"
+  },
+  {
+    "cost": [
+      "YELLOW",
+      "RED"
+    ],
+    "effectIdSequences": [
+      [
+        "zx-2"
+      ],
+      [
+        "zx-2_scanner"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_027"
+  },
+  {
+    "cost": [
+      "YELLOW"
+    ],
+    "effectIdSequences": [
+      [
+        "shockWave"
+      ],
+      [
+        "shockWave_Tsunami"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_028"
+  },
+  {
+    "cost": [
+      "RED",
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "vortexCannon"
+      ],
+      [
+        "vortexCannon_blackHole"
+      ]
+    ],
+    "onlySpecifiedOrder": false,
+    "resourceId": "AD_weapons_IT_029"
+  },
+  {
+    "cost": [
+      "RED",
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "heatseeker"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0210"
+  },
+  {
+    "cost": [
+      "RED",
+      "RED"
+    ],
+    "effectIdSequences": [
+      [
+        "rocketLauncher"
+      ],
+      [
+        "rocketLauncher","rocketLauncher_rocketJump"
+      ],
+      [
+        "rocketLauncher_rocketJump","rocketLauncher"
+      ],
+      [
+        "rocketLauncher_basic_fragmentingWarhead"
+      ],
+      [
+        "rocketLauncher_basic_fragmentingWarhead", "rocketLauncher_rocketJump"
+      ],
+      [
+        "rocketLauncher_rocketJump", "rocketLauncher_basic_fragmentingWarhead"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0211"
+  },
+  {
+    "cost": [
+      "RED"
+    ],
+    "effectIdSequences": [
+      [
+        "grenadeLauncher"
+      ],
+      [
+        "grenadeLauncher_extraGrenade"
+      ]
+    ],
+    "onlySpecifiedOrder": false,
+    "resourceId": "AD_weapons_IT_0212"
+  },
+  {
+    "cost": [
+      "RED"
+    ],
+    "effectIdSequences": [
+      [
+        "flamethrower"
+      ],
+      [
+        "flamethrower_barbecue"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0213"
+  },
+  {
+    "cost": [
+      "RED",
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "furnace"
+      ],
+      [
+        "furnace_cozyFire"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0214"
+  },
+  {
+    "cost": [
+      "RED",
+      "YELLOW"
+    ],
+    "effectIdSequences": [
+      [
+        "hellion"
+      ],
+      [
+        "hellion_nano-tracer"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0215"
+  },
+  {
+    "cost": [
+      "BLUE",
+      "RED"
+    ],
+    "effectIdSequences": [
+      [
+        "t.h.o.r."
+      ],
+      [
+        "t.h.o.r._chainReaction"
+      ],
+      [
+        "t.h.o.r._highVoltage"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0216"
+  },
+  {
+    "cost": [
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "tractorBeam"
+      ],
+      [
+        "tractorBeam_punisher"
+      ]
+    ],
+    "onlySpecifiedOrder": false,
+    "resourceId": "AD_weapons_IT_0217"
+  },
+  {
+    "cost": [
+      "BLUE",
+      "BLUE",
+      "YELLOW"
+    ],
+    "effectIdSequences": [
+      [
+        "whisper"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0218"
+  },
+  {
+    "cost": [
+      "BLUE",
+      "YELLOW"
+    ],
+    "effectIdSequences": [
+      [
+        "plasmaGun"
+      ],
+      [
+        "plasmaGun_phaseGlide"
+      ],
+      [
+        "plasmaGun_chargedShot"
+      ]
+    ],
+    "onlySpecifiedOrder": false,
+    "resourceId": "AD_weapons_IT_0219"
+  },
+  {
+    "cost": [
+      "BLUE",
+      "RED"
+    ],
+    "effectIdSequences": [
+      [
+        "machineGun"
+      ],
+      [
+        "machineGun_focusShot"
+      ],
+      [
+        "machineGun_turretTripod"
+      ]
+    ],
+    "onlySpecifiedOrder": false,
+    "resourceId": "AD_weapons_IT_0220"
+  },
+  {
+    "cost": [
+      "BLUE",
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "lockRifle"
+      ],
+      [
+        "lockRifle_secondLock"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0221"
+  },
+  {
+    "cost": [
+      "BLUE"
+    ],
+    "effectIdSequences": [
+      [
+        "electroscythe"
+      ],
+      [
+        "electroscythe_reaper"
+      ]
+    ],
+    "onlySpecifiedOrder": true,
+    "resourceId": "AD_weapons_IT_0222"
   }
+
 ]
