@@ -93,8 +93,6 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         gameOver = false;
         this.configuration = configuration;
         frenzy = false;
-
-        updateAllPlayers(fullUpdate());
     }
 
     /**
@@ -106,6 +104,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * <li>Final scoring</li></ul>
      */
     public void start() {
+        updateAllPlayers(fullUpdate());
 
         /*Ensuring that the board has all the cards*/
         board.replaceAll();

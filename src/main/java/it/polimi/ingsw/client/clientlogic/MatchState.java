@@ -3,7 +3,6 @@ package it.polimi.ingsw.client.clientlogic;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import it.polimi.ingsw.communication.protocol.Update;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,13 +10,12 @@ import java.util.stream.Collectors;
 
 /**
  * Represents the state of a Match.
- *
+ * <p>
  * It uses an Observer/Subscriber pattern to notify to {@linkplain InteractionInterface} that the state has been updated.
  *
+ * @author Fahed B. Tej
  * @see InteractionInterface
  * @see ClientController
- *
- * @author Fahed B. Tej
  */
 public class MatchState {
 
@@ -50,44 +48,42 @@ public class MatchState {
                 break;
             case IS_WEAPON_DECK_DRAWABLE:
                 boardState.setIsWeaponDeckDrawable(
-                        Integer.parseInt(update.getNewValue().get(0)) > 0
-                );
+                        Boolean.parseBoolean(update.getNewValue().get(0)));
                 break;
             case KILLSHOT_TRACK://with separator
                 boardState.setKillshotTrack(
                         update.getNewValue().stream()
-                                .map(s -> s.split(";"))
+                                .map(s -> s.split(Update.SEPARATOR))
                                 .map(array -> Arrays.asList(array))
                                 .collect(Collectors.toList()));
                 break;
             case IS_ACTION_TILE_FRENZY:
-                boardState.setIsActionTileFrenzy(update.getNewValue().get(0).equals("true"));
+                boardState.setIsActionTileFrenzy(Boolean.parseBoolean(update.getNewValue().get(0)));
                 break;
-                // setting player state
+            // setting player state
             case TURN_POSITION:
+                update.getNewValue().forEach(s -> {
+                    if (playersState.stream().noneMatch(state -> state.getNickname().equals(s)))
+                        playersState.add(new PlayerState(update.getNewValue().indexOf(s), s));
+                });
                 playersState.forEach(p -> p.setTurnPosition(update.getNewValue().indexOf(p.getNickname())));
                 break;
             case SQUARE_POSITION:
                 getReceiverState(update).setSquarePosition(Integer.parseInt(update.getNewValue().get(0)));
                 break;
-            case NICKNAME:
-                //
             case AMMO_CUBE_ARRAY:
                 getReceiverState(update).setAmmoCubes(
                         update.getNewValue().stream().map(Integer::parseInt).collect(Collectors.toList())
                 );
                 break;
             case IS_PLAYER_BOARD_FRENZY:
-                getReceiverState(update).setPlayerBoardFrenzy(update.getNewValue().get(0).equals("true"));
+                getReceiverState(update).setPlayerBoardFrenzy(Boolean.parseBoolean(update.getNewValue().get(0)));
                 break;
             case SKULL_NUMBER:
                 getReceiverState(update).setSkullNumber(Integer.parseInt(update.getNewValue().get(0)));
                 break;
             case DAMAGE_ARRAY:
                 getReceiverState(update).setDamage(update.getNewValue());
-                break;
-            case IS_CONNECTED:
-                getReceiverState(update).setConnected(update.getNewValue().get(0).equals("true"));
                 break;
             case LOADED_WEAPONS:
                 getReceiverState(update).setLoadedWeapons(update.getNewValue());
@@ -100,17 +96,21 @@ public class MatchState {
                 break;
             case CONNECTED_PLAYERS:
                 boardState.setConnectedPlayers(update.getNewValue());
-                subscribedInteractionInterfaces.forEach(i -> i.notifyUpdatedState());
+                playersState.forEach(playerState -> playerState.setConnected(
+                        boardState.getConnectedPlayers().contains(playerState.getNickname())));
                 break;
 
             case HALL_TIMER:
+                //TODO what to do with hall timer
                 break;
             case GAME_OVER:
+                //TODO the provided list contains the winners in the right order
                 break;
             default:
                 // nothing
         }
 
+        subscribedInteractionInterfaces.forEach(InteractionInterface::notifyUpdatedState);
     }
 
     private PlayerState getReceiverState(Update update) {
@@ -128,7 +128,7 @@ public class MatchState {
     }
 
     public List<String> getWeaponsCardsID() {
-            return boardState.getAmmoCardsID();
+        return boardState.getAmmoCardsID();
     }
 
     public boolean getIsWeaponDeckDrawable() {

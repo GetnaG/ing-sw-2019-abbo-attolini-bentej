@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.clientlogic;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,6 +20,22 @@ public class PlayerState {
     private List<String> unloadedWeapons;
     private List<Boolean> areWeaponsLoaded;
     private List<String> powerups;
+
+    public PlayerState(int turnPosition, String nickname) {
+        this.turnPosition = turnPosition;
+        squarePosition = -1;
+        this.nickname = nickname;
+        figureRes = null;
+        ammoCubes = new ArrayList<>();
+        isPlayerBoardFrenzy = false;
+        skullNumber = -1;
+        damage = new ArrayList<>();
+        isConnected = true;
+        loadedWeapons = new ArrayList<>();
+        unloadedWeapons = new ArrayList<>();
+        areWeaponsLoaded = new ArrayList<>();
+        powerups = new ArrayList<>();
+    }
 
     public PlayerState(int turnPosition, int squarePosition, String nickname, String figureRes, List<Integer> ammoCubes, boolean isPlayerBoardFrenzy, int skullNumber, List<String> damage, boolean isConnected, List<String> loadedWeapons, List<Boolean> areWeaponsLoaded, List<String> powerups) {
         this.turnPosition = turnPosition;

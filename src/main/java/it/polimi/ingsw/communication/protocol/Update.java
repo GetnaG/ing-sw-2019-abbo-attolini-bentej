@@ -135,10 +135,6 @@ public class Update implements Serializable {
          */
         SQUARE_POSITION,
         /**
-         * The nicknames of the players.
-         */
-        NICKNAME,//TODO: same as turn position?
-        /**
          * The active ammo cubes for the player, BLUE, RED, YELLOW.
          */
         AMMO_CUBE_ARRAY,
@@ -154,10 +150,6 @@ public class Update implements Serializable {
          * The list of players that damaged this player.
          */
         DAMAGE_ARRAY,
-        /**
-         * Whether the player specified is connected.
-         */
-        IS_CONNECTED,//TODO: same as connected
         /**
          * The cards in a player's hand.
          */

@@ -182,14 +182,15 @@ public class ServerHall implements Runnable {
      */
     private synchronized void startMatch() {
         stopTimer();
+
         DeathmatchController controller =
                 new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1);//TODO: how to change the configuration
         startedGames.add(controller);
         for (User u : connectedUsers)
             u.setMatchSuspensionListener(controller);
+        notifyAll(Notification.NotificationType.GAME_STARTING);
         connectedUsers.clear();
         statusNextGame = GameStatus.NOT_STARTED;
-        notifyAll(Notification.NotificationType.GAME_STARTING);
         new Thread(controller::start).start();
         ServerMain.getLog().info("Match starting");
     }

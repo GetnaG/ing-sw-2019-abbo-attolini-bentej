@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.*;
 import java.util.function.Function;
+import java.util.function.IntBinaryOperator;
 import java.util.stream.Collectors;
 
 /**
@@ -46,14 +47,15 @@ public class UpdateBuilder {
     }
 
     public UpdateBuilder setAmmoCards(GameBoard board) {
-        ammoCards = new ArrayList<>(12);
+        ammoCards = new ArrayList<>(Collections.nCopies(12, null));
         board.getAllSquares().forEach(s ->
-                ammoCards.add(Integer.parseInt(s.getID()), s.peekAmmoCard()));
+                ammoCards.set(Integer.parseInt(s.getID()), s.peekAmmoCard()));
         return this;
     }
 
     public UpdateBuilder setWeaponsOnBoard(GameBoard board) {
-        weaponsOnBoard = new ArrayList<>(9);
+        weaponsOnBoard = new ArrayList<>(Collections.nCopies(9, null));
+
         weaponsOnBoard.addAll(board.findSpawn(AmmoCube.BLUE).getMarket().getCards());
         weaponsOnBoard.addAll(board.findSpawn(AmmoCube.RED).getMarket().getCards());
         weaponsOnBoard.addAll(board.findSpawn(AmmoCube.YELLOW).getMarket().getCards());
@@ -166,9 +168,15 @@ public class UpdateBuilder {
         singleAdd(updates, configurationId, Update.UpdateType.CONFIGURATION_ID,
                 o -> Integer.toString(o));
         listAdd(updates, ammoCards, Update.UpdateType.AMMO_CARD_ARRAY,
-                AmmoCard::getId);
+                o -> {
+                    try {return o.getId();}
+                    catch (NullPointerException e) {return "notSet";}
+                });
         listAdd(updates, weaponsOnBoard, Update.UpdateType.WEAPON_CARD_ARRAY,
-                WeaponCard::getId);
+                o -> {
+                    try {return o.getId();}
+                    catch (NullPointerException e) {return "notSet";}
+                });
         singleAdd(updates, weaponDrawable, Update.UpdateType.IS_WEAPON_DECK_DRAWABLE,
                 o -> Boolean.toString(o));
         listAdd(updates, killshotTrack, Update.UpdateType.KILLSHOT_TRACK,
@@ -178,7 +186,10 @@ public class UpdateBuilder {
         listAdd(updates, players, Update.UpdateType.TURN_POSITION,
                 o -> o);
         mapAdd(updates, playerPosition, Update.UpdateType.SQUARE_POSITION,
-                o -> Collections.singletonList(o.getID()));
+                o -> {
+                    try {return Collections.singletonList(o.getID());}
+                    catch (NullPointerException e) {return Collections.singletonList("-1");}
+                });
         mapAdd(updates, activeCubes, Update.UpdateType.AMMO_CUBE_ARRAY,
                 o -> Arrays.asList(Integer.toString(AmmoCube.countBlue(o)),
                         Integer.toString(AmmoCube.countRed(o)),
@@ -189,14 +200,14 @@ public class UpdateBuilder {
                 o -> Collections.singletonList(Integer.toString(o)));
         mapAdd(updates, playerDamage, Update.UpdateType.DAMAGE_ARRAY,
                 o -> o.stream().map(Player::getName).collect(Collectors.toList()));
-        mapAdd(updates, isConnected, Update.UpdateType.CONNECTED_PLAYERS,
-                o -> Collections.singletonList(Boolean.toString(o)));
         mapAdd(updates, loadedWeapons, Update.UpdateType.LOADED_WEAPONS,
                 o -> o.stream().map(WeaponCard::getId).collect(Collectors.toList()));
         mapAdd(updates, unloadedWeapon, Update.UpdateType.UNLOADED_WEAPON,
                 o -> o.stream().map(WeaponCard::getId).collect(Collectors.toList()));
         mapAdd(updates, powerupsInHand, Update.UpdateType.POWERUPS,
                 o -> o.stream().map(PowerupCard::getId).collect(Collectors.toList()));
+        mapAdd(updates, isConnected, Update.UpdateType.CONNECTED_PLAYERS,
+                o -> Collections.singletonList(Boolean.toString(o)));
         singleAdd(updates, timer, Update.UpdateType.HALL_TIMER,
                 o -> Integer.toString(o));
         listAdd(updates, winners, Update.UpdateType.GAME_OVER,
@@ -220,7 +231,7 @@ public class UpdateBuilder {
         field.forEach((player, t) -> updates.add(new Update(type, nameMapper.apply(t), player.getName())));
     }
 
-    private <T> void singleAdd(List<? super Update> updates, T field,
+    private <T> void singleAdd(List<Update> updates, T field,
                                Update.UpdateType type,
                                Function<T, String> nameMapper) {
         if (field == null)
