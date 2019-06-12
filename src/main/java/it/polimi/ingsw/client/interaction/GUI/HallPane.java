@@ -62,7 +62,7 @@ public class HallPane extends StackPane {
         border.setCenter(vertical);
         vertical.getChildren().addAll(topText, textUserBox, usersBox, logWindow);
         logWindow.getChildren().addAll(logText, logRectangle, debugSkip);
-        updateHall(10); // TODO Set timer
+        updateHall(); // TODO Set timer
 
         // Set up background image
         BackgroundImage img = new BackgroundImage(R.image("logo"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -102,28 +102,16 @@ public class HallPane extends StackPane {
 
     }
 
-    public static void updateHall(int seconds) {
+    public static void updateHall() {
         if (playersInHall == null)
             playersInHall = new ArrayList<>();
 
-        List<String> oldPlayers = new ArrayList<>();
-        playersInHall.addAll(playersInHall);
         playersInHall = model.getConnectedPlayers();
-
+        // flushing previous state
         usersBox.getChildren().removeAll(usersBox.getChildren());
         for (String name : playersInHall) {
             usersBox.getChildren().add(getPlayerBox(name));
         }
-
-        // Find disconections
-        for (String name : model.getDisconnectedPlayers())
-            if (!playersInHall.contains(name))
-                logText.setText(logText.getText() + "\n" + name + " has disconnected");
-
-        // Find new connections
-        for (String name : model.getJustConnectedPlayers())
-            if (!oldPlayers.contains(name))
-                logText.setText(logText.getText() + "\n" + name + " is connected");
     }
 
     private static Pane getPlayerBox(String nickname) {

@@ -1,9 +1,15 @@
 package it.polimi.ingsw.client.interaction.GUI;
 
+import it.polimi.ingsw.client.clientlogic.PlayerState;
 import it.polimi.ingsw.client.resources.R;
+import it.polimi.ingsw.server.model.board.Square;
+import it.polimi.ingsw.server.model.player.Player;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+
+import java.util.List;
 
 public class MapPane extends GridPane {
 
@@ -24,19 +30,11 @@ public class MapPane extends GridPane {
                 buildMap3();
                 break;
         }
+        this.setAlignment(Pos.CENTER);
     }
 
-    public static ImageView getCell(String resID) {
-        ImageView img = new ImageView(R.image(resID));
-        img.setPreserveRatio(true);
-        img.setFitHeight(150);
-        img.setOnMouseEntered(e -> {
-            img.setOpacity(0.5);
-        });
-        img.setOnMouseExited(e -> {
-            img.setOpacity(1);
-        });
-        return img;
+    public static SquarePane getCell(String resID) {
+        return new SquarePane(resID);
     }
 
     private void buildMap0() {
@@ -106,7 +104,23 @@ public class MapPane extends GridPane {
         this.setWidth(1500);
     }
 
-    public ImageView getCellByID(int id) {
-        return (ImageView) this.getChildren().get(id);
+    public SquarePane getCellByID(int id) {
+        return (SquarePane) this.getChildren().get(id);
+    }
+
+    public void insertPlayerInCell(String nicknamePlayer, int cellID) {
+        getCellByID(cellID).insertPlayerInSquare(nicknamePlayer);
+    }
+
+    public void update() {
+        for (int i = 0; i < 12; i++) {
+            getCellByID(i).flushState();
+        }
+        List<PlayerState> playersStateList = GUI.getModel().getPlayersState();
+
+        for (PlayerState state : playersStateList) {
+            getCellByID(state.getSquarePosition())
+                    .insertPlayerInSquare(state.getNickname());
+        }
     }
 }

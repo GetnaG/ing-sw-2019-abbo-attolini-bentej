@@ -92,7 +92,7 @@ public class LoginPane extends StackPane {
         socketRadio.setSelected(true);
         //  Setting Button Event
         loginButton.setOnAction(e -> {
-            System.out.println(inputUsername.getText());
+            GUI.setNickname(inputUsername.getText());
             // telling the controller the connection type
             if (socketRadio.isSelected()) {
 

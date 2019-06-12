@@ -1,5 +1,8 @@
 package it.polimi.ingsw.client.interaction.GUI;
 
+import it.polimi.ingsw.client.clientlogic.MatchState;
+import it.polimi.ingsw.client.clientlogic.PlayerState;
+import it.polimi.ingsw.server.model.player.Player;
 import javafx.scene.layout.StackPane;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Platform;
@@ -19,7 +22,8 @@ import javafx.scene.text.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
+
 
 public class GamePane extends StackPane {
 
@@ -27,13 +31,22 @@ public class GamePane extends StackPane {
     private static HBox answerBox;
     private static Text questionText;
     private static MapPane map;
+    private static StackPane playerBoard;
+    private static StackPane killshotTrack;
+    /**
+     * VBox used to store the WeaponCards
+     */
+    private static VBox vboxLeftCards;
+    /**
+     * VBox used to store the AmmoCards
+     */
+    private static VBox vboxRightCards;
 
     public GamePane(HBox answerBox, Text questionText, int idMap) {
         super();
         this.answerBox = answerBox;
         BorderPane borderPane = new BorderPane();
-        //map = new MapPane(idMap); //TODO Remove following line
-        map = new MapPane(0);
+        map = new MapPane(idMap);
 
         this.getChildren().add(borderPane);
 
@@ -42,6 +55,7 @@ public class GamePane extends StackPane {
         buildCenter(borderPane);
         buildLeft(borderPane);
         buildRight(borderPane);
+        update();
 
         this.setBackground(new Background(new BackgroundFill(Color.BLACK, null, null)));
 
@@ -53,7 +67,10 @@ public class GamePane extends StackPane {
      * @param borderPane
      */
     private static void buildTop(BorderPane borderPane) {
-        HBox hbox = new HBox(getKillshotTrack(), getPlayerTile());
+        PlayerState playerState = GUI.getPlayerState(GUI.getNickname());
+        playerBoard = getPlayerBoard(playerState);
+        killshotTrack = getKillshotTrack(GUI.getModel());
+        HBox hbox = new HBox(killshotTrack, getPlayerActionTile(), playerBoard);
         borderPane.setTop(hbox);
         borderPane.setAlignment(hbox, Pos.CENTER);
         hbox.setAlignment(Pos.CENTER);
@@ -92,10 +109,6 @@ public class GamePane extends StackPane {
 
         centerBorderPane.setCenter(map);
         insertOtherPlayers(centerBorderPane);
-
-        centerBorderPane.setAlignment(centerBorderPane, Pos.CENTER);
-
-
     }
 
     /**
@@ -104,22 +117,24 @@ public class GamePane extends StackPane {
      * @param borderPane
      */
     private static void buildLeft(BorderPane borderPane) {
-        VBox vbox = new VBox();
-        borderPane.setLeft(vbox);
-        borderPane.setAlignment(vbox, Pos.CENTER_LEFT);
+        vboxLeftCards = new VBox();
+        borderPane.setLeft(vboxLeftCards);
+        borderPane.setAlignment(vboxLeftCards, Pos.CENTER_LEFT);
+        PlayerState currentPlayerState = GUI.getModel().getPlayersState().stream()
+                .filter(p -> p.getNickname().equals(GUI.getNickname()))
+                .collect(Collectors.toList()).get(0);
+        updateWeaponCards(currentPlayerState.getLoadedWeapons(), currentPlayerState.getUnloadedWeapons());
+        vboxLeftCards.setAlignment(Pos.CENTER);
+        vboxLeftCards.setSpacing(10);
+    }
 
-        /*
-        vbox.getChildren().add(getCard("AD_weapons_IT_024"));
-        vbox.getChildren().add(getCard("AD_weapons_IT_025"));
-        vbox.getChildren().add(getCard("AD_weapons_IT_026"));
-        */
-
-
-        GUI.getModel().getAmmoCardsID().forEach(ammoCardID -> vbox.getChildren().add(getCard(ammoCardID)));
-
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setSpacing(10);
-
+    /**
+     * Shows the list of loaded weapon cards to the player
+     */
+    private static void updateWeaponCards(List<String> loadedWeaponCardsIDs, List<String> unloadedWeaponCards) {
+        vboxLeftCards.getChildren().removeAll(vboxLeftCards.getChildren());
+        loadedWeaponCardsIDs.forEach(ammoCardID -> vboxLeftCards.getChildren().add(getCard(ammoCardID, false)));
+        unloadedWeaponCards.forEach(ammoCardID -> vboxLeftCards.getChildren().add(getCard(ammoCardID, true)));
     }
 
     /**
@@ -128,32 +143,114 @@ public class GamePane extends StackPane {
      * @param borderPane
      */
     private static void buildRight(BorderPane borderPane) {
-        VBox vbox = new VBox();
-        borderPane.setRight(vbox);
-        borderPane.setAlignment(vbox, Pos.CENTER_RIGHT);
-
-        GUI.getModel().getWeaponsCardsID().forEach(weaponId -> vbox.getChildren().add(getCard(weaponId)));
-
-        vbox.setAlignment(Pos.CENTER);
-        vbox.setSpacing(10);
+        vboxRightCards = new VBox();
+        borderPane.setRight(vboxRightCards);
+        borderPane.setAlignment(vboxRightCards, Pos.CENTER_RIGHT);
+        PlayerState currentPlayerState = GUI.getModel().getPlayersState().stream()
+                .filter(p -> p.getNickname().equals(GUI.getNickname()))
+                .collect(Collectors.toList()).get(0);
+        updatePowerupCards(currentPlayerState.getPowerups());
+        vboxRightCards.setAlignment(Pos.CENTER);
+        vboxRightCards.setSpacing(10);
     }
 
-    private static Node getPlayerTile() {
+    /**
+     * Shows the list of ammo cards to the player
+     *
+     * @param powerupCardIDs
+     */
+    private static void updatePowerupCards(List<String> powerupCardIDs) {
+        vboxRightCards.getChildren().removeAll(vboxRightCards.getChildren());
+        powerupCardIDs.forEach(powerupCardID -> vboxRightCards.getChildren().add(getCard(powerupCardID, false)));
+    }
+
+    private static StackPane getPlayerBoard(PlayerState playerState) {
+        StackPane stack = new StackPane();
         // load the image
         Image image = R.image("PlayerBoard");
         // if (GUI.getModel().getIsActionTileFrenzy()) TODO implementare
-
         ImageView iv = new ImageView();
         iv.setImage(image);
-        iv.setFitWidth(700);
+        iv.setFitWidth(600);
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
+        GridPane gp = new GridPane();
+        stack.getChildren().add(0, iv);
+        stack.getChildren().add(1, gp);
+        updatePlayerBoard(gp, playerState.getDamage(), playerState.getSkullNumber());
+        for (int i = 0; i < 13; i++) {
+            if (i == 0)
+                gp.getColumnConstraints().add(new ColumnConstraints(48)); // column i is 49 wide
+            else gp.getColumnConstraints().add(new ColumnConstraints(35));
+        }
+        for (int i = 0; i < 3; i++) {
+            gp.getRowConstraints().add(new RowConstraints(70));
+        }
 
-        return iv;
+        return stack;
     }
 
-    private static Node getKillshotTrack() {
+    private static StackPane getKillshotTrack(MatchState state) {
+        StackPane stack = new StackPane();
+        // load the image
+        Image image = R.image("killshotTrack");
+        // if (GUI.getModel().getIsActionTileFrenzy()) TODO implementare
+        ImageView iv = new ImageView();
+        iv.setImage(image);
+        iv.setFitWidth(500);
+        iv.setPreserveRatio(true);
+        iv.setSmooth(true);
+        iv.setCache(true);
+        GridPane gp = new GridPane();
+        gp.setMaxWidth(500);
+        gp.setMinWidth(500);
+        gp.setMaxHeight(iv.getFitHeight());
+        gp.setMinHeight(iv.getFitHeight());
+        stack.getChildren().add(0, iv);
+        stack.getChildren().add(1, gp);
+        for (int i = 0; i < 9; i++) {
+            if (i == 8)
+                gp.getColumnConstraints().add(new ColumnConstraints(50)); // column i is 49 wide
+            else gp.getColumnConstraints().add(new ColumnConstraints(50));
+        }
+        gp.getRowConstraints().add(new RowConstraints(iv.getFitHeight()));
+        updateKillshotTrack(gp, GUI.getModel().getKillshotTrack());
+        return stack;
+    }
+
+    private static void updateKillshotTrack(GridPane grid, List<List<String>> playersKillshot) {
+        // Flushing previous state
+        grid.getChildren().removeAll(grid.getChildren());
+        // Inserting new state
+        for (List<String> nicknameList : playersKillshot) {
+            Text text = new Text("");
+            text.setFill(Color.WHITE);
+            nicknameList.forEach(name -> text.setText(text.getText() + "\n" + name));
+            grid.add(text, playersKillshot.indexOf(nicknameList), 0);
+        }
+    }
+
+    private static void updatePlayerBoard(GridPane grid, List<String> playersDamage, int timesKilled) {
+        grid.getChildren().removeAll(grid.getChildren());
+        grid.getColumnConstraints().removeAll(grid.getColumnConstraints());
+        for (int i = 0; i < playersDamage.size(); i++) {
+            Text text = new Text(playersDamage.get(i));
+            text.setFill(Color.WHITE);
+            text.setFont(new Font("Arial", 20));
+            grid.add(text, i, 1);
+        }
+
+        for (int i = 0; i < timesKilled; i++) {
+            Text text = new Text("  X");
+            text.setFill(Color.WHITE);
+            text.setFont(new Font("Arial", 20));
+            grid.add(text, 2 + i, 2);
+        }
+        grid.setGridLinesVisible(true);
+    }
+
+    private static Node getPlayerActionTile() {
         Image image;
         // load the image
         if (GUI.getModel().getIsActionTileFrenzy())
@@ -171,7 +268,20 @@ public class GamePane extends StackPane {
         return iv;
     }
 
-    private static ImageView getCard(String imageName) {
+    private static Node getKillshotTrack() {
+        Image image = R.image("killshotTrack");
+
+        ImageView iv = new ImageView();
+        iv.setImage(image);
+        iv.setFitWidth(60);
+        iv.setPreserveRatio(true);
+        iv.setSmooth(true);
+        iv.setCache(true);
+
+        return iv;
+    }
+
+    private static ImageView getCard(String imageName, boolean dark) {
         Image image = R.image(imageName);
 
         ImageView iv = new ImageView();
@@ -180,6 +290,8 @@ public class GamePane extends StackPane {
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
+        if (dark)
+            iv.setOpacity(0.5);
 
         return iv;
     }
@@ -219,7 +331,6 @@ public class GamePane extends StackPane {
             answerBox.setSpacing(10);
             answerBox.setAlignment(Pos.CENTER);
         });
-
     }
 
     private static HBox getGroupBoxAnswerSquares(List<String> group, int groupIndex) {
@@ -302,7 +413,7 @@ public class GamePane extends StackPane {
     private static void createCardAnimation(Node node, String resID, ImageView imgBox) {
         node.setOnMouseEntered(e -> {
             imgBox.setVisible(true);
-            imgBox.setImage(getCard(resID).getImage());
+            imgBox.setImage(getCard(resID, false).getImage());
             node.setStyle("-fx-font-weight: bold");
         });
         node.setOnMouseExited(e -> {
@@ -339,17 +450,27 @@ public class GamePane extends StackPane {
     }
 
     private static void insertOtherPlayers(BorderPane borderPane) {
-        Node alice = getCirclePlayer("Alice");
-        Node bob = getCirclePlayer("Bob");
-        Node charlie = getCirclePlayer("Charlie");
+        List<String> otherPlayers = GUI.getModel().getPlayersState().stream()
+                .map(playerState -> playerState.getNickname())
+                .collect(Collectors.toList());
 
-        borderPane.setLeft(alice);
-        borderPane.setTop(bob);
-        borderPane.setRight(charlie);
+        HBox playersContainerTop = new HBox();
+        HBox playersContainerLeft = new HBox();
+        HBox playersContainerRight = new HBox();
+        borderPane.setLeft(playersContainerLeft);
+        borderPane.setRight(playersContainerRight);
+        borderPane.setTop(playersContainerTop);
+        for (String nickname : otherPlayers) {
+            int index = otherPlayers.indexOf(nickname);
+            if (index == 0)
+                playersContainerLeft.getChildren().add(getCirclePlayer(nickname));
+            else if (index >= 1 && index <= 3)
+                playersContainerTop.getChildren().add(getCirclePlayer(nickname));
+            else playersContainerRight.getChildren().add(getCirclePlayer(nickname));
+        }
 
-        borderPane.setAlignment(alice, Pos.CENTER_RIGHT);
-        borderPane.setAlignment(bob, Pos.CENTER);
-        borderPane.setAlignment(charlie, Pos.CENTER_LEFT);
+        playersContainerTop.setAlignment(Pos.CENTER);
+        playersContainerTop.setSpacing(20);
     }
 
     private static Node getCirclePlayer(String nickname) {
@@ -360,9 +481,36 @@ public class GamePane extends StackPane {
         stackPane.getChildren().addAll(text, circle);
 
         circle.setFill(Color.TRANSPARENT);
-        circle.setStroke(Color.BLACK);
+        circle.setStroke(Color.WHITE);
         circle.setStrokeWidth(5);
+        text.setFill(Color.WHITE);
+
+        stackPane.setOnMouseEntered(e -> {
+            PlayerState hooveredPlayerState = GUI.getModel().getPlayersState().stream()
+                    .filter(s -> s.getNickname().equals(text.getText()))
+                    .collect(Collectors.toList()).get(0);
+            updateWeaponCards(hooveredPlayerState.getLoadedWeapons(), hooveredPlayerState.getUnloadedWeapons());
+            updatePowerupCards(hooveredPlayerState.getPowerups());
+        });
+        stackPane.setOnMouseExited(e -> {
+            PlayerState clientPlayerState = GUI.getModel().getPlayersState().stream()
+                    .filter(s -> s.getNickname().equals(GUI.getNickname()))
+                    .collect(Collectors.toList()).get(0);
+            updateWeaponCards(clientPlayerState.getLoadedWeapons(), clientPlayerState.getUnloadedWeapons());
+            updatePowerupCards(clientPlayerState.getPowerups());
+        });
 
         return stackPane;
+    }
+
+    public static void update() {
+        PlayerState playerState = GUI.getPlayerState(GUI.getNickname());
+        updatePowerupCards(playerState.getPowerups());
+        updateWeaponCards(playerState.getLoadedWeapons(), playerState.getUnloadedWeapons());
+        updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
+                playerState.getDamage(),
+                playerState.getSkullNumber());
+        //updateKillshotTrack((GridPane) killshotTrack.getChildren().get(1), GUI.getModel().getKillshotTrack());
+        map.update();
     }
 }

@@ -11,14 +11,37 @@ import java.util.List;
  * @see MatchState
  */
 public class BoardState {
-
+    /**
+     * Configuration of the map
+     */
     private int configurationID;
+    /**
+     * A list of 12 ammoCardID, one for each square.
+     */
     private List<String> ammoCardsID;
+    /**
+     * A list of weaponCardsID
+     */
     private List<String> weaponCardsID;
+    /**
+     * True if the weapon deck is not empty
+     */
     private boolean isWeaponDeckDrawable;
+    /**
+     * List of players who occupy each position of the killshot track
+     */
     private List<List<String>> killshotTrack;
+    /**
+     * Tells if action tile is frenzy
+     */
     private boolean isActionTileFrenzy;
+    /**
+     * A list of connected players
+     */
     private List<String> connectedPlayers;
+    /**
+     * A list of disconnected players. It is used to check the previous state of the conncected players.
+     */
     private List<String> oldConnectedPlayer;
 
 

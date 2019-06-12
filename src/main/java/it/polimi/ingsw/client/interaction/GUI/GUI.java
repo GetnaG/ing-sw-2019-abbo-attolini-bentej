@@ -2,9 +2,11 @@ package it.polimi.ingsw.client.interaction.GUI;
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
+import it.polimi.ingsw.client.clientlogic.PlayerState;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Application;
 import javafx.application.Platform;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.*;
@@ -12,6 +14,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents the GUI interface of the game.
@@ -70,8 +73,22 @@ public class GUI extends Application {
      * The question shown to the player
      */
     private static Text questionText;
-
+    /**
+     * The login pane
+     */
     private static LoginPane loginPane;
+    /**
+     * Game pane
+     */
+    private static StackPane gamePane;
+    /**
+     * Nickname of the player
+     */
+    private static String nickname;
+    /**
+     * True if game has already started
+     */
+    private static boolean gameStarted;
 
     public GUI() {
 
@@ -91,12 +108,8 @@ public class GUI extends Application {
      * Builds a Game Pane in the given stage/
      */
     public static void buildGamePane(Stage stage) {
-
-//        StackPane rootStackPane = new GamePane(answerBox, questionText, model.getConfigurationID());
-        StackPane rootStackPane = new GamePane(answerBox, questionText, 0);
-
-        masterScene.setRoot(rootStackPane);
-
+        gamePane = new GamePane(answerBox, questionText, model.getConfigurationID());
+        masterScene.setRoot(gamePane);
     }
 
     /**
@@ -104,7 +117,12 @@ public class GUI extends Application {
      */
     public static void notifyUpdatedState() {
         Platform.runLater(
-                () -> HallPane.updateHall(2)
+                () -> {
+                    if (gameStarted)
+                        GamePane.update();
+                    else
+                        HallPane.updateHall();
+                }
         );
     }
 
@@ -188,6 +206,9 @@ public class GUI extends Application {
             case "USERNAME_TAKEN_AND_ONLINE":
                 logText.setText("Username taken and offline");
                 break;
+            case "GAME_STARTING":
+                buildGamePane(stage);
+                break;
         }
     }
 
@@ -228,19 +249,8 @@ public class GUI extends Application {
         }
     }
 
-    /**
-     * Starts the GUI. Never call directly.
-     *
-     * @param stage stage (O.S dependent)
-     */
-
-    public void start(Stage stage) {
-        this.stage = stage;
-        setUpLoginScene(stage);
-
-        stage.setTitle("Adrenaline");
-        stage.setScene(masterScene);
-        stage.show();
+    public static String getNickname() {
+        return nickname;
     }
 
 
@@ -280,4 +290,31 @@ public class GUI extends Application {
     public static MatchState getModel() {
         return model;
     }
+
+    public static void setNickname(String nickname) {
+        GUI.nickname = nickname;
+    }
+
+    public static PlayerState getPlayerState(String nickname) {
+        if (model.getPlayersState() != null)
+            return model.getPlayersState().stream().filter(p -> p.getNickname().equals(nickname)).collect(Collectors.toList()).get(0);
+        else return null;
+    }
+
+    /**
+     * Starts the GUI. Never call directly.
+     *
+     * @param stage stage (O.S dependent)
+     */
+
+    public void start(Stage stage) {
+        this.stage = stage;
+        setUpLoginScene(stage);
+        stage.setTitle("Adrenaline");
+        stage.setScene(masterScene);
+        gameStarted = false;
+        stage.show();
+    }
+
+
 }
