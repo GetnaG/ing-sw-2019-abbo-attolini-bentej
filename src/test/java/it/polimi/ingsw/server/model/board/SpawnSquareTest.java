@@ -23,7 +23,7 @@ class SpawnSquareTest {
 
         SpawnSquare sqT = new SpawnSquare(AmmoCube.BLUE, wmTest);
 
-        sqT.setReplacer(new GameBoard(null, null));
+        sqT.setReplacer(new GameBoard(null, new ArrayList<>()));
 
         sqT.pickWeapon(wmTest.getCards().get(1));
 

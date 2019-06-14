@@ -123,26 +123,24 @@ public class CLI implements InteractionInterface {
     private void askConnection() {
         if (controller != null) {
             String connection = handleQuestion("chooseConnection", null);
-            if (connection.equals("socket")) {
+            if ("socket".equals(connection)) {
                 try {
                     controller.setSocket(
                             handleQuestion("chooseIP", null),
                             Integer.parseInt(handleQuestion("choosePort", null))
                     );
                 } catch (IOException e) {
-                    handleNotification("GenericError");
+                    handleNotification("socket error: " + e.getMessage());
                 }
-            } else if (connection.equals("rmi")) {
+            } else if ("rmi".equals(connection)) {
                 try {
                     controller.setRmi(
                             handleQuestion("chooseIP", null));
                 } catch (IOException e) {
-
-                    e.printStackTrace();
-                    handleNotification("GenericError");
+                    handleNotification("Rmi error: " + e.getMessage());
                 }
             } else {
-                handleNotification("GenericError");
+                handleNotification("Input must be socket or rmi");
             }
         }
     }

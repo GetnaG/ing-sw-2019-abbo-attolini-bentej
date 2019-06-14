@@ -10,6 +10,7 @@ import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
+import it.polimi.ingsw.server.serverlogic.ServerMain;
 
 import java.rmi.RemoteException;
 import java.util.List;
@@ -46,6 +47,9 @@ public class RmiToClient implements ToClientInterface {
      */
     private int askAndCheck(MessageType type,
                             List<? extends List<String>> options) throws ToClientException {
+        if (options.isEmpty())
+            ServerMain.getLog().severe("Sending empty options list");
+
         try {
             int choice = client.handleQuestion(type, options.stream()
                     .map(a -> a.toArray(new String[]{}))

@@ -11,7 +11,7 @@ import java.util.List;
 public class Square {
 
 
-    protected ReplaceListener replacer;
+    ReplaceListener replacer;
     private AmmoCard ammoCard;
     private SquareColor squareColor;
     private int ID;
@@ -152,10 +152,6 @@ public class Square {
         this.westBorder = westBorder;
         if (this.west != null && this.west.getEastBorder() == null)  // there is a valid square with a non initialized border
             this.west.setEastBorder(westBorder);
-    }
-
-    public ReplaceListener getReplacer() {
-        return replacer;
     }
 
     public void setReplacer(ReplaceListener replacer) {

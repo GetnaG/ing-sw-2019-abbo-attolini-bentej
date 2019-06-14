@@ -380,7 +380,7 @@ public class Player implements Damageable {
      * @throws IllegalArgumentException if the player can not afford to buy
      *                                  the card
      */
-    public void buy(WeaponCard card, List<? extends PowerupCard> asCubes) {
+    public void buy(WeaponCard card, PowerupCard asCubes) {
 
         List<AmmoCube> cost = new ArrayList<>(card.getCost().subList(1,
                 card.getCost().size()));
@@ -388,10 +388,8 @@ public class Player implements Damageable {
             ammoBox.pay(cost);
             hand.addWeaponCard(card);
         } else if (!canAffordWithPowerups(card.getCost(), true).isEmpty()) {
-            for (PowerupCard asCube : asCubes) {
-                hand.removePowerup(asCube);
-                cost.remove(asCube.getCube());
-            }
+            hand.removePowerup(asCubes);
+            cost.remove(asCubes.getCube());
             ammoBox.pay(cost);
             hand.addWeaponCard(card);
         } else

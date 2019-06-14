@@ -65,6 +65,7 @@ public class GameBoard implements ReplaceListener {
     public GameBoard(AbstractTrack track, List<Room> configuration) {
         this.track = track;
         this.configuration = configuration;
+        configuration.stream().flatMap(room -> room.getSquares().stream()).forEach(square -> square.setReplacer(this));
 
         // Decks are shuffled when created
         powerupDeck = new PowerupDeck(this);
@@ -84,10 +85,6 @@ public class GameBoard implements ReplaceListener {
 
     public List<Room> getConfiguration() {
         return configuration;
-    }
-
-    public void setConfiguration(List<Room> configuration) {
-        this.configuration = configuration;
     }
 
     /**
@@ -459,14 +456,13 @@ public class GameBoard implements ReplaceListener {
     }
 
     public static Room getRoom(Square square) {
-        Room targetRoom = null;
         for (Room room : configuration) {
             for (Square s : room.getSquares()) {
-                if (s.getID() == square.getID())
-                    targetRoom = room;
+                if (s.getID().equals(square.getID()))
+                    return room;
             }
         }
-        return targetRoom;
+        throw new IllegalArgumentException("Room not found for square " + square.getID());
     }
 
     /**

@@ -63,7 +63,7 @@ class ShootTest {
 
         card = new WeaponCard(id, cubes, effects, true);
 
-        players.get(0).buy(card, new ArrayList<>());
+        players.get(0).buy(card, null);
 
     }
     @Test

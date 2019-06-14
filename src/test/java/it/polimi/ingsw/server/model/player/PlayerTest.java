@@ -309,7 +309,7 @@ class PlayerTest {
         AAmmoBox.addAmmo(AmmoCube.BLUE);
         AHandManager.addPowerup(powerup);
 
-        APlayer.buy(card, Arrays.asList(powerup));
+        APlayer.buy(card, powerup);
 
         assertEquals(1, AAmmoBox.getBlue());
         assertFalse(AHandManager.getPowerups().contains(powerup));

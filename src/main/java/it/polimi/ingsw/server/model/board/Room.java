@@ -48,7 +48,10 @@ public class Room {
     }
 
     public List<Square> getSquares(){
-        return squares;
+        List<Square> returned = new ArrayList<>(squares);
+        if (spawnSquare != null)
+            returned.add(spawnSquare);
+        return returned;
     }
 
     public boolean hasSpawnSquare() {
@@ -67,9 +70,9 @@ public class Room {
     @Override
     public boolean equals(Object obj) {
         if(this.getSpawnSquare() != null)
-            return (obj instanceof Room) && (((Room) obj).getSquares().equals(squares) && ((Room) obj).getSpawnSquare().equals(spawnSquare));
+            return (obj instanceof Room) && (((Room) obj).squares.equals(squares) && ((Room) obj).getSpawnSquare().equals(spawnSquare));
         else
-            return (obj instanceof Room) && (((Room) obj).getSquares().equals(squares));
+            return (obj instanceof Room) && (((Room) obj).squares.equals(squares));
     }
 
     public void refresh(List<Room> rooms) {

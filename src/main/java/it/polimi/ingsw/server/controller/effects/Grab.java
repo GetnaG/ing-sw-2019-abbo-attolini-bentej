@@ -6,11 +6,13 @@ import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.SpawnSquare;
 import it.polimi.ingsw.server.model.board.Square;
+import it.polimi.ingsw.server.model.board.WeaponMarket;
 import it.polimi.ingsw.server.model.cards.AmmoCard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -46,30 +48,51 @@ public class Grab implements EffectInterface {
             if (card.hasPowerup() && subjectPlayer.getAllPowerup().size() >= 3){
                 subjectPlayer.addPowerup(board.getPowerupCard());
             }
+            board.putAmmoCard(card);
+            return;
         }
 
         try {
             // We can grab a Weapon if there's a Market in our position
             if (position.getRoom().getSpawnSquare().equals(position)) {
-                //get weapons in market and filter only the affordable ones
-                List<WeaponCard> weaponAvailable = position.getRoom().getSpawnSquare().getMarket().getCards();
-                List<WeaponCard> weaponsAffordable = weaponAvailable.stream().filter(card -> subjectPlayer.canAfford(card.getCost(), true)).collect(Collectors.toList());
+                //get weapons in market
+                SpawnSquare spawnSquare = position.getRoom().getSpawnSquare();
+                List<WeaponCard> weaponAvailable = spawnSquare.getMarket().getCards();
+
+                /*Adding the weapons that the player can buy to weaponsAffordable*/
+                List<WeaponCard> weaponsAffordable = weaponAvailable.stream()
+                        .filter(card -> subjectPlayer.canAfford(card.getCost(), true) ||
+                                !subjectPlayer.canAffordWithPowerups(card.getCost(), true).isEmpty())
+                        .collect(Collectors.toList());
+
+                /*If there are no weapons it is player's mistake and he grabs nothing*/
+                if (weaponsAffordable.isEmpty()) {
+                    return;
+                }
+
                 // ask the player which weapon he wants to buy
                 WeaponCard weaponToBuy = subjectPlayer.getToClient().chooseWeaponToBuy(weaponsAffordable);
                 // If he has 3 weapons, he has to discard one.
                 if (subjectPlayer.getNumOfWeapons() >= 3) {
                     WeaponCard weaponToDiscard = subjectPlayer.getToClient().chooseWeaponToDiscard(subjectPlayer.getAllWeapons());
                     subjectPlayer.discard(weaponToDiscard);
+                    //TODO: put back to the market the discarded weapon
                 }
-                // The player buys the weapon with the chosen powerup eventually
-                List<PowerupCard> powerupToPay = List.of(subjectPlayer.getToClient().choosePowerupForPaying(subjectPlayer.getAllPowerup()));
+
+                /*If necessary, choosing a powerup to pay*/
+                PowerupCard powerupToPay = null;
+                if (!subjectPlayer.canAfford(weaponToBuy.getCost(), true)) {
+                    powerupToPay = subjectPlayer.getToClient().choosePowerupForPaying(
+                            subjectPlayer.canAffordWithPowerups(weaponToBuy.getCost(), true));
+                }
+
+                // The player buys the weapon with the chosen powerup
+                spawnSquare.getMarket().pickWeaponFromList(weaponToBuy);
                 subjectPlayer.buy(weaponToBuy, powerupToPay);
+                board.addSpawnSquare(spawnSquare);
             }
         } catch (ToClientException e) {
             //TODO Handle if the user is disconnected
-        }
-        if(position.getTurret() != null){
-            // we can grab a Turret //TODO Implement Turret which is an extra-feature
         }
     }
 

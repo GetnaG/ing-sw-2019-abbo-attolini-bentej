@@ -57,7 +57,7 @@ public class SpawnSquare extends Square {
     public void pickWeapon(WeaponCard weapon){
         if(market.isValidWeapon(weapon)) {
             market.pickWeaponFromList(weapon);
-            super.replacer.addSpawnSquare(this);
+            replacer.addSpawnSquare(this);
         }
         else
             System.out.println("Warning: You are trying to remove a non-existing weapon!");
@@ -67,7 +67,7 @@ public class SpawnSquare extends Square {
      * @return return the color of the room selected to spawn
      */
     public AmmoCube getSpawnColor() {
-        SquareColor c = super.getSquareColor();
+        SquareColor c = getSquareColor();
         if (c == SquareColor.BLUE)
             return AmmoCube.BLUE;
         if (c == SquareColor.RED)
