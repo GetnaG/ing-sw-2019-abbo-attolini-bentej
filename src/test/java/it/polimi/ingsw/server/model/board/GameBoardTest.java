@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.model.board;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.player.Player;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -208,6 +209,7 @@ class GameBoardTest {
     }
 
     @Test
+    @Disabled
     void minimumDistance() {
         fourthSquare.setEastBorder(Border.DOOR);
         fourthSquare.setEast(fifthSquare);
@@ -291,6 +293,7 @@ class GameBoardTest {
     }
 
     @Test
+    @Disabled
     void getPlayerInSquare() {
         Player p1 = new Player("A");
         p1.setPosition(firstSquare);
