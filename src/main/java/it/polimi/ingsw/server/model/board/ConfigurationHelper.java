@@ -18,7 +18,11 @@ public class ConfigurationHelper {
 
     public static List<Room> boardCreator(Configurations c) {
         maps = FromFile.maps().getAll();
+        List<Room> board = maps.get(c.getId());
+        return board;
+    }
 
-        return maps.get(c.getId());
+    public static void setReplacer(ReplaceListener replacer) {
+
     }
 }

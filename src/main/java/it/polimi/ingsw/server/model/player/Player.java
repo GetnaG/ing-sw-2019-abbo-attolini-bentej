@@ -8,6 +8,7 @@ import it.polimi.ingsw.server.controller.effects.Move;
 import it.polimi.ingsw.server.controller.effects.Shoot;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
+import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
@@ -200,6 +201,8 @@ public class Player implements Damageable {
      */
     @Override
     public Square getPosition() {
+        if (this.position != null)
+            this.position = Square.getSquare(GameBoard.getConfiguration(), Integer.parseInt(this.position.getID()));
         return position;
     }
 

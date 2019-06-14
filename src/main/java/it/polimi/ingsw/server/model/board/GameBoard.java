@@ -66,6 +66,7 @@ public class GameBoard implements ReplaceListener {
         this.track = track;
         this.configuration = configuration;
         configuration.stream().flatMap(room -> room.getSquares().stream()).forEach(square -> square.setReplacer(this));
+        configuration.stream().forEach(room -> room.refresh(configuration));
 
         // Decks are shuffled when created
         powerupDeck = new PowerupDeck(this);
@@ -83,7 +84,7 @@ public class GameBoard implements ReplaceListener {
     }
 
 
-    public List<Room> getConfiguration() {
+    public static List<Room> getConfiguration() {
         return configuration;
     }
 

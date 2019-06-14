@@ -382,7 +382,7 @@ public class Square {
         this.west = getSquare(rooms, idWest);
     }
 
-    private Square getSquare(List<Room> rooms, int idSquare) {
+    public static Square getSquare(List<Room> rooms, int idSquare) {
         for (Room room : rooms)
             for (Square s : room.getSquares())
                 if (Integer.parseInt(s.getID()) == idSquare)

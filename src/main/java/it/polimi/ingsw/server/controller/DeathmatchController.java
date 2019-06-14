@@ -88,6 +88,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
         //TODO: can I use directly the loader?
         board = new GameBoard(new KillshotTrack(skullsLeft), ConfigurationHelper.boardCreator(configuration));
+
         suspendedPlayers = new ArrayList<>();
         killedInTurn = new ArrayList<>();
         gameOver = false;
