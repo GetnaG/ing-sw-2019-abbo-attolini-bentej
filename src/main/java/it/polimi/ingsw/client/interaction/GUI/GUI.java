@@ -209,6 +209,9 @@ public class GUI extends Application {
             case "GAME_STARTING":
                 buildGamePane(stage);
                 break;
+            case "TIMER_STARTING":
+                loginPane.setLogText("Timer is starting");
+                break;
         }
     }
 

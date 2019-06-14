@@ -411,6 +411,9 @@ public class GamePane extends StackPane {
     }
 
     private static void createCardAnimation(Node node, String resID, ImageView imgBox) {
+        imgBox.setVisible(true);
+        imgBox.setImage(getCard(resID, false).getImage());
+        node.setStyle("-fx-font-weight: bold");
         node.setOnMouseEntered(e -> {
             imgBox.setVisible(true);
             imgBox.setImage(getCard(resID, false).getImage());
@@ -446,6 +449,7 @@ public class GamePane extends StackPane {
             label.setPadding(new Insets(5, 5, 5, 5));
         });
 
+
         return hbox;
     }
 
@@ -471,6 +475,10 @@ public class GamePane extends StackPane {
 
         playersContainerTop.setAlignment(Pos.CENTER);
         playersContainerTop.setSpacing(20);
+        playersContainerLeft.setAlignment(Pos.CENTER);
+        playersContainerLeft.setSpacing(20);
+        playersContainerRight.setAlignment(Pos.CENTER);
+        playersContainerRight.setSpacing(20);
     }
 
     private static Node getCirclePlayer(String nickname) {

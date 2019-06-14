@@ -20,7 +20,7 @@ import java.io.IOException;
 public class LoginPane extends StackPane {
     private String username;
 
-
+    private Text logText;
     private TextField inputUsername;
 
     public LoginPane(ClientController controllerGUI) {
@@ -32,7 +32,7 @@ public class LoginPane extends StackPane {
         HBox usernameHBox = new HBox();
         HBox loginAndRadioBox = new HBox();
         StackPane logWindow = new StackPane();
-        Text logText = new Text();
+        logText = new Text();
         logText.setText(R.string("InsertUsername"));
         Rectangle logRectangle = new Rectangle(800, 100);
 
@@ -117,5 +117,9 @@ public class LoginPane extends StackPane {
 
     public String getInputUsername() {
         return inputUsername.getText();
+    }
+
+    public void setLogText(String text) {
+        logText.setText(text);
     }
 }

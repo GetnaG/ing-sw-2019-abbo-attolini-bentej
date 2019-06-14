@@ -119,6 +119,8 @@ public class MapPane extends GridPane {
         List<PlayerState> playersStateList = GUI.getModel().getPlayersState();
 
         for (PlayerState state : playersStateList) {
+            if (state.getSquarePosition() == -1)
+                continue;
             getCellByID(state.getSquarePosition())
                     .insertPlayerInSquare(state.getNickname());
         }

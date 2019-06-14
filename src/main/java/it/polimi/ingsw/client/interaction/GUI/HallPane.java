@@ -2,6 +2,7 @@ package it.polimi.ingsw.client.interaction.GUI;
 
 import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
+import it.polimi.ingsw.client.clientlogic.PlayerState;
 import javafx.scene.layout.StackPane;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Application;
@@ -26,6 +27,7 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HallPane extends StackPane {
     private static Text logText;
@@ -105,8 +107,7 @@ public class HallPane extends StackPane {
     public static void updateHall() {
         if (playersInHall == null)
             playersInHall = new ArrayList<>();
-
-        playersInHall = model.getConnectedPlayers();
+        playersInHall = model.getPlayersState().stream().map(state -> state.getNickname()).collect(Collectors.toList());
         // flushing previous state
         usersBox.getChildren().removeAll(usersBox.getChildren());
         for (String name : playersInHall) {
