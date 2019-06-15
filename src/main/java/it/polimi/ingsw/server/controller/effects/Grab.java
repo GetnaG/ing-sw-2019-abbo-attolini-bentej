@@ -41,8 +41,8 @@ public class Grab implements EffectInterface {
         Square position = subjectPlayer.getPosition();
 
         // We can grab an AmmoCard if there's an AmmoTile
-        if(position.getAmmoCard() != null){
-            AmmoCard card = position.getAmmoCard();
+        AmmoCard card = position.getAmmoCard();
+        if(card != null){
             subjectPlayer.addAmmo(card.getCubes());
             // If the tile depicts a powerup card, draw one.
             if (card.hasPowerup() && subjectPlayer.getAllPowerup().size() >= 3){
@@ -61,8 +61,8 @@ public class Grab implements EffectInterface {
 
                 /*Adding the weapons that the player can buy to weaponsAffordable*/
                 List<WeaponCard> weaponsAffordable = weaponAvailable.stream()
-                        .filter(card -> subjectPlayer.canAfford(card.getCost(), true) ||
-                                !subjectPlayer.canAffordWithPowerups(card.getCost(), true).isEmpty())
+                        .filter(weaponCard -> subjectPlayer.canAfford(weaponCard.getCost(), true) ||
+                                !subjectPlayer.canAffordWithPowerups(weaponCard.getCost(), true).isEmpty())
                         .collect(Collectors.toList());
 
                 /*If there are no weapons it is player's mistake and he grabs nothing*/

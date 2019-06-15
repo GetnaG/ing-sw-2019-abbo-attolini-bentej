@@ -18,6 +18,10 @@ public class GameBoard implements ReplaceListener {
 
 
     /**
+     * The configuration of the rooms. Note that there exists only 4 possible configurations.
+     */
+    private static List<Room> configuration;
+    /**
      * Contains all the squares where a new Ammo Card is needed.
      */
     List<Square> squareNewAmmoCard;
@@ -25,10 +29,6 @@ public class GameBoard implements ReplaceListener {
      * Contains all the squares where a new Weapon Card is needed.
      */
     List<SpawnSquare> squareNewWeaponCard;
-    /**
-     * The configuration of the rooms. Note that there exists only 4 possible configurations.
-     */
-    private static List<Room> configuration;
     /**
      * Powerup Deck used during the game.
      */
@@ -66,7 +66,7 @@ public class GameBoard implements ReplaceListener {
         this.track = track;
         this.configuration = configuration;
         configuration.stream().flatMap(room -> room.getSquares().stream()).forEach(square -> square.setReplacer(this));
-        configuration.stream().forEach(room -> room.refresh(configuration));
+        configuration.forEach(room -> room.refresh(configuration));
 
         // Decks are shuffled when created
         powerupDeck = new PowerupDeck(this);
@@ -81,11 +81,73 @@ public class GameBoard implements ReplaceListener {
         squareNewAmmoCard = new ArrayList<>();
         squareNewWeaponCard = new ArrayList<>();
 
+        /*Adding all the missing ammo cards and weapons*/
+        configuration.stream().flatMap(room -> room.getSquares().stream()).forEach(square -> {
+            if (square.equals(square.getRoom().getSpawnSquare()))
+                addSpawnSquare(square.getRoom().getSpawnSquare());
+            else addSquare(square);
+        });
+        replaceAll();
     }
 
 
     public static List<Room> getConfiguration() {
         return configuration;
+    }
+
+    public static Room getRoom(Square square) {
+        for (Room room : configuration) {
+            for (Square s : room.getSquares()) {
+                if (s.getID().equals(square.getID()))
+                    return room;
+            }
+        }
+        throw new IllegalArgumentException("Room not found for square " + square.getID());
+    }
+
+    /**
+     * @param destination is the square that will be checked
+     * @return 1 if the destination square is visible from the calling square, 0 otherwise
+     */
+
+    public static boolean checkVisible(Square departure, Square destination) {
+
+        if (getRoom(departure) == getRoom(destination))
+            return true;
+
+        else {
+            if (departure.getNorthBorder() != Border.WALL && departure.getNorthBorder() != null) {
+                if (getRoom(departure.getNorth()) == getRoom(destination) || departure.getNorthBorder() == Border.CORRIDOR)
+                    return true;
+
+            }
+
+
+            if (departure.getSouthBorder() != Border.WALL && departure.getSouthBorder() != null) {
+                if (departure.getSouth().getRoom() == destination.getRoom() || departure.getSouthBorder() == Border.CORRIDOR)
+                    return true;
+            }
+
+            if (departure.getEastBorder() != Border.WALL && departure.getEastBorder() != null) {
+                if (departure.getEast().getRoom() == destination.getRoom() || departure.getEastBorder() == Border.CORRIDOR)
+                    return true;
+            }
+
+            if (departure.getWestBorder() != Border.WALL && departure.getWestBorder() != null) {
+                if (departure.getWest().getRoom() == destination.getRoom() || departure.getWestBorder() == Border.CORRIDOR)
+                    return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static Square getSquare(int idSquare) {
+        for (Room room : configuration)
+            for (Square s : room.getSquares())
+                if (Integer.parseInt(s.getID()) == idSquare)
+                    return s;
+        return null;
     }
 
     /**
@@ -108,7 +170,8 @@ public class GameBoard implements ReplaceListener {
 
     /**
      * Gets a random Weapon Card from the Weapon Deck. Note that Weapon Cards can't be drawn if the Deck is empty {@see WeaponDeck}.
-     *  A call to {@code }
+     * A call to {@code }
+     *
      * @return random Weapon Card from the Weapon Deck.
      */
     public WeaponCard getWeaponCard() throws AgainstRulesException {
@@ -117,10 +180,11 @@ public class GameBoard implements ReplaceListener {
 
     /**
      * Checks if the Weapon Deck is empty
-     * @return  true if is empty, false otherwise.
+     *
+     * @return true if is empty, false otherwise.
      */
-    public boolean isWeaponDeckEmpty(){
-        return  weaponDeck.cardsLeft() > 0;
+    public boolean isWeaponDeckEmpty() {
+        return weaponDeck.cardsLeft() > 0;
     }
 
     /**
@@ -247,6 +311,7 @@ public class GameBoard implements ReplaceListener {
 
     /**
      * Returns the killshot track.
+     *
      * @return the killshot track
      */
     public List<List<Player>> getKillshotTrack() {
@@ -261,7 +326,6 @@ public class GameBoard implements ReplaceListener {
     public boolean checkFinalFrenzy() {
         return track.getSkullsLeft() == 0;
     }
-
 
     /**
      * Scores the track.
@@ -338,6 +402,8 @@ public class GameBoard implements ReplaceListener {
                     }
                 }
             }
+        squareNewAmmoCard.clear();
+        squareNewWeaponCard.clear();
 
     }
 
@@ -433,7 +499,6 @@ public class GameBoard implements ReplaceListener {
         return squares;
     }
 
-
     /**
      * Gets all the players in the given square.
      *
@@ -454,61 +519,6 @@ public class GameBoard implements ReplaceListener {
                 .map(room -> room.getSquares()).
                         flatMap(List::stream)
                 .collect(Collectors.toSet());
-    }
-
-    public static Room getRoom(Square square) {
-        for (Room room : configuration) {
-            for (Square s : room.getSquares()) {
-                if (s.getID().equals(square.getID()))
-                    return room;
-            }
-        }
-        throw new IllegalArgumentException("Room not found for square " + square.getID());
-    }
-
-    /**
-     * @param destination is the square that will be checked
-     * @return 1 if the destination square is visible from the calling square, 0 otherwise
-     */
-
-    public static boolean checkVisible(Square departure,Square destination) {
-
-        if (getRoom(departure) == getRoom(destination))
-            return true;
-
-        else {
-            if (departure.getNorthBorder() != Border.WALL && departure.getNorthBorder() != null) {
-                if (getRoom(departure.getNorth())==getRoom(destination) || departure.getNorthBorder() == Border.CORRIDOR)
-                    return true;
-
-            }
-
-
-            if (departure.getSouthBorder() != Border.WALL && departure.getSouthBorder() != null) {
-                if (departure.getSouth().getRoom() == destination.getRoom() || departure.getSouthBorder() == Border.CORRIDOR)
-                    return true;
-            }
-
-            if (departure.getEastBorder() != Border.WALL && departure.getEastBorder() != null) {
-                if (departure.getEast().getRoom() == destination.getRoom() || departure.getEastBorder() == Border.CORRIDOR)
-                    return true;
-            }
-
-            if (departure.getWestBorder() != Border.WALL && departure.getWestBorder() != null) {
-                if (departure.getWest().getRoom() == destination.getRoom() || departure.getWestBorder() == Border.CORRIDOR)
-                    return true;
-            }
-        }
-
-        return false;
-    }
-
-    public static Square getSquare(int idSquare) {
-        for (Room room : configuration)
-            for (Square s : room.getSquares())
-                if (Integer.parseInt(s.getID()) == idSquare)
-                    return s;
-        return null;
     }
 
 }

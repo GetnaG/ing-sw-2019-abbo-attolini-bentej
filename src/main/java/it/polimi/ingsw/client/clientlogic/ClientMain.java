@@ -20,7 +20,7 @@ public class ClientMain {
     /**
      * The logger for the client.
      */
-    private static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
+    public static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
 
     /**
      * Starts the client with the specified interface.

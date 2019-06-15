@@ -29,7 +29,7 @@ public class ServerHall implements Runnable {
     /**
      * The minimum number of player for a match to start.
      */
-    private static final int MINIMUM_PLAYERS = 1;
+    private static final int MINIMUM_PLAYERS = 3;
     /**
      * The maximum number of player for a match to start.
      */

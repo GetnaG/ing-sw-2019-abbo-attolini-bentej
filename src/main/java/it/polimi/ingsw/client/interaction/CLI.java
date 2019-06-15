@@ -129,18 +129,21 @@ public class CLI implements InteractionInterface {
                             handleQuestion("chooseIP", null),
                             Integer.parseInt(handleQuestion("choosePort", null))
                     );
-                } catch (IOException e) {
-                    handleNotification("socket error: " + e.getMessage());
+                } catch (IOException | NumberFormatException e) {
+                    handleNotification("socketError");
+                    System.exit(-1);
                 }
             } else if ("rmi".equals(connection)) {
                 try {
                     controller.setRmi(
                             handleQuestion("chooseIP", null));
                 } catch (IOException e) {
-                    handleNotification("Rmi error: " + e.getMessage());
+                    handleNotification("rmiError");
+                    System.exit(-1);
                 }
             } else {
-                handleNotification("Input must be socket or rmi");
+                handleNotification("connectionError");
+                System.exit(-1);
             }
         }
     }

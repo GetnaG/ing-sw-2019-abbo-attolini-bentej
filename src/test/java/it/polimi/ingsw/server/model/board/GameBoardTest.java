@@ -181,6 +181,7 @@ class GameBoardTest {
     }
 
     @Test
+    @Disabled
     void getValidDestinations() {
 
         int maxDistance = 0;

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.*;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -65,7 +66,9 @@ public class Action implements EffectInterface {
      * @param damageTargeted
      */
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alreadyTargeted, List<Damageable> damageTargeted) {
-        effects.forEach(x -> x.runEffect(subjectPlayer, null, board, alreadyTargeted, new ArrayList<>()));
+        for (EffectInterface x : effects) {
+            x.runEffect(subjectPlayer, null, board, alreadyTargeted, new ArrayList<>());
+        }
     }
 
     /**

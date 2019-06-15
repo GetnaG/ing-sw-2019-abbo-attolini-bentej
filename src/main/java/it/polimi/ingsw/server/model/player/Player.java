@@ -203,6 +203,7 @@ public class Player implements Damageable {
     public Square getPosition() {
         if (this.position != null && this.position.getNorthBorder() != null)
             this.position = Square.getSquare(GameBoard.getConfiguration(), Integer.parseInt(this.position.getID()));
+        //TODO: why?
         return position;
     }
 

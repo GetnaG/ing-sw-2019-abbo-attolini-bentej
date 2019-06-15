@@ -78,13 +78,13 @@ public class Move implements EffectInterface {
     private List<Square> neighbours(Square square){
         List<Square> neighbours = new ArrayList<>();
 
-        if(square.getNorthBorder() != Border.WALL)
+        if(square.getNorth() != null && square.getNorthBorder() != Border.WALL)
             neighbours.add(square.getNorth());
-        if(square.getEastBorder() != Border.WALL)
+        if(square.getEast() != null && square.getEastBorder() != Border.WALL)
             neighbours.add(square.getEast());
-        if(square.getSouthBorder() != Border.WALL)
+        if(square.getSouth() != null && square.getSouthBorder() != Border.WALL)
             neighbours.add(square.getSouth());
-        if(square.getWestBorder() != Border.WALL)
+        if(square.getWest() != null && square.getWestBorder() != Border.WALL)
             neighbours.add(square.getWest());
 
         return neighbours;

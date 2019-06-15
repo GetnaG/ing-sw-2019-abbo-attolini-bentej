@@ -4,6 +4,8 @@ import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Objects;
 
 /**
  * 
@@ -80,8 +82,22 @@ public class SpawnSquare extends Square {
     /**
      * After maps are loaded from json, a refresh is needed.
      */
-    public void refesh() {
-        market = new WeaponMarket(new ArrayList<>());
+    public void refresh() {
+        market = new WeaponMarket(new ArrayList<>(Arrays.asList(null, null, null)));
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof SpawnSquare)) return false;
+        if (!super.equals(o)) return false;
+        SpawnSquare that = (SpawnSquare) o;
+        return Objects.equals(market, that.market) &&
+                Objects.equals(spawn, that.spawn);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(market, spawn);
+    }
 }

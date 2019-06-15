@@ -86,6 +86,6 @@ public class Room {
 
         }
         if (this.hasSpawnSquare())
-            spawnSquare.refesh();
+            spawnSquare.refresh();
     }
  }

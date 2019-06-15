@@ -9,7 +9,6 @@ import it.polimi.ingsw.communication.rmi.RmiInversionInterface;
 import it.polimi.ingsw.communication.socket.SocketFromServer;
 
 import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.net.Socket;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -18,6 +17,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
 
 /**
  * Represents the Controller of the client.
@@ -140,18 +140,13 @@ public class ClientController extends UnicastRemoteObject implements RmiFromClie
      * @param port the port of the server
      */
     public void setSocket(String ip, int port) throws IOException {
-        try {
-            new Thread(() -> {
-                try {
-                    SocketFromServer fromServer = new SocketFromServer(this,
-                            new Socket(ip, port));
-                    fromServer.startListening();
-                } catch (IOException e) {
-                    throw new UncheckedIOException(e);
-                }
-            }).start();
-        } catch (UncheckedIOException e) {
-            throw new IOException(e);
-        }
+        SocketFromServer fromServer = new SocketFromServer(this, new Socket(ip, port));
+        new Thread(() -> {
+            try {
+                fromServer.startListening();
+            } catch (IOException e) {
+                ClientMain.LOG.log(Level.SEVERE, "Socket exception", e);
+            }
+        }).start();
     }
 }

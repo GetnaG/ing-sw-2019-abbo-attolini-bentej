@@ -106,9 +106,6 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      */
     public void start() {
         updateAllPlayers(fullUpdate());
-
-        /*Ensuring that the board has all the cards*/
-        board.replaceAll();
         Player currentPlayer = players.get(0);
 
         /*First turn for the players not suspended*/
@@ -133,7 +130,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
         /*Setting up final frenzy*/
         int whoTriggered = players.indexOf(currentPlayer);
-        currentPlayer = iterator.next();
+        currentPlayer = (gameOver) ? currentPlayer : iterator.next();
         frenzy = true;
         players.forEach(Player::setupFinalFrenzy);
 

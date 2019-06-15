@@ -199,6 +199,8 @@ public class Square {
     }
 
     public AmmoCard getAmmoCard() {
+        if (ammoCard == null)
+            return null;
         replacer.addSquare(this);
         AmmoCard tmp = ammoCard;
         ammoCard = null;
