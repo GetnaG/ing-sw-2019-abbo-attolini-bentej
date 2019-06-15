@@ -107,11 +107,13 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
     public void start() {
         updateAllPlayers(fullUpdate());
         Player currentPlayer = players.get(0);
+        updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
 
         /*First turn for the players not suspended*/
         Iterator<Player> iterator = new PlayerIterator(players.get(0), false);
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
+            updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
             new FirstTurn(this::updateAllPlayers).startTurn(currentPlayer, board);
             turn(new NormalTurn(currentPlayer, board, this::updateAllPlayers), currentPlayer);
         }
@@ -125,6 +127,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         iterator = new PlayerIterator(players.get(0), true);
         while (!board.checkFinalFrenzy() && iterator.hasNext()) {
             currentPlayer = iterator.next();
+            updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
             turn(new NormalTurn(currentPlayer, board, this::updateAllPlayers), currentPlayer);
         }
 
@@ -138,6 +141,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         iterator = new PlayerIterator(currentPlayer, false);
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
+            updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
             if (players.indexOf(currentPlayer) > whoTriggered) {
 
                 /*For those who are before the first player*/
@@ -213,6 +217,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
                     .setIsPlayerFrenzy(p, p.isFrenzy())
                     .setSkullsOnBoard(p, p.getSkulls())
                     .setPlayerDamage(p, p.getPlayerBoard().getDamage())
+                    .setPlayerDamage(p, p.getPlayerBoard().getMarks())
                     .setIsConnected(p, !suspendedPlayers.contains(p))
                     .setLoadedWeapons(p, p.getLoadedWeapons())
                     .setUnloadedWeapon(p, p.getReloadableWeapons())

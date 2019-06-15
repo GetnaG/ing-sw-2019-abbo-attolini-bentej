@@ -85,6 +85,9 @@ public class MatchState {
             case DAMAGE_ARRAY:
                 getReceiverState(update).setDamage(update.getNewValue());
                 break;
+            case MARKS_ARRAY:
+                getReceiverState(update).setMarks(update.getNewValue());
+                break;
             case LOADED_WEAPONS:
                 getReceiverState(update).setLoadedWeapons(update.getNewValue());
                 break;
@@ -106,6 +109,8 @@ public class MatchState {
             case GAME_OVER:
                 //TODO the provided list contains the winners in the right order
                 break;
+            case CURRENT_PLAYER:
+                playersState.forEach(playerState -> playerState.setCurrent(playerState.getNickname().equals(update.getNewValue().get(0))));
             default:
                 // nothing
         }

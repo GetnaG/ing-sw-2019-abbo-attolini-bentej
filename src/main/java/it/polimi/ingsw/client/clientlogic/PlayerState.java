@@ -15,11 +15,13 @@ public class PlayerState {
     private boolean isPlayerBoardFrenzy;
     private int skullNumber;
     private List<String> damage;
+    private List<String> marks;
     private boolean isConnected;
     private List<String> loadedWeapons;
     private List<String> unloadedWeapons;
     private List<Boolean> areWeaponsLoaded;
     private List<String> powerups;
+    private boolean isCurrent;
 
     public PlayerState(int turnPosition, String nickname) {
         this.turnPosition = turnPosition;
@@ -30,26 +32,21 @@ public class PlayerState {
         isPlayerBoardFrenzy = false;
         skullNumber = -1;
         damage = new ArrayList<>();
+        marks = new ArrayList<>();
         isConnected = true;
         loadedWeapons = new ArrayList<>();
         unloadedWeapons = new ArrayList<>();
         areWeaponsLoaded = new ArrayList<>();
         powerups = new ArrayList<>();
+        isCurrent = false;
     }
 
-    public PlayerState(int turnPosition, int squarePosition, String nickname, String figureRes, List<Integer> ammoCubes, boolean isPlayerBoardFrenzy, int skullNumber, List<String> damage, boolean isConnected, List<String> loadedWeapons, List<Boolean> areWeaponsLoaded, List<String> powerups) {
-        this.turnPosition = turnPosition;
-        this.squarePosition = squarePosition;
-        this.nickname = nickname;
-        this.figureRes = figureRes;
-        this.ammoCubes = ammoCubes;
-        this.isPlayerBoardFrenzy = isPlayerBoardFrenzy;
-        this.skullNumber = skullNumber;
-        this.damage = damage;
-        this.isConnected = isConnected;
-        this.loadedWeapons = loadedWeapons;
-        this.areWeaponsLoaded = areWeaponsLoaded;
-        this.powerups = powerups;
+    public boolean isCurrent() {
+        return isCurrent;
+    }
+
+    public void setCurrent(boolean current) {
+        isCurrent = current;
     }
 
     public int getTurnPosition() {
@@ -114,6 +111,14 @@ public class PlayerState {
 
     public void setDamage(List<String> damage) {
         this.damage = damage;
+    }
+
+    public void setMarks(List<String> damage) {
+        this.marks = damage;
+    }
+
+    public List<String> getMarks() {
+        return marks;
     }
 
     public boolean isConnected() {

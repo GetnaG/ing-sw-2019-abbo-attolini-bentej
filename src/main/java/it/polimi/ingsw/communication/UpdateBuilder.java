@@ -34,12 +34,14 @@ public class UpdateBuilder {
     private Map<Player, Boolean> isPlayerFrenzy;
     private Map<Player, Integer> skullsOnBoard;
     private Map<Player, List<Player>> playerDamage;
+    private Map<Player, List<Player>> playerMarks;
     private Map<Player, Boolean> isConnected;
     private Map<Player, List<WeaponCard>> loadedWeapons;
     private Map<Player, List<WeaponCard>> unloadedWeapon;
     private Map<Player, List<PowerupCard>> powerupsInHand;
     private Integer timer;
     private List<? extends Player> winners;
+    private Player current;
 
     public UpdateBuilder setConfigurationId(Integer configurationId) {
         this.configurationId = configurationId;
@@ -163,6 +165,16 @@ public class UpdateBuilder {
         return this;
     }
 
+    public UpdateBuilder setPlayerMarks(Map<Player, List<Player>> playerMarks) {
+        this.playerMarks = playerMarks;
+        return this;
+    }
+
+    public UpdateBuilder setCurrent(Player current) {
+        this.current = current;
+        return this;
+    }
+
     public Update[] build() {
         List<Update> updates = new ArrayList<>();
         singleAdd(updates, configurationId, Update.UpdateType.CONFIGURATION_ID,
@@ -200,6 +212,8 @@ public class UpdateBuilder {
                 o -> Collections.singletonList(Integer.toString(o)));
         mapAdd(updates, playerDamage, Update.UpdateType.DAMAGE_ARRAY,
                 o -> o.stream().map(Player::getName).collect(Collectors.toList()));
+        mapAdd(updates, playerMarks, Update.UpdateType.MARKS_ARRAY,
+                o -> o.stream().map(Player::getName).collect(Collectors.toList()));
         mapAdd(updates, loadedWeapons, Update.UpdateType.LOADED_WEAPONS,
                 o -> o.stream().map(WeaponCard::getId).collect(Collectors.toList()));
         mapAdd(updates, unloadedWeapon, Update.UpdateType.UNLOADED_WEAPON,
@@ -211,6 +225,8 @@ public class UpdateBuilder {
         singleAdd(updates, timer, Update.UpdateType.HALL_TIMER,
                 o -> Integer.toString(o));
         listAdd(updates, winners, Update.UpdateType.GAME_OVER,
+                Player::getName);
+        singleAdd(updates, current, Update.UpdateType.CURRENT_PLAYER,
                 Player::getName);
         return updates.toArray(new Update[]{});
     }

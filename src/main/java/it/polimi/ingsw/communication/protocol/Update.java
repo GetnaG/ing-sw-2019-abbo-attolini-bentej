@@ -151,6 +151,10 @@ public class Update implements Serializable {
          */
         DAMAGE_ARRAY,
         /**
+         * The list of players that marked this player.
+         */
+        MARKS_ARRAY,
+        /**
          * The cards in a player's hand.
          */
         LOADED_WEAPONS,
@@ -173,6 +177,10 @@ public class Update implements Serializable {
         /**
          * Game over, the list of players is ordered, the first is the winner.
          */
-        GAME_OVER
+        GAME_OVER,
+        /**
+         * The player provided in {@linkplain #newValue} is the current player.
+         */
+        CURRENT_PLAYER
     }
 }
