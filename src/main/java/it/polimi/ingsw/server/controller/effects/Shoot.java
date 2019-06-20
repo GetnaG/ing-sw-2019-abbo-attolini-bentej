@@ -46,7 +46,7 @@ public class Shoot implements EffectInterface {
                     weaponChosen.getPossibleSequences()
             );
 
-            effectChosen.runEffect(subjectPlayer, null, board, alredyTargeted, new ArrayList<>());
+            effectChosen.runEffect(subjectPlayer, allTargets, board, alredyTargeted, new ArrayList<>());
         } catch (ToClientException e) {
             //TODO Handle if the user is disconnected
         }

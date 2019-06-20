@@ -76,6 +76,7 @@ public class Move implements EffectInterface {
      * @return a list of walkable surrounding square
      */
     private List<Square> neighbours(Square square){
+        if (square == null) return null;
         List<Square> neighbours = new ArrayList<>();
 
         if(square.getNorth() != null && square.getNorthBorder() != Border.WALL)

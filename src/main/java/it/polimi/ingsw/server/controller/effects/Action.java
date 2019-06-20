@@ -67,7 +67,7 @@ public class Action implements EffectInterface {
      */
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alreadyTargeted, List<Damageable> damageTargeted) {
         for (EffectInterface x : effects) {
-            x.runEffect(subjectPlayer, null, board, alreadyTargeted, new ArrayList<>());
+            x.runEffect(subjectPlayer, allTargets, board, alreadyTargeted, new ArrayList<>());
         }
     }
 

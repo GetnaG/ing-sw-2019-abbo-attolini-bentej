@@ -46,6 +46,7 @@ public class FirstTurn implements TurnInterface {
         // Player choosen a card, the other one is discarded.
         try{
             cardChosen = currentPlayer.getToClient().chooseSpawn(drawnPowerups);
+            currentPlayer.addPowerup(cardChosen);
             drawnPowerups.remove(cardChosen);
             if (cardChosen.equals(firstPowerup)) {
                 board.putPowerupCard(secondPowerup);

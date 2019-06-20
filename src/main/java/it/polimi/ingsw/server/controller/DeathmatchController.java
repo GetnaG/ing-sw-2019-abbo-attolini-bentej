@@ -115,7 +115,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             currentPlayer = iterator.next();
             updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
             new FirstTurn(this::updateAllPlayers).startTurn(currentPlayer, board);
-            turn(new NormalTurn(currentPlayer, board, this::updateAllPlayers), currentPlayer);
+            // turn(new NormalTurn(currentPlayer, board, this::updateAllPlayers), currentPlayer);
         }
 
         /*Ensuring that all the players are on the board, the default is the blue spawn*/
@@ -128,7 +128,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         while (!board.checkFinalFrenzy() && iterator.hasNext()) {
             currentPlayer = iterator.next();
             updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
-            turn(new NormalTurn(currentPlayer, board, this::updateAllPlayers), currentPlayer);
+            List<Damageable> allDamagebales = new ArrayList<>();
+            players.forEach(p -> allDamagebales.add(p));
+            turn(new NormalTurn(currentPlayer, allDamagebales, board, this::updateAllPlayers), currentPlayer);
         }
 
         /*Setting up final frenzy*/

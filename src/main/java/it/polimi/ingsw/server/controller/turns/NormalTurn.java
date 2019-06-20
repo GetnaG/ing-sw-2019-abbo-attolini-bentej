@@ -46,10 +46,12 @@ public class NormalTurn implements TurnInterface {
 
     private Consumer<UpdateBuilder> updater;
 
+    private List<Damageable> allTargets;
+
     /**
      * Creates a normal turn.
      */
-    public NormalTurn(Player currentPlayer, GameBoard board,
+    public NormalTurn(Player currentPlayer, List<Damageable> allTargets, GameBoard board,
                       Consumer<UpdateBuilder> updater){
         this.player = currentPlayer;
         this.board = board;
@@ -57,6 +59,7 @@ public class NormalTurn implements TurnInterface {
         this.actions = new ArrayList<>();
         this.isFinalFrenzyTriggered = false;
         this.updater = updater;
+        this.allTargets = allTargets;
     }
 
     /**
@@ -138,7 +141,7 @@ public class NormalTurn implements TurnInterface {
             return;
         }
 
-        chosenAction.runEffect(player, null, board, alreadyTargeted, new ArrayList<>());
+        chosenAction.runEffect(player, allTargets, board, alreadyTargeted, new ArrayList<>());
 
     }
 
