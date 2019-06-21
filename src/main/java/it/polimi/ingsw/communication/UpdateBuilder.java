@@ -165,8 +165,10 @@ public class UpdateBuilder {
         return this;
     }
 
-    public UpdateBuilder setPlayerMarks(Map<Player, List<Player>> playerMarks) {
-        this.playerMarks = playerMarks;
+    public UpdateBuilder setPlayerMarks(Player player, List<Player> marks) {
+        if (playerMarks == null)
+            playerMarks = new HashMap<>();
+        playerMarks.put(player, marks);
         return this;
     }
 

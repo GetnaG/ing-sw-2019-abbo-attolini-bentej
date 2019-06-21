@@ -87,9 +87,8 @@ public class Grab implements EffectInterface {
                 }
 
                 // The player buys the weapon with the chosen powerup
-                spawnSquare.getMarket().pickWeaponFromList(weaponToBuy);
+                spawnSquare.pickWeapon(weaponToBuy);
                 subjectPlayer.buy(weaponToBuy, powerupToPay);
-                board.addSpawnSquare(spawnSquare);
             }
         } catch (ToClientException e) {
             //TODO Handle if the user is disconnected

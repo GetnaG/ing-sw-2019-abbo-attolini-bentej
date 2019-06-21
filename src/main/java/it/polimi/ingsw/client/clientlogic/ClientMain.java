@@ -33,8 +33,9 @@ public class ClientMain {
             MatchState model = new MatchState();
             view.setModel(model);
             view.setController(new ClientController(model, view));
-        } catch (IOException | NullPointerException e) {
-            LOG.severe(e.getMessage());
+        } catch (IOException | IllegalArgumentException | NullPointerException e) {
+            LOG.log(Level.SEVERE, "Exception in main", e);
+            System.exit(-1);
         }
     }
 }

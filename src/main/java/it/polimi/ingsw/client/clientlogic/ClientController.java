@@ -146,6 +146,7 @@ public class ClientController extends UnicastRemoteObject implements RmiFromClie
                 fromServer.startListening();
             } catch (IOException e) {
                 ClientMain.LOG.log(Level.SEVERE, "Socket exception", e);
+                System.exit(-1);
             }
         }).start();
     }

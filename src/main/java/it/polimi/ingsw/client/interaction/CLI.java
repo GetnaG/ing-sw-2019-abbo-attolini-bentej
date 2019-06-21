@@ -4,14 +4,9 @@ import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.clientlogic.PlayerState;
 import it.polimi.ingsw.client.resources.R;
-import it.polimi.ingsw.server.model.AmmoCube;
-import it.polimi.ingsw.server.model.board.*;
-import it.polimi.ingsw.server.model.player.Player;
 
 import java.io.*;
-import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
@@ -84,7 +79,7 @@ public class CLI implements InteractionInterface {
      */
     private ClientController controller;
 
-    private static final int boardLenght  = 12;
+    private static final int BOARD_LENGTH = 12;
 
     /**
      * Creates a CLI interface that uses the provided input and output, and
@@ -541,7 +536,7 @@ public class CLI implements InteractionInterface {
             //squares
 
             stringBuilder.append(lineSeparator);
-            for(int i=0; i < boardLenght; i++) {
+            for(int i = 0; i < BOARD_LENGTH; i++) {
                 //get ammo or market, then
                 stringBuilder.append("square ").append(i).append(": ").append("[").append(" ammo | market : < weapon1, weapon2, weapon3 > ").append("]").append("  ||  ");
                 //get list of players in the square

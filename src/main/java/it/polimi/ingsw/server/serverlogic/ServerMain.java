@@ -65,6 +65,7 @@ public class ServerMain {
                     UnicastRemoteObject.exportObject(new RmiInversion(), rmiPort));
         } catch (RemoteException | AlreadyBoundException e) {
             LOG.log(Level.SEVERE, "Exception when setting up RMI", e);
+            System.exit(-1);
         }
     }
 

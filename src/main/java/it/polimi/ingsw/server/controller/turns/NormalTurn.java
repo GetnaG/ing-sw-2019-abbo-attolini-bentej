@@ -110,7 +110,8 @@ public class NormalTurn implements TurnInterface {
         }
 
         if (card != null)
-            card.getEffect().runEffect(player, null, board, alreadyTargeted, new ArrayList<>());
+            card.getEffect().runEffect(player, allTargets, board, alreadyTargeted,
+                    new ArrayList<>());
     }
     /**
      * Asks the player to choose from a list of Actions and runs that action.
