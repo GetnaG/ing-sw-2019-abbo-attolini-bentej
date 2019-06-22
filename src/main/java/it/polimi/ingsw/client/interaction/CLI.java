@@ -458,6 +458,9 @@ public class CLI implements InteractionInterface {
     private StringBuilder translateStatus() {
         StringBuilder stringBuilder = new StringBuilder();
 
+       // String x = R.string("AD_powerups_IT_023");
+        //System.out.println(x);
+
         if(this.model != null) {
 
             List<String> momentaryAmmoCardList = new ArrayList<>();
@@ -536,61 +539,114 @@ public class CLI implements InteractionInterface {
             //squares
 
             stringBuilder.append(lineSeparator);
-            for(int i = 0; i < BOARD_LENGTH; i++) {
-                //get ammo or market, then
-                stringBuilder.append("square ").append(i).append(": ").append("[").append(" ammo | market : < weapon1, weapon2, weapon3 > ").append("]").append("  ||  ");
-                //get list of players in the square
+            for(int i=0; i < BOARD_LENGTH; i++) {
+
+                //get ammo or market
+
+                //if match has started
+
+                stringBuilder.append("square ").append(i).append(": ");
+                if(model.getAmmoCardsID() != null) {
+                    if (model.getAmmoCardsID().get(i) != null)
+                        stringBuilder.append(" ammo: [").append(R.string(model.getAmmoCardsID().get(i))).append("]");
+                    else {
+                        for (int j = 0; j < model.getWeaponsCardsID().size(); j++)
+                            System.out.println(" weapon string: " + R.string(model.getWeaponsCardsID().get(j)) + " \n");//TODO
+                        //if(market.getWeaponCard.get(j) == null)
+                        //append("")
+                        //else
+                        //append(market.getWeaponCard.get(j) NOME-STRINGA)
+
+                        stringBuilder.append("market : < ").append("weapon1, weapon2, weapon3 ").append("> ");
+
+                    }
+
+                }
+
+                //players in the square
 
                 int pos;
                 if(model.getPlayersState() != null){
-                    stringBuilder.append("{ ");
-                    for(PlayerState ps : model.getPlayersState()) {
-                        pos = ps.getSquarePosition();
-                        if (pos == i)
-                            stringBuilder.append(ps.getNickname()).append(" , ");
-                    }
-                    stringBuilder.append(" }").append(lineSeparator);
+                        stringBuilder.append("players in this square { ");
+                        for(PlayerState ps : model.getPlayersState()) {
+                            pos = ps.getSquarePosition();
+                            if (pos == i)
+                                stringBuilder.append(ps.getNickname()).append(" , ");
+                        }
+                        stringBuilder.append(" }").append(lineSeparator);
+                        stringBuilder.append(lineSeparator);
                 }
 
             }
 
             //boards
 
-            for(PlayerState ps : model.getPlayersState()) {
-                if(ps.isConnected())
-                    stringBuilder.append(ps.getNickname()).append(": < status: online >").append(lineSeparator);
-                else
-                    stringBuilder.append(ps.getNickname()).append(": < status: offline >").append(lineSeparator);
+            //board of each player
+            if(model.getPlayersState() != null) {
+                for (PlayerState ps : model.getPlayersState()) {
+                    if (ps.isConnected())
+                        stringBuilder.append(ps.getNickname()).append(": < status: online >").append(lineSeparator);
+                    else
+                        stringBuilder.append(ps.getNickname()).append(": < status: offline >").append(lineSeparator);
 
-                stringBuilder.append("damage: ").append(ps.getDamage()).append(lineSeparator);
+                    stringBuilder.append("damage: ").append(ps.getDamage()).append(lineSeparator);
 
                 //ps.getMarks();-------------------------------------------------------------------------------------------
 
-                //ps.getBoardValue(); -----------------------------------------------------------------------------------------------
-
-                stringBuilder.append("skulls: ").append(ps.getSkullNumber()).append(lineSeparator);
+                    stringBuilder.append("active marks: ").append(ps.getMarks()).append(lineSeparator);
 
 
+                    stringBuilder.append("skulls: ").append(ps.getSkullNumber()).append(lineSeparator);
 
-                for(int i = 0 ; i < ps.getAmmoCubes().size(); i++)
-                    stringBuilder.append(ps.getAmmoCubes().get(i)).append(" -- ");
+                    //board value
+                    stringBuilder.append("board value: { ");
+                    /*if(ps.getSkullNumber()<6)----------------------------------------------------------------------
+                        stringBuilder.append(vectorValue[ps.getSkullNumber()]);
+                    else
+                        stringBuilder.append(vectorValue[5]);*/
+                    stringBuilder.append(" }");
 
-                stringBuilder.append(lineSeparator);
+                    stringBuilder.append(lineSeparator);
 
-                for(int i = 0 ; i < ps.getLoadedWeapons().size(); i++ )
-                    stringBuilder.append(ps.getLoadedWeapons().get(i)).append(" -- ");
+                    //ammo cubes
+                    stringBuilder.append("ammo cubes: ");
+                    for (int i = 0; i < ps.getAmmoCubes().size(); i++)
+                        stringBuilder.append(ps.getAmmoCubes().get(i)).append(" , ");
 
-                stringBuilder.append(lineSeparator);
+                    stringBuilder.append(lineSeparator);
 
-                for(int i = 0 ; i < ps.getUnloadedWeapons().size(); i++)
-                    stringBuilder.append(ps.getUnloadedWeapons().get(i)).append(" -- ");
+                    //loaded weapons
+                    stringBuilder.append("loaded weapons: ");
+                    for (int i = 0; i < ps.getLoadedWeapons().size(); i++)
+                        stringBuilder.append(ps.getLoadedWeapons().get(i)).append(" , ");
 
-                stringBuilder.append(lineSeparator);
+                    stringBuilder.append(lineSeparator);
 
-                for(int i = 0 ; i < ps.getPowerups().size(); i++)
-                    stringBuilder.append(ps.getPowerups().get(i)).append(" -- ");
+                    //unloaded weapons
+                    stringBuilder.append("unloaded weapons: ");
+                    for (int i = 0; i < ps.getUnloadedWeapons().size(); i++)
+                        stringBuilder.append(ps.getUnloadedWeapons().get(i)).append(" , ");
 
-                stringBuilder.append(lineSeparator);
+                    stringBuilder.append(lineSeparator);
+
+                    //powerups
+                    stringBuilder.append("powerups: ");
+                    for (int i = 0; i < ps.getPowerups().size(); i++)
+                        stringBuilder.append(ps.getPowerups().get(i));
+
+                    stringBuilder.append(lineSeparator);
+
+
+                    //get turn player
+                    if(ps.isCurrent()){
+                        stringBuilder.append("it's your turn, ").append(ps.getNickname()).append("!").append(lineSeparator);
+                    }
+
+
+
+                }
+
+
 
             }
 
