@@ -84,6 +84,7 @@ public class NormalTurn implements TurnInterface {
             if (isFinalFrenzyTriggered)
                 return -1;
         }
+        askAndRunPowerup();
         askAndReload();
 
         updater.accept(new UpdateBuilder()); //TODO: add here what changed
@@ -93,7 +94,7 @@ public class NormalTurn implements TurnInterface {
     /**
      * Asks the player if he wants to use a Powerup Card. Then it runs its effect.
      */
-    private void askAndRunPowerup(){
+    private void askAndRunPowerup(){//TODO: check if usable as action (and cost when will be implemented)
         isFinalFrenzyTriggered = board.checkFinalFrenzy();
 
         if (player.getAllPowerup().isEmpty() || isFinalFrenzyTriggered)

@@ -390,7 +390,8 @@ public class GameBoard implements ReplaceListener {
 
         //Replacing Ammo Cards
         for (Square s : squareNewAmmoCard)
-            s.setAmmoCard(ammoDeck.drawCard());
+            if (s.peekAmmoCard() == null)
+                s.setAmmoCard(ammoDeck.drawCard());
         //Replacing Weapon Card
         for (SpawnSquare s : squareNewWeaponCard)
             if (weaponDeck.cardsLeft() != 0) {
@@ -404,7 +405,6 @@ public class GameBoard implements ReplaceListener {
             }
         squareNewAmmoCard.clear();
         squareNewWeaponCard.clear();
-
     }
 
     /**

@@ -87,6 +87,7 @@ public class Move implements EffectInterface {
             neighbours.add(square.getSouth());
         if(square.getWest() != null && square.getWestBorder() != Border.WALL)
             neighbours.add(square.getWest());
+        neighbours.add(square);
 
         return neighbours;
     }

@@ -47,6 +47,8 @@ public class Shoot implements EffectInterface {
             );
 
             effectChosen.runEffect(subjectPlayer, allTargets, board, alredyTargeted, new ArrayList<>());
+
+            //TODO tagback and targeting scope
         } catch (ToClientException e) {
             //TODO Handle if the user is disconnected
         }

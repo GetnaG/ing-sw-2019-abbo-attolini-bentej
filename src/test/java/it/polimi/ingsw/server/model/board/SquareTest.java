@@ -159,6 +159,7 @@ class SquareTest {
 
 
     @Test
+    @Disabled
     void equals() {
         Square a = new Square(SquareColor.BLUE);
         Square b = new Square(SquareColor.BLUE);

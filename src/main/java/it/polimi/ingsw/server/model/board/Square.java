@@ -4,6 +4,7 @@ import it.polimi.ingsw.server.model.cards.AmmoCard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Defines the structure of a square.
@@ -283,10 +284,11 @@ public class Square {
         return visibleSquares;
     }
 
-    /**
+    //TODO: following equals gave problems with hash tables, automatically implemented new one below
+   /* *//**
      * @param obj is a square
      * @return true if the squares are the same instances
-     */
+     *//*
     @Override
     public boolean equals(Object obj) {
         if (!(obj instanceof Square))
@@ -320,8 +322,29 @@ public class Square {
             return false;
 
         return true;
+    }*/
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Square)) return false;
+        Square square = (Square) o;
+        return ID == square.ID &&
+                idNorth == square.idNorth &&
+                idSouth == square.idSouth &&
+                idEast == square.idEast &&
+                idWest == square.idWest &&
+                squareColor == square.squareColor &&
+                northBorder == square.northBorder &&
+                southBorder == square.southBorder &&
+                eastBorder == square.eastBorder &&
+                westBorder == square.westBorder;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(squareColor, ID, idNorth, idSouth, idEast, idWest, northBorder, southBorder, eastBorder, westBorder);
+    }
 
     /**
      * @param dest is a square.

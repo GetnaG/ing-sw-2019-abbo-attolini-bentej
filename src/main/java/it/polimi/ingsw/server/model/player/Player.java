@@ -13,10 +13,7 @@ import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class represents a player in the game.
@@ -224,11 +221,13 @@ public class Player implements Damageable {
     /**
      * {@inheritDoc}
      * <p>
-     * This also adds a skull to the player.
+     * This also adds a skull to the player and a mark to who dealt overkill.
      */
     @Override
     public void scoreAndResetDamage() {
         playerBoard.score();
+        if(getOverkillPlayer() != null)
+            getOverkillPlayer().giveMark(Collections.singletonList(this));
         playerBoard.addSkull();
         playerBoard.resetDamage();
     }

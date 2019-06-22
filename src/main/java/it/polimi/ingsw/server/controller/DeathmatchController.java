@@ -138,6 +138,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         currentPlayer = (gameOver) ? currentPlayer : iterator.next();
         frenzy = true;
         players.forEach(Player::setupFinalFrenzy);
+        updateAllPlayers(fullUpdate());
 
         /*Final frenzy from the player after who started it*/
         iterator = new PlayerIterator(currentPlayer, false);
@@ -311,10 +312,37 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
     /**
      * {@inheritDoc}
+     * <p>
+     * This also ensures that the revenge mark is applied.
      */
     @Override
     public void scoreAllKilled() {
-        killedInTurn.forEach(Damageable::scoreAndResetDamage);
+        List<Player> killers = new ArrayList<>();
+        for (Damageable d : killedInTurn) {
+            List<Player> toTrack = new ArrayList<>();
+            Player killshot = d.getKillshotPlayer();
+
+            /*Adding the killshot player to the killshot track list and to the list of killers.
+              Adding the overkill player to the killshot track list*/
+            if (killshot != null) {
+                toTrack.add(killshot);
+                killers.add(killshot);
+            }
+            if (d.getOverkillPlayer() != null)
+                toTrack.add(d.getOverkillPlayer());
+
+            /*Adding the list to the killshot track on the board*/
+            board.addTokensAndRemoveSkull(toTrack);
+
+            /*Giving double kill points*/
+            players.forEach(player -> {
+                if (Collections.frequency(killers, player) >= 2)
+                    player.addScore(1);
+            });
+
+            /*Scoring the player*/
+            d.scoreAndResetDamage();
+        }
     }
 
     /**
