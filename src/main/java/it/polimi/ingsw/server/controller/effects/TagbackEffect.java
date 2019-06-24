@@ -50,7 +50,8 @@ public class TagbackEffect implements EffectInterface {
      */
     @Override
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board,
-                          List<Damageable> allTargeted, List<Damageable> damageTargeted) {
+                          List<Damageable> allTargeted, List<Damageable> damageTargeted)
+            throws ToClientException {
         for (Damageable d : damageTargeted) {
 
             /* Only Players can use a tagback.
@@ -72,7 +73,7 @@ public class TagbackEffect implements EffectInterface {
 
                         /*Applying the effect*/
                         subjectPlayer.giveMark(Collections.singletonList(player));
-                    } catch (ToClientException | ChoiceRefusedException e) {
+                    } catch (ChoiceRefusedException e) {
                         /*Nothing to recover from*/
                     }
                 }

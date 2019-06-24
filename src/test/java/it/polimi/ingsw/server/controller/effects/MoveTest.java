@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class MoveTest {
     private GameBoard board;
@@ -43,7 +44,11 @@ class MoveTest {
         Move m1 = new Move();
 
         // we set the client to choose the first option every time. He will choose square2
-        m1.runEffect(players.get(0), null, board, new ArrayList<>(), new ArrayList<>());
+        try {
+            m1.runEffect(players.get(0), null, board, new ArrayList<>(), new ArrayList<>());
+        } catch (ToClientException e) {
+            fail(e);
+        }
 
         assertEquals(configuration.get(1), players.get(0).getPosition());
 

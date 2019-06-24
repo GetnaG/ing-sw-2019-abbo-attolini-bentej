@@ -32,26 +32,20 @@ public class Shoot implements EffectInterface {
      * @param alredyTargeted    the targets already hitted in the player's turn.
      * @param damageTargeted
      */
-    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) throws ToClientException {
         this.player = subjectPlayer;
         if (subjectPlayer.getLoadedWeapons().isEmpty())
             return;
 
-        try {
-            WeaponCard weaponChosen = subjectPlayer.getToClient().chooseWeaponCard(
-                    subjectPlayer.getLoadedWeapons()
-            );
+        WeaponCard weaponChosen = subjectPlayer.getToClient().chooseWeaponCard(
+                subjectPlayer.getLoadedWeapons());
 
-            EffectInterface effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(
-                    weaponChosen.getPossibleSequences()
-            );
+        EffectInterface effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(
+                weaponChosen.getPossibleSequences());
 
-            effectChosen.runEffect(subjectPlayer, allTargets, board, alredyTargeted, new ArrayList<>());
+        effectChosen.runEffect(subjectPlayer, allTargets, board, alredyTargeted, new ArrayList<>());
 
-            //TODO tagback and targeting scope
-        } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
-        }
+        //TODO tagback and targeting scope
     }
 
     /**

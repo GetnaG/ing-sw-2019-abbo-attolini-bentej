@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -27,9 +28,12 @@ public interface EffectInterface extends Iterable<EffectInterface> {
      * @param board          the game board (for applying the effect)
      * @param allTargeted    a list of elements already targeted by this chain
      * @param damageTargeted a list of the elements that have received damage
+     * @throws ToClientException if the execution is interrupted because the
+     *                           player is suspended
      */
     void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board,
-                   List<Damageable> allTargeted, List<Damageable> damageTargeted);
+                   List<Damageable> allTargeted, List<Damageable> damageTargeted)
+            throws ToClientException;
 
     /**
      * Returns the name of this effect.

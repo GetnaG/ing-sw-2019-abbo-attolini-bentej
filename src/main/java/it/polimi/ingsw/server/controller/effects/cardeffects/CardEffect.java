@@ -188,7 +188,7 @@ public class CardEffect implements EffectInterface {
     @Override
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets,
                           GameBoard board, List<Damageable> allTargeted,
-                          List<Damageable> damageTargeted) {
+                          List<Damageable> damageTargeted) throws ToClientException {
         subject = subjectPlayer;
         alreadyTargeted = allTargeted;
         alreadyDamaged = damageTargeted;
@@ -198,11 +198,10 @@ public class CardEffect implements EffectInterface {
         destinations = null;
 
         filterTargets();
-        try {//FIXME: what to do if there are no availableTargets?
+        try {
             selectTargets();
         } catch (AgainstRulesException e) {
-            e.printStackTrace();
-        } catch (ToClientException e) {
+            /*The player chose an effect that can not be applied*/
             return;
         }
         apply();

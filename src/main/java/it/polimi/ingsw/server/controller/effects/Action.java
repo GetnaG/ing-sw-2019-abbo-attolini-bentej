@@ -65,7 +65,7 @@ public class Action implements EffectInterface {
      * @param alredyTargeted    list of players already targeted during the turn
      * @param damageTargeted
      */
-    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alreadyTargeted, List<Damageable> damageTargeted) {
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alreadyTargeted, List<Damageable> damageTargeted) throws ToClientException {
         for (EffectInterface x : effects) {
             x.runEffect(subjectPlayer, allTargets, board, alreadyTargeted, new ArrayList<>());
         }

@@ -26,16 +26,10 @@ public class Move implements EffectInterface {
      * @param damageTargeted
      */
     @Override
-    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) {
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) throws ToClientException {
         List<Square> neighboursBy1 = neighbours(subjectPlayer.getPosition());
-        Square destination = null;
-        try {
-            destination = subjectPlayer.getToClient().chooseDestination(
-                    neighboursBy1);
-        } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
-        }
 
+        Square destination = subjectPlayer.getToClient().chooseDestination(neighboursBy1);
 
         subjectPlayer.setPosition(destination);
     }

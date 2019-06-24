@@ -55,7 +55,7 @@ public class MoveSelfEffect implements EffectInterface {
     @Override
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets,
                           GameBoard board, List<Damageable> allTargeted,
-                          List<Damageable> damageTargeted) {
+                          List<Damageable> damageTargeted) throws ToClientException {
 
         /*Filtering the squares*/
         List<Square> available = (maxDistance == -1) ?
@@ -64,14 +64,7 @@ public class MoveSelfEffect implements EffectInterface {
                 new ArrayList<>(board.getAllSquares());
 
         /*Choosing the destination*/
-        Square destination;
-        try {
-            destination = subjectPlayer.getToClient().chooseDestination(available);
-        } catch (ToClientException e) {
-
-            /*In case of problems the destination is unchanged*/
-            destination = subjectPlayer.getPosition();
-        }
+        Square destination = subjectPlayer.getToClient().chooseDestination(available);
 
         /*Setting the destination*/
         subjectPlayer.setPosition(destination);

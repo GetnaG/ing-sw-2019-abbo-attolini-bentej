@@ -39,10 +39,11 @@ public class Grab implements EffectInterface {
      * @param damageTargeted not used, can be null
      */
     public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board,
-                          List<Damageable> allTargeted, List<Damageable> damageTargeted) {
-        Square position = subjectPlayer.getPosition();
+                          List<Damageable> allTargeted, List<Damageable> damageTargeted)
+            throws ToClientException {
 
         /*We can grab an AmmoCard if there's an AmmoTile*/
+        Square position = subjectPlayer.getPosition();
         AmmoCard card = position.getAmmoCard();
         if (card != null) {
             subjectPlayer.addAmmo(card.getCubes());
@@ -57,10 +58,10 @@ public class Grab implements EffectInterface {
         }
 
         /*We can grab a Weapon if there's a Market in our position*/
-        if (position.getRoom().getSpawnSquare().equals(position)) {
+        SpawnSquare spawnSquare = position.getRoom().getSpawnSquare();
+        if (spawnSquare.equals(position)) {
 
             /*Getting the weapons in market*/
-            SpawnSquare spawnSquare = position.getRoom().getSpawnSquare();
             List<WeaponCard> weaponAvailable = spawnSquare.getMarket().getCards();
 
             /*Adding the weapons that the player can buy to weaponsAffordable*/
@@ -74,25 +75,19 @@ public class Grab implements EffectInterface {
                 return;
 
             /*Asking the player which weapon he wants to buy*/
-            WeaponCard weaponToBuy;
+            WeaponCard weaponToBuy =
+                    subjectPlayer.getToClient().chooseWeaponToBuy(weaponsAffordable);
+
+            /*If the player has 3 weapons, he has to discard one.*/
             WeaponCard weaponToDiscard = null;
+            if (subjectPlayer.getNumOfWeapons() >= 3)
+                weaponToDiscard = subjectPlayer.getToClient().chooseWeaponToDiscard(subjectPlayer.getAllWeapons());
+
+            /*If necessary, choosing a powerup to pay*/
             PowerupCard powerupToPay = null;
-            try {
-                weaponToBuy = subjectPlayer.getToClient().chooseWeaponToBuy(weaponsAffordable);
-
-                /*If the player has 3 weapons, he has to discard one.*/
-                if (subjectPlayer.getNumOfWeapons() >= 3)
-                    weaponToDiscard = subjectPlayer.getToClient().chooseWeaponToDiscard(subjectPlayer.getAllWeapons());
-
-                /*If necessary, choosing a powerup to pay*/
-                if (!subjectPlayer.canAfford(weaponToBuy.getCost(), true))
-                    powerupToPay = subjectPlayer.getToClient().choosePowerupForPaying(
-                            subjectPlayer.canAffordWithPowerups(weaponToBuy.getCost(), true));
-            } catch (ToClientException e) {
-
-                /*If the user is disconnected he grabs nothing*/
-                return;
-            }
+            if (!subjectPlayer.canAfford(weaponToBuy.getCost(), true))
+                powerupToPay = subjectPlayer.getToClient().choosePowerupForPaying(
+                        subjectPlayer.canAffordWithPowerups(weaponToBuy.getCost(), true));
 
             /*The player buys the weapon with the chosen powerup*/
             if (weaponToDiscard != null)
