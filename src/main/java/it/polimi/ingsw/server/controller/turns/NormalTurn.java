@@ -52,7 +52,7 @@ public class NormalTurn implements TurnInterface {
      * Creates a normal turn.
      */
     public NormalTurn(Player currentPlayer, List<Damageable> allTargets, GameBoard board,
-                      Consumer<UpdateBuilder> updater){
+                      Consumer<UpdateBuilder> updater) {
         this.player = currentPlayer;
         this.board = board;
         this.alreadyTargeted = new ArrayList<>();
@@ -64,9 +64,9 @@ public class NormalTurn implements TurnInterface {
 
     /**
      * A player takes two actions then he has the option to reload. Between each of these steps he is asked if he want to use a Powerup Card.
-     * @param currentPlayer 
-     * @param board GameBoard
      *
+     * @param currentPlayer
+     * @param board         GameBoard
      * @return -1 if Final Frenzy is triggered, else 0
      */
     public int startTurn(Player currentPlayer, GameBoard board) {
@@ -74,12 +74,16 @@ public class NormalTurn implements TurnInterface {
         this.player = currentPlayer;
         this.board = board;
 
-        for (int i = 0; i < 2; i++){
+        try {
             askAndRunPowerup();
             askAndRunAction();
+            askAndRunPowerup();
+            askAndRunAction();
+            askAndRunPowerup();
+            askAndReload();
+        } catch (ToClientException e) {
+            /*The execution stopped with an exception: interrupting the turn*/
         }
-        askAndRunPowerup();
-        askAndReload();
 
         updater.accept(new UpdateBuilder()); //TODO: add here what changed
         if (isFinalFrenzyTriggered)
@@ -90,7 +94,7 @@ public class NormalTurn implements TurnInterface {
     /**
      * Asks the player if he wants to use a Powerup Card. Then it runs its effect.
      */
-    private void askAndRunPowerup(){//TODO: check if usable as action (and cost when will be implemented)
+    private void askAndRunPowerup() throws ToClientException {//TODO: check if usable as action (and cost when will be implemented)
 
         if (player.getAllPowerup().isEmpty())
             return;
@@ -98,10 +102,9 @@ public class NormalTurn implements TurnInterface {
         PowerupCard card = null;
         try {
             List<PowerupCard> powerupCards = player.getAllPowerup().stream().filter(c -> c.isUsableAsAction()).collect(Collectors.toList());
-            card = player.getToClient().choosePowerup(powerupCards);
-        } catch (ToClientException | ChoiceRefusedException e) {
-            // (1) default move : nothing
-            // (2) suspend player: already done by the User class (calls matchSuspensionListener)
+            if (!powerupCards.isEmpty())
+                card = player.getToClient().choosePowerup(powerupCards);
+        } catch (ChoiceRefusedException e) {
             return;
         }
 
@@ -113,7 +116,7 @@ public class NormalTurn implements TurnInterface {
     /**
      * Asks the player to choose from a list of Actions and runs that action.
      */
-    private void askAndRunAction() {
+    private void askAndRunAction() throws ToClientException {
         isFinalFrenzyTriggered = board.checkFinalFrenzy();
         if (isFinalFrenzyTriggered)
             return;
@@ -130,42 +133,40 @@ public class NormalTurn implements TurnInterface {
         actions.add(new Action("Shoot", new Shoot()));
         actions.addAll(player.getAdrenalineActions());
 
-        Action chosenAction = null;
-        try {
-            chosenAction = player.getToClient().chooseAction(actions);
-        } catch (ToClientException e) {
-            // (1) default move : does nothing
-            // (2) suspend player: already done by the User class (calls matchSuspensionListener)
-            return;
-        }
-
-        chosenAction.runEffect(player, allTargets, board, alreadyTargeted, new ArrayList<>());
+        player.getToClient().chooseAction(actions)
+                .runEffect(player, allTargets, board, alreadyTargeted, new ArrayList<>());
 
     }
 
     /**
      * Asks the player to choose whether to reload. Then it takes care of reloading.
      */
-    private void askAndReload() {
+    private void askAndReload() throws ToClientException {
         isFinalFrenzyTriggered = board.checkFinalFrenzy();
-
         if (isFinalFrenzyTriggered)
             return;
-        WeaponCard cardToReload;
 
-        List<WeaponCard> weaponCards = player.getAllWeapons().stream()
-                .filter(x -> player.canAfford(x.getCost(), false))
+        /*Taking the reloadable weapons that the player can afford*/
+        List<WeaponCard> weaponCards = player.getReloadableWeapons().stream()
+                .filter(x -> player.canAfford(x.getCost(), false) ||
+                        !player.canAffordWithPowerups(x.getCost(), false).isEmpty())
                 .collect(Collectors.toList());
 
+        /*Choosing the card to reload*/
+        WeaponCard cardToReload;
         try {
             cardToReload = player.getToClient().chooseWeaponToReload(weaponCards);
-            if (cardToReload != null)
-                player.reload(cardToReload);
-        } catch (ToClientException | ChoiceRefusedException e) {
-            // (1) default move : nothing
-            // (2) suspend player: already done by the User class (calls matchSuspensionListener)
+        } catch (ChoiceRefusedException e) {
             return;
         }
+
+        /*Choosing a powerup to pay if the player can not afford reloading*/
+        PowerupCard toPay = null;
+        if (!player.canAfford(cardToReload.getCost(), false))
+            toPay = player.getToClient().choosePowerupForPaying(
+                    player.canAffordWithPowerups(cardToReload.getCost(), false));
+
+        player.reload(cardToReload, toPay);
     }
 
 }

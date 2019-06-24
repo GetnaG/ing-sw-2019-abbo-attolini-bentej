@@ -425,15 +425,25 @@ public class Player implements Damageable {
     }
 
     /**
-     * Reloads the specified weapon.
+     * Reloads the specified weapon and pays the cost.
      * A loaded weapon can be used to shoot.
      *
      * @param weapon the weapon to be reloaded
+     * @param asCubes the card to use as cubes if necessary
      * @throws NullPointerException     if {@code weapon} is null
      * @throws IllegalArgumentException if the {@code weapon} was not in the
      *                                  hand or is already loaded
      */
-    public void reload(WeaponCard weapon) {
+    public void reload(WeaponCard weapon, PowerupCard asCubes) {
+        List<AmmoCube> cost = new ArrayList<>(weapon.getCost());
+        if (!canAfford(weapon.getCost(), false)) {
+            if (!canAffordWithPowerups(weapon.getCost(), false).isEmpty()) {
+                hand.removePowerup(asCubes);
+                cost.remove(asCubes.getCube());
+            } else
+                throw new IllegalArgumentException("Can not afford buying");
+        }
+        ammoBox.pay(cost);
         hand.reload(weapon);
     }
 

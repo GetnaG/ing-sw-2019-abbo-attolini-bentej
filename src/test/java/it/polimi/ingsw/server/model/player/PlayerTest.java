@@ -369,7 +369,7 @@ class PlayerTest {
         AHandManager.addWeaponCard(card2);
         AHandManager.unload(card2);
 
-        APlayer.reload(card2);
+        APlayer.reload(card2, null);
 
         assertEquals(2, APlayer.getLoadedWeapons().size());
         assertTrue(APlayer.getLoadedWeapons().contains(card1));
@@ -387,7 +387,7 @@ class PlayerTest {
         AHandManager.addWeaponCard(card);
 
         assertThrows(IllegalArgumentException.class,
-                () -> APlayer.reload(card));
+                () -> APlayer.reload(card, null));
     }
 
     /*Testing normal behaviour for loaded and unloaded weapons*/
