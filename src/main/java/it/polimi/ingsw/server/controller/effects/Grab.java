@@ -76,7 +76,7 @@ public class Grab implements EffectInterface {
                 if (subjectPlayer.getNumOfWeapons() >= 3) {
                     WeaponCard weaponToDiscard = subjectPlayer.getToClient().chooseWeaponToDiscard(subjectPlayer.getAllWeapons());
                     subjectPlayer.discard(weaponToDiscard);
-                    //TODO: put back to the market the discarded weapon
+                    spawnSquare.getMarket().addCard(weaponToDiscard);
                 }
 
                 /*If necessary, choosing a powerup to pay*/

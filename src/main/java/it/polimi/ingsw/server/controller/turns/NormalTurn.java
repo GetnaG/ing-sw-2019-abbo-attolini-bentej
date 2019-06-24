@@ -75,19 +75,15 @@ public class NormalTurn implements TurnInterface {
         this.board = board;
 
         for (int i = 0; i < 2; i++){
-            if (isFinalFrenzyTriggered)
-                return -1;
             askAndRunPowerup();
-            if (isFinalFrenzyTriggered)
-                return -1;
             askAndRunAction();
-            if (isFinalFrenzyTriggered)
-                return -1;
         }
         askAndRunPowerup();
         askAndReload();
 
         updater.accept(new UpdateBuilder()); //TODO: add here what changed
+        if (isFinalFrenzyTriggered)
+            return -1;
         return 0;
     }
 
@@ -95,15 +91,14 @@ public class NormalTurn implements TurnInterface {
      * Asks the player if he wants to use a Powerup Card. Then it runs its effect.
      */
     private void askAndRunPowerup(){//TODO: check if usable as action (and cost when will be implemented)
-        isFinalFrenzyTriggered = board.checkFinalFrenzy();
 
-        if (player.getAllPowerup().isEmpty() || isFinalFrenzyTriggered)
+        if (player.getAllPowerup().isEmpty())
             return;
-
 
         PowerupCard card = null;
         try {
-            card = player.getToClient().choosePowerup(player.getAllPowerup());
+            List<PowerupCard> powerupCards = player.getAllPowerup().stream().filter(c -> c.isUsableAsAction()).collect(Collectors.toList());
+            card = player.getToClient().choosePowerup(powerupCards);
         } catch (ToClientException | ChoiceRefusedException e) {
             // (1) default move : nothing
             // (2) suspend player: already done by the User class (calls matchSuspensionListener)
@@ -114,6 +109,7 @@ public class NormalTurn implements TurnInterface {
             card.getEffect().runEffect(player, allTargets, board, alreadyTargeted,
                     new ArrayList<>());
     }
+
     /**
      * Asks the player to choose from a list of Actions and runs that action.
      */
