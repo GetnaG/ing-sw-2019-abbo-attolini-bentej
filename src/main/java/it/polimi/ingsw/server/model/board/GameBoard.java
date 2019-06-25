@@ -434,12 +434,17 @@ public class GameBoard implements ReplaceListener {
     public int minimumDistance(Square start, Square end, Boolean wallSensitive) {
         if (start.equals(end))
             return 0;
+        if (start != null)
+            start.refresh(GameBoard.getConfiguration());
+        if (end != null)
+            end.refresh(GameBoard.getConfiguration());
 
         Set<Square> Q = getAllSquares();
         Map<Square, Integer> dist = new HashMap<>();
         Map<Square, Square> prev = new HashMap<>();
 
         Q.forEach(x -> {
+            x.refresh(GameBoard.getConfiguration());
             dist.put(x, 999);
             prev.put(x, null);
         });
@@ -474,8 +479,6 @@ public class GameBoard implements ReplaceListener {
                 minSquare = s;
             }
         return minSquare;
-
-
     }
 
     /**
@@ -485,6 +488,8 @@ public class GameBoard implements ReplaceListener {
      * @return
      */
     private List<Square> getNeighbours(Square s, Boolean wallSensitive) {
+        if (s == null) return new ArrayList<>();
+
         List<Square> squares = new ArrayList<>();
 
         if (s.getNorthBorder() != Border.WALL || !wallSensitive)
@@ -496,7 +501,7 @@ public class GameBoard implements ReplaceListener {
         if (s.getWestBorder() != Border.WALL || !wallSensitive)
             squares.add(s.getWest());
 
-        return squares;
+        return squares.stream().filter(e -> e != null).collect(Collectors.toList());
     }
 
     /**

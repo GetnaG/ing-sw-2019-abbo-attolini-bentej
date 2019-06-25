@@ -63,6 +63,7 @@ public class Grab implements EffectInterface {
 
             /*Getting the weapons in market*/
             List<WeaponCard> weaponAvailable = spawnSquare.getMarket().getCards();
+            weaponAvailable = weaponAvailable.stream().filter(w -> w != null).collect(Collectors.toList());
 
             /*Adding the weapons that the player can buy to weaponsAffordable*/
             List<WeaponCard> weaponsAffordable = weaponAvailable.stream()

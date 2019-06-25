@@ -198,9 +198,8 @@ public class Player implements Damageable {
      */
     @Override
     public Square getPosition() {
-        if (this.position != null && this.position.getNorthBorder() != null)
-            this.position = Square.getSquare(GameBoard.getConfiguration(), Integer.parseInt(this.position.getID()));
-        //TODO: why?
+        if (GameBoard.getConfiguration() != null && position != null)
+            position.refresh(GameBoard.getConfiguration());
         return position;
     }
 
@@ -215,6 +214,7 @@ public class Player implements Damageable {
      */
     @Override
     public void setPosition(Square newPosition) {
+        newPosition.refresh(GameBoard.getConfiguration());
         position = newPosition;
     }
 

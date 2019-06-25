@@ -401,6 +401,8 @@ public class Square {
     }
 
     public void refresh(List<Room> rooms) {
+        if (rooms == null || rooms.size() == 0) return;
+
         this.north = getSquare(rooms, idNorth);
         this.east = getSquare(rooms, idEast);
         this.south = getSquare(rooms, idSouth);
