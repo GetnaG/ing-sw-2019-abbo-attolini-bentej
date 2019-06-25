@@ -81,6 +81,14 @@ public class CLI implements InteractionInterface {
 
     private static final int BOARD_LENGTH = 12;
 
+    private static final int MARKET_SIZE = 3;
+
+    private static final int BLUE_SPAWN_POINT = 2;
+
+    private static final int RED_SPAWN_POINT = 4;
+
+    private static final int YELLOW_SPAWN_POINT = 11;
+
     /**
      * Creates a CLI interface that uses the provided input and output, and
      * retrieves data from the provided model.
@@ -457,57 +465,41 @@ public class CLI implements InteractionInterface {
      */
     private StringBuilder translateStatus() {
         StringBuilder stringBuilder = new StringBuilder();
-
-       // String x = R.string("AD_powerups_IT_023");
-        //System.out.println(x);
+        Integer[] vectorValue = {8, 6, 4, 2, 1, 1, 1, 1, 1};
+        Integer[] forbidden_squares = {100, 100};
 
         if(this.model != null) {
 
-            List<String> momentaryAmmoCardList = new ArrayList<>();
-            if(model.getAmmoCardsID() != null)
-                momentaryAmmoCardList.addAll(0, model.getAmmoCardsID());
-
-            List<List<String>> momentaryKillshotTrack;
-            if(model.getKillshotTrack() != null)
-                momentaryKillshotTrack = model.getKillshotTrack();
-
-            List<String> momentaryWeaponCardList;
-            if(model.getWeaponsCardsID() != null)
-                momentaryWeaponCardList = model.getWeaponsCardsID();
-
-            //if(model.getIsActionTileFrenzy())
-            //TODO
-
-            List<String> momentaryListOfConnectedPlayers = new ArrayList<>();
-            if(model.getConnectedPlayers() != null)
-                momentaryListOfConnectedPlayers = model.getConnectedPlayers();
-
-            //if(model.getIsWeaponDeckDrawable())
-            //TODO
-
             if(model.getDisconnectedPlayers() != null){
                 for (String s : model.getDisconnectedPlayers())
-                    stringBuilder.append(s);
+                    stringBuilder.append(lineSeparator).append(s).append(" is disconnected");
             }
+            stringBuilder.append(lineSeparator);
 
             if(model.getJustConnectedPlayers() != null) {
                 for (String s : model.getJustConnectedPlayers())
-                    stringBuilder.append(s);
+                    stringBuilder.append(lineSeparator).append(s).append("has just connected");
             }
+            stringBuilder.append(lineSeparator);
 
+            //if match has started-----------------------------------------------------------------------------------
 
 
             switch (model.getConfigurationID()) {
                 case 0: {
                     stringBuilder.append(R.string("configuration0"));
+                    forbidden_squares[0] = 3;
                     break;
                 }
                 case 1: {
                     stringBuilder.append(R.string("configuration1"));
+                    forbidden_squares[0] = 3;
+                    forbidden_squares[0] = 8;
                     break;
                 }
                 case 2: {
                     stringBuilder.append(R.string("configuration2"));
+                    forbidden_squares[0] = 8;
                     break;
                 }
                 case 3: {
@@ -517,101 +509,116 @@ public class CLI implements InteractionInterface {
                 default:
             }
 
-
-            /*
-            square infos:
-            square "ID": (color)
-                         [ ammo | market : < weapon1, weapon2, weapon3 > ]
-                         { player1 , player2 , ... }
-             */
-            /*
-            players' boards:
-            player_name: < status: online | offline >
-                         damage [x x x x x x x x x x][+][*]
-                         marks [m m m]
-                         value { 8 | 6 | 4 | 2 | 1 }
-                         ammo: [ ] [ ] [ ] [ ]
-                         weapons: { ... }
-             skull track:
-             [ ] [ ] [ ] [ ] [ ]
-             */
-
             //squares
 
             stringBuilder.append(lineSeparator);
             for(int i=0; i < BOARD_LENGTH; i++) {
+                if(i != forbidden_squares[0] && i != forbidden_squares[1]) {
+                    stringBuilder.append("square ").append(i).append(": ");
+                    if (model.getAmmoCardsID() != null) {
+                        if (model.getAmmoCardsID().get(i) != null)
+                            stringBuilder.append("ammo: [ ").append(R.string(model.getAmmoCardsID().get(i))).append(" ]");
+                        else {
+                            stringBuilder.append("market: < ");
+                            switch (i) {
+                                case BLUE_SPAWN_POINT: {
+                                    for (int j = 0; j < MARKET_SIZE; j++) {
+                                        if (model.getWeaponsCardsID().get(j) != null)
+                                            stringBuilder.append(model.getWeaponsCardsID().get(j));
+                                        else
+                                            stringBuilder.append(R.string("empty"));
+                                        if (j < 2)
+                                            stringBuilder.append(" , ");
+                                    }
+                                    break;
+                                }
+                                case RED_SPAWN_POINT: {
+                                    for (int j = 0; j < MARKET_SIZE; j++) {
+                                        if (model.getWeaponsCardsID().get(j + MARKET_SIZE) != null)
+                                            stringBuilder.append(model.getWeaponsCardsID().get(j + MARKET_SIZE)).append(" , ");
+                                        else
+                                            stringBuilder.append(R.string("empty"));
+                                        if (j < 2)
+                                            stringBuilder.append(" , ");
+                                    }
+                                    break;
+                                }
+                                case YELLOW_SPAWN_POINT: {
+                                    for (int j = 0; j < MARKET_SIZE; j++) {
+                                        if (model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE) != null)
+                                            stringBuilder.append(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE)).append(" , ");
+                                        else
+                                            stringBuilder.append(R.string("empty"));
+                                        if (j < 2)
+                                            stringBuilder.append(" , ");
+                                    }
+                                    break;
+                                }
 
-                //get ammo or market
+                                default:
+                            }
 
-                //if match has started
-
-                stringBuilder.append("square ").append(i).append(": ");
-                if(model.getAmmoCardsID() != null) {
-                    if (model.getAmmoCardsID().get(i) != null)
-                        stringBuilder.append(" ammo: [").append(R.string(model.getAmmoCardsID().get(i))).append("]");
-                    else {
-                        for (int j = 0; j < model.getWeaponsCardsID().size(); j++)
-                            System.out.println(" weapon string: " + R.string(model.getWeaponsCardsID().get(j)) + " \n");//TODO
-                        //if(market.getWeaponCard.get(j) == null)
-                        //append("")
-                        //else
-                        //append(market.getWeaponCard.get(j) NOME-STRINGA)
-
-                        stringBuilder.append("market : < ").append("weapon1, weapon2, weapon3 ").append("> ");
-
-                    }
-
-                }
-
-                //players in the square
-
-                int pos;
-                if(model.getPlayersState() != null){
-                        stringBuilder.append("players in this square { ");
-                        for(PlayerState ps : model.getPlayersState()) {
-                            pos = ps.getSquarePosition();
-                            if (pos == i)
-                                stringBuilder.append(ps.getNickname()).append(" , ");
                         }
-                        stringBuilder.append(" }").append(lineSeparator);
-                        stringBuilder.append(lineSeparator);
-                }
 
+                        //players in the square
+
+                        int pos;
+                        if (model.getPlayersState() != null && !model.getPlayersState().isEmpty()) {
+                            stringBuilder.append(" players: { ");
+                            for (PlayerState ps : model.getPlayersState()) {
+                                pos = ps.getSquarePosition();
+                                if (pos == i)
+                                    stringBuilder.append(ps.getNickname()).append(" , ");
+                            }
+                            stringBuilder.append(" }");
+                        }
+
+                        stringBuilder.append(lineSeparator);
+                    }
+                }
             }
 
-            //boards
+            stringBuilder.append(lineSeparator);
 
+            //boards
             //board of each player
             if(model.getPlayersState() != null) {
                 for (PlayerState ps : model.getPlayersState()) {
                     if (ps.isConnected())
-                        stringBuilder.append(ps.getNickname()).append(": < status: online >").append(lineSeparator);
+                        stringBuilder.append("< ").append(ps.getNickname()).append(": online >").append(lineSeparator);
                     else
-                        stringBuilder.append(ps.getNickname()).append(": < status: offline >").append(lineSeparator);
+                        stringBuilder.append("< ").append(ps.getNickname()).append(": offline >").append(lineSeparator);
 
                     stringBuilder.append("damage: ").append(ps.getDamage()).append(lineSeparator);
 
-                //ps.getMarks();-------------------------------------------------------------------------------------------
 
-                    stringBuilder.append("active marks: ").append(ps.getMarks()).append(lineSeparator);
+                    stringBuilder.append("passive marks: ").append(ps.getMarks()).append(lineSeparator);
 
-
-                    stringBuilder.append("skulls: ").append(ps.getSkullNumber()).append(lineSeparator);
+                    if(ps.getSkullNumber() >= 0)
+                        stringBuilder.append("skulls: ").append(ps.getSkullNumber()).append(lineSeparator);
+                    else
+                        stringBuilder.append("skulls: 0").append(lineSeparator);
 
                     //board value
                     stringBuilder.append("board value: { ");
-                    /*if(ps.getSkullNumber()<6)----------------------------------------------------------------------
-                        stringBuilder.append(vectorValue[ps.getSkullNumber()]);
+                    if(ps.getSkullNumber()>=0)
+                            stringBuilder.append(vectorValue[ps.getSkullNumber()]);
                     else
-                        stringBuilder.append(vectorValue[5]);*/
+                        stringBuilder.append(vectorValue[0]);
                     stringBuilder.append(" }");
 
                     stringBuilder.append(lineSeparator);
 
                     //ammo cubes
                     stringBuilder.append("ammo cubes: ");
-                    for (int i = 0; i < ps.getAmmoCubes().size(); i++)
-                        stringBuilder.append(ps.getAmmoCubes().get(i)).append(" , ");
+                    if(ps.getAmmoCubes()!= null && !ps.getAmmoCubes().isEmpty()) {
+                        if(ps.getAmmoCubes().get(0)!= null && ps.getAmmoCubes().size()>0 && ps.getAmmoCubes().get(0)>0)
+                            stringBuilder.append("[").append(ps.getAmmoCubes().get(0)).append(" BLUE] ");
+                        if(ps.getAmmoCubes().get(1)!= null && ps.getAmmoCubes().size()>1 && ps.getAmmoCubes().get(1)>0)
+                            stringBuilder.append("[").append(ps.getAmmoCubes().get(1)).append(" RED] ");
+                        if(ps.getAmmoCubes().get(2)!= null && ps.getAmmoCubes().size()>2 && ps.getAmmoCubes().get(2)>0)
+                            stringBuilder.append("[").append(ps.getAmmoCubes().get(2)).append(" YELLOW]");
+                    }
 
                     stringBuilder.append(lineSeparator);
 
@@ -637,27 +644,27 @@ public class CLI implements InteractionInterface {
                     stringBuilder.append(lineSeparator);
 
 
-                    //get turn player
-                    if(ps.isCurrent()){
-                        stringBuilder.append("it's your turn, ").append(ps.getNickname()).append("!").append(lineSeparator);
-                    }
-
+                    for(PlayerState x: model.getPlayersState())
+                        if(x.isPlayerBoardFrenzy())
+                            stringBuilder.append(x.getNickname()).append(" is in Frenzy Mode!").append(lineSeparator);
 
 
                 }
-
-
-
             }
 
-            //TODO
+            stringBuilder.append(lineSeparator);
 
+            //get turn player
+            for(PlayerState x: model.getPlayersState())
+                if(x.isCurrent()){
+                    stringBuilder.append("it's your turn, ").append(x.getNickname()).append("!").append(lineSeparator);
+            }
 
 
 
         }
 
-        return stringBuilder.append(lineSeparator).append("end_of_view");
+        return stringBuilder;
 
     }
 
