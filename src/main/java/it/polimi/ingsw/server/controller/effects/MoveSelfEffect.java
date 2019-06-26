@@ -1,13 +1,13 @@
 package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,9 +25,9 @@ public class MoveSelfEffect implements EffectInterface {
      */
     private String id;
     /**
-     * The effect that could follow this.
+     * The cost of this effect.
      */
-    private EffectInterface decorated;
+    private List<AmmoCube> cost;
     /**
      * The maximum number of moves or -1 if not set.
      */
@@ -40,11 +40,12 @@ public class MoveSelfEffect implements EffectInterface {
      * @param id          the name of this effect
      * @param maxDistance -1 or the maximum distance from the position of the
      *                    subject
+     * @param cost        the cost of this effect
      */
-    public MoveSelfEffect(String id, int maxDistance) {
+    public MoveSelfEffect(String id, int maxDistance, List<AmmoCube> cost) {
         this.id = id;
         this.maxDistance = maxDistance;
-        decorated = null;
+        this.cost = cost;
     }
 
     /**
@@ -78,32 +79,8 @@ public class MoveSelfEffect implements EffectInterface {
         return id;
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
-    public EffectInterface getDecorated() {
-        return decorated;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addToChain(EffectInterface last) {
-        if (decorated == null)
-            decorated = last;
-        else
-            decorated.addToChain(last);
-    }
-
-    /**
-     * Returns an iterator over the elements of this chain of effects.
-     *
-     * @return an iterator over the elements of this chain of effects
-     */
-    @Override
-    public Iterator<EffectInterface> iterator() {
-        return new EffectIterator(this);
+    public List<AmmoCube> getCost() {
+        return new ArrayList<>(cost);
     }
 }

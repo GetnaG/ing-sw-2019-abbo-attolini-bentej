@@ -49,9 +49,10 @@ public class WeaponLoader implements BasicLoader<WeaponCard> {
         weaponCards = new Gson().fromJson(new InputStreamReader(inputStream),
                 WeaponCard[].class);
 
-        /*Checking if all effects are present*/
+        /*Setting the sequences and checking if all effects are present*/
         for (WeaponCard card : weaponCards)
             try {
+                card.runPermutation();
                 card.getPossibleSequences();
             } catch (NoSuchElementException e) {
                 throw new WrongFileInputException("Weapon card", card.getId(), e);

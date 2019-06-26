@@ -7,7 +7,6 @@ import it.polimi.ingsw.communication.protocol.ProtocolMessage;
 import it.polimi.ingsw.communication.socket.SocketToClient;
 import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
-import it.polimi.ingsw.server.controller.effects.EffectIterator;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
@@ -95,11 +94,11 @@ class SocketToClientTest {
     @Test
     void chooseEffectsSequence() {
         optionsHelper(Arrays.asList(
-                new MockEffect("test1", new MockEffect("test2", null)),
-                new MockEffect(DEFAULT_CHOICE, null)),
+                new Action("", Arrays.asList(new MockEffect("test1"), new MockEffect("test2"))),
+                new Action(DEFAULT_CHOICE, new ArrayList<>())),
                 1,
                 toClient::chooseEffectsSequence,
-                EffectInterface::getName,
+                Action::getName,
                 MessageType.EFFECTS_SEQUENCE);
     }
 
@@ -441,9 +440,9 @@ class SocketToClientTest {
         EffectInterface next;
         String name;
 
-        MockEffect(String name, MockEffect next) {
+        MockEffect(String name) {
             this.name = name;
-            this.next = next;
+            next = null;
         }
 
         @Override
@@ -457,21 +456,9 @@ class SocketToClientTest {
         }
 
         @Override
-        public EffectInterface getDecorated() {
-            return next;
+        public List<AmmoCube> getCost() {
+            return new ArrayList<>();
         }
 
-        @Override
-        public void addToChain(EffectInterface last) {
-            if (next == null)
-                next = last;
-            else
-                next.addToChain(last);
-        }
-
-        @Override
-        public Iterator<EffectInterface> iterator() {
-            return new EffectIterator(this);
-        }
     }
 }

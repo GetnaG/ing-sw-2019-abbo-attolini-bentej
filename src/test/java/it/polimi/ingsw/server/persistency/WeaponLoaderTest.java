@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.persistency;
 
+import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
@@ -43,13 +44,12 @@ class WeaponLoaderTest {
         assertNotNull(card);
         assertEquals(EXISTING_COST, card.getCost());
 
-        List<EffectInterface> sequences = card.getPossibleSequences();
+        List<Action> sequences = card.getPossibleSequences();
         int i = 0;
         int j = 0;
-        for (EffectInterface e : sequences) {
-            while (e.getDecorated() != null) {
+        for (Action action : sequences) {
+            for (EffectInterface e : action) {
                 assertEquals(EXISTING_EFFECTS[i][j], e.getName());
-                e = e.getDecorated();
                 j++;
             }
             j = 0;
@@ -65,13 +65,13 @@ class WeaponLoaderTest {
         assertNotNull(card);
         assertEquals(EXISTING_COST, card.getCost());
 
-        List<EffectInterface> sequences = card.getPossibleSequences();
+
+        List<Action> sequences = card.getPossibleSequences();
         int i = 0;
         int j = 0;
-        for (EffectInterface e : sequences) {
-            while (e.getDecorated() != null) {
+        for (Action action : sequences) {
+            for (EffectInterface e : action) {
                 assertEquals(EXISTING_EFFECTS[i][j], e.getName());
-                e = e.getDecorated();
                 j++;
             }
             j = 0;

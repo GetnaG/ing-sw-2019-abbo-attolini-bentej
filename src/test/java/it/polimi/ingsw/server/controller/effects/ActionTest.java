@@ -106,7 +106,7 @@ class ActionTest {
     private ToClientInterface getDumbToClientInterface(){
         return new ToClientInterface() {
             @Override
-            public EffectInterface chooseEffectsSequence(List<EffectInterface> options) {
+            public Action chooseEffectsSequence(List<Action> options) {
                 return null;
             }
 

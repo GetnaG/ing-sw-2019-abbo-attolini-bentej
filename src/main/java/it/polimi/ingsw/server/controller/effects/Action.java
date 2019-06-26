@@ -1,20 +1,27 @@
 package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.communication.ToClientException;
-import it.polimi.ingsw.server.model.*;
+import it.polimi.ingsw.server.model.AmmoCube;
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * An {@link Action} represents a collection of {@link EffectInterface}.
  * An Action is run as an iteration through the single effects which is composed by.
- * The words effects and steps are used with the same meaning .
+ * The words effects and steps are used with the same meaning.
+ * An action can also have a cost, this is the sum of the costs of the single
+ * steps.
+ *
+ * @author Fahed Ben Tej
+ * @author Abbo Giulio A.
  */
-public class Action implements EffectInterface {
+public class Action implements Iterable<EffectInterface> {
     /**
      * The name of the Action
      */
@@ -24,87 +31,80 @@ public class Action implements EffectInterface {
      */
     private List<EffectInterface> effects;
     /**
-     * An index pointing to the current effect who is seen as decorator
+     * The cost of this action, sum of the costs of the effects.
      */
-    private int currentIndex;
+    private List<AmmoCube> totalCost;
 
     /**
      * Constructs an Action composed by multiple effects.
-     * @param name      name of the action
-     * @param effects   list of effects which compose the action
+     * The costs of the single effects is summed in {@linkplain #totalCost}.
+     *
+     * @param name    name of the action
+     * @param effects list of effects that compose the action
      */
     public Action(String name, List<EffectInterface> effects) {
         this.name = name;
         this.effects = effects;
-        this.currentIndex = 0;
+        totalCost = effects.stream().flatMap(effectInterface ->
+                effectInterface.getCost().stream()).collect(Collectors.toList());
     }
+
     /**
      * Constructs an Action composed by a single effect.
-     * @param name      name of the action
-     * @param effect    the single effect which compose the action
+     * The costs of the single effects is summed in {@linkplain #totalCost}.
+     *
+     * @param name   name of the action
+     * @param effect the single effect that composes the action
      */
     public Action(String name, EffectInterface effect) {
-        this.name = name;
-        this.effects = new ArrayList<>();
-        this.effects.add(effect);
-        this.currentIndex = 0;
+        this(name, Collections.singletonList(effect));
     }
 
     /**
-     * Default constructor
+     * Runs all the effects (steps) in this action.
+     *
+     * @param subjectPlayer  the player who calls this effect
+     * @param allTargets     all the targets on the board
+     * @param board          the game board (for applying the effect)
+     * @param allTargeted    a list of elements already targeted by this chain
+     * @param damageTargeted a list of the elements that have received damage
+     * @throws ToClientException if the execution is interrupted because the
+     *                           player is suspended
+     * @see EffectInterface#runEffect(Player, List, GameBoard, List, List)
      */
-    public Action() {
-
-    }
-
-    /**
-     * Runs all the effects (steps) composed by the Action.
-     * @param subjectPlayer     who is running the Action
-     * @param allTargets
-     * @param board             board used in the game
-     * @param alredyTargeted    list of players already targeted during the turn
-     * @param damageTargeted
-     */
-    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alreadyTargeted, List<Damageable> damageTargeted) throws ToClientException {
+    public void runAll(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> allTargeted, List<Damageable> damageTargeted) throws ToClientException {
         for (EffectInterface x : effects) {
-            x.runEffect(subjectPlayer, allTargets, board, alreadyTargeted, new ArrayList<>());
+            x.runEffect(subjectPlayer, allTargets, board, allTargeted, damageTargeted);
         }
     }
 
     /**
-     * Gets the name of the action.
-     * @return the name of action.
+     * Gets the name of this action.
+     *
+     * @return the name of this action
      */
     public String getName() {
         return name;
     }
 
     /**
-     * An {@link EffectInterface} can be decorated with another {@link EffectInterface}.
-     * This method returns the next effect in the chain.
-     * @return  the next Effect in the chain or null it doesn't exist.
+     * Returns the cost of this action.
+     * The cost of an Action is the sum of the costs of the composing
+     * {@linkplain EffectInterface}s.
+     *
+     * @return the cost of this action
      */
-    public EffectInterface getDecorated() {
-        if(currentIndex == effects.size()-1)
-            return null;
-        currentIndex += 1;
-        return effects.get(currentIndex-1);
+    public List<AmmoCube> getTotalCost() {
+        return totalCost;
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addToChain(EffectInterface last) {
-        effects.add(last);
-    }
-
-    /**
-     * Gets the iterator for an Action.
-     * @return iterator for Action
+     * Returns an iterator over the steps in this action.
+     *
+     * @return an iterator over the steps in this action
      */
     @Override
     public Iterator<EffectInterface> iterator() {
-        return effects.listIterator();
+        return effects.iterator();
     }
 }

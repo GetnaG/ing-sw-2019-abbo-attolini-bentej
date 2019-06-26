@@ -2,14 +2,15 @@ package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.persistency.FromFile;
 
+import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,10 +25,6 @@ public class TagbackEffect implements EffectInterface {
      * The name of this effect.
      */
     private String id;
-    /**
-     * The effect that could follow this.
-     */
-    private EffectInterface decorated;
 
     /**
      * Creates a tagback effect with the provided id.
@@ -90,31 +87,12 @@ public class TagbackEffect implements EffectInterface {
     }
 
     /**
-     * {@inheritDoc}
-     */
-    @Override
-    public EffectInterface getDecorated() {
-        return decorated;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addToChain(EffectInterface last) {
-        if (decorated == null)
-            decorated = last;
-        else
-            decorated.addToChain(last);
-    }
-
-    /**
-     * Returns an iterator over the elements of this chain of effects.
+     * This effect has no cost.
      *
-     * @return an iterator over the elements of this chain of effects
+     * @return an empty list
      */
     @Override
-    public Iterator<EffectInterface> iterator() {
-        return new EffectIterator(this);
+    public List<AmmoCube> getCost() {
+        return new ArrayList<>();
     }
 }

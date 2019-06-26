@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.SpawnSquare;
@@ -10,7 +11,7 @@ import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
 
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -110,31 +111,12 @@ public class Grab implements EffectInterface {
     }
 
     /**
-     * Has no decorated.
+     * This effect has no cost.
      *
-     * @return null
-     */
-    public EffectInterface getDecorated() {
-        return null;
-    }
-
-    /**
-     * Not supported
-     *
-     * @throws UnsupportedOperationException if called
+     * @return an empty list
      */
     @Override
-    public void addToChain(EffectInterface last) {
-        throw new UnsupportedOperationException();
-    }
-
-    /**
-     * Has no iterator
-     *
-     * @throws UnsupportedOperationException if called
-     */
-    @Override
-    public Iterator<EffectInterface> iterator() {
-        throw new UnsupportedOperationException();
+    public List<AmmoCube> getCost() {
+        return new ArrayList<>();
     }
 }

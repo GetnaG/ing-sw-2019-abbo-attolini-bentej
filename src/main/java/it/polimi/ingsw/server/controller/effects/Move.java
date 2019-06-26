@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Border;
 import it.polimi.ingsw.server.model.board.GameBoard;
@@ -8,7 +9,6 @@ import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -43,25 +43,13 @@ public class Move implements EffectInterface {
     }
 
     /**
-     * @return
+     * This effect has no cost.
+     *
+     * @return an empty list
      */
     @Override
-    public EffectInterface getDecorated() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addToChain(EffectInterface last) {
-        //TODO does this need fixing?
-    }
-
-
-    @Override
-    public Iterator<EffectInterface> iterator() {
-        return null;
+    public List<AmmoCube> getCost() {
+        return new ArrayList<>();
     }
 
     /**

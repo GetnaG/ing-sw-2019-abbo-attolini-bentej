@@ -1,14 +1,15 @@
 package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Represents the Shoot step in an Action.
@@ -40,10 +41,14 @@ public class Shoot implements EffectInterface {
         WeaponCard weaponChosen = subjectPlayer.getToClient().chooseWeaponCard(
                 subjectPlayer.getLoadedWeapons());
 
-        EffectInterface effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(
-                weaponChosen.getPossibleSequences());
+        Action effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(
+                weaponChosen.getPossibleSequences().stream().filter(s ->
+                        subjectPlayer.canAfford(s.getTotalCost(), false)
+                        //TODO: question: can I pay for an effect with powerups?
+                ).collect(Collectors.toList()));
 
-        effectChosen.runEffect(subjectPlayer, allTargets, board, alredyTargeted, new ArrayList<>());
+        subjectPlayer.pay(effectChosen.getTotalCost());
+        effectChosen.runAll(subjectPlayer, allTargets, board, alredyTargeted, damageTargeted);
 
         //TODO tagback and targeting scope
     }
@@ -57,29 +62,12 @@ public class Shoot implements EffectInterface {
     }
 
     /**
-     * //FIXME
-     * Not used in Shoot.
-     * @return  null
-     */
-    public EffectInterface getDecorated() {
-        return null;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addToChain(EffectInterface last) {
-
-    }
-
-    /**
-     * //TODO
+     * This effect has no cost.
      *
-     * @return
+     * @return an empty list
      */
     @Override
-    public Iterator<EffectInterface> iterator() {
-        return null;
+    public List<AmmoCube> getCost() {
+        return new ArrayList<>();
     }
 }

@@ -2,8 +2,8 @@ package it.polimi.ingsw.server.controller.effects.cardeffects;
 
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
-import it.polimi.ingsw.server.controller.effects.EffectIterator;
 import it.polimi.ingsw.server.model.AgainstRulesException;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.Square;
@@ -35,6 +35,10 @@ public class CardEffect implements EffectInterface {
      * The name of this effect.
      */
     private String id;
+    /**
+     * The additional cost of this effect.
+     */
+    private AmmoCube[] cost;
     /**
      * The damage given to the selected targets. Negative values are not
      * allowed.
@@ -104,11 +108,6 @@ public class CardEffect implements EffectInterface {
     private QuirkPolicy[] quirks;
 
     /**
-     * The next effect in the chain.
-     * This field is not part of the effect.
-     */
-    private EffectInterface decorated;
-    /**
      * The list of available targets.
      * This field is not part of the effect.
      */
@@ -151,6 +150,7 @@ public class CardEffect implements EffectInterface {
      */
     public CardEffect(CardEffect toClone) {
         id = toClone.id;
+        cost = toClone.cost;
         damageAmount = toClone.damageAmount;
         marksAmount = toClone.marksAmount;
         secondaryDamage = toClone.secondaryDamage;
@@ -164,7 +164,6 @@ public class CardEffect implements EffectInterface {
         squaresPolicy = toClone.squaresPolicy;
         squaresDistance = toClone.squaresDistance;
         quirks = toClone.quirks.clone();
-        decorated = null;
         availableTargets = null;
         destinations = null;
         subject = null;
@@ -219,29 +218,8 @@ public class CardEffect implements EffectInterface {
      * {@inheritDoc}
      */
     @Override
-    public EffectInterface getDecorated() {
-        return decorated;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void addToChain(EffectInterface last) {
-        if (decorated == null)
-            decorated = last;
-        else
-            decorated.addToChain(last);
-    }
-
-    /**
-     * Returns an iterator over the elements of this chain of effects.
-     *
-     * @return an iterator over the elements of this chain of effects
-     */
-    @Override
-    public Iterator<EffectInterface> iterator() {
-        return new EffectIterator(this);
+    public List<AmmoCube> getCost() {
+        return new ArrayList<>(Arrays.asList(cost));
     }
 
     /**

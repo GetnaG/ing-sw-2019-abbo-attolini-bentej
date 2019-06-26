@@ -2,7 +2,6 @@ package it.polimi.ingsw.communication;
 
 import it.polimi.ingsw.communication.protocol.Notification;
 import it.polimi.ingsw.server.controller.effects.Action;
-import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
@@ -37,7 +36,7 @@ public interface ToClientInterface {
      * @throws ToClientException if there are problems with the communication
      *                           or the client does not answer in time
      */
-    EffectInterface chooseEffectsSequence(List<EffectInterface> options) throws ToClientException;
+    Action chooseEffectsSequence(List<Action> options) throws ToClientException;
 
     /**
      * Asks the client to choose one of the spawn location from the provided

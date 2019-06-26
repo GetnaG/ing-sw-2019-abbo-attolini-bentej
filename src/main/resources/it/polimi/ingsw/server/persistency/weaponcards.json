@@ -24,13 +24,34 @@
         "cyberblade"
       ],
       [
+        "cyberblade",
         "cyberblade_shadowstep"
       ],
       [
+        "cyberblade_shadowstep",
+        "cyberblade"
+      ],
+      [
+        "cyberblade",
+        "cyberblade_sliceAndDice"
+      ],
+      [
+        "cyberblade",
+        "cyberblade_sliceAndDice",
+        "cyberblade_shadowstep"
+      ],
+      [
+        "cyberblade",
+        "cyberblade_shadowstep",
+        "cyberblade_sliceAndDice"
+      ],
+      [
+        "cyberblade_shadowstep",
+        "cyberblade",
         "cyberblade_sliceAndDice"
       ]
     ],
-    "onlySpecifiedOrder": false,
+    "onlySpecifiedOrder": true,
     "resourceId": "AD_weapons_IT_023"
   },
   {
@@ -123,10 +144,11 @@
         "vortexCannon"
       ],
       [
+        "vortexCannon",
         "vortexCannon_blackHole"
       ]
     ],
-    "onlySpecifiedOrder": false,
+    "onlySpecifiedOrder": true,
     "resourceId": "AD_weapons_IT_029"
   },
   {
@@ -152,19 +174,23 @@
         "rocketLauncher"
       ],
       [
-        "rocketLauncher","rocketLauncher_rocketJump"
+        "rocketLauncher",
+        "rocketLauncher_rocketJump"
       ],
       [
-        "rocketLauncher_rocketJump","rocketLauncher"
+        "rocketLauncher_rocketJump",
+        "rocketLauncher"
       ],
       [
         "rocketLauncher_basic_fragmentingWarhead"
       ],
       [
-        "rocketLauncher_basic_fragmentingWarhead", "rocketLauncher_rocketJump"
+        "rocketLauncher_basic_fragmentingWarhead",
+        "rocketLauncher_rocketJump"
       ],
       [
-        "rocketLauncher_rocketJump", "rocketLauncher_basic_fragmentingWarhead"
+        "rocketLauncher_rocketJump",
+        "rocketLauncher_basic_fragmentingWarhead"
       ]
     ],
     "onlySpecifiedOrder": true,
@@ -182,7 +208,7 @@
         "grenadeLauncher_extraGrenade"
       ]
     ],
-    "onlySpecifiedOrder": false,
+    "onlySpecifiedOrder": true,
     "resourceId": "AD_weapons_IT_0212"
   },
   {
@@ -242,9 +268,12 @@
         "t.h.o.r."
       ],
       [
+        "t.h.o.r.",
         "t.h.o.r._chainReaction"
       ],
       [
+        "t.h.o.r.",
+        "t.h.o.r._chainReaction",
         "t.h.o.r._highVoltage"
       ]
     ],
@@ -263,7 +292,7 @@
         "tractorBeam_punisher"
       ]
     ],
-    "onlySpecifiedOrder": false,
+    "onlySpecifiedOrder": true,
     "resourceId": "AD_weapons_IT_0217"
   },
   {
@@ -290,13 +319,29 @@
         "plasmaGun"
       ],
       [
+        "plasmaGun",
         "plasmaGun_phaseGlide"
       ],
       [
+        "plasmaGun_phaseGlide",
+        "plasmaGun"
+      ],
+      [
+        "plasmaGun",
+        "plasmaGun_chargedShot"
+      ],
+      [
+        "plasmaGun",
+        "plasmaGun_chargedShot",
+        "plasmaGun_phaseGlide"
+      ],
+      [
+        "plasmaGun_phaseGlide",
+        "plasmaGun",
         "plasmaGun_chargedShot"
       ]
     ],
-    "onlySpecifiedOrder": false,
+    "onlySpecifiedOrder": true,
     "resourceId": "AD_weapons_IT_0219"
   },
   {
@@ -309,13 +354,20 @@
         "machineGun"
       ],
       [
+        "machineGun",
         "machineGun_focusShot"
       ],
       [
+        "machineGun",
+        "machineGun_turretTripod"
+      ],
+      [
+        "machineGun",
+        "machineGun_focusShot",
         "machineGun_turretTripod"
       ]
     ],
-    "onlySpecifiedOrder": false,
+    "onlySpecifiedOrder": true,
     "resourceId": "AD_weapons_IT_0220"
   },
   {
@@ -328,6 +380,7 @@
         "lockRifle"
       ],
       [
+        "lockRifle",
         "lockRifle_secondLock"
       ]
     ],
@@ -349,5 +402,4 @@
     "onlySpecifiedOrder": true,
     "resourceId": "AD_weapons_IT_0222"
   }
-
 ]

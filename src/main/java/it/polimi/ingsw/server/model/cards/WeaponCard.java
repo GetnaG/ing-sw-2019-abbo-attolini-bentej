@@ -1,12 +1,14 @@
 package it.polimi.ingsw.server.model.cards;
 
-import it.polimi.ingsw.server.controller.effects.EffectInterface;
+import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.persistency.FromFile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * This represents a weapon card, with a cost and sequences of effects.
@@ -18,7 +20,16 @@ import java.util.List;
  * {@link it.polimi.ingsw.server.controller.effects.EffectInterface} that
  * this card allows, this must be written explicitly if
  * {@linkplain #onlySpecifiedOrder} is true, otherwise all the permutation of
- * the elements are allowed.
+ * the elements are allowed. In this last case, only the first elements of
+ * the arrays are considered, the first of which must be the base method.
+ * For example, given the effects BASE, A, B, then the possible sequences
+ * will be<ul>
+ * <li>BASE</li>
+ * <li>BASE, A</li>
+ * <li>BASE, B</li>
+ * <li>A, BASE</li>
+ * <li>B, BASE</li>
+ * <li>and then all the permutation of BASE, A, B</li></ul>
  *
  * @author Abbo Giulio A.
  * @see it.polimi.ingsw.server.persistency.WeaponLoader
@@ -79,34 +90,43 @@ public class WeaponCard extends AbstractCard {
      *
      * @return a list of all the possible sequences of effect allowed
      */
-    public List<EffectInterface> getPossibleSequences() {
-        /*If the order is not fixed, this calculates all the possible
-        permutations*/
+    public List<Action> getPossibleSequences() {
+        return Arrays.stream(effectIdSequences).map(effectIdSequence ->
+                new Action("", Arrays.stream(effectIdSequence).map(s ->
+                        FromFile.effects().get(s)).collect(Collectors.toList())))
+                .collect(Collectors.toList());
+    }
+
+    /**
+     * If the order is not fixed, this calculates all the possible permutations.
+     */
+    public void runPermutation() {
         if (!onlySpecifiedOrder) {
-            /*Preparing the elements*/
+            List<List<String>> permutationsList = new ArrayList<>();
+
+            /*Just the basic effect*/
+            permutationsList.add(Collections.singletonList(effectIdSequences[0][0]));
+
+            /*Basic and first optional*/
+            if (effectIdSequences.length >= 2)
+                permutations(Arrays.asList(effectIdSequences[0][0], effectIdSequences[1][0]),
+                        new ArrayList<>(), permutationsList);
+
+            /*Basic and second optional*/
+            if (effectIdSequences.length >= 3)
+                permutations(Arrays.asList(effectIdSequences[0][0], effectIdSequences[2][0]),
+                        new ArrayList<>(), permutationsList);
+
+            /*All the effects*/
             List<String> elements = new ArrayList<>();
             for (String[] s : effectIdSequences)
                 elements.add(s[0]);
+            permutations(elements, new ArrayList<>(), permutationsList);
 
-            /*Putting the permutations in the variable*/
-            List<String[]> perm = new ArrayList<>();
-            permutations(elements, 0, perm);
-
-            /*Replacing the sequence with the one with permutations*/
-            effectIdSequences = perm.toArray(new String[0][0]);
+            /*Storing the permutations and ensuring that this method does not run again*/
+            effectIdSequences = permutationsList.stream().map(e -> e.toArray(new String[0])).toArray(String[][]::new);
+            onlySpecifiedOrder = true;
         }
-
-        /*Decorating the effects*/
-        List<EffectInterface> list = new ArrayList<>();
-        for (String[] effectIdSequence : effectIdSequences)
-            if (effectIdSequence.length > 0) {
-                EffectInterface chain =
-                        FromFile.effects().get(effectIdSequence[0]);
-                for (int i = 1; i < effectIdSequence.length; i++)
-                    chain.addToChain(FromFile.effects().get(effectIdSequence[i]));
-                list.add(chain);
-            }
-        return list;
     }
 
     /**
@@ -122,40 +142,20 @@ public class WeaponCard extends AbstractCard {
      * Returns all the different permutations of the provided elements.
      *
      * @param elements  the elements of the sequence
-     * @param pos       the first element to work on
+     * @param temp      where the sequence is temporarily stored
      * @param collector where all the permutations will be stored
      */
-    private void permutations(List<String> elements, int pos,
-                              List<String[]> collector) {
-        /*If there are no more elements*/
-        if (pos == elements.size()) {
-
-            /*Checking whether the same sequence already exists*/
-            for (String[] strings : collector) {
-                boolean different = false;
-                for (int i = 0; i < strings.length; i++) {
-                    if (!strings[i].equals(elements.get(i)))
-                        different = true;
-                }
-                if (!different)
-                    return;
+    private void permutations(List<String> elements, List<String> temp, List<? super List<String>> collector) {
+        if (elements.isEmpty()) {
+            collector.add(temp);
+        } else {
+            for (String element : elements) {
+                List<String> myTemp = new ArrayList<>(temp);
+                myTemp.add(element);
+                List<String> myElements = new ArrayList<>(elements);
+                myElements.remove(element);
+                permutations(myElements, myTemp, collector);
             }
-
-            /*Adding the sequence only if it does not already exist*/
-            collector.add(elements.toArray(new String[0]));
-        }
-
-        /*Iterating on the remaining elements*/
-        for (int i = pos; i < elements.size(); i++) {
-
-            /*Fixing an element at the beginning*/
-            List<String> left = new ArrayList<>(elements);
-            String removed = left.get(i);
-            left.remove(i);
-            left.add(pos, removed);
-
-            /*Recursive call on those left*/
-            permutations(left, pos + 1, collector);
         }
     }
 }

@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.cards;
 
+import it.polimi.ingsw.server.controller.effects.Action;
 import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.AmmoCube;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,12 +34,12 @@ class WeaponCardTest {
     /*Testing that the sequences are in the right order*/
     @Test
     void getPossibleSequences_ordered() {
-        List<EffectInterface> sequences = card.getPossibleSequences();
-        int i = 0, j = 0;
-        for (EffectInterface e : sequences) {
-            while (e.getDecorated() != null) {
+        List<Action> sequences = card.getPossibleSequences();
+        int i = 0;
+        int j = 0;
+        for (Action action : sequences) {
+            for (EffectInterface e : action) {
                 assertEquals(effects[i][j], e.getName());
-                e = e.getDecorated();
                 j++;
             }
             j = 0;
@@ -50,21 +51,29 @@ class WeaponCardTest {
     @Test
     void getPossibleSequences_unOrdered() {
         WeaponCard card = new WeaponCard(id, cubes, new String[][]
-                {{"railgun"}, {"zx-2"}, {"railgun", "powerGlove"}}, false);
+                {{"railgun"}, {"zx-2"}, {"flamethrower", "powerGlove"}}, false);
+        card.runPermutation();
 
         String[][] expected = {
-                {"railgun", "zx-2", "railgun"},
-                {"railgun", "railgun", "zx-2"},
-                {"zx-2", "railgun", "railgun"}
+                {"railgun"},
+                {"railgun", "zx-2"},
+                {"zx-2", "railgun"},
+                {"railgun", "flamethrower"},
+                {"flamethrower", "railgun"},
+                {"railgun", "zx-2", "flamethrower"},
+                {"railgun", "flamethrower", "zx-2"},
+                {"zx-2", "railgun", "flamethrower"},
+                {"zx-2", "flamethrower", "railgun"},
+                {"flamethrower", "railgun", "zx-2"},
+                {"flamethrower", "zx-2", "railgun"}
         };
 
-        List<EffectInterface> sequences = card.getPossibleSequences();
+        List<Action> sequences = card.getPossibleSequences();
         int i = 0;
         int j = 0;
-        for (EffectInterface e : sequences) {
-            while (e.getDecorated() != null) {
+        for (Action action : sequences) {
+            for (EffectInterface e : action) {
                 assertEquals(expected[i][j], e.getName());
-                e = e.getDecorated();
                 j++;
             }
             j = 0;

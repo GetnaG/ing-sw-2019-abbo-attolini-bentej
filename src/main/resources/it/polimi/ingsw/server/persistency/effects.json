@@ -1,6 +1,7 @@
 [
   {
     "id": "sledgehammer",
+    "cost": [],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": 0},
@@ -11,6 +12,7 @@
   },
   {
     "id": "sledgehammer_pulverize",
+    "cost": ["RED"],
     "damageAmount": 3,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": 0},
@@ -22,6 +24,7 @@
   },
   {
     "id": "shockwave",
+    "cost": [],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 3},
     "targetsDistance": {"min": 1, "max": 1},
@@ -32,6 +35,7 @@
   },
   {
     "id": "shockwave_tsunami",
+    "cost": ["YELLOW"],
     "damageAmount": 1,
     "targetsNumber": {"min": -1, "max": -1},
     "targetsDistance": {"min": 1, "max": 1},
@@ -42,6 +46,7 @@
   },
   {
     "id": "powerGlove",
+    "cost": [],
     "damageAmount": 1,
     "marksAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
@@ -53,6 +58,7 @@
   },
   {
     "id": "powerGlove_rocketFist",
+    "cost": ["BLUE"],
     "damageAmount": 2,
     "targetsNumber": {"min": 0, "max": 2},
     "targetsDistance": {"min": 1, "max": 2},
@@ -64,6 +70,7 @@
   },
   {
     "id": "shotgun",
+    "cost": [],
     "damageAmount": 3,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": 0},
@@ -75,6 +82,7 @@
   },
   {
     "id": "shotgun_longBarrel",
+    "cost": [],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 1, "max": 1},
@@ -85,6 +93,7 @@
   },
   {
     "id": "zx-2",
+    "cost": [],
     "damageAmount": 1,
     "marksAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
@@ -96,6 +105,7 @@
   },
   {
     "id": "zx-2_scanner",
+    "cost": [],
     "marksAmount": 1,
     "targetsNumber": {"min": 1, "max": 3},
     "targetsDistance": {"min": 0, "max": -1},
@@ -106,6 +116,7 @@
   },
   {
     "id": "cyberblade",
+    "cost": [],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": 0},
@@ -116,6 +127,7 @@
   },
   {
     "id": "cyberblade_sliceAndDice",
+    "cost": ["YELLOW"],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": 0},
@@ -126,6 +138,7 @@
   },
   {
     "id": "railgun",
+    "cost": [],
     "damageAmount": 3,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -137,6 +150,7 @@
   },
   {
     "id": "railgun_piercing",
+    "cost": [],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 2},
     "targetsDistance": {"min": 0, "max": -1},
@@ -148,6 +162,7 @@
   },
   {
     "id": "rocketLauncher",
+    "cost": [],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 1, "max": -1},
@@ -159,6 +174,7 @@
   },
   {
     "id": "rocketLauncher_basic_fragmentingWarhead",
+    "cost": ["YELLOW"],
     "damageAmount": 2,
     "secondaryDamage": 1,
     "targetsNumber": {"min": 1, "max": 1},
@@ -171,6 +187,7 @@
   },
   {
     "id": "grenadeLauncher",
+    "cost": [],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -182,6 +199,7 @@
   },
   {
     "id": "grenadeLauncher_extraGrenade",
+    "cost": ["RED"],
     "secondaryDamage": 1,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -193,6 +211,7 @@
   },
   {
     "id": "flamethrower",
+    "cost": [],
     "damageAmount": 1,
     "targetsNumber": {"min": 0, "max": 2},
     "targetsDistance": {"min": 1, "max": 2},
@@ -204,6 +223,7 @@
   },
   {
     "id": "flamethrower_barbecue",
+    "cost": ["YELLOW", "YELLOW"],
     "damageAmount": 1,
     "secondaryDamage": 1,
     "targetsNumber": {"min": 0, "max": 2},
@@ -216,6 +236,7 @@
   },
   {
     "id": "hellion",
+    "cost": [],
     "damageAmount": 1,
     "secondaryMarks": 1,
     "targetsNumber": {"min": 1, "max": 1},
@@ -227,6 +248,7 @@
   },
   {
     "id": "hellion_nano-tracer",
+    "cost": ["RED"],
     "damageAmount": 1,
     "secondaryMarks": 2,
     "targetsNumber": {"min": 1, "max": 1},
@@ -238,6 +260,7 @@
   },
   {
     "id": "heatseeker",
+    "cost": [],
     "damageAmount": 3,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -248,6 +271,7 @@
   },
   {
     "id": "furnace",
+    "cost": [],
     "secondaryDamage": 1,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -259,6 +283,7 @@
   },
   {
     "id": "furnace_cozyFire",
+    "cost": [],
     "secondaryDamage": 1,
     "secondaryMarks": 1,
     "targetsNumber": {"min": 1, "max": 1},
@@ -271,6 +296,7 @@
   },
   {
     "id": "vortexCannon",
+    "cost": [],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -282,6 +308,7 @@
   },
   {
     "id": "vortexCannon_blackHole",
+    "cost": ["RED"],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 2},
     "targetsDistance": {"min": 0, "max": -1},
@@ -293,6 +320,7 @@
   },
   {
     "id": "tractorBeam",
+    "cost": [],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -304,6 +332,7 @@
   },
   {
     "id": "tractorBeam_punisher",
+    "cost": ["RED", "YELLOW"],
     "damageAmount": 3,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": 2},
@@ -314,6 +343,7 @@
   },
   {
     "id": "electroscythe",
+    "cost": [],
     "damageAmount": 1,
     "targetsNumber": {"min": -1, "max": -1},
     "targetsDistance": {"min": 0, "max": 0},
@@ -324,6 +354,7 @@
   },
   {
     "id": "electroscythe_reaper",
+    "cost": ["BLUE", "RED"],
     "damageAmount": 2,
     "targetsNumber": {"min": -1, "max": -1},
     "targetsDistance": {"min": 0, "max": 0},
@@ -334,6 +365,7 @@
   },
   {
     "id": "whisper",
+    "cost": [],
     "damageAmount": 3,
     "marksAmount": 1,
     "targetsNumber": {"min": 1, "max": 1},
@@ -345,6 +377,7 @@
   },
   {
     "id": "plasmaGun",
+    "cost": [],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -355,6 +388,7 @@
   },
   {
     "id": "plasmaGun_chargedShot",
+    "cost": ["BLUE"],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -365,6 +399,7 @@
   },
   {
     "id": "t.h.o.r.",
+    "cost": [],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -375,6 +410,7 @@
   },
   {
     "id": "t.h.o.r._chainReaction",
+    "cost": ["BLUE"],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -385,6 +421,7 @@
   },
   {
     "id": "t.h.o.r._highVoltage",
+    "cost": ["BLUE"],
     "damageAmount": 2,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -395,6 +432,7 @@
   },
   {
     "id": "machineGun",
+    "cost": [],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 2},
     "targetsDistance": {"min": 0, "max": -1},
@@ -405,6 +443,7 @@
   },
   {
     "id": "machineGun_focusShot",
+    "cost": ["YELLOW"],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -415,6 +454,7 @@
   },
   {
     "id": "machineGun_turretTripod",
+    "cost": ["BLUE"],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 2},
     "targetsDistance": {"min": 0, "max": -1},
@@ -425,6 +465,7 @@
   },
   {
     "id": "lockRifle",
+    "cost": [],
     "damageAmount": 2,
     "marksAmount": 1,
     "targetsNumber": {"min": 1, "max": 1},
@@ -436,6 +477,7 @@
   },
   {
     "id": "lockRifle_secondLock",
+    "cost": ["RED"],
     "damageAmount": 0,
     "marksAmount": 1,
     "secondaryDamage": 0,
@@ -450,6 +492,7 @@
   },
   {
     "id": "targetingScope",
+    "cost": ["ANY"],
     "damageAmount": 1,
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
@@ -460,6 +503,7 @@
   },
   {
     "id": "newton",
+    "cost": [],
     "targetsNumber": {"min": 1, "max": 1},
     "targetsDistance": {"min": 0, "max": -1},
     "historyPolicy": "ALL",

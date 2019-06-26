@@ -5,13 +5,11 @@ import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.controller.effects.MoveSelfEffect;
 import it.polimi.ingsw.server.controller.effects.TagbackEffect;
 import it.polimi.ingsw.server.controller.effects.cardeffects.CardEffect;
+import it.polimi.ingsw.server.model.AmmoCube;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -22,6 +20,7 @@ import java.util.stream.Stream;
  * <pre> {@code [
  *  {
  *     "id": "name",
+ *     "cost": ["RED"],
  *     "damageAmount": 0,
  *     "marksAmount": 0,
  *     "secondaryDamage": 0,
@@ -75,10 +74,10 @@ public class EffectLoader implements BasicLoader<EffectInterface> {
 
         /*Adding the other effects*/
         otherEffects = new ArrayList<>();
-        otherEffects.add(new MoveSelfEffect("cyberblade_shadowstep", 1));
-        otherEffects.add(new MoveSelfEffect("rocketLauncher_rocketJump", 2));
-        otherEffects.add(new MoveSelfEffect("plasmaGun_phaseGlide", 2));
-        otherEffects.add(new MoveSelfEffect("teleporter", -1));
+        otherEffects.add(new MoveSelfEffect("cyberblade_shadowstep", 1, new ArrayList<>()));
+        otherEffects.add(new MoveSelfEffect("rocketLauncher_rocketJump", 2, Collections.singletonList(AmmoCube.BLUE)));
+        otherEffects.add(new MoveSelfEffect("plasmaGun_phaseGlide", 2, new ArrayList<>()));
+        otherEffects.add(new MoveSelfEffect("teleporter", -1, new ArrayList<>()));
         otherEffects.add(new TagbackEffect("tagbackGrenade"));
     }
 

@@ -152,7 +152,7 @@ class ShootTest {
     private ToClientInterface getDumbToClientInterface(){
         return new ToClientInterface() {
             @Override
-            public EffectInterface chooseEffectsSequence(List<EffectInterface> options) {
+            public Action chooseEffectsSequence(List<Action> options) {
                 return options.get(0);
             }
 

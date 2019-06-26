@@ -6,9 +6,7 @@ import it.polimi.ingsw.communication.*;
 import it.polimi.ingsw.communication.protocol.MessageType;
 import it.polimi.ingsw.communication.protocol.Notification;
 import it.polimi.ingsw.communication.protocol.ProtocolMessage;
-import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.effects.Action;
-import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
@@ -132,7 +130,7 @@ public class SocketToClient implements ToClientInterface {
      * @throws ToClientException if there are problems whit the socket
      */
     @Override
-    public EffectInterface chooseEffectsSequence(List<EffectInterface> options)
+    public Action chooseEffectsSequence(List<Action> options)
             throws ToClientException {
         return options.get(sendAndCheck(MessageType.EFFECTS_SEQUENCE,
                 new CommunicationHelper().askEffect(options)));

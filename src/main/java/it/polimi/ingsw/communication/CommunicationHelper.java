@@ -30,11 +30,11 @@ public class CommunicationHelper {
      * @param options the options to choose from
      * @return the options as lists of sequences of keys
      */
-    public List<List<String>> askEffect(List<? extends EffectInterface> options) {
+    public List<List<String>> askEffect(List<? extends Action> options) {
 
         /*Creating a list of names for each chain of effects*/
         List<List<String>> names = new ArrayList<>();
-        for (EffectInterface effect : options) {
+        for (Action effect : options) {
             List<String> chain = new ArrayList<>();
             effect.forEach(el -> chain.add(el.getName()));
             names.add(chain);

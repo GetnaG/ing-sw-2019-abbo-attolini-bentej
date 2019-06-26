@@ -6,7 +6,6 @@ import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.ToClientInterface;
 import it.polimi.ingsw.server.controller.ScoreListener;
 import it.polimi.ingsw.server.controller.effects.Action;
-import it.polimi.ingsw.server.controller.effects.EffectInterface;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.Square;
@@ -531,7 +530,7 @@ class PlayerTest {
     /*A mock ToClientInterface*/
     private static class MyToClientInterface implements ToClientInterface {
         @Override
-        public EffectInterface chooseEffectsSequence(List<EffectInterface> options) {
+        public Action chooseEffectsSequence(List<Action> options) {
             return null;
         }
 

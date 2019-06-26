@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.controller.effects;
 
 import it.polimi.ingsw.communication.ToClientException;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -8,17 +9,14 @@ import it.polimi.ingsw.server.model.player.Player;
 import java.util.List;
 
 /**
- * This class represents an effect of a card or an action.
+ * This class represents an effect of a card or a step.
  * <p>
- * An effect has a name and a reference to a following one if necessary,
- * this way a chain of effects can be built; this chain can be iterated with
- * the provided {@link EffectIterator}.
+ * An effect has a name and a cost that must be payed to run the effect.
  * The effect can be run with the provided method.
  *
  * @author Abbo Giulio A.
- * @see EffectIterator
  */
-public interface EffectInterface extends Iterable<EffectInterface> {
+public interface EffectInterface {
 
     /**
      * Runs this effect for the specified player.
@@ -43,18 +41,9 @@ public interface EffectInterface extends Iterable<EffectInterface> {
     String getName();
 
     /**
-     * Returns the next effect in the chain.
-     * An iterator should be used to access the effects in the chain instead
-     * of this method.
+     * Returns the cost of this effect.
      *
-     * @return the next effect in the chain, null if there is not one
+     * @return the cost of this effect
      */
-    EffectInterface getDecorated();
-
-    /**
-     * Sets the provided effect as the last effect in the chain.
-     *
-     * @param last the effect to be added
-     */
-    void addToChain(EffectInterface last);
+    List<AmmoCube> getCost();
 }

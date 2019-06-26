@@ -94,23 +94,27 @@ public class NormalTurn implements TurnInterface {
     /**
      * Asks the player if he wants to use a Powerup Card. Then it runs its effect.
      */
-    private void askAndRunPowerup() throws ToClientException {//TODO: check if usable as action (and cost when will be implemented)
+    private void askAndRunPowerup() throws ToClientException {
 
         if (player.getAllPowerup().isEmpty())
             return;
 
         PowerupCard card = null;
         try {
-            List<PowerupCard> powerupCards = player.getAllPowerup().stream().filter(c -> c.isUsableAsAction()).collect(Collectors.toList());
+            List<PowerupCard> powerupCards = player.getAllPowerup().stream()
+                    .filter(PowerupCard::isUsableAsAction)
+                    .filter(c -> player.canAfford(c.getEffect().getCost(), false))
+                    .collect(Collectors.toList());
             if (!powerupCards.isEmpty())
                 card = player.getToClient().choosePowerup(powerupCards);
         } catch (ChoiceRefusedException e) {
             return;
         }
 
-        if (card != null)
-            card.getEffect().runEffect(player, allTargets, board, alreadyTargeted,
-                    new ArrayList<>());
+        if (card != null) {
+            player.pay(card.getEffect().getCost());
+            card.getEffect().runEffect(player, allTargets, board, alreadyTargeted, new ArrayList<>());
+        }
     }
 
     /**
@@ -134,7 +138,7 @@ public class NormalTurn implements TurnInterface {
         actions.addAll(player.getAdrenalineActions());
 
         player.getToClient().chooseAction(actions)
-                .runEffect(player, allTargets, board, alreadyTargeted, new ArrayList<>());
+                .runAll(player, allTargets, board, alreadyTargeted, new ArrayList<>());
 
     }
 

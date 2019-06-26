@@ -203,10 +203,6 @@ public class Player implements Damageable {
         return position;
     }
 
-    public PlayerBoardInterface getPlayerBoard() {
-        return playerBoard;
-    }
-
     /**
      * {@inheritDoc}
      *
@@ -218,6 +214,22 @@ public class Player implements Damageable {
         position = newPosition;
     }
 
+    public PlayerBoardInterface getPlayerBoard() {
+        return playerBoard;
+    }
+
+    /**
+     * Changes the playerBoard for this player.
+     * Marks are kept if the given board accepts them.
+     *
+     * @param playerBoard the new board
+     */
+    void setPlayerBoard(PlayerBoardInterface playerBoard) {
+        List<Player> marks = this.playerBoard.getMarks();
+        this.playerBoard = playerBoard;
+        this.playerBoard.addMarks(marks);
+    }
+
     /**
      * {@inheritDoc}
      * <p>
@@ -226,7 +238,7 @@ public class Player implements Damageable {
     @Override
     public void scoreAndResetDamage() {
         playerBoard.score();
-        if(getOverkillPlayer() != null)
+        if (getOverkillPlayer() != null)
             getOverkillPlayer().giveMark(Collections.singletonList(this));
         playerBoard.addSkull();
         playerBoard.resetDamage();
@@ -428,7 +440,7 @@ public class Player implements Damageable {
      * Reloads the specified weapon and pays the cost.
      * A loaded weapon can be used to shoot.
      *
-     * @param weapon the weapon to be reloaded
+     * @param weapon  the weapon to be reloaded
      * @param asCubes the card to use as cubes if necessary
      * @throws NullPointerException     if {@code weapon} is null
      * @throws IllegalArgumentException if the {@code weapon} was not in the
@@ -509,6 +521,7 @@ public class Player implements Damageable {
 
     /**
      * Returns the active ammo cubes.
+     *
      * @return the active ammo cubes
      */
     public List<AmmoCube> getAmmoCubes() {
@@ -555,15 +568,14 @@ public class Player implements Damageable {
     }
 
     /**
-     * Changes the playerBoard for this player.
-     * Marks are kept if the given board accepts them.
+     * Pays the provided price, if possible.
      *
-     * @param playerBoard the new board
+     * @param price the price to pay
+     * @throws IllegalArgumentException if this player can not afford to pay
+     *                                  the price
      */
-    void setPlayerBoard(PlayerBoardInterface playerBoard) {
-        List<Player> marks = this.playerBoard.getMarks();
-        this.playerBoard = playerBoard;
-        this.playerBoard.addMarks(marks);
+    public void pay(List<AmmoCube> price) {
+        ammoBox.pay(price);
     }
 
     public int getSkulls() {
