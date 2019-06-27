@@ -435,7 +435,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
          * if the iteration should stop
          */
         private Player circularNext() {
-            index = ((index + 1) < players.size()) ? (index + 1) : 0;
+            index = (index + 1) % players.size();
             return (!gameOver && (isCircular || index != start)) ?
                     players.get(index) : null;
         }

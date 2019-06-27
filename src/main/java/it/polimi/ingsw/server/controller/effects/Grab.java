@@ -50,7 +50,7 @@ public class Grab implements EffectInterface {
             subjectPlayer.addAmmo(card.getCubes());
 
             /*If the tile depicts a powerup card, draw one*/
-            if (card.hasPowerup() && subjectPlayer.getAllPowerup().size() >= 3)
+            if (card.hasPowerup() && subjectPlayer.getAllPowerup().size() < 3)
                 subjectPlayer.addPowerup(board.getPowerupCard());
 
             /*Recycling the ammo card*/
@@ -87,14 +87,14 @@ public class Grab implements EffectInterface {
 
             /*If necessary, choosing a powerup to pay*/
             PowerupCard powerupToPay = null;
-            if (!subjectPlayer.canAfford(weaponToBuy.getCost(), true))
+            if (!subjectPlayer.canAfford(weaponToBuy.getCost(), true) && !subjectPlayer.canAffordWithPowerups(weaponToBuy.getCost(), true).isEmpty()) {
                 powerupToPay = subjectPlayer.getToClient().choosePowerupForPaying(
                         subjectPlayer.canAffordWithPowerups(weaponToBuy.getCost(), true));
+            }
 
             /*The player buys the weapon with the chosen powerup*/
             if (weaponToDiscard != null)
                 subjectPlayer.discard(weaponToDiscard);
-            spawnSquare.pickWeapon(weaponToBuy);
             subjectPlayer.buy(weaponToBuy, powerupToPay);
             if (weaponToDiscard != null)
                 spawnSquare.getMarket().addCard(weaponToDiscard);
