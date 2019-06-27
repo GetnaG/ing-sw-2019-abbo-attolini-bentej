@@ -171,10 +171,10 @@ public class Square {
         return GameBoard.getRoom(this);
     }
 
-    public void setRoom(Room room) {
+    /*public void setRoom(Room room) {
 
-        //this.room = room; TODO Consider delete
-    }
+        //this.room = room;
+    }*/
 
 
     public String getID() {
@@ -284,46 +284,6 @@ public class Square {
         return visibleSquares;
     }
 
-    //TODO: following equals gave problems with hash tables, automatically implemented new one below
-   /* *//**
-     * @param obj is a square
-     * @return true if the squares are the same instances
-     *//*
-    @Override
-    public boolean equals(Object obj) {
-        if (!(obj instanceof Square))
-            return false;
-
-        if (!(this.north == null && ((Square) obj).north == null)) {
-            if (!(this.north != null && ((Square) obj).north != null) || ((Square) obj).north != north) {
-                return false;
-            }
-        }
-
-        if (!(this.south == null && ((Square) obj).south == null)) {
-            if (!(this.south != null && ((Square) obj).south != null) || ((Square) obj).south != south) {
-                return false;
-            }
-        }
-
-        if (!(this.east == null && ((Square) obj).east == null)) {
-            if (!(this.east != null && ((Square) obj).east != null) || ((Square) obj).east != east) {
-                return false;
-            }
-        }
-
-        if (!(this.west == null && ((Square) obj).west == null)) {
-            if (!(this.west != null && ((Square) obj).west != null) || ((Square) obj).west != west) {
-                return false;
-            }
-        }
-
-        if(this.getSquareColor() != ((Square) obj).getSquareColor())
-            return false;
-
-        return true;
-    }*/
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -401,7 +361,7 @@ public class Square {
     }
 
     public void refresh(List<Room> rooms) {
-        if (rooms == null || rooms.size() == 0) return;
+        if (rooms == null || rooms.isEmpty()) return;
 
         this.north = getSquare(rooms, idNorth);
         this.east = getSquare(rooms, idEast);

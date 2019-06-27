@@ -81,10 +81,10 @@ class GameBoardTest {
         squaresInRoom.add(fourthSquare);
         Room secondRoom = new Room(squaresInRoom);
 
-        firstSquare.setRoom(firstRoom);
-        thirdSquare.setRoom(firstRoom);
-        secondSquare.setRoom(secondRoom);
-        fourthSquare.setRoom(secondRoom);
+        //firstSquare.setRoom(firstRoom);
+        //thirdSquare.setRoom(firstRoom);
+        //secondSquare.setRoom(secondRoom);
+        //fourthSquare.setRoom(secondRoom);
 
         configuration = new ArrayList<>();
         configuration.add(firstRoom);
@@ -152,9 +152,9 @@ class GameBoardTest {
         squaresInRoom.add(fourthSquare);
         Room secondRoom2 = new Room(squaresInRoom);
 
-        fifthSquare.setRoom(thirdRoom);
-        sixthSquare.setRoom(thirdRoom);
-        seventhSquare.setRoom(thirdRoom);
+        //fifthSquare.setRoom(thirdRoom);
+        //sixthSquare.setRoom(thirdRoom);
+        //seventhSquare.setRoom(thirdRoom);
 
         configuration2 = new ArrayList<>();
         configuration2.add(firstRoom);
@@ -281,10 +281,10 @@ class GameBoardTest {
         squaresInRoom.add(square4);
         Room secondRoom = new Room(squaresInRoom);
 
-        square1.setRoom(firstRoom);
-        square3.setRoom(firstRoom);
-        square2.setRoom(secondRoom);
-        square4.setRoom(secondRoom);
+        //square1.setRoom(firstRoom);
+        //square3.setRoom(firstRoom);
+        //square2.setRoom(secondRoom);
+        //square4.setRoom(secondRoom);
 
         conf = new ArrayList<>();
         conf.add(firstRoom);

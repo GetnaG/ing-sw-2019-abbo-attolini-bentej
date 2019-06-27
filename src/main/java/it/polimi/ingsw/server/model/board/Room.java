@@ -22,8 +22,8 @@ public class Room {
     public Room( List<Square> squares, SpawnSquare spawnSquare ) {
 
         this.squares = squares;
-        for(Square i: squares)
-            i.setRoom(this);
+        /*for(Square i: squares)
+            i.setRoom(this);*/
 
         this.spawnSquare = spawnSquare;
 
@@ -37,14 +37,14 @@ public class Room {
 
     public Room( List<Square> squares ) {
         this.squares = squares;
-        for(Square i: squares)
-            i.setRoom(this);
+        /*for(Square i: squares)
+            i.setRoom(this);*/
     }
 
     public void setSquares(List<Square> squares) {
         this.squares = squares;
-        for(Square i: squares)
-            i.setRoom(this);
+        /*for(Square i: squares)
+            i.setRoom(this);*/
     }
 
     public List<Square> getSquares(){

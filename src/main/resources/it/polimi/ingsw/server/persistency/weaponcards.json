@@ -5,10 +5,10 @@
     ],
     "effectIdSequences": [
       [
-        "sledgehammer"
+        "sledgeHammer"
       ],
       [
-        "sledgehammer_pulverize"
+        "sledgeHammer_pulverize"
       ]
     ],
     "onlySpecifiedOrder": true,

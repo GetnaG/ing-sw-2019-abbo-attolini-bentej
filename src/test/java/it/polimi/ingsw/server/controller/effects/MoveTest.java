@@ -108,10 +108,10 @@ class MoveTest {
         squaresInRoom.add(square4);
         Room secondRoom = new Room(squaresInRoom);
 
-        square1.setRoom(firstRoom);
-        square3.setRoom(firstRoom);
-        square2.setRoom(secondRoom);
-        square4.setRoom(secondRoom);
+        //square1.setRoom(firstRoom);
+        //square3.setRoom(firstRoom);
+        //square2.setRoom(secondRoom);
+        //square4.setRoom(secondRoom);
 
         conf = new ArrayList<>();
         conf.add(firstRoom);

@@ -4,7 +4,6 @@ import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.communication.protocol.Notification;
-import it.polimi.ingsw.communication.protocol.Update;
 import it.polimi.ingsw.server.controller.DeathmatchController;
 import it.polimi.ingsw.server.model.board.Configurations;
 
@@ -177,14 +176,25 @@ public class ServerHall implements Runnable {
         }
     }
 
+    /*
+    private Configurations chooseConfig (){
+
+        Configurations chosenConfig;
+        //TODO let the player choose the map
+        return chosenConfig;
+    }
+    */
+
     /**
      * Starts a death match.
      */
     private synchronized void startMatch() {
         stopTimer();
 
+        //Configurations c = chooseConfig();
+
         DeathmatchController controller =
-                new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1);//TODO: how to change the configuration
+                new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1 /*c*/);//TODO: how to change the configuration
         startedGames.add(controller);
         for (User u : connectedUsers)
             u.setMatchSuspensionListener(controller);
@@ -192,6 +202,7 @@ public class ServerHall implements Runnable {
         connectedUsers.clear();
         statusNextGame = GameStatus.NOT_STARTED;
         new Thread(controller::start).start();
+        //TODO notify MatchState
         ServerMain.getLog().info("Match starting");
     }
 

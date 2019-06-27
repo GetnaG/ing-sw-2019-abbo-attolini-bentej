@@ -6,7 +6,6 @@ import it.polimi.ingsw.client.clientlogic.PlayerState;
 import it.polimi.ingsw.client.resources.R;
 
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -88,6 +87,9 @@ public class CLI implements InteractionInterface {
     private static final int RED_SPAWN_POINT = 4;
 
     private static final int YELLOW_SPAWN_POINT = 11;
+
+    private static final String EMPTY = "empty";
+
 
     /**
      * Creates a CLI interface that uses the provided input and output, and
@@ -466,7 +468,7 @@ public class CLI implements InteractionInterface {
     private StringBuilder translateStatus() {
         StringBuilder stringBuilder = new StringBuilder();
         Integer[] vectorValue = {8, 6, 4, 2, 1, 1, 1, 1, 1};
-        Integer[] forbidden_squares = {100, 100};
+        Integer[] forbiddenSquares = {100, 100};
 
         if(this.model != null) {
 
@@ -488,18 +490,18 @@ public class CLI implements InteractionInterface {
             switch (model.getConfigurationID()) {
                 case 0: {
                     stringBuilder.append(R.string("configuration0"));
-                    forbidden_squares[0] = 3;
+                    forbiddenSquares[0] = 3;
                     break;
                 }
                 case 1: {
                     stringBuilder.append(R.string("configuration1"));
-                    forbidden_squares[0] = 3;
-                    forbidden_squares[0] = 8;
+                    forbiddenSquares[0] = 3;
+                    forbiddenSquares[0] = 8;
                     break;
                 }
                 case 2: {
                     stringBuilder.append(R.string("configuration2"));
-                    forbidden_squares[0] = 8;
+                    forbiddenSquares[0] = 8;
                     break;
                 }
                 case 3: {
@@ -513,7 +515,7 @@ public class CLI implements InteractionInterface {
 
             stringBuilder.append(lineSeparator);
             for(int i=0; i < BOARD_LENGTH; i++) {
-                if(i != forbidden_squares[0] && i != forbidden_squares[1]) {
+                if(i != forbiddenSquares[0] && i != forbiddenSquares[1]) {
                     stringBuilder.append("square ").append(i).append(": ");
                     if (model.getAmmoCardsID() != null) {
                         if (model.getAmmoCardsID().get(i) != null)
@@ -526,7 +528,7 @@ public class CLI implements InteractionInterface {
                                         if (model.getWeaponsCardsID().get(j) != null)
                                             stringBuilder.append(model.getWeaponsCardsID().get(j));
                                         else
-                                            stringBuilder.append(R.string("empty"));
+                                            stringBuilder.append(EMPTY);
                                         if (j < 2)
                                             stringBuilder.append(" , ");
                                     }
@@ -537,7 +539,7 @@ public class CLI implements InteractionInterface {
                                         if (model.getWeaponsCardsID().get(j + MARKET_SIZE) != null)
                                             stringBuilder.append(model.getWeaponsCardsID().get(j + MARKET_SIZE)).append(" , ");
                                         else
-                                            stringBuilder.append(R.string("empty"));
+                                            stringBuilder.append(EMPTY);
                                         if (j < 2)
                                             stringBuilder.append(" , ");
                                     }
@@ -548,7 +550,7 @@ public class CLI implements InteractionInterface {
                                         if (model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE) != null)
                                             stringBuilder.append(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE)).append(" , ");
                                         else
-                                            stringBuilder.append(R.string("empty"));
+                                            stringBuilder.append(EMPTY);
                                         if (j < 2)
                                             stringBuilder.append(" , ");
                                     }
@@ -589,10 +591,24 @@ public class CLI implements InteractionInterface {
                     else
                         stringBuilder.append("< ").append(ps.getNickname()).append(": offline >").append(lineSeparator);
 
-                    stringBuilder.append("damage: ").append(ps.getDamage()).append(lineSeparator);
+                    stringBuilder.append("damage: [").append(ps.getDamage());
+                    for(String s : ps.getDamage()) {
+                        stringBuilder.append(s);
+                        if(ps.getDamage().indexOf(s) < ps.getDamage().size())
+                            stringBuilder.append(" ");
+                    }
+                    stringBuilder.append("]").append(lineSeparator);
 
+                    //TODO mancano player. overkill e inferimento
 
-                    stringBuilder.append("passive marks: ").append(ps.getMarks()).append(lineSeparator);
+                    stringBuilder.append("passive marks: ");
+                    for(String s : ps.getMarks()) {
+                        stringBuilder.append(s);
+                        if(ps.getMarks().indexOf(s) < ps.getMarks().size())
+                            stringBuilder.append(" ,");
+                    }
+                    stringBuilder.append(lineSeparator);
+
 
                     if(ps.getSkullNumber() >= 0)
                         stringBuilder.append("skulls: ").append(ps.getSkullNumber()).append(lineSeparator);
@@ -642,7 +658,6 @@ public class CLI implements InteractionInterface {
                         stringBuilder.append(ps.getPowerups().get(i));
 
                     stringBuilder.append(lineSeparator);
-
 
                     for(PlayerState x: model.getPlayersState())
                         if(x.isPlayerBoardFrenzy())
