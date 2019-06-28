@@ -115,8 +115,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             currentPlayer = iterator.next();
             updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
             new FirstTurn(this::updateAllPlayers).startTurn(currentPlayer, board);
-            turn(new NormalTurn(currentPlayer, new ArrayList<>(players), board,
-                    this::updateAllPlayers), currentPlayer);
+            if (!suspendedPlayers.contains(currentPlayer))
+                turn(new NormalTurn(currentPlayer, new ArrayList<>(players), board,
+                        this::updateAllPlayers), currentPlayer);
         }
 
         /*Ensuring that all the players are on the board, the default is the blue spawn*/
