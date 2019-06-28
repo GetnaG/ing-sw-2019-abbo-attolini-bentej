@@ -431,7 +431,7 @@ public class GameBoard implements ReplaceListener {
      * @param wallSensitive boolean indicating if the path should ignore walls or not
      * @return an int representing the minimum distance between two squares.
      */
-    public int minimumDistance(Square start, Square end, Boolean wallSensitive) {
+    public int minimumDistance(Square start, Square end, Boolean wallSensitive) {  //TODO risolvere il loop
         if (start.equals(end))
             return 0;
         if (start != null)

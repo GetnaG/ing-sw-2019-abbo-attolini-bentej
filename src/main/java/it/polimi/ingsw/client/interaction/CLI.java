@@ -31,6 +31,12 @@ public class CLI implements InteractionInterface {
      * multiple choices are available.
      */
     private static final String CHOICE_INDEX = ") ";
+    private static final int BOARD_LENGTH = 12;
+    private static final int MARKET_SIZE = 3;
+    private static final int BLUE_SPAWN_POINT = 2;
+    private static final int RED_SPAWN_POINT = 4;
+    private static final int YELLOW_SPAWN_POINT = 11;
+    private static final String EMPTY = "empty";
     /**
      * The line separator for this OS.
      */
@@ -77,18 +83,6 @@ public class CLI implements InteractionInterface {
      * The controller, used only in the initial setup.
      */
     private ClientController controller;
-
-    private static final int BOARD_LENGTH = 12;
-
-    private static final int MARKET_SIZE = 3;
-
-    private static final int BLUE_SPAWN_POINT = 2;
-
-    private static final int RED_SPAWN_POINT = 4;
-
-    private static final int YELLOW_SPAWN_POINT = 11;
-
-    private static final String EMPTY = "empty";
 
 
     /**
@@ -467,220 +461,537 @@ public class CLI implements InteractionInterface {
      */
     private StringBuilder translateStatus() {
         StringBuilder stringBuilder = new StringBuilder();
-        Integer[] vectorValue = {8, 6, 4, 2, 1, 1, 1, 1, 1};
+
+        if (this.model != null) {
+
+            drawconnectedAndDisconnectedPlayers(stringBuilder);
+
+            //TODO if match has started--
+
+            drawConfigurationAndSquares(stringBuilder);
+
+            if (model.getPlayersState() != null) {
+                drawBoards(stringBuilder);
+            }
+        }
+        return stringBuilder;
+    }
+
+    private void drawConfigurationAndSquares(StringBuilder s) {
         Integer[] forbiddenSquares = {100, 100};
-
-        if(this.model != null) {
-
-            if(model.getDisconnectedPlayers() != null){
-                for (String s : model.getDisconnectedPlayers())
-                    stringBuilder.append(lineSeparator).append(s).append(" is disconnected");
+        switch (model.getConfigurationID()) {
+            case 0: {
+                forbiddenSquares[0] = 3;
+                break;
             }
-            stringBuilder.append(lineSeparator);
-
-            if(model.getJustConnectedPlayers() != null) {
-                for (String s : model.getJustConnectedPlayers())
-                    stringBuilder.append(lineSeparator).append(s).append("has just connected");
+            case 1: {
+                forbiddenSquares[0] = 3;
+                forbiddenSquares[1] = 8;
+                break;
             }
-            stringBuilder.append(lineSeparator);
-
-            //if match has started-----------------------------------------------------------------------------------
-
-
-            switch (model.getConfigurationID()) {
-                case 0: {
-                    stringBuilder.append(R.string("configuration0"));
-                    forbiddenSquares[0] = 3;
-                    break;
-                }
-                case 1: {
-                    stringBuilder.append(R.string("configuration1"));
-                    forbiddenSquares[0] = 3;
-                    forbiddenSquares[0] = 8;
-                    break;
-                }
-                case 2: {
-                    stringBuilder.append(R.string("configuration2"));
-                    forbiddenSquares[0] = 8;
-                    break;
-                }
-                case 3: {
-                    stringBuilder.append(R.string("configuration3"));
-                    break;
-                }
-                default:
+            case 2: {
+                forbiddenSquares[0] = 8;
+                break;
             }
-
-            //squares
-
-            stringBuilder.append(lineSeparator);
-            for(int i=0; i < BOARD_LENGTH; i++) {
-                if(i != forbiddenSquares[0] && i != forbiddenSquares[1]) {
-                    stringBuilder.append("square ").append(i).append(": ");
-                    if (model.getAmmoCardsID() != null) {
-                        if (model.getAmmoCardsID().get(i) != null)
-                            stringBuilder.append("ammo: [ ").append(R.string(model.getAmmoCardsID().get(i))).append(" ]");
-                        else {
-                            stringBuilder.append("market: < ");
-                            switch (i) {
-                                case BLUE_SPAWN_POINT: {
-                                    for (int j = 0; j < MARKET_SIZE; j++) {
-                                        if (model.getWeaponsCardsID().get(j) != null)
-                                            stringBuilder.append(model.getWeaponsCardsID().get(j));
-                                        else
-                                            stringBuilder.append(EMPTY);
-                                        if (j < 2)
-                                            stringBuilder.append(" , ");
-                                    }
-                                    break;
-                                }
-                                case RED_SPAWN_POINT: {
-                                    for (int j = 0; j < MARKET_SIZE; j++) {
-                                        if (model.getWeaponsCardsID().get(j + MARKET_SIZE) != null)
-                                            stringBuilder.append(model.getWeaponsCardsID().get(j + MARKET_SIZE)).append(" , ");
-                                        else
-                                            stringBuilder.append(EMPTY);
-                                        if (j < 2)
-                                            stringBuilder.append(" , ");
-                                    }
-                                    break;
-                                }
-                                case YELLOW_SPAWN_POINT: {
-                                    for (int j = 0; j < MARKET_SIZE; j++) {
-                                        if (model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE) != null)
-                                            stringBuilder.append(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE)).append(" , ");
-                                        else
-                                            stringBuilder.append(EMPTY);
-                                        if (j < 2)
-                                            stringBuilder.append(" , ");
-                                    }
-                                    break;
-                                }
-
-                                default:
-                            }
-
-                        }
-
-                        //players in the square
-
-                        int pos;
-                        if (model.getPlayersState() != null && !model.getPlayersState().isEmpty()) {
-                            stringBuilder.append(" players: { ");
-                            for (PlayerState ps : model.getPlayersState()) {
-                                pos = ps.getSquarePosition();
-                                if (pos == i)
-                                    stringBuilder.append(ps.getNickname()).append(" , ");
-                            }
-                            stringBuilder.append(" }");
-                        }
-
-                        stringBuilder.append(lineSeparator);
-                    }
-                }
+            case 3: {
+                break;
             }
-
-            stringBuilder.append(lineSeparator);
-
-            //boards
-            //board of each player
-            if(model.getPlayersState() != null) {
-                for (PlayerState ps : model.getPlayersState()) {
-                    if (ps.isConnected())
-                        stringBuilder.append("< ").append(ps.getNickname()).append(": online >").append(lineSeparator);
-                    else
-                        stringBuilder.append("< ").append(ps.getNickname()).append(": offline >").append(lineSeparator);
-
-                    stringBuilder.append("damage: [").append(ps.getDamage());
-                    for(String s : ps.getDamage()) {
-                        stringBuilder.append(s);
-                        if(ps.getDamage().indexOf(s) < ps.getDamage().size())
-                            stringBuilder.append(" ");
-                    }
-                    stringBuilder.append("]").append(lineSeparator);
-
-                    //TODO mancano player. overkill e inferimento
-
-                    stringBuilder.append("passive marks: ");
-                    for(String s : ps.getMarks()) {
-                        stringBuilder.append(s);
-                        if(ps.getMarks().indexOf(s) < ps.getMarks().size())
-                            stringBuilder.append(" ,");
-                    }
-                    stringBuilder.append(lineSeparator);
-
-
-                    if(ps.getSkullNumber() >= 0)
-                        stringBuilder.append("skulls: ").append(ps.getSkullNumber()).append(lineSeparator);
-                    else
-                        stringBuilder.append("skulls: 0").append(lineSeparator);
-
-                    //board value
-                    stringBuilder.append("board value: { ");
-                    if(ps.getSkullNumber()>=0)
-                            stringBuilder.append(vectorValue[ps.getSkullNumber()]);
-                    else
-                        stringBuilder.append(vectorValue[0]);
-                    stringBuilder.append(" }");
-
-                    stringBuilder.append(lineSeparator);
-
-                    //ammo cubes
-                    stringBuilder.append("ammo cubes: ");
-                    if(ps.getAmmoCubes()!= null && !ps.getAmmoCubes().isEmpty()) {
-                        if(ps.getAmmoCubes().get(0)!= null && ps.getAmmoCubes().size()>0 && ps.getAmmoCubes().get(0)>0)
-                            stringBuilder.append("[").append(ps.getAmmoCubes().get(0)).append(" BLUE] ");
-                        if(ps.getAmmoCubes().get(1)!= null && ps.getAmmoCubes().size()>1 && ps.getAmmoCubes().get(1)>0)
-                            stringBuilder.append("[").append(ps.getAmmoCubes().get(1)).append(" RED] ");
-                        if(ps.getAmmoCubes().get(2)!= null && ps.getAmmoCubes().size()>2 && ps.getAmmoCubes().get(2)>0)
-                            stringBuilder.append("[").append(ps.getAmmoCubes().get(2)).append(" YELLOW]");
-                    }
-
-                    stringBuilder.append(lineSeparator);
-
-                    //loaded weapons
-                    stringBuilder.append("loaded weapons: ");
-                    for (int i = 0; i < ps.getLoadedWeapons().size(); i++)
-                        stringBuilder.append(ps.getLoadedWeapons().get(i)).append(" , ");
-
-                    stringBuilder.append(lineSeparator);
-
-                    //unloaded weapons
-                    stringBuilder.append("unloaded weapons: ");
-                    for (int i = 0; i < ps.getUnloadedWeapons().size(); i++)
-                        stringBuilder.append(ps.getUnloadedWeapons().get(i)).append(" , ");
-
-                    stringBuilder.append(lineSeparator);
-
-                    //powerups
-                    stringBuilder.append("powerups: ");
-                    for (int i = 0; i < ps.getPowerups().size(); i++)
-                        stringBuilder.append(ps.getPowerups().get(i));
-
-                    stringBuilder.append(lineSeparator);
-
-                    for(PlayerState x: model.getPlayersState())
-                        if(x.isPlayerBoardFrenzy())
-                            stringBuilder.append(x.getNickname()).append(" is in Frenzy Mode!").append(lineSeparator);
-
-
-                }
-            }
-
-            stringBuilder.append(lineSeparator);
-
-            //get turn player
-            for(PlayerState x: model.getPlayersState())
-                if(x.isCurrent()){
-                    stringBuilder.append("it's your turn, ").append(x.getNickname()).append("!").append(lineSeparator);
-            }
-
-
-
+            default:
         }
 
-        return stringBuilder;
+        for (int i = 0; i < BOARD_LENGTH; i++) {
+            drawLayer(s, model.getConfigurationID(), i);
+            drawammosOrWeaponsAndPlayers(s, forbiddenSquares, i);
+        }
 
+        switch (model.getConfigurationID()) {
+            case 0: {
+                s.append(R.string("config_line_012"));
+                break;
+            }
+            case 1: {
+                s.append(R.string("config_line_112"));
+                break;
+            }
+            case 2: {
+                s.append(R.string("config_line_212"));
+                break;
+            }
+            case 3: {
+                s.append(R.string("config_line_312"));
+                break;
+            }
+            default:
+        }
+
+        s.append(lineSeparator);
+    }
+
+    private void drawLayer(StringBuilder layer, int config, int line) {
+        switch (config) {
+            case 0:
+                switch (line) {
+                    case 0: {
+                        layer.append(R.string("config_line_00"));
+                        break;
+                    }
+                    case 1: {
+                        layer.append(R.string("config_line_01"));
+                        break;
+                    }
+                    case 2: {
+                        layer.append(R.string("config_line_02"));
+                        break;
+                    }
+                    case 3: {
+                        layer.append(R.string("config_line_03"));
+                        break;
+                    }
+                    case 4: {
+                        layer.append(R.string("config_line_04"));
+                        break;
+                    }
+                    case 5: {
+                        layer.append(R.string("config_line_05"));
+                        break;
+                    }
+                    case 6: {
+                        layer.append(R.string("config_line_06"));
+                        break;
+                    }
+                    case 7: {
+                        layer.append(R.string("config_line_07"));
+                        break;
+                    }
+                    case 8: {
+                        layer.append(R.string("config_line_08"));
+                        break;
+                    }
+                    case 9: {
+                        layer.append(R.string("config_line_09"));
+                        break;
+                    }
+                    case 10: {
+                        layer.append(R.string("config_line_010"));
+                        break;
+                    }
+                    case 11: {
+                        layer.append(R.string("config_line_011"));
+                        break;
+                    }
+                    default:
+                }
+                break;
+            case 1:
+                switch (line) {
+                    case 0: {
+                        layer.append(R.string("config_line_10"));
+                        break;
+                    }
+                    case 1: {
+                        layer.append(R.string("config_line_11"));
+                        break;
+                    }
+                    case 2: {
+                        layer.append(R.string("config_line_12"));
+                        break;
+                    }
+                    case 3: {
+                        layer.append(R.string("config_line_13"));
+                        break;
+                    }
+                    case 4: {
+                        layer.append(R.string("config_line_14"));
+                        break;
+                    }
+                    case 5: {
+                        layer.append(R.string("config_line_15"));
+                        break;
+                    }
+                    case 6: {
+                        layer.append(R.string("config_line_16"));
+                        break;
+                    }
+                    case 7: {
+                        layer.append(R.string("config_line_17"));
+                        break;
+                    }
+                    case 8: {
+                        layer.append(R.string("config_line_18"));
+                        break;
+                    }
+                    case 9: {
+                        layer.append(R.string("config_line_19"));
+                        break;
+                    }
+                    case 10: {
+                        layer.append(R.string("config_line_110"));
+                        break;
+                    }
+                    case 11: {
+                        layer.append(R.string("config_line_111"));
+                        break;
+                    }
+                    default:
+                }
+                break;
+            case 2:
+                switch (line) {
+                    case 0: {
+                        layer.append(R.string("config_line_20"));
+                        break;
+                    }
+                    case 1: {
+                        layer.append(R.string("config_line_21"));
+                        break;
+                    }
+                    case 2: {
+                        layer.append(R.string("config_line_22"));
+                        break;
+                    }
+                    case 3: {
+                        layer.append(R.string("config_line_23"));
+                        break;
+                    }
+                    case 4: {
+                        layer.append(R.string("config_line_24"));
+                        break;
+                    }
+                    case 5: {
+                        layer.append(R.string("config_line_25"));
+                        break;
+                    }
+                    case 6: {
+                        layer.append(R.string("config_line_26"));
+                        break;
+                    }
+                    case 7: {
+                        layer.append(R.string("config_line_27"));
+                        break;
+                    }
+                    case 8: {
+                        layer.append(R.string("config_line_28"));
+                        break;
+                    }
+                    case 9: {
+                        layer.append(R.string("config_line_29"));
+                        break;
+                    }
+                    case 10: {
+                        layer.append(R.string("config_line_210"));
+                        break;
+                    }
+                    case 11: {
+                        layer.append(R.string("config_line_211"));
+                        break;
+                    }
+                    default:
+                }
+                break;
+            case 3:
+                switch (line) {
+                    case 0: {
+                        layer.append(R.string("config_line_30"));
+                        break;
+                    }
+                    case 1: {
+                        layer.append(R.string("config_line_31"));
+                        break;
+                    }
+                    case 2: {
+                        layer.append(R.string("config_line_32"));
+                        break;
+                    }
+                    case 3: {
+                        layer.append(R.string("config_line_33"));
+                        break;
+                    }
+                    case 4: {
+                        layer.append(R.string("config_line_34"));
+                        break;
+                    }
+                    case 5: {
+                        layer.append(R.string("config_line_35"));
+                        break;
+                    }
+                    case 6: {
+                        layer.append(R.string("config_line_36"));
+                        break;
+                    }
+                    case 7: {
+                        layer.append(R.string("config_line_37"));
+                        break;
+                    }
+                    case 8: {
+                        layer.append(R.string("config_line_38"));
+                        break;
+                    }
+                    case 9: {
+                        layer.append(R.string("config_line_39"));
+                        break;
+                    }
+                    case 10: {
+                        layer.append(R.string("config_line_310"));
+                        break;
+                    }
+                    case 11: {
+                        layer.append(R.string("config_line_311"));
+                        break;
+                    }
+                    default:
+                }
+                break;
+            default:
+        }
+    }
+
+    private void drawammosOrWeaponsAndPlayers(StringBuilder ammoWeaponPlayersLayer, Integer[] f, int line) {
+        if (line != f[0] && line != f[1]) {
+            ammoWeaponPlayersLayer.append(" - square ").append(line).append(": ");
+            if (model.getAmmoCardsID() != null) {
+                if (model.getAmmoCardsID().get(line) != null)
+                    drawAmmo(ammoWeaponPlayersLayer, line);
+                else {
+                    drawMarket(line, ammoWeaponPlayersLayer);
+                }
+            }
+
+            drawPlayersInTheSquare(ammoWeaponPlayersLayer, line);
+
+        } else
+            ammoWeaponPlayersLayer.append(lineSeparator);
+
+    }
+
+    private void drawAmmo(StringBuilder ammoLine, int l) {
+        ammoLine.append("ammo: [ ").append(R.string(model.getAmmoCardsID().get(l))).append(" ]");
+    }
+
+    private void drawMarket(int spawnP, StringBuilder marketLine) {
+        marketLine.append("market: < ");
+        switch (spawnP) {
+            case BLUE_SPAWN_POINT: {
+                for (int j = 0; j < MARKET_SIZE; j++) {
+                    if (model.getWeaponsCardsID().get(j) != null)
+                        marketLine.append(model.getWeaponsCardsID().get(j));
+                    else
+                        marketLine.append(EMPTY);
+                    if (j < 2)
+                        marketLine.append(" , ");
+                }
+                break;
+            }
+            case RED_SPAWN_POINT: {
+                for (int j = 0; j < MARKET_SIZE; j++) {
+                    if (model.getWeaponsCardsID().get(j + MARKET_SIZE) != null)
+                        marketLine.append(model.getWeaponsCardsID().get(j + MARKET_SIZE)).append(" , ");
+                    else
+                        marketLine.append(EMPTY);
+                    if (j < 2)
+                        marketLine.append(" , ");
+                }
+                break;
+            }
+            case YELLOW_SPAWN_POINT: {
+                for (int j = 0; j < MARKET_SIZE; j++) {
+                    if (model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE) != null)
+                        marketLine.append(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE)).append(" , ");
+                    else
+                        marketLine.append(EMPTY);
+                    if (j < 2)
+                        marketLine.append(" , ");
+                }
+                break;
+            }
+
+            default:
+        }
+        marketLine.append(" >");
+    }
+
+    private void drawPlayersInTheSquare(StringBuilder splayers, int l) {
+        int pos, x = 0;
+        if (model.getPlayersState() != null && !model.getPlayersState().isEmpty()) {
+            for (PlayerState ps : model.getPlayersState()) {
+                pos = ps.getSquarePosition();
+                if (pos == l)
+                    x++;
+            }
+            if (x > 0) {
+                splayers.append(" players: { ");
+                for (PlayerState ps : model.getPlayersState()) {
+                    pos = ps.getSquarePosition();
+                    if (pos == l)
+                        splayers.append(ps.getNickname()).append(" , ");
+                }
+            }
+            splayers.append(" }");
+        }
+
+        splayers.append(lineSeparator);
+    }
+
+    private void drawconnectedAndDisconnectedPlayers(StringBuilder str) {
+
+        if (model.getDisconnectedPlayers() != null) {
+            for (String s : model.getDisconnectedPlayers())
+                str.append(lineSeparator).append(s).append(" is disconnected");
+        }
+        str.append(lineSeparator);
+
+        if (model.getJustConnectedPlayers() != null) {
+            for (String s : model.getJustConnectedPlayers())
+                str.append(lineSeparator).append(s).append("has just connected");
+        }
+        str.append(lineSeparator);
+
+    }
+
+    private void drawBoards(StringBuilder str) {
+
+        for (PlayerState ps : model.getPlayersState()) {
+            drawPlayersStatus(str, ps);
+            drawDamageKillshotOverkill(str, ps);
+            drawMarksAndSkulls(str, ps);
+            drawBoardValue(str, ps);
+            drawCubes(str, ps);
+            drawWeapons(str, ps);
+            drawPowerups(str, ps);
+            if (model.getKillshotTrack() != null)
+                drawcurrentKillshotTrack(str, model.getKillshotTrack());
+        }
+
+        drawturnPlayerFrenzyPlayersFrenzyTurn(str);
+
+        str.append(lineSeparator);
+
+    }
+
+    private void drawPlayersStatus(StringBuilder temp, PlayerState p) {
+        temp.append(" -- -- -- -- -- -- -- -- --").append(lineSeparator);
+        if (p.isConnected())
+            temp.append("< ").append(p.getNickname()).append(": online >").append(lineSeparator);
+        else
+            temp.append("< ").append(p.getNickname()).append(": offline >").append(lineSeparator);
+
+    }
+
+    //TODO mancano player. killshot e overkill
+    private void drawDamageKillshotOverkill(StringBuilder temp, PlayerState p) {
+        temp.append("damage: ").append(p.getDamage());
+        for (String s : p.getDamage()) {
+            temp.append(s);
+            if (p.getDamage().indexOf(s) < p.getDamage().size())
+                temp.append(" ");
+        }
+        temp.append(" ").append(lineSeparator);
+
+
+    }
+
+    private void drawMarksAndSkulls(StringBuilder temp, PlayerState p) {
+        temp.append("passive marks: ");
+        for (String s : p.getMarks()) {
+            temp.append(s);
+            if (p.getMarks().indexOf(s) < p.getMarks().size())
+                temp.append(" ,");
+        }
+        temp.append(lineSeparator);
+
+
+        if (p.getSkullNumber() >= 0)
+            temp.append("skulls: ").append(p.getSkullNumber()).append(lineSeparator);
+        else
+            temp.append("skulls: 0").append(lineSeparator);
+
+    }
+
+    private void drawBoardValue(StringBuilder temp, PlayerState p) {
+        Integer[] vectorValue = {8, 6, 4, 2, 1, 1, 1, 1, 1};
+        temp.append("board value: { ");
+        if (p.getSkullNumber() >= 0)
+            temp.append(vectorValue[p.getSkullNumber()]);
+        else
+            temp.append(vectorValue[0]);
+        temp.append(" }");
+
+        temp.append(lineSeparator);
+
+    }
+
+    private void drawCubes(StringBuilder temp, PlayerState p) {
+        temp.append("ammo cubes: ");
+        if (p.getAmmoCubes() != null && !p.getAmmoCubes().isEmpty()) {
+            if (p.getAmmoCubes().get(0) != null && !p.getAmmoCubes().isEmpty() && p.getAmmoCubes().get(0) > 0)
+                temp.append("[").append(p.getAmmoCubes().get(0)).append(" BLUE] ");
+            if (p.getAmmoCubes().get(1) != null && p.getAmmoCubes().size() > 1 && p.getAmmoCubes().get(1) > 0)
+                temp.append("[").append(p.getAmmoCubes().get(1)).append(" RED] ");
+            if (p.getAmmoCubes().get(2) != null && p.getAmmoCubes().size() > 2 && p.getAmmoCubes().get(2) > 0)
+                temp.append("[").append(p.getAmmoCubes().get(2)).append(" YELLOW]");
+        }
+
+        temp.append(lineSeparator);
+
+    }
+
+    private void drawWeapons(StringBuilder temp, PlayerState p) {
+        //loaded weapons
+        temp.append("loaded weapons: ");
+        for (int i = 0; i < p.getLoadedWeapons().size(); i++)
+            temp.append(p.getLoadedWeapons().get(i)).append(" , ");
+
+        temp.append(lineSeparator);
+
+        //unloaded weapons
+        temp.append("unloaded weapons: ");
+        for (int i = 0; i < p.getUnloadedWeapons().size(); i++)
+            temp.append(p.getUnloadedWeapons().get(i)).append(" , ");
+
+        temp.append(lineSeparator);
+
+    }
+
+    private void drawPowerups(StringBuilder temp, PlayerState p) {
+        temp.append("powerups: ");
+        for (int i = 0; i < p.getPowerups().size(); i++)
+            temp.append(p.getPowerups().get(i)).append(" ");
+
+        temp.append(lineSeparator);
+
+    }
+
+    private void drawturnPlayerFrenzyPlayersFrenzyTurn(StringBuilder temp) {
+        int skullsRemoved = 0;
+
+        for (PlayerState x : model.getPlayersState()) {
+            if (x.isPlayerBoardFrenzy())
+                temp.append(x.getNickname()).append(" is in Frenzy Mode!").append(lineSeparator);
+            skullsRemoved += x.getSkullNumber();
+        }
+
+        if (skullsRemoved == 8) {
+            temp.append("--- FRENZY TURN STARTED! ---").append(lineSeparator);
+        }
+
+        temp.append(lineSeparator);
+
+        for (PlayerState x : model.getPlayersState())
+            if (x.isCurrent())
+                temp.append("-> it's your turn, ").append(x.getNickname()).append("!").append(lineSeparator);
+
+
+    }
+
+    private void drawcurrentKillshotTrack(StringBuilder temp, List<List<String>> kst) {
+        temp.append(" -- -- -- -- -- -- -- -- --").append(lineSeparator);
+        temp.append("current Killshot track: ");
+        for (int i = 0; i < kst.size(); i++)
+            for (String q : kst.get(i)) {
+                temp.append(i).append(") ").append(q).append(lineSeparator);
+                if (i < kst.size() - 1)
+                    temp.append("                        ");
+            }
+        temp.append(lineSeparator);
     }
 
     /**
