@@ -60,9 +60,8 @@ public class MoveSelfEffect implements EffectInterface {
 
         /*Filtering the squares*/
         List<Square> available = (maxDistance == -1) ?
-                board.getValidDestinations(subjectPlayer.getPosition(),
-                        maxDistance, false) :
-                new ArrayList<>(board.getAllSquares());
+                new ArrayList<>(board.getAllSquares()) :
+                board.getValidDestinations(subjectPlayer.getPosition(), maxDistance, false);
 
         /*Choosing the destination*/
         Square destination = subjectPlayer.getToClient().chooseDestination(available);

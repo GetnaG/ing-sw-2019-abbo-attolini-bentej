@@ -95,6 +95,7 @@ public class Grab implements EffectInterface {
             /*The player buys the weapon with the chosen powerup*/
             if (weaponToDiscard != null)
                 subjectPlayer.discard(weaponToDiscard);
+            spawnSquare.pickWeapon(weaponToBuy);
             subjectPlayer.buy(weaponToBuy, powerupToPay);
             if (weaponToDiscard != null)
                 spawnSquare.getMarket().addCard(weaponToDiscard);

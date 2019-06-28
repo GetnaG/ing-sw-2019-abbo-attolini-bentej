@@ -113,6 +113,7 @@ public class NormalTurn implements TurnInterface {
 
         if (card != null) {
             player.pay(card.getEffect().getCost());
+            player.removePowerup(card);
             card.getEffect().runEffect(player, allTargets, board, alreadyTargeted, new ArrayList<>());
         }
     }

@@ -62,8 +62,8 @@ public class FirstTurn implements TurnInterface {
 
         /*Spawning the player and adding the other card to his hand*/
         currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
-        board.putPowerupCard(notChosen);
-        currentPlayer.addPowerup(cardChosen);
+        board.putPowerupCard(cardChosen);
+        currentPlayer.addPowerup(notChosen);
 
         /*Updating the position and the powerups in hand*/
         updater.accept(new UpdateBuilder()
