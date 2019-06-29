@@ -2,6 +2,7 @@ package it.polimi.ingsw.server.controller.turns;
 
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.UpdateBuilder;
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -35,11 +36,10 @@ public class FirstTurn implements TurnInterface {
      * Once the player draws two cards from the powerup deck, he chooses one which defines the Spawn.
      * The other is added to his hand.
      *
-     * @param currentPlayer the player that spawns
+     * @param subjectPlayer the player that spawns
      * @param board         the GameBoard
-     * @return -1 if Final Frenzy is triggered, else 0
      */
-    public int startTurn(Player currentPlayer, GameBoard board) {
+    public void startTurn(Player subjectPlayer, List<Damageable> allTargets, GameBoard board) {
         List<PowerupCard> drawnPowerups = new ArrayList<>();
         PowerupCard cardChosen;
         PowerupCard notChosen;
@@ -50,7 +50,7 @@ public class FirstTurn implements TurnInterface {
 
         /*Player chooses a card to spawn*/
         try {
-            cardChosen = currentPlayer.getToClient().chooseSpawn(drawnPowerups);
+            cardChosen = subjectPlayer.getToClient().chooseSpawn(drawnPowerups);
             drawnPowerups.remove(cardChosen);
             notChosen = drawnPowerups.get(0);
         } catch (ToClientException e) {
@@ -61,14 +61,13 @@ public class FirstTurn implements TurnInterface {
         }
 
         /*Spawning the player and adding the other card to his hand*/
-        currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
+        subjectPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
         board.putPowerupCard(cardChosen);
-        currentPlayer.addPowerup(notChosen);
+        subjectPlayer.addPowerup(notChosen);
 
         /*Updating the position and the powerups in hand*/
         updater.accept(new UpdateBuilder()
-                .setPowerupsInHand(currentPlayer, currentPlayer.getAllPowerup())
-                .setPlayerPosition(currentPlayer, currentPlayer.getPosition()));
-        return 0;
+                .setPowerupsInHand(subjectPlayer, subjectPlayer.getAllPowerup())
+                .setPlayerPosition(subjectPlayer, subjectPlayer.getPosition()));
     }
 }

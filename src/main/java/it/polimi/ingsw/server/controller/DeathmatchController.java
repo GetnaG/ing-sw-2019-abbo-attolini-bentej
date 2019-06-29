@@ -114,10 +114,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         while (iterator.hasNext()) {
             currentPlayer = iterator.next();
             updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
-            new FirstTurn(this::updateAllPlayers).startTurn(currentPlayer, board);
+            new FirstTurn(this::updateAllPlayers).startTurn(currentPlayer, new ArrayList<>(players), board);
             if (!suspendedPlayers.contains(currentPlayer))
-                turn(new NormalTurn(currentPlayer, new ArrayList<>(players), board,
-                        this::updateAllPlayers), currentPlayer);
+                turn(new NormalTurn(this::updateAllPlayers), currentPlayer);
         }
 
         /*Ensuring that all the players are on the board, the default is the blue spawn*/
@@ -130,8 +129,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         while (!board.checkFinalFrenzy() && iterator.hasNext()) {
             currentPlayer = iterator.next();
             updateAllPlayers(new UpdateBuilder().setCurrent(currentPlayer));
-            turn(new NormalTurn(currentPlayer, new ArrayList<>(players), board,
-                    this::updateAllPlayers), currentPlayer);
+            turn(new NormalTurn(this::updateAllPlayers), currentPlayer);
         }
 
         /*Setting up final frenzy*/
@@ -149,13 +147,11 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             if (players.indexOf(currentPlayer) > whoTriggered) {
 
                 /*For those who are before the first player*/
-                turn(new FrenzyTurnBefore(currentPlayer, board, this::updateAllPlayers),
-                        currentPlayer);
+                turn(new FrenzyTurnBefore(this::updateAllPlayers), currentPlayer);
             } else {
 
                 /*For those who are after the first player and him*/
-                turn(new FrenzyTurnAfter(currentPlayer, board, this::updateAllPlayers),
-                        currentPlayer);
+                turn(new FrenzyTurnAfter(this::updateAllPlayers), currentPlayer);
             }
         }
 
@@ -239,14 +235,14 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * @param currentPlayer the player that will run this turn
      */
     private void turn(TurnInterface turnInterface, Player currentPlayer) {
-        turnInterface.startTurn(currentPlayer, board);
+        turnInterface.startTurn(currentPlayer, new ArrayList<>(players), board);
         scoreAllKilled();
         board.replaceAll();
 
         /*Respawning*/
         for (Player p : players) {
             if (killedInTurn.contains(p))
-                new RespawnTurn(this::updateAllPlayers).startTurn(p, board);
+                new RespawnTurn(this::updateAllPlayers).startTurn(p, new ArrayList<>(players), board);
         }
         emptyKilledList();
     }
@@ -377,11 +373,11 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
          */
         private int start;
         /**
-         * The index of the {@linkplain #next} element.
+         * The index of the current element.
          */
         private int index;
         /**
-         * The element that will be returned next.
+         * The element that will be returned next if it will be valid.
          */
         private Player next;
 
@@ -398,34 +394,32 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             this.isCircular = isCircular;
             start = players.indexOf(from);
             index = start;
-
-            /*Setting the first valid next element*/
-            next = from;
-            while (next != null && suspendedPlayers.contains(next)) {
-                next = circularNext();
-                notifyAllPlayers(Notification.NotificationType.USER_WILL_SKIP);
-            }
+            next = validNext(from);
         }
 
         @Override
         public boolean hasNext() {
-            return next != null;
+            if (suspendedPlayers.contains(next))
+                next = validNext(next);
+            return next != null && !gameOver;
         }
 
         @Override
         public Player next() {
             if (!hasNext())
                 throw new NoSuchElementException();
-            Player toReturn = next;
 
-            /*Setting the first valid next element*/
-            next = circularNext();
-            while (next != null && suspendedPlayers.contains(next)) {
-                next = circularNext();
+            Player toReturn = next;
+            next = validNext(circularNext());
+            return toReturn;
+        }
+
+        private Player validNext(Player from) {
+            Player toReturn = from;
+            while (toReturn != null && suspendedPlayers.contains(toReturn)) {
+                toReturn = circularNext();
                 notifyAllPlayers(Notification.NotificationType.USER_WILL_SKIP);
             }
-
-            /*Returning the memorized element*/
             return toReturn;
         }
 

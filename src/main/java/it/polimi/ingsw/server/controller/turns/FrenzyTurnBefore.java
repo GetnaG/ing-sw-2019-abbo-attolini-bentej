@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.controller.turns;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.server.controller.effects.*;
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
 
@@ -21,24 +22,12 @@ import java.util.function.Consumer;
  * @author Fahed Ben Tej
  */
 public class FrenzyTurnBefore implements TurnInterface {
-    /**
-     * The current player.
-     */
-    private Player currentPlayer;
-    /**
-     * The game board.
-     */
-    private GameBoard board;
-
     private Consumer<UpdateBuilder> updater;
 
     /**
      * Construct a FrenzyTurn
      */
-    public FrenzyTurnBefore(Player currentPlayer, GameBoard board,
-                            Consumer<UpdateBuilder> updater) {
-        this.currentPlayer = currentPlayer;
-        this.board = board;
+    public FrenzyTurnBefore(Consumer<UpdateBuilder> updater) {
         this.updater = updater;
     }
 
@@ -48,12 +37,9 @@ public class FrenzyTurnBefore implements TurnInterface {
      * (2) Move up to 4 squares.
      * (3) Move up to 2 squares and grab something there.
      * At the end of the turn there is no point in reloading because his match is over.
-     * @param currentPlayer 
-     * @param board GameBoard
-     *
-     * @return -1 if Final Frenzy is triggered, else 0. In this case, final frenzy is never triggered because it has already happened.
      */
-    public int startTurn(Player currentPlayer, GameBoard board) {
+    public void startTurn(Player subjectPlayer, List<Damageable> allTargets,
+                       GameBoard board) {
 
         List<Action> actions = new ArrayList<>();
         Action choosenAction;
@@ -63,14 +49,13 @@ public class FrenzyTurnBefore implements TurnInterface {
         actions.add(getThirdFrenzyActionBefore());
 
         try {
-            choosenAction = currentPlayer.getToClient().chooseAction(actions);
-            choosenAction.runAll(currentPlayer, null, board, new ArrayList<>(), new ArrayList<>());
+            choosenAction = subjectPlayer.getToClient().chooseAction(actions);
+            choosenAction.runAll(subjectPlayer, allTargets, board, new ArrayList<>(), new ArrayList<>());
         } catch (ToClientException e) {
             //TODO Handle if the user is disconnected
         }
 
         updater.accept(new UpdateBuilder());//TODO: put here things that could change
-        return 0;
     }
 
     /**

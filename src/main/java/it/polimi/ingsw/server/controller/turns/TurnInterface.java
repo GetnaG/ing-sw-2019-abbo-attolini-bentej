@@ -1,7 +1,10 @@
 package it.polimi.ingsw.server.controller.turns;
 
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
+
+import java.util.List;
 
 /**
  * Defines the behaviour of a turn.
@@ -9,14 +12,13 @@ import it.polimi.ingsw.server.model.player.Player;
  * @author Fahed Ben Tej
  */
 public interface TurnInterface {
-
     /**
-     * Starts player's turn.
-     * @param currentPlayer the player who's turn is starting.
-     * @param board GameBoard of the game.
+     * Starts the player's turn.
      *
-     * @return -1 if Final Frenzy is triggered, else 0.
+     * @param subjectPlayer the player who's turn is starting
+     * @param allTargets all the targets on the board
+     * @param board GameBoard of the game
      */
-    public int startTurn(Player currentPlayer, GameBoard board);
+    void startTurn(Player subjectPlayer, List<Damageable> allTargets, GameBoard board);
 
 }

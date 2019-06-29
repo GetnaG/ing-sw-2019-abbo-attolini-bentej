@@ -28,7 +28,7 @@ class RespawnTurnTest {
     @Test
     void startTurn() {
         RespawnTurn rt = new RespawnTurn(builder -> {});
-        rt.startTurn(player, board);
+        rt.startTurn(player, new ArrayList<>(), board);
         assertEquals(player.getAllPowerup().get(0).getCube(), player.getPosition().getSquareColor());
 
     }

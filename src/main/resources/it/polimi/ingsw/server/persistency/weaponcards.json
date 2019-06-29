@@ -154,7 +154,8 @@
   {
     "cost": [
       "RED",
-      "BLUE"
+      "RED",
+      "YELLOW"
     ],
     "effectIdSequences": [
       [

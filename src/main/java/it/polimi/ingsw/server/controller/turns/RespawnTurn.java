@@ -2,10 +2,13 @@ package it.polimi.ingsw.server.controller.turns;
 
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.UpdateBuilder;
+import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.player.Player;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -26,32 +29,37 @@ public class RespawnTurn implements TurnInterface {
 
     /**
      * Makes the player draw a powerup card. He chooses the powerup which determines his next spawn.
-     *
-     * @param currentPlayer player respawning.
-     * @param board         GameBoard used in the board.
-     * @return -1 if Final Frenzy is triggered, else 0
      */
-    public int startTurn(Player currentPlayer, GameBoard board) {
+    public void startTurn(Player subjectPlayer, List<Damageable> allTargets, GameBoard board) {
 
-        // player draws card
-        currentPlayer.addPowerup(board.getPowerupCard());
-        // we make the player choose a powerup
-        PowerupCard cardChosen = null;
+        /*Drawing a card*/
+        List<PowerupCard> availablePowerups = new ArrayList<>(subjectPlayer.getAllPowerup());
+        PowerupCard drawnCard = board.getPowerupCard();
+        availablePowerups.add(drawnCard);
+
+        /*Making the player choose a powerup*/
+        PowerupCard cardChosen;
         try {
-            cardChosen =
-                    currentPlayer.getToClient().chooseSpawn(currentPlayer.getAllPowerup());
+            cardChosen = subjectPlayer.getToClient().chooseSpawn(availablePowerups);
         } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
+
+            /*The player is offline: default choice*/
+            cardChosen = drawnCard;
         }
-        // discard that card
-        currentPlayer.removePowerup(cardChosen);
-        // set the player position in the spawn determined by that square
-        currentPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
+
+        /*Discarding the chosen card and adding the new one*/
+        try {
+            subjectPlayer.removePowerup(cardChosen);
+            subjectPlayer.addPowerup(drawnCard);
+        } catch (IllegalArgumentException e) {
+            /*The chosen card was not in the player's hand, it was the new one*/
+        }
+
+        /*Setting the player position in the spawn determined by that square*/
+        subjectPlayer.setPosition(board.findSpawn(cardChosen.getCube()));
 
         updater.accept(new UpdateBuilder()
-                .setPowerupsInHand(currentPlayer, currentPlayer.getAllPowerup())
-                .setPlayerPosition(currentPlayer, currentPlayer.getPosition()));
-        return 0;
+                .setPowerupsInHand(subjectPlayer, subjectPlayer.getAllPowerup())
+                .setPlayerPosition(subjectPlayer, subjectPlayer.getPosition()));
     }
-
 }
