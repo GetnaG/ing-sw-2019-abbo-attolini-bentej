@@ -432,7 +432,7 @@ public class GameBoard implements ReplaceListener {
      * @return an int representing the minimum distance between two squares.
      */
     public int minimumDistance(Square start, Square end, Boolean wallSensitive) {  //TODO risolvere il loop
-        if (start.equals(end))
+        if (start.equals(end) || start == null || end == null)
             return 0;
         if (start != null)
             start.refresh(GameBoard.getConfiguration());
@@ -441,12 +441,10 @@ public class GameBoard implements ReplaceListener {
 
         Set<Square> Q = getAllSquares();
         Map<Square, Integer> dist = new HashMap<>();
-        Map<Square, Square> prev = new HashMap<>();
 
         Q.forEach(x -> {
             x.refresh(GameBoard.getConfiguration());
             dist.put(x, 999);
-            prev.put(x, null);
         });
         dist.put(start, 0);
         Square u = start;
@@ -474,7 +472,7 @@ public class GameBoard implements ReplaceListener {
         int min = 999;
         Square minSquare = null;
         for (Square s : squares)
-            if (map.get(s) < min) {
+            if (map.get(s) <= min) {
                 min = map.get(s);
                 minSquare = s;
             }

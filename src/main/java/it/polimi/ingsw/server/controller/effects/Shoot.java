@@ -40,12 +40,11 @@ public class Shoot implements EffectInterface {
 
         WeaponCard weaponChosen = subjectPlayer.getToClient().chooseWeaponCard(
                 subjectPlayer.getLoadedWeapons());
+        List<Action> effectsPlayerCanAfford = weaponChosen.getPossibleSequences().stream().filter(s ->
+                subjectPlayer.canAfford(s.getTotalCost(), false)).collect(Collectors.toList());
+        if (effectsPlayerCanAfford.isEmpty()) return;
 
-        Action effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(
-                weaponChosen.getPossibleSequences().stream().filter(s ->
-                        subjectPlayer.canAfford(s.getTotalCost(), false)
-                        //TODO: question: can I pay for an effect with powerups?
-                ).collect(Collectors.toList()));
+        Action effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(effectsPlayerCanAfford);
 
         subjectPlayer.pay(effectChosen.getTotalCost());
         effectChosen.runAll(subjectPlayer, allTargets, board, alredyTargeted, damageTargeted);
