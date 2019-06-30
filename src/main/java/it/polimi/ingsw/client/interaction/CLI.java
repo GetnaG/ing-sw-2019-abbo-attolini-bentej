@@ -464,14 +464,16 @@ public class CLI implements InteractionInterface {
 
         if (this.model != null) {
 
-            drawconnectedAndDisconnectedPlayers(stringBuilder);
+            drawConnectedAndDisconnectedPlayers(stringBuilder);
 
-            //TODO if match has started--
+            if(currentNotification == translateNotification("GAME_STARTING")){
 
-            drawConfigurationAndSquares(stringBuilder);
+                drawConfigurationAndSquares(stringBuilder);
 
-            if (model.getPlayersState() != null) {
-                drawBoards(stringBuilder);
+                if (model.getPlayersState() != null) {
+                    drawBoards(stringBuilder);
+                }
+
             }
         }
         return stringBuilder;
@@ -501,7 +503,7 @@ public class CLI implements InteractionInterface {
 
         for (int i = 0; i < BOARD_LENGTH; i++) {
             drawLayer(s, model.getConfigurationID(), i);
-            drawammosOrWeaponsAndPlayers(s, forbiddenSquares, i);
+            drawAmmosOrWeaponsAndPlayers(s, forbiddenSquares, i);
         }
 
         switch (model.getConfigurationID()) {
@@ -745,7 +747,7 @@ public class CLI implements InteractionInterface {
         }
     }
 
-    private void drawammosOrWeaponsAndPlayers(StringBuilder ammoWeaponPlayersLayer, Integer[] f, int line) {
+    private void drawAmmosOrWeaponsAndPlayers(StringBuilder ammoWeaponPlayersLayer, Integer[] f, int line) {
         if (line != f[0] && line != f[1]) {
             ammoWeaponPlayersLayer.append(" - square ").append(line).append(": ");
             if (model.getAmmoCardsID() != null) {
@@ -824,14 +826,15 @@ public class CLI implements InteractionInterface {
                     if (pos == l)
                         splayers.append(ps.getNickname()).append(" , ");
                 }
+                splayers.append(" }");
             }
-            splayers.append(" }");
+
         }
 
         splayers.append(lineSeparator);
     }
 
-    private void drawconnectedAndDisconnectedPlayers(StringBuilder str) {
+    private void drawConnectedAndDisconnectedPlayers(StringBuilder str) {
 
         if (model.getDisconnectedPlayers() != null) {
             for (String s : model.getDisconnectedPlayers())
@@ -857,11 +860,12 @@ public class CLI implements InteractionInterface {
             drawCubes(str, ps);
             drawWeapons(str, ps);
             drawPowerups(str, ps);
-            if (model.getKillshotTrack() != null)
-                drawcurrentKillshotTrack(str, model.getKillshotTrack());
-        }
+            }
 
-        drawturnPlayerFrenzyPlayersFrenzyTurn(str);
+        if (model.getKillshotTrack() != null)
+            drawCurrentKillshotTrack(str, model.getKillshotTrack());
+
+        drawTurnPlayerFrenzyPlayersFrenzyTurn(str);
 
         str.append(lineSeparator);
 
@@ -876,17 +880,21 @@ public class CLI implements InteractionInterface {
 
     }
 
-    //TODO mancano player. killshot e overkill
+
     private void drawDamageKillshotOverkill(StringBuilder temp, PlayerState p) {
         temp.append("damage: ").append(p.getDamage());
         for (String s : p.getDamage()) {
+            if (p.getDamage().indexOf(s) == p.getDamage().size()-2){
+               temp.append("killshot: ");
+            }
+            if (p.getDamage().indexOf(s) == p.getDamage().size()-1){
+                temp.append("overkill: ");
+            }
             temp.append(s);
             if (p.getDamage().indexOf(s) < p.getDamage().size())
                 temp.append(" ");
         }
-        temp.append(" ").append(lineSeparator);
-
-
+        temp.append(lineSeparator);
     }
 
     private void drawMarksAndSkulls(StringBuilder temp, PlayerState p) {
@@ -960,7 +968,7 @@ public class CLI implements InteractionInterface {
 
     }
 
-    private void drawturnPlayerFrenzyPlayersFrenzyTurn(StringBuilder temp) {
+    private void drawTurnPlayerFrenzyPlayersFrenzyTurn(StringBuilder temp) {
         int skullsRemoved = 0;
 
         for (PlayerState x : model.getPlayersState()) {
@@ -982,7 +990,7 @@ public class CLI implements InteractionInterface {
 
     }
 
-    private void drawcurrentKillshotTrack(StringBuilder temp, List<List<String>> kst) {
+    private void drawCurrentKillshotTrack(StringBuilder temp, List<List<String>> kst) {
         temp.append(" -- -- -- -- -- -- -- -- --").append(lineSeparator);
         temp.append("current Killshot track: ");
         for (int i = 0; i < kst.size(); i++)
@@ -994,7 +1002,8 @@ public class CLI implements InteractionInterface {
         temp.append(lineSeparator);
     }
 
-    /**
+
+     /**
      * Returns a string containing the localized text for the notification.
      *
      * @param notificationKey the resource key for retrieving the notification

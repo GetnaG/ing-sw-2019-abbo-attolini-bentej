@@ -176,14 +176,6 @@ public class ServerHall implements Runnable {
         }
     }
 
-    /*
-    private Configurations chooseConfig (){
-
-        Configurations chosenConfig;
-        //TODO let the player choose the map
-        return chosenConfig;
-    }
-    */
 
     /**
      * Starts a death match.
@@ -191,10 +183,8 @@ public class ServerHall implements Runnable {
     private synchronized void startMatch() {
         stopTimer();
 
-        //Configurations c = chooseConfig();
-
         DeathmatchController controller =
-                new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1 /*c*/);//TODO: how to change the configuration
+                new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1);
         startedGames.add(controller);
         for (User u : connectedUsers)
             u.setMatchSuspensionListener(controller);
