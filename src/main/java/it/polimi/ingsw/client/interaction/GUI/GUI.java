@@ -108,6 +108,8 @@ public class GUI extends Application {
      * Builds a Game Pane in the given stage/
      */
     public static void buildGamePane(Stage stage) {
+        answerBox = new HBox();
+        questionText = new Text();
         gamePane = new GamePane(answerBox, questionText, model.getConfigurationID());
         masterScene.setRoot(gamePane);
     }

@@ -45,6 +45,8 @@ public class GamePane extends StackPane {
     public GamePane(HBox answerBox, Text question, int idMap) {
         super();
         this.answerBox = answerBox;
+        answerBox.setMinWidth(1680);
+        answerBox.setMinHeight(400);
         if (questionText == null) questionText = new Text();
         BorderPane borderPane = new BorderPane();
         map = new MapPane(idMap);
@@ -409,8 +411,7 @@ public class GamePane extends StackPane {
     private static void createCardAnimation(Node node, String resID, ImageView imgBox) {
         imgBox.setVisible(true);
         imgBox.setImage(getCard(resID, false).getImage());
-        imgBox.setFitHeight(imgBox.getFitHeight() * 0.7);
-        imgBox.setPreserveRatio(true);
+        imgBox.setFitHeight(180);
         node.setStyle("-fx-font-weight: bold");
         node.setOnMouseEntered(e -> {
             imgBox.setVisible(true);
@@ -432,6 +433,7 @@ public class GamePane extends StackPane {
             GUI.setAnswer(groupIndex);
             GUI.setAnswerGiven(true);
         });
+
         hbox.getChildren().add(groupNameButton);
 
         // Creating a list of labels for each element of the group
@@ -442,6 +444,13 @@ public class GamePane extends StackPane {
             labelsGroupElements.add(label);
             createCardAnimation(label, element, imgBox);
             hbox.getChildren().add(label);
+            groupNameButton.setOnMouseEntered(e -> {
+                imgBox.setVisible(true);
+                imgBox.setImage(getCard(element, false).getImage());
+                imgBox.setFitHeight(180);
+            });
+            groupNameButton.setOnMouseExited(e -> imgBox.setVisible(false));
+
             label.setTextFill(Color.WHITE);
             label.setFont(new Font("Arial", 15));
             label.setLineSpacing(5);
