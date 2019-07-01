@@ -38,24 +38,20 @@ public class FrenzyTurnBefore implements TurnInterface {
      * (3) Move up to 2 squares and grab something there.
      * At the end of the turn there is no point in reloading because his match is over.
      */
-    public void startTurn(Player subjectPlayer, List<Damageable> allTargets,
-                       GameBoard board) {
-
+    public void startTurn(Player subjectPlayer, List<Damageable> allTargets, GameBoard board) {
         List<Action> actions = new ArrayList<>();
-        Action choosenAction;
-
         actions.add(getFirstFrenzyActionBefore());
         actions.add(getSecondFrenzyActionBefore());
         actions.add(getThirdFrenzyActionBefore());
 
         try {
-            choosenAction = subjectPlayer.getToClient().chooseAction(actions);
-            choosenAction.runAll(subjectPlayer, allTargets, board, new ArrayList<>(), new ArrayList<>());
+            for (EffectInterface effect : subjectPlayer.getToClient().chooseAction(actions)) {
+                effect.runEffect(subjectPlayer, allTargets, board, new ArrayList<>(), new ArrayList<>());
+                updater.accept(null);
+            }
         } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
+            updater.accept(null);
         }
-
-        updater.accept(new UpdateBuilder());//TODO: put here things that could change
     }
 
     /**

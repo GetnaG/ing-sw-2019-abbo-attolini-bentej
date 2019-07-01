@@ -50,16 +50,6 @@ public class BoardState {
         this.oldConnectedPlayer = new ArrayList<>();
     }
 
-    public BoardState(int configurationID, List<String> ammoCardsID, List<String> weaponCardsID, boolean isWeaponDeckDrawable, List<List<String>> killshotTrack, boolean isActionTileFrenzy) {
-        this.configurationID = configurationID;
-        this.ammoCardsID = ammoCardsID;
-        this.weaponCardsID = weaponCardsID;
-        this.isWeaponDeckDrawable = isWeaponDeckDrawable;
-        this.killshotTrack = killshotTrack;
-        this.isActionTileFrenzy = isActionTileFrenzy;
-        this.oldConnectedPlayer = new ArrayList<>();
-    }
-
     public int getConfigurationID() {
         return configurationID;
     }

@@ -183,17 +183,32 @@ public class ServerHall implements Runnable {
     private synchronized void startMatch() {
         stopTimer();
 
-        DeathmatchController controller =
-                new DeathmatchController(connectedUsers, 8, Configurations.STANDARD1);//TODO chose configuration
+        Configurations configuration = getConfiguration();
+        DeathmatchController controller = new DeathmatchController(connectedUsers, 8, configuration);
         startedGames.add(controller);
         for (User u : connectedUsers)
             u.setMatchSuspensionListener(controller);
         notifyAll(Notification.NotificationType.GAME_STARTING);
+        updateAll(new UpdateBuilder().setConfigurationId(configuration.getId()));
         connectedUsers.clear();
         statusNextGame = GameStatus.NOT_STARTED;
         new Thread(controller::start).start();
-        //TODO notify MatchState
         ServerMain.getLog().info("Match starting");
+    }
+
+    /**
+     * Returns a board configuration based on the number of players.
+     *
+     * @return a board configuration based on the number of players
+     */
+    private Configurations getConfiguration() {
+        if (connectedUsers.size() == 4)
+            return Configurations.ADVISED34;
+        if (connectedUsers.size() == 5)
+            return Configurations.ADVISED45;
+        return ((System.currentTimeMillis() / 100) % 2 == 0) ?
+                Configurations.STANDARD1 :
+                Configurations.STANDARD2;
     }
 
     /**

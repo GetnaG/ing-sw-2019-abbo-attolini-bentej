@@ -39,19 +39,18 @@ public class FrenzyTurnAfter implements TurnInterface {
      */
     public void startTurn(Player subjectPlayer, List<Damageable> allTargets, GameBoard board) {
         List<Action> actions = new ArrayList<>();
-        Action choosenAction;
-
         actions.add(getFirstFrenzyActionAfter());
         actions.add(getSecondFrenzyActionAfter());
 
         try {
-            choosenAction = subjectPlayer.getToClient().chooseAction(actions);
-            choosenAction.runAll(subjectPlayer, allTargets, board, new ArrayList<>(), new ArrayList<>());
+            Action chosenAction = subjectPlayer.getToClient().chooseAction(actions);
+            for (EffectInterface effect : chosenAction) {
+                effect.runEffect(subjectPlayer, allTargets, board, new ArrayList<>(), new ArrayList<>());
+                updater.accept(null);
+            }
         } catch (ToClientException e) {
-            //TODO Handle if the user is disconnected
+            updater.accept(null);
         }
-
-        updater.accept(new UpdateBuilder());//TODO: put here things that could change
     }
 
     /**

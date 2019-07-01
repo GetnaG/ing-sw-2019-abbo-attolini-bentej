@@ -99,14 +99,12 @@ public class MatchState {
                 getReceiverState(update).setPowerups(update.getNewValue());
                 break;
             case CONNECTED_PLAYERS:
-                boardState.setConnectedPlayers(update.getNewValue());
-                playersState.forEach(playerState -> playerState.setConnected(
-                        boardState.getConnectedPlayers().contains(playerState.getNickname())));
+                getReceiverState(update).setConnected(Boolean.parseBoolean(update.getNewValue().get(0)));
                 break;
 
             case HALL_TIMER:
                 int timer = Integer.parseInt(update.getNewValue().get(0));
-                GUI.updateTimer(timer);
+                //GUI.updateTimer(timer);
                 //FIXME: this is not the time left, it is the duration of the timer
                 //FIXME: passing info to the view. Memorize in a field instead and then the view, when notified, will access the field
                 //FIXME: calling a method of the GUI and not of InteractionInterface
@@ -139,7 +137,7 @@ public class MatchState {
     }
 
     public List<String> getWeaponsCardsID() {
-        return boardState.getAmmoCardsID();
+        return boardState.getWeaponCardID();
     }
 
     public boolean getIsWeaponDeckDrawable() {
@@ -157,17 +155,4 @@ public class MatchState {
     public List<PlayerState> getPlayersState() {
         return playersState;
     }
-
-    public List<String> getConnectedPlayers() {
-        return boardState.getConnectedPlayers();
-    }
-
-    public List<String> getDisconnectedPlayers() {
-        return boardState.getDisconnectedPlayers();
-    }
-
-    public List<String> getJustConnectedPlayers() {
-        return boardState.getJustConnectedPlayers();
-    }
-
 }

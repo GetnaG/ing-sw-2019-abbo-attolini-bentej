@@ -8,6 +8,7 @@ import it.polimi.ingsw.client.resources.R;
 import java.io.*;
 import java.util.Iterator;
 import java.util.List;
+import java.util.MissingResourceException;
 
 /**
  * Command line interface, handles the communication with the user via text.
@@ -464,16 +465,13 @@ public class CLI implements InteractionInterface {
 
         if (this.model != null) {
 
-            drawConnectedAndDisconnectedPlayers(stringBuilder);
+            //drawConnectedAndDisconnectedPlayers(stringBuilder);
+            //TODO
 
-            if(currentNotification == translateNotification("GAME_STARTING")){
+            drawConfigurationAndSquares(stringBuilder);
 
-                drawConfigurationAndSquares(stringBuilder);
-
-                if (model.getPlayersState() != null) {
-                    drawBoards(stringBuilder);
-                }
-
+            if (model.getPlayersState() != null) {
+                drawBoards(stringBuilder);
             }
         }
         return stringBuilder;
@@ -834,7 +832,7 @@ public class CLI implements InteractionInterface {
         splayers.append(lineSeparator);
     }
 
-    private void drawConnectedAndDisconnectedPlayers(StringBuilder str) {
+/*    private void drawConnectedAndDisconnectedPlayers(StringBuilder str) {
 
         if (model.getDisconnectedPlayers() != null) {
             for (String s : model.getDisconnectedPlayers())
@@ -848,7 +846,7 @@ public class CLI implements InteractionInterface {
         }
         str.append(lineSeparator);
 
-    }
+    }*/
 
     private void drawBoards(StringBuilder str) {
 
@@ -1035,9 +1033,14 @@ public class CLI implements InteractionInterface {
 
         for (int i = 0; i < optionKeys.size(); i++) {
             Iterator<String> iterator = optionKeys.get(i).iterator();
-            builder.append(i)
-                    .append(CHOICE_INDEX)
-                    .append(R.string(iterator.next()));
+            builder.append(i).append(CHOICE_INDEX);
+            String next = iterator.next();
+            try {builder.append(R.string(next));}
+            catch (MissingResourceException e) {
+                /*No resource found: printing the key*/
+                builder.append(next);
+            }
+
             while (iterator.hasNext())
                 builder.append(R.string("choiceSeparator"))
                         .append(SPACE)

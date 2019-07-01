@@ -44,9 +44,8 @@ public class NormalTurn implements TurnInterface {
             askAndReload(subjectPlayer);
         } catch (ToClientException e) {
             /*The execution stopped with an exception: interrupting the turn*/
+            updater.accept(null);
         }
-
-        updater.accept(new UpdateBuilder()); //TODO: add here what changed
     }
 
     /**
@@ -73,6 +72,7 @@ public class NormalTurn implements TurnInterface {
             player.pay(card.getEffect().getCost());
             player.removePowerup(card);
             card.getEffect().runEffect(player, allTargets, board, new ArrayList<>(), new ArrayList<>());
+            updater.accept(null);
         }
     }
 
@@ -92,9 +92,10 @@ public class NormalTurn implements TurnInterface {
         actions.add(new Action("Shoot", new Shoot()));
         actions.addAll(player.getAdrenalineActions());
 
-        player.getToClient().chooseAction(actions)
-                .runAll(player, allTargets, board, new ArrayList<>(), new ArrayList<>());
-
+        for (EffectInterface effect : player.getToClient().chooseAction(actions)) {
+            effect.runEffect(player, allTargets, board, new ArrayList<>(), new ArrayList<>());
+            updater.accept(null);
+        }
     }
 
     /**
@@ -123,5 +124,10 @@ public class NormalTurn implements TurnInterface {
                     player.canAffordWithPowerups(cardToReload.getCost(), false));
 
         player.reload(cardToReload, toPay);
+        updater.accept(new UpdateBuilder()
+                .setLoadedWeapons(player, player.getLoadedWeapons())
+                .setUnloadedWeapon(player, player.getReloadableWeapons())
+                .setPowerupsInHand(player, player.getAllPowerup())
+                .setActiveCubes(player, player.getAmmoCubes()));
     }
 }

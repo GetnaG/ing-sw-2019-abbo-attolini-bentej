@@ -68,7 +68,6 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      */
     private List<Damageable> killedInTurn;
     private boolean gameOver;
-    private Configurations configuration;
     private boolean frenzy;
 
     /**
@@ -92,7 +91,6 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         suspendedPlayers = new ArrayList<>();
         killedInTurn = new ArrayList<>();
         gameOver = false;
-        this.configuration = configuration;
         frenzy = false;
     }
 
@@ -191,6 +189,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      * @param update the update to send
      */
     public void updateAllPlayers(UpdateBuilder update) {
+        if (update == null) update = fullUpdate();
         for (Player p : players) {
             if (!suspendedPlayers.contains(p)) {
                 try {
@@ -204,7 +203,6 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
 
     private UpdateBuilder fullUpdate() {
         UpdateBuilder updateBuilder = new UpdateBuilder()
-                .setConfigurationId(configuration.getId())
                 .setAmmoCards(board)
                 .setWeaponsOnBoard(board)
                 .setWeaponDrawable(!board.isWeaponDeckEmpty())

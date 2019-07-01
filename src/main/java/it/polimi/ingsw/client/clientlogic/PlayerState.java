@@ -10,7 +10,6 @@ public class PlayerState {
     private int turnPosition;
     private int squarePosition;
     private String nickname;
-    private String figureRes;
     private List<Integer> ammoCubes;
     private boolean isPlayerBoardFrenzy;
     private int skullNumber;
@@ -19,7 +18,6 @@ public class PlayerState {
     private boolean isConnected;
     private List<String> loadedWeapons;
     private List<String> unloadedWeapons;
-    private List<Boolean> areWeaponsLoaded;
     private List<String> powerups;
     private boolean isCurrent;
 
@@ -27,7 +25,6 @@ public class PlayerState {
         this.turnPosition = turnPosition;
         squarePosition = -1;
         this.nickname = nickname;
-        figureRes = null;
         ammoCubes = new ArrayList<>();
         isPlayerBoardFrenzy = false;
         skullNumber = -1;
@@ -36,7 +33,6 @@ public class PlayerState {
         isConnected = true;
         loadedWeapons = new ArrayList<>();
         unloadedWeapons = new ArrayList<>();
-        areWeaponsLoaded = new ArrayList<>();
         powerups = new ArrayList<>();
         isCurrent = false;
     }
@@ -71,14 +67,6 @@ public class PlayerState {
 
     public void setNickname(String nickname) {
         this.nickname = nickname;
-    }
-
-    public String getFigureRes() {
-        return figureRes;
-    }
-
-    public void setFigureRes(String figureRes) {
-        this.figureRes = figureRes;
     }
 
     public List<Integer> getAmmoCubes() {
@@ -135,14 +123,6 @@ public class PlayerState {
 
     public void setLoadedWeapons(List<String> loadedWeapons) {
         this.loadedWeapons = loadedWeapons;
-    }
-
-    public List<Boolean> getAreWeaponsLoaded() {
-        return areWeaponsLoaded;
-    }
-
-    public void setAreWeaponsLoaded(List<Boolean> areWeaponsLoaded) {
-        this.areWeaponsLoaded = areWeaponsLoaded;
     }
 
     public List<String> getPowerups() {
