@@ -105,15 +105,18 @@ public class MatchState {
                 break;
 
             case HALL_TIMER:
-                //TODO what to do with hall timer
                 int timer = Integer.parseInt(update.getNewValue().get(0));
                 GUI.updateTimer(timer);
+                //FIXME: this is not the time left, it is the duration of the timer
+                //FIXME: passing info to the view. Memorize in a field instead and then the view, when notified, will access the field
+                //FIXME: calling a method of the GUI and not of InteractionInterface
                 break;
             case GAME_OVER:
                 //TODO the provided list contains the winners in the right order
                 break;
             case CURRENT_PLAYER:
                 playersState.forEach(playerState -> playerState.setCurrent(playerState.getNickname().equals(update.getNewValue().get(0))));
+                break;
             default:
                 // nothing
         }
