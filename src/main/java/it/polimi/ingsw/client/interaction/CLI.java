@@ -1065,5 +1065,8 @@ public class CLI implements InteractionInterface {
         askConnection();
     }
 
+    public void updateTimer(int seconds) {
+        // does nothing
+    }
 
 }

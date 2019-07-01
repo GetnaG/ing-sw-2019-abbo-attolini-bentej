@@ -1,5 +1,6 @@
 package it.polimi.ingsw.client.clientlogic;
 
+import it.polimi.ingsw.client.interaction.GUI.GUI;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import it.polimi.ingsw.communication.protocol.Update;
 
@@ -105,6 +106,8 @@ public class MatchState {
 
             case HALL_TIMER:
                 //TODO what to do with hall timer
+                int timer = Integer.parseInt(update.getNewValue().get(0));
+                GUI.updateTimer(timer);
                 break;
             case GAME_OVER:
                 //TODO the provided list contains the winners in the right order

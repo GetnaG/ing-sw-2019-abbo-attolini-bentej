@@ -53,18 +53,17 @@ public class HallPane extends StackPane {
         VBox vertical = new VBox();
         Text topText = new Text("Hall");
         StackPane logWindow = new StackPane();
-        logText = new Text("");
+        this.logText = new Text("");
         Rectangle logRectangle = new Rectangle(400, 40);
         Text textUserBox = new Text("The following users are connected:");
         usersBox = new HBox();
-        Button debugSkip = new Button("debug skip");
 
 
         this.getChildren().add(border);
         border.setCenter(vertical);
         vertical.getChildren().addAll(topText, textUserBox, usersBox, logWindow);
-        logWindow.getChildren().addAll(logText, logRectangle, debugSkip);
-        updateHall(); // TODO Set timer
+        logWindow.getChildren().addAll(logText, logRectangle);
+        updateHall();
 
         // Set up background image
         BackgroundImage img = new BackgroundImage(R.image("logo"), BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.CENTER, BackgroundSize.DEFAULT);
@@ -98,9 +97,6 @@ public class HallPane extends StackPane {
         textUserBox.setFont(new Font("Cambria", 20));
         textUserBox.setFill(Color.WHITE);
 
-        // Setting event
-        debugSkip.setOnAction(e -> GUI.buildGamePane(null));
-
 
     }
 
@@ -113,6 +109,11 @@ public class HallPane extends StackPane {
         for (String name : playersInHall) {
             usersBox.getChildren().add(getPlayerBox(name));
         }
+        logText.setText(R.string("waitPlayers"));
+    }
+
+    public static void updateTimer(int seconds) {
+        logText.setText("Timer started. Match starting in " + seconds + " seconds.");
     }
 
     private static Pane getPlayerBox(String nickname) {

@@ -97,7 +97,7 @@ public class LoginPane extends StackPane {
             if (socketRadio.isSelected()) {
 
                 try {
-                    controllerGUI.setSocket("localhost", 9000);
+                    controllerGUI.setSocket("localhost", 9002);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

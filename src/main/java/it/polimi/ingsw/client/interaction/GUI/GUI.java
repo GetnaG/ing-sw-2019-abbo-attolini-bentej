@@ -145,17 +145,20 @@ public class GUI extends Application {
     public static int choosePowerupWithQuestion(List<List<String>> optionKeys, String question) {
         answerGiven = false;
         GamePane.changeAnswerBoxCards(optionKeys);
-        questionText.setText(question);
+        GamePane.setQuestionText(question);
         return 0;
     }
     public static int chooseEffectSequence(List<List<String>> optionKeys) {
+        answerGiven = false;
+        GamePane.changeAnswerSimpleOptions(optionKeys);
+        GamePane.setQuestionText(R.string("askEffect"));
         return 0;
     }
 
     public static int chooseSpawn(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerBoxCards(optionKeys);
-        questionText.setText(R.string("askSpawn"));
+        GamePane.setQuestionText(R.string("askSpawn"));
         return 0;
     }
 
@@ -166,14 +169,14 @@ public class GUI extends Application {
     public static int chooseWeaponWithQuestion(List<List<String>> optionKeys, String question) {
         answerGiven = false;
         GamePane.changeAnswerBoxCards(optionKeys);
-        questionText.setText(question);
+        GamePane.setQuestionText(question);
         return 0;
     }
 
     public static int chooseDestination(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerBoxSquares(optionKeys);
-        questionText.setText(R.string("askSquare"));
+        GamePane.setQuestionText(R.string("askSquare"));
         return 0;
     }
 
@@ -207,10 +210,11 @@ public class GUI extends Application {
                 logText.setText("Username taken and offline");
                 break;
             case "GAME_STARTING":
+                gameStarted = true;
                 buildGamePane(stage);
                 break;
             case "TIMER_STARTING":
-                loginPane.setLogText("Timer is starting");
+                loginPane.setLogText("Timer has started");
                 break;
         }
     }
@@ -218,7 +222,7 @@ public class GUI extends Application {
     public static int chooseAction(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerSimpleOptions(optionKeys);
-        questionText.setText(R.string("askAction"));
+        GamePane.setQuestionText(R.string("askAction"));
         return 0;
     }
 
@@ -229,11 +233,14 @@ public class GUI extends Application {
     public static int chooseUseTagBack(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerSimpleOptions(optionKeys);
-        questionText.setText(R.string("askTagback"));
+        GamePane.setQuestionText(R.string("askTagback"));
         return 0;
     }
 
     public static int chooseTarget(List<List<String>> optionKeys) {
+        answerGiven = false;
+        GamePane.changeAnswerSimpleOptions(optionKeys);
+        GamePane.setQuestionText(R.string("askTarget"));
         return 0;
     }
 
@@ -247,7 +254,7 @@ public class GUI extends Application {
         if (input.length() > 1 && input.length() < 18) {
             return input;
         } else {
-            logText.setText("Insert valid username");
+            loginPane.setLogText("Insert valid username");
             return "ERROR";
         }
     }
@@ -317,6 +324,14 @@ public class GUI extends Application {
         stage.setScene(masterScene);
         gameStarted = false;
         stage.show();
+    }
+
+    public static void updateTimer(int seconds) {
+        HallPane.updateTimer(seconds);
+    }
+
+    public static void setWaitForTurn() {
+        GamePane.setWaitForTurn();
     }
 
 

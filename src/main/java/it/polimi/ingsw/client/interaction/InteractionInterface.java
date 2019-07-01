@@ -148,4 +148,6 @@ public interface InteractionInterface {
      * @param model the model to set
      */
     void setModel(MatchState model);
+
+    void updateTimer(int seconds);
 }

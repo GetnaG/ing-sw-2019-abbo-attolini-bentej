@@ -42,9 +42,10 @@ public class GamePane extends StackPane {
      */
     private static VBox vboxRightCards;
 
-    public GamePane(HBox answerBox, Text questionText, int idMap) {
+    public GamePane(HBox answerBox, Text question, int idMap) {
         super();
         this.answerBox = answerBox;
+        if (questionText == null) questionText = new Text();
         BorderPane borderPane = new BorderPane();
         map = new MapPane(idMap);
 
@@ -93,9 +94,6 @@ public class GamePane extends StackPane {
         vbox.getChildren().add(answerBox);
 
         vbox.setFillWidth(true);
-        vbox.setMinHeight(400);
-
-
     }
 
     /**
@@ -292,14 +290,12 @@ public class GamePane extends StackPane {
         iv.setCache(true);
         if (dark)
             iv.setOpacity(0.5);
-
         return iv;
     }
 
     private static Node getQuestionBox(String question) {
         StackPane stackPane = new StackPane();
-        questionText = new Text(question);
-        Rectangle rectangle = new Rectangle(700, 100);
+        Rectangle rectangle = new Rectangle(700, 50);
 
         stackPane.getChildren().addAll(questionText, rectangle);
 
@@ -368,7 +364,7 @@ public class GamePane extends StackPane {
             options.forEach(group -> {
                 HBox hbox = new HBox();
                 // TOP GROUP Name
-                Button groupNameButton = new Button(options.indexOf(group) + "");
+                Button groupNameButton = new Button(group.get(0));
                 groupNameButton.setOnMouseClicked(e -> {
                     GUI.setAnswer(options.indexOf(group));
                     GUI.setAnswerGiven(true);
@@ -413,10 +409,13 @@ public class GamePane extends StackPane {
     private static void createCardAnimation(Node node, String resID, ImageView imgBox) {
         imgBox.setVisible(true);
         imgBox.setImage(getCard(resID, false).getImage());
+        imgBox.setFitHeight(imgBox.getFitHeight() * 0.7);
+        imgBox.setPreserveRatio(true);
         node.setStyle("-fx-font-weight: bold");
         node.setOnMouseEntered(e -> {
             imgBox.setVisible(true);
             imgBox.setImage(getCard(resID, false).getImage());
+            imgBox.setFitHeight(180);
             node.setStyle("-fx-font-weight: bold");
         });
         node.setOnMouseExited(e -> {
@@ -520,5 +519,23 @@ public class GamePane extends StackPane {
                 playerState.getSkullNumber());
         //updateKillshotTrack((GridPane) killshotTrack.getChildren().get(1), GUI.getModel().getKillshotTrack());
         map.update();
+    }
+
+    public static Text getQuestionText() {
+        if (questionText == null) questionText = new Text();
+        return questionText;
+    }
+
+    public static void setQuestionText(String question) {
+        if (questionText == null) questionText = new Text();
+        questionText.setText(question);
+    }
+
+
+    public static void setWaitForTurn() {
+        Platform.runLater(() -> {
+            questionText.setText(R.string("wait"));
+            answerBox.getChildren().removeAll(answerBox.getChildren());
+        });
     }
 }

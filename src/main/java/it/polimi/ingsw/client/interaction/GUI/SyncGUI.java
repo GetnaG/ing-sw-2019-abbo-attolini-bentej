@@ -53,15 +53,29 @@ public class SyncGUI implements InteractionInterface {
 
     @Override
     public int chooseEffectSequence(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.chooseEffectSequence(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
     public int chooseSpawn(List<List<String>> optionKeys) {
+        GUI.setAnswerGiven(false);
         GUI.chooseSpawn(optionKeys);
-        while (true) {
-            if (GUI.isAnswerGiven())
-                break;
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
         }
         int indexButtonPressed = GUI.getAnswer();
         GUI.setAnswerGiven(false);
@@ -70,66 +84,163 @@ public class SyncGUI implements InteractionInterface {
 
     @Override
     public int choosePowerup(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.choosePowerup(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
     public int chooseDestination(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.chooseDestination(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
     public int chooseWeapon(List<List<String>> optionKeys) {
         GUI.chooseWeapon(optionKeys);
-        while (true) {
-            if (GUI.isAnswerGiven())
-                break;
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
         }
         int indexButtonPressed = GUI.getAnswer();
         GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
         return indexButtonPressed;
     }
 
     @Override
     public int chooseWeaponToBuy(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        GUI.chooseWeaponToBuy(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
     public int chooseWeaponToDiscard(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.chooseWeaponToDiscard(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
     public int chooseWeaponToReload(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.chooseWeaponToReload(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+                System.out.println(GUI.getAnswer() + "");
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
     public int chooseAction(List<List<String>> optionKeys) {
+        GUI.setAnswerGiven(false);
         GUI.chooseAction(optionKeys);
-        while (true) {
-            if (GUI.isAnswerGiven())
-                break;
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
         }
         int indexButtonPressed = GUI.getAnswer();
         GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
         return indexButtonPressed;
     }
 
     @Override
     public int choosePowerupForPaying(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.choosePowerupForPaying(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
     public int chooseUseTagBack(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.chooseUseTagBack(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
     public int chooseTarget(List<List<String>> optionKeys) {
-        return 0;
+        GUI.setAnswerGiven(false);
+        GUI.chooseTarget(optionKeys);
+        while (!GUI.isAnswerGiven()) {
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+            }
+        }
+        int indexButtonPressed = GUI.getAnswer();
+        GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
+        return indexButtonPressed;
     }
 
     @Override
@@ -145,6 +256,10 @@ public class SyncGUI implements InteractionInterface {
     @Override
     public void sendNotification(String notificationKey) {
         Platform.runLater(() -> GUI.sendNotification(notificationKey));
+    }
+
+    public void updateTimer(int seconds) {
+        GUI.updateTimer(seconds);
     }
 
 }
