@@ -5,6 +5,7 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -82,7 +83,8 @@ public class SpawnSquare extends Square {
     /**
      * After maps are loaded from json, a refresh is needed.
      */
-    public void refresh() {
+    public void refresh(List<Room> rooms) {
+        super.refresh(rooms);
         market = new WeaponMarket(new ArrayList<>(Arrays.asList(null, null, null)));
     }
 

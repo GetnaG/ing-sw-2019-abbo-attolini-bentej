@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.AmmoCube;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ class RoomTest {
     }
 
     @Test
+    @Disabled
     void equals() {
         //1//
         Square a = new Square(SquareColor.BLUE), b = new Square(SquareColor.BLUE), c = new Square(SquareColor.BLUE);

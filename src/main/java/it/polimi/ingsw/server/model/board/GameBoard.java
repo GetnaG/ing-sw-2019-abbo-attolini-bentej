@@ -66,7 +66,6 @@ public class GameBoard implements ReplaceListener {
         this.track = track;
         this.configuration = configuration;
         configuration.stream().flatMap(room -> room.getSquares().stream()).forEach(square -> square.setReplacer(this));
-        configuration.forEach(room -> room.refresh(configuration));
 
         // Decks are shuffled when created
         powerupDeck = new PowerupDeck(this);
@@ -82,11 +81,13 @@ public class GameBoard implements ReplaceListener {
         squareNewWeaponCard = new ArrayList<>();
 
         /*Adding all the missing ammo cards and weapons*/
-        configuration.stream().flatMap(room -> room.getSquares().stream()).forEach(square -> {
-            if (square.equals(square.getRoom().getSpawnSquare()))
-                addSpawnSquare(square.getRoom().getSpawnSquare());
-            else addSquare(square);
-        });
+        for (Room room : configuration) {
+            for (Square square : room.getSquares()) {
+                if (square.equals(square.getRoom().getSpawnSquare()))
+                    addSpawnSquare(square.getRoom().getSpawnSquare());
+                else addSquare(square);
+            }
+        }
         replaceAll();
     }
 
@@ -435,15 +436,15 @@ public class GameBoard implements ReplaceListener {
         if (start.equals(end) || start == null || end == null)
             return 0;
         if (start != null)
-            start.refresh(GameBoard.getConfiguration());
+            start.refresh(GameBoard.getConfiguration());//TODO
         if (end != null)
-            end.refresh(GameBoard.getConfiguration());
+            end.refresh(GameBoard.getConfiguration());//TODO
 
         Set<Square> Q = getAllSquares();
         Map<Square, Integer> dist = new HashMap<>();
 
         Q.forEach(x -> {
-            x.refresh(GameBoard.getConfiguration());
+            x.refresh(GameBoard.getConfiguration());//TODO
             dist.put(x, 999);
         });
         dist.put(start, 0);

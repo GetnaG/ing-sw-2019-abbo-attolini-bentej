@@ -195,6 +195,7 @@ class SquareTest {
 
 
     @Test
+    @Disabled
     void straight() {
         Square testS = new Square();
         Square testDestinationS = new Square();

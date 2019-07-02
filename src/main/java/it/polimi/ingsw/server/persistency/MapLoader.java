@@ -2,14 +2,13 @@ package it.polimi.ingsw.server.persistency;
 
 import com.google.gson.Gson;
 import it.polimi.ingsw.server.model.board.Room;
-import it.polimi.ingsw.server.model.cards.PowerupCard;
 
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 /**
@@ -40,43 +39,41 @@ public class MapLoader implements BasicLoader<List<Room>> {
     }
 
     /**
-     * Returns the first object with a matching {@code id} ignoring case.
-     *
-     * @param id the identifier of the requested object
-     * @return the first object found with the requested {@code id}
-     * @throws NoSuchElementException if no match is found
+     * {@inheritDoc}
+     * <p>
+     * Returns the configuration with a matching {@code id}, refreshed.
      */
     @Override
     public List<Room> get(String id) {
-        int index = Integer.parseInt(id);
-        return Arrays.asList(maps[index]);
+        List<Room> rooms = new ArrayList<>(Arrays.asList(maps[Integer.parseInt(id)]));
+        rooms.forEach(room -> room.refresh(rooms));
+        return rooms;
     }
 
     /**
+     * {@inheritDoc}
+     * <p>
      * Returns all the object loaded, already refreshed.
-     *
-     * @return all the object loaded
      */
     @Override
     public List<List<Room>> getAll() {
-        List<Room[]> tmp = Arrays.asList(maps);
-        List<List<Room>> maps = tmp.stream().map(array -> Arrays.asList(array)).collect(Collectors.toList());
-        for (List<Room> rooms : maps) {
-            rooms.get(0).refresh(rooms);
+        List<List<Room>> mapsList = Arrays.stream(maps)
+                .map(Arrays::asList)
+                .collect(Collectors.toList());
+        for (List<Room> rooms : mapsList) {
+            rooms.forEach(room -> room.refresh(rooms));
         }
-        return maps;
+        return mapsList;
     }
 
     /**
-     * Returns all the objects with a matching {@code id} ignoring case.
-     *
-     * @param id the identifier of the requested objects
-     * @return all the objects found with the requested {@code id}
+     * {@inheritDoc}
+     * <p>
+     * The list will contain only one element because the id is unique.
+     * The squares will be already refreshed.
      */
     @Override
     public List<List<Room>> getAll(String id) {
-        List<List<Room>> ret = new ArrayList<>();
-        ret.add(get(id));
-        return ret;
+        return Collections.singletonList(get(id));
     }
 }

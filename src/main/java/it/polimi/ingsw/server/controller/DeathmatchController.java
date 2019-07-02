@@ -8,11 +8,11 @@ import it.polimi.ingsw.communication.protocol.Notification;
 import it.polimi.ingsw.server.controller.turns.*;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
-import it.polimi.ingsw.server.model.board.ConfigurationHelper;
 import it.polimi.ingsw.server.model.board.Configurations;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.KillshotTrack;
 import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.persistency.FromFile;
 import it.polimi.ingsw.server.serverlogic.ServerMain;
 import it.polimi.ingsw.server.serverlogic.SuspensionListener;
 
@@ -85,8 +85,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         players = new ArrayList<>();
         users.forEach(u -> players.add(new Player(u.getName(), PLAYER_RESOURCE_PREFIX + users.indexOf(u), u, this)));
 
-        //TODO: can I use directly the loader?
-        board = new GameBoard(new KillshotTrack(skullsLeft), ConfigurationHelper.boardCreator(configuration));
+        board = new GameBoard(new KillshotTrack(skullsLeft), FromFile.maps().getAll().get(configuration.getId()));
 
         suspendedPlayers = new ArrayList<>();
         killedInTurn = new ArrayList<>();

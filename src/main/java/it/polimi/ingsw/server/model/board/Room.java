@@ -76,16 +76,13 @@ public class Room {
     }
 
     public void refresh(List<Room> rooms) {
-        for (Room room : rooms) {
-            for (Square square : room.getSquares()) {
-                square.setNorth(Square.getSquare(rooms, square.getIdNorth()));
-                square.setEast(Square.getSquare(rooms, square.getIdEast()));
-                square.setSouth(Square.getSquare(rooms, square.getIdSouth()));
-                square.setWest(Square.getSquare(rooms, square.getIdWest()));
-            }
-
+        for (Square square : getSquares()) {
+            square.setNorth(Square.getSquare(rooms, square.getIdNorth()));
+            square.setEast(Square.getSquare(rooms, square.getIdEast()));
+            square.setSouth(Square.getSquare(rooms, square.getIdSouth()));
+            square.setWest(Square.getSquare(rooms, square.getIdWest()));
         }
-        if (this.hasSpawnSquare())
-            spawnSquare.refresh();
+        if (hasSpawnSquare())
+            spawnSquare.refresh(rooms);
     }
  }

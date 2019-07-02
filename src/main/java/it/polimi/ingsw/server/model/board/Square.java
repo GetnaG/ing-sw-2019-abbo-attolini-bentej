@@ -293,17 +293,17 @@ public class Square {
                 idNorth == square.idNorth &&
                 idSouth == square.idSouth &&
                 idEast == square.idEast &&
-                idWest == square.idWest &&
+                idWest == square.idWest; /*&&//TODO
                 squareColor == square.squareColor &&
                 northBorder == square.northBorder &&
                 southBorder == square.southBorder &&
                 eastBorder == square.eastBorder &&
-                westBorder == square.westBorder;
+                westBorder == square.westBorder;*/
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(squareColor, ID, idNorth, idSouth, idEast, idWest, northBorder, southBorder, eastBorder, westBorder);
+        return Objects.hash(squareColor, ID, idNorth, idSouth, idEast, idWest); /*northBorder, southBorder, eastBorder, westBorder);*/
     }
 
     /**
@@ -360,7 +360,7 @@ public class Square {
         if(eb != null) this.setEastBorder(eb);
     }
 
-    public void refresh(List<Room> rooms) {
+    public void refresh(List<Room> rooms) {//TODO
         if (rooms == null || rooms.isEmpty()) return;
 
         this.north = getSquare(rooms, idNorth);
