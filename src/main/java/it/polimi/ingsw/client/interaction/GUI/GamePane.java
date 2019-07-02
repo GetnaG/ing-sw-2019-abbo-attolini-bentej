@@ -42,8 +42,9 @@ public class GamePane extends StackPane {
      */
     private static VBox vboxRightCards;
 
+    private static boolean ready = false;
+
     public GamePane(HBox answerBox, Text question, int idMap) {
-        super();
         this.answerBox = answerBox;
         answerBox.setMinWidth(1680);
         answerBox.setMinHeight(400);
@@ -52,7 +53,7 @@ public class GamePane extends StackPane {
         map = new MapPane(idMap);
 
         this.getChildren().add(borderPane);
-
+        this.ready = true;
         buildTop(borderPane);
         buildBottom(borderPane);
         buildCenter(borderPane);
@@ -132,6 +133,7 @@ public class GamePane extends StackPane {
      * Shows the list of loaded weapon cards to the player
      */
     private static void updateWeaponCards(List<String> loadedWeaponCardsIDs, List<String> unloadedWeaponCards) {
+        if (vboxLeftCards == null) return;
         vboxLeftCards.getChildren().removeAll(vboxLeftCards.getChildren());
         loadedWeaponCardsIDs.forEach(ammoCardID -> vboxLeftCards.getChildren().add(getCard(ammoCardID, false)));
         unloadedWeaponCards.forEach(ammoCardID -> vboxLeftCards.getChildren().add(getCard(ammoCardID, true)));
@@ -160,8 +162,10 @@ public class GamePane extends StackPane {
      * @param powerupCardIDs
      */
     private static void updatePowerupCards(List<String> powerupCardIDs) {
-        vboxRightCards.getChildren().removeAll(vboxRightCards.getChildren());
-        powerupCardIDs.forEach(powerupCardID -> vboxRightCards.getChildren().add(getCard(powerupCardID, false)));
+        if (vboxRightCards != null) {
+            vboxRightCards.getChildren().removeAll(vboxRightCards.getChildren());
+            powerupCardIDs.forEach(powerupCardID -> vboxRightCards.getChildren().add(getCard(powerupCardID, false)));
+        }
     }
 
     private static StackPane getPlayerBoard(PlayerState playerState) {
@@ -520,13 +524,14 @@ public class GamePane extends StackPane {
     }
 
     public static void update() {
+        if (!ready) return;
         PlayerState playerState = GUI.getPlayerState(GUI.getNickname());
         updatePowerupCards(playerState.getPowerups());
         updateWeaponCards(playerState.getLoadedWeapons(), playerState.getUnloadedWeapons());
         updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
                 playerState.getDamage(),
                 playerState.getSkullNumber());
-        //updateKillshotTrack((GridPane) killshotTrack.getChildren().get(1), GUI.getModel().getKillshotTrack());
+        updateKillshotTrack((GridPane) killshotTrack.getChildren().get(1), GUI.getModel().getKillshotTrack());
         map.update();
     }
 

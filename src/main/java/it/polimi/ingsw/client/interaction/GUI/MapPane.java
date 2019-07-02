@@ -1,35 +1,18 @@
 package it.polimi.ingsw.client.interaction.GUI;
 
 import it.polimi.ingsw.client.clientlogic.PlayerState;
-import it.polimi.ingsw.client.resources.R;
-import it.polimi.ingsw.server.model.board.Square;
-import it.polimi.ingsw.server.model.player.Player;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 import java.util.List;
 
 public class MapPane extends GridPane {
+    private static int map;
 
     public MapPane(int mapID) {
         super();
-
-        switch (mapID) {
-            case 0:
-                buildMap0();
-                break;
-            case 1:
-                buildMap1();
-                break;
-            case 2:
-                buildMap2();
-                break;
-            case 3:
-                buildMap3();
-                break;
-        }
+        map = mapID;
+        buildMap(mapID);
         this.setAlignment(Pos.CENTER);
     }
 
@@ -37,7 +20,25 @@ public class MapPane extends GridPane {
         return new SquarePane(resID);
     }
 
-    private void buildMap0() {
+    private void buildMap(int mapID) {
+        this.getChildren().removeAll(this.getChildren());
+        switch (mapID) {
+            case 0: //STD1
+                buildMapStd1();
+                break;
+            case 1: //ADVISED34
+                buildMapAdv34();
+                break;
+            case 2:
+                buildMapStd2(); // STD2
+                break;
+            case 3: // ADVISED45
+                buildMapAdv45();
+                break;
+        }
+    }
+
+    private void buildMapStd1() {
 
         this.add(getCell("1-x1y3"), 0, 0);
         this.add(getCell("1-x2y3"), 1, 0);
@@ -54,7 +55,7 @@ public class MapPane extends GridPane {
         this.setWidth(1500);
     }
 
-    private void buildMap1() {
+    private void buildMapAdv45() {
 
         this.add(getCell("1-x1y3"), 0, 0);
         this.add(getCell("1-x2y3"), 1, 0);
@@ -72,7 +73,7 @@ public class MapPane extends GridPane {
         this.setWidth(1500);
     }
 
-    private void buildMap2() {
+    private void buildMapStd2() {
         this.add(getCell("2-x1y3"), 0, 0);
         this.add(getCell("2-x2y3"), 1, 0);
         this.add(getCell("2-x3y3"), 2, 0);
@@ -88,7 +89,7 @@ public class MapPane extends GridPane {
         this.setWidth(1500);
     }
 
-    private void buildMap3() {
+    private void buildMapAdv34() {
         this.add(getCell("2-x1y3"), 0, 0);
         this.add(getCell("2-x2y3"), 1, 0);
         this.add(getCell("1-x3y3"), 2, 0);
@@ -113,6 +114,10 @@ public class MapPane extends GridPane {
     }
 
     public void update() {
+        if (map != GUI.getModel().getConfigurationID()) {
+            buildMap(GUI.getModel().getConfigurationID());
+            map = GUI.getModel().getConfigurationID();
+        }
         for (int i = 0; i < 12; i++) {
             getCellByID(i).flushState();
         }
@@ -125,4 +130,6 @@ public class MapPane extends GridPane {
                     .insertPlayerInSquare(state.getNickname());
         }
     }
+
+
 }

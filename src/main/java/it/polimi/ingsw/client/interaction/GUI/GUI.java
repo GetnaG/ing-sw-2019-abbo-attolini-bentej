@@ -295,7 +295,8 @@ public class GUI extends Application {
      */
     private void setUpLoginScene(Stage stage) {
         inputUsername = new TextField();
-        loginPane = new LoginPane(controllerGUI);
+        logText = new Text();
+        loginPane = new LoginPane(controllerGUI, logText, inputUsername);
         masterScene = new Scene(loginPane, 1000, 1000);
     }
 
@@ -321,11 +322,14 @@ public class GUI extends Application {
 
     public void start(Stage stage) {
         this.stage = stage;
+        gameStarted = false;
         setUpLoginScene(stage);
         stage.setTitle("Adrenaline");
         stage.setScene(masterScene);
-        gameStarted = false;
+        stage.setMinWidth(1000);
+        stage.setMinHeight(1022);
         stage.show();
+
     }
 
     public static void updateTimer(int seconds) {

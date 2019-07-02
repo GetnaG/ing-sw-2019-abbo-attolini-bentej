@@ -109,11 +109,14 @@ public class HallPane extends StackPane {
         for (String name : playersInHall) {
             usersBox.getChildren().add(getPlayerBox(name));
         }
-        logText.setText(R.string("waitPlayers"));
+        if (logText != null) logText.setText(R.string("waitPlayers"));
+        if (model.getTimerDuration() > 0)
+            updateTimer(model.getTimerDuration());
     }
 
     public static void updateTimer(int seconds) {
-        logText.setText("Timer started. Match starting in " + seconds + " seconds.");
+        if (logText != null)
+            logText.setText("Timer started. Match starting in " + seconds + " seconds.");
     }
 
     private static Pane getPlayerBox(String nickname) {

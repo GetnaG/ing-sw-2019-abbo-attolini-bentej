@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.clientlogic;
 
 import it.polimi.ingsw.client.interaction.GUI.GUI;
+import it.polimi.ingsw.client.interaction.GUI.MapPane;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import it.polimi.ingsw.communication.protocol.Update;
 
@@ -24,12 +25,13 @@ public class MatchState {
 
     private BoardState boardState;
     private List<InteractionInterface> subscribedInteractionInterfaces;
+    private int timerDuration;
 
     public MatchState() {
         this.playersState = new ArrayList<>();
         this.boardState = new BoardState();
-
         subscribedInteractionInterfaces = new ArrayList<>();
+        timerDuration = -1;
     }
 
     public void subscribe(InteractionInterface interactionInterface) {
@@ -103,11 +105,7 @@ public class MatchState {
                 break;
 
             case HALL_TIMER:
-                int timer = Integer.parseInt(update.getNewValue().get(0));
-                //GUI.updateTimer(timer);
-                //FIXME: this is not the time left, it is the duration of the timer
-                //FIXME: passing info to the view. Memorize in a field instead and then the view, when notified, will access the field
-                //FIXME: calling a method of the GUI and not of InteractionInterface
+                timerDuration = Integer.parseInt(update.getNewValue().get(0));
                 break;
             case GAME_OVER:
                 //TODO the provided list contains the winners in the right order
@@ -154,5 +152,9 @@ public class MatchState {
 
     public List<PlayerState> getPlayersState() {
         return playersState;
+    }
+
+    public int getTimerDuration() {
+        return timerDuration;
     }
 }

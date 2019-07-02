@@ -9,8 +9,8 @@ import java.util.List;
 
 public class SquarePane extends StackPane {
 
-    private static ImageView imgSquare;
-    private static Text players;
+    private ImageView imgSquare;
+    private Text players;
 
     public SquarePane(String resImage) {
         players = new Text();
@@ -33,6 +33,7 @@ public class SquarePane extends StackPane {
     }
 
     public void insertPlayerInSquare(String player) {
+
         players.setText(players.getText() + "\n" + player);
     }
 

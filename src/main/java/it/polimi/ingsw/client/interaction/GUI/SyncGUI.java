@@ -44,12 +44,12 @@ public class SyncGUI implements InteractionInterface {
         this.model = model;
         model.subscribe(this);
         GUI.setModel(model);
+        model.subscribe(this);
     }
 
     @Override
     public void notifyUpdatedState() {
         GUI.notifyUpdatedState();
-
     }
 
     @Override
@@ -250,7 +250,6 @@ public class SyncGUI implements InteractionInterface {
         while (name == "ERROR") {
             name = GUI.askName();
         }
-
         return name;
     }
 

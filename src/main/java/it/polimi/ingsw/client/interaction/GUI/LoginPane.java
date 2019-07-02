@@ -23,16 +23,16 @@ public class LoginPane extends StackPane {
     private Text logText;
     private TextField inputUsername;
 
-    public LoginPane(ClientController controllerGUI) {
+    public LoginPane(ClientController controllerGUI, Text logText, TextField textField) {
         super();
-        inputUsername = new TextField();
+        this.logText = logText;
+        this.inputUsername = textField;
         BorderPane border = new BorderPane();
         VBox vertical = new VBox();
         Text topText = new Text(R.string("GUIWelcomeText"));
         HBox usernameHBox = new HBox();
         HBox loginAndRadioBox = new HBox();
         StackPane logWindow = new StackPane();
-        logText = new Text();
         logText.setText(R.string("InsertUsername"));
         Rectangle logRectangle = new Rectangle(800, 100);
 
