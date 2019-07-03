@@ -129,6 +129,43 @@ public class MapPane extends GridPane {
             getCellByID(state.getSquarePosition())
                     .insertPlayerInSquare(state.getNickname());
         }
+
+        for (int i = 0; i < 12; i++) {
+            SquarePane sp = getCellByID(i);
+            int squareID = i;
+            sp.setOnMouseEntered(e -> {
+                sp.getImgSquare().setOpacity(0.5);
+                if (squareID != 2 && squareID != 4 && squareID != 11) {
+                    String cardKeyPowerup = GUI.getModel().getAmmoCardsID().get(squareID);
+                    if (!cardKeyPowerup.equals("notSet")) {
+                        GamePane.updateRightGeneralTag(List.of(cardKeyPowerup), "The square contains:");
+                    }
+                } else {
+                    int indexStart = 0;
+                    switch (squareID) {
+                        case 2:
+                            indexStart = 0;
+                            break;
+                        case 4:
+                            indexStart = 3;
+                            break;
+                        case 11:
+                            indexStart = 6;
+                            break;
+                        default:
+                            break;
+                    }
+                    List<String> weaponCardsMarketKeys = GUI.getModel().getWeaponsCardsID().subList(indexStart + 9, indexStart + 3 + 9);
+                    GamePane.updateRightGeneralTag(weaponCardsMarketKeys, "The square contains:");
+                }
+
+            });
+
+            sp.setOnMouseExited(e -> {
+                sp.getImgSquare().setOpacity(1);
+                GamePane.update();
+            });
+        }
     }
 
 

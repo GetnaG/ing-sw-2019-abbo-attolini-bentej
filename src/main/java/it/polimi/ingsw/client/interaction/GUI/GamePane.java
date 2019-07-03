@@ -158,7 +158,7 @@ public class GamePane extends StackPane {
         PlayerState currentPlayerState = GUI.getModel().getPlayersState().stream()
                 .filter(p -> p.getNickname().equals(GUI.getNickname()))
                 .collect(Collectors.toList()).get(0);
-        updatePowerupCards(currentPlayerState.getPowerups());
+        updatePowerupCards(currentPlayerState.getPowerups(), R.string("powerup"), true);
         vboxRightCards.setAlignment(Pos.CENTER);
         vboxRightCards.setSpacing(10);
     }
@@ -167,21 +167,26 @@ public class GamePane extends StackPane {
      * Shows the list of ammo cards to the player
      *
      * @param powerupCardIDs
+     * @param title
+     * @param isPowerup tells if we are updating a powerup or an on square movement
      */
-    private static void updatePowerupCards(List<String> powerupCardIDs) {
+    private static void updatePowerupCards(List<String> powerupCardIDs, String title, boolean isPowerup) {
         if (vboxRightCards != null) {
             vboxRightCards.getChildren().removeAll(vboxRightCards.getChildren());
-            Label topLabel = new Label(R.string("powerup"));
+            Label topLabel = new Label(title);
             topLabel.setFont(R.font("AllertaStencil-Regular.ttf", 20));
             topLabel.setTextFill(Color.WHITE);
             vboxRightCards.getChildren().add(topLabel);
             powerupCardIDs.forEach(powerupCardID -> vboxRightCards.getChildren().add(getCard(powerupCardID, false)));
-            for (int i = powerupCardIDs.size(); i < 3; i++) {
+            for (int i = powerupCardIDs.size(); i < 3 && isPowerup; i++) {
                 vboxRightCards.getChildren().add(getCard("refuse", false));
             }
         }
     }
 
+    public static void updateRightGeneralTag(List<String> cardIDs, String title) {
+        updatePowerupCards(cardIDs, title, false);
+    }
     private static StackPane getPlayerBoard(PlayerState playerState) {
         StackPane stack = new StackPane();
         // load the image
@@ -525,14 +530,14 @@ public class GamePane extends StackPane {
                     .filter(s -> s.getNickname().equals(text.getText()))
                     .collect(Collectors.toList()).get(0);
             updateWeaponCards(hooveredPlayerState.getLoadedWeapons(), hooveredPlayerState.getUnloadedWeapons());
-            updatePowerupCards(hooveredPlayerState.getPowerups());
+            updatePowerupCards(hooveredPlayerState.getPowerups(), R.string("powerup"), true);
         });
         stackPane.setOnMouseExited(e -> {
             PlayerState clientPlayerState = GUI.getModel().getPlayersState().stream()
                     .filter(s -> s.getNickname().equals(GUI.getNickname()))
                     .collect(Collectors.toList()).get(0);
             updateWeaponCards(clientPlayerState.getLoadedWeapons(), clientPlayerState.getUnloadedWeapons());
-            updatePowerupCards(clientPlayerState.getPowerups());
+            updatePowerupCards(clientPlayerState.getPowerups(), R.string("powerup"), true);
         });
 
         return stackPane;
@@ -541,7 +546,7 @@ public class GamePane extends StackPane {
     public static void update() {
         if (!ready) return;
         PlayerState playerState = GUI.getPlayerState(GUI.getNickname());
-        updatePowerupCards(playerState.getPowerups());
+        updatePowerupCards(playerState.getPowerups(), R.string("powerup"), true);
         updateWeaponCards(playerState.getLoadedWeapons(), playerState.getUnloadedWeapons());
         updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
                 playerState.getDamage(),
