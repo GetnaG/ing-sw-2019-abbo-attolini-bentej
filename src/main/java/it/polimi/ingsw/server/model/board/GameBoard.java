@@ -435,16 +435,11 @@ public class GameBoard implements ReplaceListener {
     public int minimumDistance(Square start, Square end, Boolean wallSensitive) {  //TODO risolvere il loop
         if (start.equals(end) || start == null || end == null)
             return 0;
-        if (start != null)
-            start.refresh(GameBoard.getConfiguration());//TODO
-        if (end != null)
-            end.refresh(GameBoard.getConfiguration());//TODO
 
         Set<Square> Q = getAllSquares();
         Map<Square, Integer> dist = new HashMap<>();
 
         Q.forEach(x -> {
-            x.refresh(GameBoard.getConfiguration());//TODO
             dist.put(x, 999);
         });
         dist.put(start, 0);

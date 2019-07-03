@@ -85,7 +85,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         players = new ArrayList<>();
         users.forEach(u -> players.add(new Player(u.getName(), PLAYER_RESOURCE_PREFIX + users.indexOf(u), u, this)));
 
-        board = new GameBoard(new KillshotTrack(skullsLeft), FromFile.maps().getAll().get(configuration.getId()));
+        board = new GameBoard(new KillshotTrack(skullsLeft), FromFile.maps().get(configuration.getId() + ""));
 
         suspendedPlayers = new ArrayList<>();
         killedInTurn = new ArrayList<>();

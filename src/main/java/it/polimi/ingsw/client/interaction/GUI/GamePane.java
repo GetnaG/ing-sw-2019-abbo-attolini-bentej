@@ -243,7 +243,7 @@ public class GamePane extends StackPane {
     }
 
     private static void updateKillshotTrack(GridPane grid, List<List<String>> playersKillshot) {
-        if (killshotTrack == null) return;
+        if (killshotTrack == null || playersKillshot == null) return;
         // Flushing previous state
         grid.getChildren().removeAll(grid.getChildren());
         // Inserting new state

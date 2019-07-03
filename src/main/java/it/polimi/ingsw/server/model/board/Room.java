@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.model.board;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *  A room consists in a list of Squares
@@ -75,14 +76,17 @@ public class Room {
             return (obj instanceof Room) && (((Room) obj).squares.equals(squares));
     }
 
-    public void refresh(List<Room> rooms) {
-        for (Square square : getSquares()) {
+    public static void refresh(List<Room> rooms) {
+        List<Square> allSquares = rooms.stream().map(Room::getSquares).flatMap(List::stream).collect(Collectors.toList());
+        for (Square square : allSquares) {
             square.setNorth(Square.getSquare(rooms, square.getIdNorth()));
             square.setEast(Square.getSquare(rooms, square.getIdEast()));
             square.setSouth(Square.getSquare(rooms, square.getIdSouth()));
             square.setWest(Square.getSquare(rooms, square.getIdWest()));
         }
-        if (hasSpawnSquare())
-            spawnSquare.refresh(rooms);
+        for (Room r : rooms) {
+            if (r.hasSpawnSquare())
+                r.getSpawnSquare().refresh(rooms);
+        }
     }
  }

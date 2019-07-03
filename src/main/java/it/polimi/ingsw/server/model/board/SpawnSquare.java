@@ -84,8 +84,12 @@ public class SpawnSquare extends Square {
      * After maps are loaded from json, a refresh is needed.
      */
     public void refresh(List<Room> rooms) {
-        super.refresh(rooms);
-        market = new WeaponMarket(new ArrayList<>(Arrays.asList(null, null, null)));
+        if (market == null)
+            market = new WeaponMarket(new ArrayList<>(Arrays.asList(null, null, null)));
+        this.setNorth(Square.getSquare(rooms, this.getIdNorth()));
+        this.setEast(Square.getSquare(rooms, this.getIdEast()));
+        this.setSouth(Square.getSquare(rooms, this.getIdSouth()));
+        this.setWest(Square.getSquare(rooms, this.getIdWest()));
     }
 
     @Override

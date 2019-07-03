@@ -46,7 +46,7 @@ public class MapLoader implements BasicLoader<List<Room>> {
     @Override
     public List<Room> get(String id) {
         List<Room> rooms = new ArrayList<>(Arrays.asList(maps[Integer.parseInt(id)]));
-        rooms.forEach(room -> room.refresh(rooms));
+        Room.refresh(rooms);
         return rooms;
     }
 
@@ -61,7 +61,7 @@ public class MapLoader implements BasicLoader<List<Room>> {
                 .map(Arrays::asList)
                 .collect(Collectors.toList());
         for (List<Room> rooms : mapsList) {
-            rooms.forEach(room -> room.refresh(rooms));
+            Room.refresh(rooms);
         }
         return mapsList;
     }
