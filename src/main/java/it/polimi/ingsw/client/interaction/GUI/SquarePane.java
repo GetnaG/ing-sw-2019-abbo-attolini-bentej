@@ -17,18 +17,19 @@ public class SquarePane extends StackPane {
         imgSquare = getCell(resImage);
         this.getChildren().add(0, imgSquare);
         this.getChildren().add(1, players);
+
+        imgSquare.setOnMouseEntered(e -> {
+            imgSquare.setOpacity(0.5);
+        });
+        imgSquare.setOnMouseExited(e -> {
+            imgSquare.setOpacity(1);
+        });
     }
 
     public static ImageView getCell(String resID) {
         ImageView img = new ImageView(R.image(resID));
         img.setPreserveRatio(true);
         img.setFitHeight(150);
-        img.setOnMouseEntered(e -> {
-            img.setOpacity(0.5);
-        });
-        img.setOnMouseExited(e -> {
-            img.setOpacity(1);
-        });
         return img;
     }
 
@@ -41,4 +42,7 @@ public class SquarePane extends StackPane {
         players.setText("");
     }
 
+    public ImageView getImgSquare() {
+        return imgSquare;
+    }
 }
