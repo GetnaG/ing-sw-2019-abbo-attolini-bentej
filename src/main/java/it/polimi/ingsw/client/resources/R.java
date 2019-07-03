@@ -1,6 +1,7 @@
 package it.polimi.ingsw.client.resources;
 
 import javafx.scene.image.Image;
+import javafx.scene.text.Font;
 
 import java.io.IOException;
 import java.util.MissingResourceException;
@@ -52,6 +53,10 @@ public class R {
      * The extension of the properties files.
      */
     private static final String PROPERTIES_EXTENSION = ".properties";
+    /**
+     * The folder containing the fonts.
+     */
+    private static final String FONTS_PATH = "/fonts/";
     /**
      * The bundle for in-game strings.
      */
@@ -131,5 +136,25 @@ public class R {
                     R.class.getName(), fileName);
         }
         return properties;
+    }
+
+    /**
+     * Returns the {@linkplain Font} associated with the provided {@code key}.
+     *
+     * @param key the identifier for the desired value
+     * @return the font associated with the provided key
+     * @throws MissingResourceException if the font is not found
+     */
+    public static synchronized Font font(String key, double fontSize) {
+        /*
+        Put here code to add localization for images.
+        The code should parse the key, replacing the language token.
+         */
+        try {
+            return Font.loadFont(R.class.getResourceAsStream(FONTS_PATH + key), fontSize);
+        } catch (NullPointerException e) {
+            throw new MissingResourceException("Could not find font " +
+                    "resource: " + key, R.class.getName(), key);
+        }
     }
 }

@@ -135,8 +135,15 @@ public class GamePane extends StackPane {
     private static void updateWeaponCards(List<String> loadedWeaponCardsIDs, List<String> unloadedWeaponCards) {
         if (vboxLeftCards == null) return;
         vboxLeftCards.getChildren().removeAll(vboxLeftCards.getChildren());
+        Label topLabel = new Label(R.string("weapon"));
+        topLabel.setFont(R.font("AllertaStencil-Regular.ttf", 20));
+        topLabel.setTextFill(Color.WHITE);
+        vboxLeftCards.getChildren().add(topLabel);
         loadedWeaponCardsIDs.forEach(ammoCardID -> vboxLeftCards.getChildren().add(getCard(ammoCardID, false)));
         unloadedWeaponCards.forEach(ammoCardID -> vboxLeftCards.getChildren().add(getCard(ammoCardID, true)));
+        for (int i = loadedWeaponCardsIDs.size() + unloadedWeaponCards.size(); i < 3; i++) {
+            vboxLeftCards.getChildren().add(getCard("refuse", false));
+        }
     }
 
     /**
@@ -164,7 +171,14 @@ public class GamePane extends StackPane {
     private static void updatePowerupCards(List<String> powerupCardIDs) {
         if (vboxRightCards != null) {
             vboxRightCards.getChildren().removeAll(vboxRightCards.getChildren());
+            Label topLabel = new Label(R.string("powerup"));
+            topLabel.setFont(R.font("AllertaStencil-Regular.ttf", 20));
+            topLabel.setTextFill(Color.WHITE);
+            vboxRightCards.getChildren().add(topLabel);
             powerupCardIDs.forEach(powerupCardID -> vboxRightCards.getChildren().add(getCard(powerupCardID, false)));
+            for (int i = powerupCardIDs.size(); i < 3; i++) {
+                vboxRightCards.getChildren().add(getCard("refuse", false));
+            }
         }
     }
 
@@ -224,6 +238,7 @@ public class GamePane extends StackPane {
     }
 
     private static void updateKillshotTrack(GridPane grid, List<List<String>> playersKillshot) {
+        if (killshotTrack == null) return;
         // Flushing previous state
         grid.getChildren().removeAll(grid.getChildren());
         // Inserting new state
@@ -531,7 +546,8 @@ public class GamePane extends StackPane {
         updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
                 playerState.getDamage(),
                 playerState.getSkullNumber());
-        updateKillshotTrack((GridPane) killshotTrack.getChildren().get(1), GUI.getModel().getKillshotTrack());
+        if (killshotTrack != null)
+            updateKillshotTrack((GridPane) killshotTrack.getChildren().get(1), GUI.getModel().getKillshotTrack());
         map.update();
     }
 

@@ -326,7 +326,7 @@ public class GUI extends Application {
         setUpLoginScene(stage);
         stage.setTitle("Adrenaline");
         stage.setScene(masterScene);
-        stage.setMinWidth(1000);
+        stage.setMinWidth(1300);
         stage.setMinHeight(1022);
         stage.show();
 

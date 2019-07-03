@@ -12,6 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 
 
@@ -49,7 +51,7 @@ public class LoginPane extends StackPane {
         Background background = new Background(img);
         this.setBackground(background);
         // setting opacity factor
-        vertical.setStyle("-fx-background-color: rgba(0, 0, 0, 0.8); -fx-background-radius: 10;");
+        vertical.setStyle("-fx-background-color: rgba(0, 0, 0, 0.6); -fx-background-radius: 10;");
         // Set up usernameHBox
         Label usernameLabel = new Label(R.string("username"));
         usernameHBox.getChildren().addAll(usernameLabel);
@@ -81,11 +83,13 @@ public class LoginPane extends StackPane {
         usernameHBox.setAlignment(Pos.CENTER);
         loginAndRadioBox.setAlignment(Pos.CENTER);
         // Setting text proprieties
-        topText.setFont(new Font("Arial", 20));
+        topText.setFont(R.font("AllertaStencil-Regular.ttf", 40));
         topText.setFill(Color.WHITE);
-        usernameLabel.setFont(new Font("Arial", 20));
+        usernameLabel.setFont(R.font("AllertaStencil-Regular.ttf", 30));
         usernameLabel.setTextFill(Color.WHITE);
-        logText.setFont(new Font("Arial", 15));
+        logText.setFont(R.font("AllertaStencil-Regular.ttf", 30));
+        socketRadio.setFont(R.font("AllertaStencil-Regular.ttf", 20));
+        rmiRadio.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         logText.setFill(Color.WHITE);
         socketRadio.setTextFill(Color.WHITE);
         rmiRadio.setTextFill(Color.WHITE);

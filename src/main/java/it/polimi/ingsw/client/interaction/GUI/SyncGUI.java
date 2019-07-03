@@ -42,7 +42,6 @@ public class SyncGUI implements InteractionInterface {
     @Override
     public void setModel(MatchState model) {
         this.model = model;
-        model.subscribe(this);
         GUI.setModel(model);
         model.subscribe(this);
     }

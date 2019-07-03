@@ -90,11 +90,11 @@ public class HallPane extends StackPane {
         usersBox.setAlignment(Pos.CENTER);
 
         // Setting text proprieties
-        topText.setFont(new Font("Cambria", 40));
+        topText.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         topText.setFill(Color.WHITE);
-        logText.setFont(new Font("Cambria", 15));
+        logText.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         logText.setFill(Color.WHITE);
-        textUserBox.setFont(new Font("Cambria", 20));
+        textUserBox.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         textUserBox.setFill(Color.WHITE);
 
 
