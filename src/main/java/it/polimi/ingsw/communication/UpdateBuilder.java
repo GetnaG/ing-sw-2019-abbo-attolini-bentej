@@ -184,7 +184,7 @@ public class UpdateBuilder {
         listAdd(updates, ammoCards, Update.UpdateType.AMMO_CARD_ARRAY,
                 o -> {
                     try {return o.getId();}
-                    catch (NullPointerException e) {return "notSet";}
+                    catch (NullPointerException e) {return /*"notSet"*/ "market";}
                 });
         listAdd(updates, weaponsOnBoard, Update.UpdateType.WEAPON_CARD_ARRAY,
                 o -> {
