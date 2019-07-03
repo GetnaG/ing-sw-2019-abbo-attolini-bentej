@@ -33,6 +33,7 @@ public class GamePane extends StackPane {
     private static MapPane map;
     private static StackPane playerBoard;
     private static StackPane killshotTrack;
+    private static Node actionTile;
     /**
      * VBox used to store the WeaponCards
      */
@@ -74,7 +75,9 @@ public class GamePane extends StackPane {
         PlayerState playerState = GUI.getPlayerState(GUI.getNickname());
         playerBoard = getPlayerBoard(playerState);
         killshotTrack = getKillshotTrack(GUI.getModel());
-        HBox hbox = new HBox(killshotTrack, getPlayerActionTile(), playerBoard);
+        actionTile = getPlayerActionTile();
+        actionTile.maxHeight(276);
+        HBox hbox = new HBox(killshotTrack, actionTile, playerBoard);
         borderPane.setTop(hbox);
         borderPane.setAlignment(hbox, Pos.CENTER);
         hbox.setAlignment(Pos.CENTER);
@@ -181,6 +184,7 @@ public class GamePane extends StackPane {
             for (int i = powerupCardIDs.size(); i < 3 && isPowerup; i++) {
                 vboxRightCards.getChildren().add(getCard("refuse", false));
             }
+            vboxRightCards.setMinWidth(209);
         }
     }
 
@@ -284,8 +288,6 @@ public class GamePane extends StackPane {
 
         ImageView iv = new ImageView();
         iv.setImage(image);
-        iv.setFitWidth(60);
-        iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
 
@@ -344,7 +346,6 @@ public class GamePane extends StackPane {
     public static void changeAnswerBoxSquares(List<List<String>> options) {
         Platform.runLater(() -> {
             answerBox.getChildren().removeAll(answerBox.getChildren());
-
             // Creating a GroupBoxAnswer for each option
             options.forEach(group -> {
                 HBox groupAnswerBox = getGroupBoxAnswerSquares(group, options.indexOf(group));
@@ -352,6 +353,8 @@ public class GamePane extends StackPane {
             });
             answerBox.setSpacing(10);
             answerBox.setAlignment(Pos.CENTER);
+            answerBox.setMinHeight(180);
+            answerBox.setMaxHeight(180);
         });
     }
 
@@ -402,6 +405,8 @@ public class GamePane extends StackPane {
 
             answerBox.setSpacing(10);
             answerBox.setAlignment(Pos.CENTER);
+            answerBox.setMinHeight(180);
+            answerBox.setMaxHeight(180);
         });
 
     }
@@ -428,6 +433,9 @@ public class GamePane extends StackPane {
 
             answerBox.setSpacing(10);
             answerBox.setAlignment(Pos.CENTER);
+            answerBox.setMinHeight(180);
+            answerBox.setMaxHeight(180);
+
         });
 
     }

@@ -5,6 +5,7 @@ import javafx.geometry.Pos;
 import javafx.scene.layout.GridPane;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class MapPane extends GridPane {
     private static int map;
@@ -155,10 +156,9 @@ public class MapPane extends GridPane {
                         default:
                             break;
                     }
-                    List<String> weaponCardsMarketKeys = GUI.getModel().getWeaponsCardsID().subList(indexStart + 9, indexStart + 3 + 9);
-                    GamePane.updateRightGeneralTag(weaponCardsMarketKeys, "The square contains:");
+                    List<String> weaponCardsMarketKeys = GUI.getModel().getWeaponsCardsID().stream().filter(s -> !s.equals("notSet")).collect(Collectors.toList());
+                    GamePane.updateRightGeneralTag(weaponCardsMarketKeys.subList(indexStart, indexStart + 3), "The square contains:");
                 }
-
             });
 
             sp.setOnMouseExited(e -> {

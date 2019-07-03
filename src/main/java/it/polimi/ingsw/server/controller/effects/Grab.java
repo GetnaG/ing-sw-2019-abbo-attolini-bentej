@@ -68,8 +68,7 @@ public class Grab implements EffectInterface {
 
             /*Adding the weapons that the player can buy to weaponsAffordable*/
             List<WeaponCard> weaponsAffordable = weaponAvailable.stream()
-                    .filter(weaponCard -> subjectPlayer.canAfford(weaponCard.getCost(), true) ||
-                            !subjectPlayer.canAffordWithPowerups(weaponCard.getCost(), true).isEmpty())
+                    .filter(weaponCard -> subjectPlayer.canAfford(weaponCard.getCost(), true))
                     .collect(Collectors.toList());
 
             /*If there are no weapons it is player's mistake and he grabs nothing*/

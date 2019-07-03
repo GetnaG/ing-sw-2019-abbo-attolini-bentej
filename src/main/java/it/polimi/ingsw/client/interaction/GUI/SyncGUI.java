@@ -169,7 +169,6 @@ public class SyncGUI implements InteractionInterface {
         while (!GUI.isAnswerGiven()) {
             try {
                 Thread.sleep(1000);
-                System.out.println(GUI.getAnswer() + "");
             } catch (Exception e) {
             }
         }
