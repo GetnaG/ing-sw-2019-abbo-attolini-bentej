@@ -58,7 +58,7 @@ public class InteractionFactory {
                 preference = properties.getProperty("preferredInterface");
                 if (preference == null)
                     throw new NullPointerException("Could not find the " +
-                            "following key in the properties: interface");
+                            "following key in the properties: preferredInterface");
             } catch (MissingResourceException e) {
                 throw new IOException("There are no command line" +
                         " arguments and the interaction preferences could not" +

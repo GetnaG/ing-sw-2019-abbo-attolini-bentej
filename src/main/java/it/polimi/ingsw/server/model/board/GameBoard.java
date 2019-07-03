@@ -504,8 +504,8 @@ public class GameBoard implements ReplaceListener {
      * @param square
      * @return a set presenting the players in the given square
      */
-    public Collection<? extends Damageable> getPlayerInSquare(Square square, Collection<? extends Damageable> players) {
-        return players.stream().filter(p -> p.getPosition().equals(square)).collect(Collectors.toSet());
+    public Collection<Damageable> getPlayerInSquare(Square square, Collection<? extends Damageable> players) {
+        return players.stream().filter(p -> p.getPosition()!= null && p.getPosition().equals(square)).collect(Collectors.toSet());
     }
 
     /**
