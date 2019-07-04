@@ -65,8 +65,7 @@ public class GameBoard implements ReplaceListener {
     public GameBoard(AbstractTrack track, List<Room> configuration) {
         this.track = track;
         this.configuration = configuration;
-        configuration.stream().flatMap(room -> room.getSquares().stream()).forEach(square -> square.setReplacer(this));
-        configuration.stream().forEach(room -> room.getSpawnSquare().setReplacer(this));
+        configuration.stream().flatMap(room -> room.getAllSquares().stream()).forEach(square -> square.setReplacer(this));
         // Decks are shuffled when created
         powerupDeck = new PowerupDeck(this);
         weaponDeck = new WeaponDeck(this);
@@ -82,7 +81,7 @@ public class GameBoard implements ReplaceListener {
 
         /*Adding all the missing ammo cards and weapons*/
         for (Room room : configuration) {
-            for (Square square : room.getSquares()) {
+            for (Square square : room.getAllSquares()) {
                 if (square.equals(square.getRoom().getSpawnSquare()))
                     addSpawnSquare(square.getRoom().getSpawnSquare());
                 else addSquare(square);
@@ -98,7 +97,7 @@ public class GameBoard implements ReplaceListener {
 
     public static Room getRoom(Square square) {
         for (Room room : configuration) {
-            for (Square s : room.getSquares()) {
+            for (Square s : room.getAllSquares()) {
                 if (s.getID().equals(square.getID()))
                     return room;
             }
@@ -145,7 +144,7 @@ public class GameBoard implements ReplaceListener {
 
     public static Square getSquare(int idSquare) {
         for (Room room : configuration)
-            for (Square s : room.getSquares())
+            for (Square s : room.getAllSquares())
                 if (Integer.parseInt(s.getID()) == idSquare)
                     return s;
         return null;
@@ -515,7 +514,7 @@ public class GameBoard implements ReplaceListener {
      */
     public Set<Square> getAllSquares() {
         return configuration.stream()
-                .map(room -> room.getSquares()).
+                .map(room -> room.getAllSquares()).
                         flatMap(List::stream)
                 .collect(Collectors.toSet());
     }

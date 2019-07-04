@@ -13,18 +13,6 @@
           "southBorder": "CORRIDOR",
           "eastBorder": "DOOR",
           "westBorder": "WALL"
-        },
-        {
-          "squareColor": "RED",
-          "ID": 4,
-          "idNorth": 0,
-          "idSouth": 8,
-          "idEast": 5,
-          "idWest": -1,
-          "northBorder": "CORRIDOR",
-          "southBorder": "DOOR",
-          "eastBorder": "WALL",
-          "westBorder": "WALL"
         }
       ],
       "spawnSquare": {
@@ -53,18 +41,6 @@
           "southBorder": "DOOR",
           "eastBorder": "CORRIDOR",
           "westBorder": "DOOR"
-        },
-        {
-          "squareColor": "BLUE",
-          "ID": 2,
-          "idNorth": -1,
-          "idSouth": 6,
-          "idEast": -1,
-          "idWest": 1,
-          "northBorder": "WALL",
-          "southBorder": "DOOR",
-          "eastBorder": "WALL",
-          "westBorder": "CORRIDOR"
         }
       ],
       "spawnSquare": {
@@ -91,18 +67,6 @@
           "idWest": 6,
           "northBorder": "WALL",
           "southBorder": "CORRIDOR",
-          "eastBorder": "WALL",
-          "westBorder": "DOOR"
-        },
-        {
-          "squareColor": "YELLOW",
-          "ID": 11,
-          "idNorth": 7,
-          "idSouth": -1,
-          "idEast": -1,
-          "idWest": 10,
-          "northBorder": "CORRIDOR",
-          "southBorder": "WALL",
           "eastBorder": "WALL",
           "westBorder": "DOOR"
         }
@@ -215,18 +179,6 @@
           "southBorder": "WALL",
           "eastBorder": "CORRIDOR",
           "westBorder": "CORRIDOR"
-        },
-        {
-          "squareColor": "BLUE",
-          "ID": 2,
-          "idNorth": -1,
-          "idSouth": 6,
-          "idEast": -1,
-          "idWest": 1,
-          "northBorder": "WALL",
-          "southBorder": "DOOR",
-          "eastBorder": "WALL",
-          "westBorder": "CORRIDOR"
         }
       ],
       "spawnSquare": {
@@ -244,18 +196,6 @@
     },
     {
       "squares": [
-        {
-          "squareColor": "RED",
-          "ID": 4,
-          "idNorth": 0,
-          "idSouth": -1,
-          "idEast": 5,
-          "idWest": -1,
-          "northBorder": "DOOR",
-          "southBorder": "WALL",
-          "eastBorder": "CORRIDOR",
-          "westBorder": "CORRIDOR"
-        },
         {
           "squareColor": "RED",
           "ID": 5,
@@ -305,18 +245,6 @@
           "idWest": 6,
           "northBorder": "WALL",
           "southBorder": "CORRIDOR",
-          "eastBorder": "WALL",
-          "westBorder": "DOOR"
-        },
-        {
-          "squareColor": "YELLOW",
-          "ID": 11,
-          "idNorth": 7,
-          "idSouth": -1,
-          "idEast": -1,
-          "idWest": 10,
-          "northBorder": "CORRIDOR",
-          "southBorder": "WALL",
           "eastBorder": "WALL",
           "westBorder": "DOOR"
         }
@@ -389,18 +317,6 @@
           "southBorder": "WALL",
           "eastBorder": "CORRIDOR",
           "westBorder": "CORRIDOR"
-        },
-        {
-          "squareColor": "BLUE",
-          "ID": 2,
-          "idNorth": -1,
-          "idSouth": 6,
-          "idEast": 3,
-          "idWest": 1,
-          "northBorder": "WALL",
-          "southBorder": "DOOR",
-          "eastBorder": "DOOR",
-          "westBorder": "CORRIDOR"
         }
       ],
       "spawnSquare": {
@@ -434,18 +350,6 @@
     },
     {
       "squares": [
-        {
-          "squareColor": "RED",
-          "ID": 4,
-          "idNorth": 0,
-          "idSouth": -1,
-          "idEast": 5,
-          "idWest": -1,
-          "northBorder": "DOOR",
-          "southBorder": "WALL",
-          "eastBorder": "CORRIDOR",
-          "westBorder": "WALL"
-        },
         {
           "squareColor": "RED",
           "ID": 5,
@@ -504,18 +408,6 @@
         },
         {
           "squareColor": "YELLOW",
-          "ID": 11,
-          "idNorth": 7,
-          "idSouth": -1,
-          "idEast": -1,
-          "idWest": 10,
-          "northBorder": "CORRIDOR",
-          "southBorder": "WALL",
-          "eastBorder": "WALL",
-          "westBorder": "CORRIDOR"
-        },
-        {
-          "squareColor": "YELLOW",
           "ID": 6,
           "idNorth": 2,
           "idSouth": 10,
@@ -563,18 +455,6 @@
           "southBorder": "CORRIDOR",
           "eastBorder": "DOOR",
           "westBorder": "WALL"
-        },
-        {
-          "squareColor": "RED",
-          "ID": 4,
-          "idNorth": 0,
-          "idSouth": 8,
-          "idEast": 5,
-          "idWest": -1,
-          "northBorder": "CORRIDOR",
-          "southBorder": "DOOR",
-          "eastBorder": "WALL",
-          "westBorder": "WALL"
         }
       ],
       "spawnSquare": {
@@ -603,18 +483,6 @@
           "southBorder": "DOOR",
           "eastBorder": "CORRIDOR",
           "westBorder": "DOOR"
-        },
-        {
-          "squareColor": "BLUE",
-          "ID": 2,
-          "idNorth": -1,
-          "idSouth": 6,
-          "idEast": 3,
-          "idWest": 1,
-          "northBorder": "WALL",
-          "southBorder": "DOOR",
-          "eastBorder": "DOOR",
-          "westBorder": "CORRIDOR"
         }
       ],
       "spawnSquare": {
@@ -683,18 +551,6 @@
           "southBorder": "WALL",
           "eastBorder": "CORRIDOR",
           "westBorder": "DOOR"
-        },
-        {
-          "squareColor": "YELLOW",
-          "ID": 11,
-          "idNorth": 7,
-          "idSouth": -1,
-          "idEast": -1,
-          "idWest": 10,
-          "northBorder": "CORRIDOR",
-          "southBorder": "WALL",
-          "eastBorder": "WALL",
-          "westBorder": "CORRIDOR"
         }
       ],
       "spawnSquare": {

@@ -33,7 +33,7 @@ class RoomTest {
         l.add(c);
         r = new Room(l);
 
-        assertEquals(3, r.getSquares().size());
+        assertEquals(3, r.getAllSquares().size());
     }
 
     @Test

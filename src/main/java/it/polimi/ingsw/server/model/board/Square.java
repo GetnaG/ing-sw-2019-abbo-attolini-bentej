@@ -275,10 +275,10 @@ public class Square {
         Square temp;
 
         for (Room r : config) {
-            temp = r.getSquares().get(i);
+            temp = r.getAllSquares().get(i);
             if (gb.checkVisible(this, temp)) {
-                visibleSquares.addAll(j, r.getSquares());
-                j = j + r.getSquares().size();
+                visibleSquares.addAll(j, r.getAllSquares());
+                j = j + r.getAllSquares().size();
             }
         }
         return visibleSquares;
@@ -371,7 +371,7 @@ public class Square {
 
     public static Square getSquare(List<Room> rooms, int idSquare) {
         for (Room room : rooms)
-            for (Square s : room.getSquares())
+            for (Square s : room.getAllSquares())
                 if (Integer.parseInt(s.getID()) == idSquare)
                     return s;
         return null;

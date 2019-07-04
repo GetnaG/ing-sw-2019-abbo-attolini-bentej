@@ -136,7 +136,7 @@ class SquaresPolicyTest {
         for (int conf = 0; conf < configurationList.size(); conf++) {
             GameBoard board = new GameBoard(new KillshotTrack(), configurationList.get(conf));
             for (Room room : configurationList.get(conf)) {
-                for (Square square : room.getSquares()) {
+                for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
                     assertEquals(a.getVisible(conf, square),
                             VISIBLE.getValidDestinations(subject, board, new ArrayList<>()));
@@ -151,7 +151,7 @@ class SquaresPolicyTest {
         for (int conf = 0; conf < configurationList.size(); conf++) {
             GameBoard board = new GameBoard(new KillshotTrack(), configurationList.get(conf));
             for (Room room : configurationList.get(conf)) {
-                for (Square square : room.getSquares()) {
+                for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
                     assertEquals(a.getVisibleNotSelf(conf, square),
                             VISIBLE_NOT_SELF.getValidDestinations(subject, board, new ArrayList<>()));
@@ -166,7 +166,7 @@ class SquaresPolicyTest {
         for (int conf = 0; conf < configurationList.size(); conf++) {
             GameBoard board = new GameBoard(new KillshotTrack(), configurationList.get(conf));
             for (Room room : configurationList.get(conf)) {
-                for (Square square : room.getSquares()) {
+                for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
                     assertEquals(a.getCardinals(conf, square),
                             SUBJECT_CARDINALS.getValidDestinations(subject, board, new ArrayList<>()));
@@ -180,9 +180,9 @@ class SquaresPolicyTest {
     void getValidDestinations_all() {
         for (List<Room> rooms : configurationList) {
             GameBoard board = new GameBoard(new KillshotTrack(), rooms);
-            Set<Square> all = rooms.stream().flatMap(room -> room.getSquares().stream()).collect(Collectors.toSet());
+            Set<Square> all = rooms.stream().flatMap(room -> room.getAllSquares().stream()).collect(Collectors.toSet());
             for (Room room : rooms) {
-                for (Square square : room.getSquares()) {
+                for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
                     assertEquals(all, ALL.getValidDestinations(subject, board, new ArrayList<>()));
                 }
@@ -196,7 +196,7 @@ class SquaresPolicyTest {
         for (List<Room> rooms : configurationList) {
             GameBoard board = new GameBoard(new KillshotTrack(), rooms);
             for (Room room : rooms) {
-                for (Square square : room.getSquares()) {
+                for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
                     assertNull(TO_SUBJECT.getValidDestinations(subject, board, new ArrayList<>()));
                     assertNull(NONE.getValidDestinations(subject, board, new ArrayList<>()));

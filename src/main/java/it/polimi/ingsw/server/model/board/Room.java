@@ -48,13 +48,10 @@ public class Room {
             i.setRoom(this);*/
     }
 
-    public List<Square> getSquares(){
+    public List<Square> getAllSquares(){
         List<Square> returned = new ArrayList<>(squares);
-        /*
         if (spawnSquare != null)
             returned.add(spawnSquare);
-
-         */
         return returned;
     }
 
@@ -80,7 +77,7 @@ public class Room {
     }
 
     public static void refresh(List<Room> rooms) {
-        List<Square> allSquares = rooms.stream().map(Room::getSquares).flatMap(List::stream).collect(Collectors.toList());
+        List<Square> allSquares = rooms.stream().map(Room::getAllSquares).flatMap(List::stream).collect(Collectors.toList());
         for (Square square : allSquares) {
             square.setNorth(Square.getSquare(rooms, square.getIdNorth()));
             square.setEast(Square.getSquare(rooms, square.getIdEast()));
