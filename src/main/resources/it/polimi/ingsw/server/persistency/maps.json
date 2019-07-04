@@ -21,10 +21,10 @@
           "idSouth": 8,
           "idEast": 5,
           "idWest": -1,
-          "northBorder": "WALL",
-          "southBorder": "WALL",
-          "eastBorder": "CORRIDOR",
-          "westBorder": "CORRIDOR"
+          "northBorder": "CORRIDOR",
+          "southBorder": "DOOR",
+          "eastBorder": "WALL",
+          "westBorder": "WALL"
         }
       ],
       "spawnSquare": {
@@ -34,10 +34,10 @@
         "idSouth": 8,
         "idEast": 5,
         "idWest": -1,
-        "northBorder": "WALL",
-        "southBorder": "WALL",
-        "eastBorder": "CORRIDOR",
-        "westBorder": "CORRIDOR"
+        "northBorder": "CORRIDOR",
+        "southBorder": "DOOR",
+        "eastBorder": "WALL",
+        "westBorder": "WALL"
       }
     },
     {
