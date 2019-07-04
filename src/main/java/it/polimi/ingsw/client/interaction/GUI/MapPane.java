@@ -7,6 +7,9 @@ import javafx.scene.layout.GridPane;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents the Map of the game using a Grid.
+ */
 public class MapPane extends GridPane {
     private static int map;
 
@@ -114,6 +117,9 @@ public class MapPane extends GridPane {
         getCellByID(cellID).insertPlayerInSquare(nicknamePlayer);
     }
 
+    /**
+     *
+     */
     public void update() {
         if (map != GUI.getModel().getConfigurationID()) {
             buildMap(GUI.getModel().getConfigurationID());

@@ -88,7 +88,7 @@ public class NormalTurn implements TurnInterface {
         tripleMove.add(new Move());
 
         actions.add(new Action("TripleMove", tripleMove));
-        actions.add(new Action("Grab", new Grab()));
+        actions.add(new Action("Move&Grab", List.of(new Move(), new Grab())));
         actions.add(new Action("Shoot", new Shoot()));
         actions.addAll(player.getAdrenalineActions());
 

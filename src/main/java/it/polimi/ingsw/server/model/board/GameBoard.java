@@ -66,7 +66,7 @@ public class GameBoard implements ReplaceListener {
         this.track = track;
         this.configuration = configuration;
         configuration.stream().flatMap(room -> room.getSquares().stream()).forEach(square -> square.setReplacer(this));
-
+        configuration.stream().forEach(room -> room.getSpawnSquare().setReplacer(this));
         // Decks are shuffled when created
         powerupDeck = new PowerupDeck(this);
         weaponDeck = new WeaponDeck(this);
@@ -444,7 +444,7 @@ public class GameBoard implements ReplaceListener {
         });
         dist.put(start, 0);
         Square u = start;
-        while (!Q.isEmpty()) {
+        while (!dist.containsKey(end)) {
             u = min(Q, dist);
             Q.remove(u);
             List<Square> neighbours = getNeighbours(u, wallSensitive);

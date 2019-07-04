@@ -50,8 +50,11 @@ public class Room {
 
     public List<Square> getSquares(){
         List<Square> returned = new ArrayList<>(squares);
+        /*
         if (spawnSquare != null)
             returned.add(spawnSquare);
+
+         */
         return returned;
     }
 

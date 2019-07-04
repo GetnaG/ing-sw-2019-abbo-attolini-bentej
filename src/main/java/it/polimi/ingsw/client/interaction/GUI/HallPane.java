@@ -85,6 +85,7 @@ public class HallPane extends StackPane {
         vertical.setPrefWidth(border.getWidth() - 50);
         vertical.setSpacing(100);
         logWindow.setPadding(new Insets(0, 0, 50, 0));
+        logWindow.setMinWidth(500);
         vertical.setAlignment(Pos.CENTER);
         usersBox.setSpacing(10);
         usersBox.setAlignment(Pos.CENTER);

@@ -150,6 +150,10 @@ public class GUI extends Application {
         GamePane.setQuestionText(question);
         return 0;
     }
+
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseEffectSequence(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerSimpleOptions(optionKeys);
@@ -157,6 +161,9 @@ public class GUI extends Application {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseSpawn(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerBoxCards(optionKeys);
@@ -164,10 +171,20 @@ public class GUI extends Application {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseWeapon(List<List<String>> optionKeys) {
         return chooseWeaponWithQuestion(optionKeys, R.string("askWeapon"));
     }
 
+    /**
+     * Asks the player to choose a weapon using the given questions
+     *
+     * @param optionKeys
+     * @param question
+     * @return
+     */
     public static int chooseWeaponWithQuestion(List<List<String>> optionKeys, String question) {
         answerGiven = false;
         GamePane.changeAnswerBoxCards(optionKeys);
@@ -175,6 +192,9 @@ public class GUI extends Application {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseDestination(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerBoxSquares(optionKeys);
@@ -182,22 +202,39 @@ public class GUI extends Application {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseWeaponToBuy(List<List<String>> optionKeys) {
         return chooseWeaponWithQuestion(optionKeys, R.string("askWeaponBuy"));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseWeaponToDiscard(List<List<String>> optionKeys) {
         return chooseWeaponWithQuestion(optionKeys, R.string("askWeaponDiscard"));
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseWeaponToReload(List<List<String>> optionKeys) {
         return chooseWeaponWithQuestion(optionKeys, R.string("askWeaponReload"));
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static int choosePowerupForPaying(List<List<String>> optionKeys) {
         return choosePowerupWithQuestion(optionKeys, R.string("askPowerupPay"));
     }
 
+    /**
+     * Handles the notifications.
+     * @param notificationKey
+     */
     public static void sendNotification(String notificationKey) {
         switch (notificationKey) {
             case "GREET":
@@ -221,6 +258,9 @@ public class GUI extends Application {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseAction(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerSimpleOptions(optionKeys);
@@ -232,6 +272,10 @@ public class GUI extends Application {
         GUI.answer = answer;
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseUseTagBack(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerSimpleOptions(optionKeys);
@@ -239,6 +283,9 @@ public class GUI extends Application {
         return 0;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public static int chooseTarget(List<List<String>> optionKeys) {
         answerGiven = false;
         GamePane.changeAnswerSimpleOptions(optionKeys);
@@ -250,6 +297,10 @@ public class GUI extends Application {
         controllerGUI = controller;
     }
 
+    /**
+     * Asks the name to the player
+     * @return the name chosen by the player
+     */
     public static String askName() {
         String input = loginPane.getInputUsername();
 
@@ -334,6 +385,11 @@ public class GUI extends Application {
 
     @Override
     public void stop() {
+        try {
+            super.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         System.exit(0);
     }
 
@@ -344,6 +400,7 @@ public class GUI extends Application {
     public static void setWaitForTurn() {
         GamePane.setWaitForTurn();
     }
+
 
 
 }

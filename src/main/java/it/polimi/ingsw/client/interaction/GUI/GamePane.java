@@ -2,7 +2,6 @@ package it.polimi.ingsw.client.interaction.GUI;
 
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.clientlogic.PlayerState;
-import it.polimi.ingsw.server.model.player.Player;
 import javafx.scene.layout.StackPane;
 import it.polimi.ingsw.client.resources.R;
 import javafx.application.Platform;
@@ -24,7 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-
+/**
+ * Represents the GUI of the Game. The map is represented using a {@linkplain MapPane}.
+ *
+ * @author Fahed B. Tej
+ */
 public class GamePane extends StackPane {
 
 
@@ -188,6 +191,12 @@ public class GamePane extends StackPane {
         }
     }
 
+    /**
+     * Updates the right-side cards.
+     *
+     * @param cardIDs
+     * @param title   the title of the column
+     */
     public static void updateRightGeneralTag(List<String> cardIDs, String title) {
         updatePowerupCards(cardIDs, title, false);
     }
@@ -539,6 +548,9 @@ public class GamePane extends StackPane {
                     .collect(Collectors.toList()).get(0);
             updateWeaponCards(hooveredPlayerState.getLoadedWeapons(), hooveredPlayerState.getUnloadedWeapons());
             updatePowerupCards(hooveredPlayerState.getPowerups(), R.string("powerup"), true);
+            updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
+                    hooveredPlayerState.getDamage(),
+                    hooveredPlayerState.getSkullNumber());
         });
         stackPane.setOnMouseExited(e -> {
             PlayerState clientPlayerState = GUI.getModel().getPlayersState().stream()
@@ -546,11 +558,17 @@ public class GamePane extends StackPane {
                     .collect(Collectors.toList()).get(0);
             updateWeaponCards(clientPlayerState.getLoadedWeapons(), clientPlayerState.getUnloadedWeapons());
             updatePowerupCards(clientPlayerState.getPowerups(), R.string("powerup"), true);
+            updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
+                    clientPlayerState.getDamage(),
+                    clientPlayerState.getSkullNumber());
         });
 
         return stackPane;
     }
 
+    /**
+     * Updates the whole GamePane according to the state of the model.
+     */
     public static void update() {
         if (!ready) return;
         PlayerState playerState = GUI.getPlayerState(GUI.getNickname());
@@ -564,17 +582,18 @@ public class GamePane extends StackPane {
         map.update();
     }
 
-    public static Text getQuestionText() {
-        if (questionText == null) questionText = new Text();
-        return questionText;
-    }
-
+    /**
+     * Sets the question
+     * @param question the actual question
+     */
     public static void setQuestionText(String question) {
         if (questionText == null) questionText = new Text();
         questionText.setText(question);
     }
 
-
+    /**
+     * Tells the player to wait for his turn
+     */
     public static void setWaitForTurn() {
         Platform.runLater(() -> {
             questionText.setText(R.string("wait"));
