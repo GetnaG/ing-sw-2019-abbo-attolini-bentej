@@ -1,5 +1,6 @@
 package it.polimi.ingsw.server.controller.effects.cardeffects;
 
+import it.polimi.ingsw.server.model.AgainstRulesException;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.Square;
@@ -54,7 +55,7 @@ enum SquaresPolicy {
      * @return all the valid squares, null if squares are not relevant
      */
     Set<Square> getValidDestinations(Player subject, GameBoard board,
-                                     List<? extends Damageable> alreadyTargeted) {
+                                     List<? extends Damageable> alreadyTargeted) throws AgainstRulesException {
         switch (this) {
             case VISIBLE:
                 return new HashSet<>(subject.getPosition().listOfVisibles(board));
@@ -64,7 +65,11 @@ enum SquaresPolicy {
                 visible.remove(subject.getPosition());
                 return visible;
             case TO_PREVIOUS:
-                return new HashSet<>(Collections.singletonList(alreadyTargeted.get(alreadyTargeted.size() - 1).getPosition()));
+                try {
+                    return new HashSet<>(Collections.singletonList(alreadyTargeted.get(alreadyTargeted.size() - 1).getPosition()));
+                } catch (Exception e) {
+                    throw new AgainstRulesException("No previous players");
+                }
             case SUBJECT_CARDINALS:
                 return new HashSet<>(subject.getPosition().getCardinals());
             case ALL:

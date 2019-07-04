@@ -294,17 +294,17 @@ public class Square {
                 idNorth == square.idNorth &&
                 idSouth == square.idSouth &&
                 idEast == square.idEast &&
-                idWest == square.idWest; /*&&//TODO
+                idWest == square.idWest &&
                 squareColor == square.squareColor &&
                 northBorder == square.northBorder &&
                 southBorder == square.southBorder &&
                 eastBorder == square.eastBorder &&
-                westBorder == square.westBorder;*/
+                westBorder == square.westBorder;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(squareColor, ID, idNorth, idSouth, idEast, idWest); /*northBorder, southBorder, eastBorder, westBorder);*/
+        return Objects.hash(ID, idNorth, idSouth, idEast, idWest, squareColor, northBorder, southBorder, eastBorder, westBorder);
     }
 
     /**

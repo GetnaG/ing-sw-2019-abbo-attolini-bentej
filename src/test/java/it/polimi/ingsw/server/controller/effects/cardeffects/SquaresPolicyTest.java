@@ -1,21 +1,17 @@
 package it.polimi.ingsw.server.controller.effects.cardeffects;
 
-import it.polimi.ingsw.server.model.board.GameBoard;
-import it.polimi.ingsw.server.model.board.KillshotTrack;
-import it.polimi.ingsw.server.model.board.Room;
-import it.polimi.ingsw.server.model.board.Square;
+import it.polimi.ingsw.server.model.AgainstRulesException;
+import it.polimi.ingsw.server.model.board.*;
 import it.polimi.ingsw.server.model.player.Player;
 import it.polimi.ingsw.server.persistency.FromFile;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 import static it.polimi.ingsw.server.controller.effects.cardeffects.SquaresPolicy.*;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 /*
  * Author: Abbo Giulio A.
@@ -137,8 +133,12 @@ class SquaresPolicyTest {
             for (Room room : configurationList.get(conf)) {
                 for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
-                    assertEquals(a.getVisible(conf, square),
-                            VISIBLE.getValidDestinations(subject, board, new ArrayList<>()));
+                    try {
+                        assertEquals(a.getVisible(conf, square),
+                                VISIBLE.getValidDestinations(subject, board, new ArrayList<>()));
+                    } catch (AgainstRulesException e) {
+                        fail(e);
+                    }
                 }
             }
         }
@@ -152,8 +152,12 @@ class SquaresPolicyTest {
             for (Room room : configurationList.get(conf)) {
                 for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
-                    assertEquals(a.getVisibleNotSelf(conf, square),
-                            VISIBLE_NOT_SELF.getValidDestinations(subject, board, new ArrayList<>()));
+                    try {
+                        assertEquals(a.getVisibleNotSelf(conf, square),
+                                VISIBLE_NOT_SELF.getValidDestinations(subject, board, new ArrayList<>()));
+                    } catch (AgainstRulesException e) {
+                        fail(e);
+                    }
                 }
             }
         }
@@ -167,8 +171,12 @@ class SquaresPolicyTest {
             for (Room room : configurationList.get(conf)) {
                 for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
-                    assertEquals(a.getCardinals(conf, square),
-                            SUBJECT_CARDINALS.getValidDestinations(subject, board, new ArrayList<>()));
+                    try {
+                        assertEquals(a.getCardinals(conf, square),
+                                SUBJECT_CARDINALS.getValidDestinations(subject, board, new ArrayList<>()));
+                    } catch (AgainstRulesException e) {
+                        fail(e);
+                    }
                 }
             }
         }
@@ -183,7 +191,11 @@ class SquaresPolicyTest {
             for (Room room : rooms) {
                 for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
-                    assertEquals(all, ALL.getValidDestinations(subject, board, new ArrayList<>()));
+                    try {
+                        assertEquals(all, ALL.getValidDestinations(subject, board, new ArrayList<>()));
+                    } catch (AgainstRulesException e) {
+                        fail(e);
+                    }
                 }
             }
         }
@@ -197,17 +209,71 @@ class SquaresPolicyTest {
             for (Room room : rooms) {
                 for (Square square : room.getAllSquares()) {
                     subject.setPosition(square);
-                    assertNull(TO_SUBJECT.getValidDestinations(subject, board, new ArrayList<>()));
-                    assertNull(NONE.getValidDestinations(subject, board, new ArrayList<>()));
+                    try {
+                        assertNull(TO_SUBJECT.getValidDestinations(subject, board, new ArrayList<>()));
+                        assertNull(NONE.getValidDestinations(subject, board, new ArrayList<>()));
+                    } catch (AgainstRulesException e) {
+                        fail(e);
+                    }
                 }
             }
         }
     }
 
-
+    /*Testing TO_PREVIOUS, only generic case*/
     @Test
-    void apply() {
-        /*Apply e to previous*/
+    void getValidDestinations_toPrevious() {
+        Player prev = new Player("prev");
+        prev.setPosition(new Square(SquareColor.BLUE));
+
+        try {
+            assertEquals(prev.getPosition(), TO_PREVIOUS.getValidDestinations(subject,
+                    null, Collections.singletonList(prev)).toArray()[0]);
+        } catch (AgainstRulesException | NullPointerException e) {
+            fail(e);
+        }
+
+        assertThrows(AgainstRulesException.class,
+                () -> TO_PREVIOUS.getValidDestinations(subject, null, new ArrayList<>()));
+    }
+
+    /*Testing TO_SUBJECT.apply with generic input*/
+    @Test
+    void apply_toSubject() {
+        Player target = new Player("target");
+        target.setPosition(new Square(SquareColor.BLUE));
+        subject.setPosition(new Square(SquareColor.RED));
+
+        TO_SUBJECT.apply(subject, target, null);
+
+        assertEquals(subject.getPosition(), target.getPosition());
+    }
+
+    /*Testing other values with generic input*/
+    @Test
+    void apply_other() {
+        Square initial = new Square(SquareColor.BLUE);
+        Player target = new Player("target");
+
+        for (SquaresPolicy policy : values()) {
+            if (policy != TO_SUBJECT) {
+                /*No destinations*/
+                target.setPosition(initial);
+                policy.apply(null, target, null);
+                assertEquals(initial, target.getPosition());
+
+                /*Empty destinations*/
+                policy.apply(null, target, new HashSet<>());
+                assertEquals(initial, target.getPosition());
+
+                /*Some destinations*/
+                List<Square> destinations = Collections.singletonList(new Square(SquareColor.RED));
+                policy.apply(null, target, new HashSet<>(destinations));
+                assertEquals(destinations.get(0), target.getPosition());
+            }
+        }
+
+
     }
 
     private class Answers {

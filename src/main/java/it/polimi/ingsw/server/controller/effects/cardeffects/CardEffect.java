@@ -196,8 +196,8 @@ public class CardEffect implements EffectInterface {
         availableTargets = null;
         destinations = null;
 
-        filterTargets();
         try {
+            filterTargets();
             selectTargets();
         } catch (AgainstRulesException e) {
             /*The player chose an effect that can not be applied*/
@@ -227,8 +227,10 @@ public class CardEffect implements EffectInterface {
      * {@code availableTargets} will contain all the available targets;
      * {@code destinations} will contain all the available destinations, or
      * will be null if the destinations are not relevant.
+     *
+     * @throws AgainstRulesException if the effect can not be used
      */
-    private void filterTargets() {
+    private void filterTargets() throws AgainstRulesException {
 
         /*Retrieving and filtering the targets*/
         availableTargets = targetsPolicy.getValidTargets(subject, allTargets,
@@ -454,12 +456,12 @@ public class CardEffect implements EffectInterface {
      * subject's room are not included.
      *
      * @return the valid destinations
+     * @throws AgainstRulesException if the effect can not be used
      */
-    private Set<Square> getValidDestinations() {
+    private Set<Square> getValidDestinations() throws AgainstRulesException {
 
         /*Retrieving the valid destinations*/
-        Set<Square> valid = squaresPolicy.getValidDestinations(subject, board,
-                alreadyTargeted);
+        Set<Square> valid = squaresPolicy.getValidDestinations(subject, board, alreadyTargeted);
 
         /*If ROOM is selected*/
         if (QuirkPolicy.ROOM.isIn(quirks) && valid != null) {
