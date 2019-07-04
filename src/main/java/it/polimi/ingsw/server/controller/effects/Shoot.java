@@ -48,6 +48,7 @@ public class Shoot implements EffectInterface {
 
         subjectPlayer.pay(effectChosen.getTotalCost());
         effectChosen.runAll(subjectPlayer, allTargets, board, alredyTargeted, damageTargeted);
+        subjectPlayer.unload(weaponChosen);
 
         //TODO tagback and targeting scope
     }
