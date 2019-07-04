@@ -33,7 +33,11 @@
         "idNorth": 0,
         "idSouth": 8,
         "idEast": 5,
-        "idWest": -1
+        "idWest": -1,
+        "northBorder": "WALL",
+        "southBorder": "WALL",
+        "eastBorder": "CORRIDOR",
+        "westBorder": "CORRIDOR"
       }
     },
     {
@@ -69,7 +73,11 @@
         "idNorth": -1,
         "idSouth": 6,
         "idEast": -1,
-        "idWest": 1
+        "idWest": 1,
+        "northBorder": "WALL",
+        "southBorder": "DOOR",
+        "eastBorder": "WALL",
+        "westBorder": "CORRIDOR"
       }
     },
     {
@@ -105,7 +113,11 @@
         "idNorth": 7,
         "idSouth": -1,
         "idEast": -1,
-        "idWest": 10
+        "idWest": 10,
+        "northBorder": "CORRIDOR",
+        "southBorder": "WALL",
+        "eastBorder": "WALL",
+        "westBorder": "DOOR"
       }
     },
     {
@@ -223,7 +235,11 @@
         "idNorth": -1,
         "idSouth": 6,
         "idEast": -1,
-        "idWest": 1
+        "idWest": 1,
+        "northBorder": "WALL",
+        "southBorder": "DOOR",
+        "eastBorder": "WALL",
+        "westBorder": "CORRIDOR"
       }
     },
     {
@@ -271,7 +287,11 @@
         "idNorth": 0,
         "idSouth": -1,
         "idEast": 5,
-        "idWest": -1
+        "idWest": -1,
+        "northBorder": "DOOR",
+        "southBorder": "WALL",
+        "eastBorder": "CORRIDOR",
+        "westBorder": "CORRIDOR"
       }
     },
     {
@@ -307,7 +327,11 @@
         "idNorth": 7,
         "idSouth": -1,
         "idEast": -1,
-        "idWest": 10
+        "idWest": 10,
+        "northBorder": "CORRIDOR",
+        "southBorder": "WALL",
+        "eastBorder": "WALL",
+        "westBorder": "DOOR"
       }
     },
     {
@@ -385,7 +409,11 @@
         "idNorth": -1,
         "idSouth": 6,
         "idEast": 3,
-        "idWest": 1
+        "idWest": 1,
+        "northBorder": "WALL",
+        "southBorder": "DOOR",
+        "eastBorder": "DOOR",
+        "westBorder": "CORRIDOR"
       }
     },
     {
@@ -437,7 +465,11 @@
         "idNorth": 0,
         "idSouth": -1,
         "idEast": 5,
-        "idWest": -1
+        "idWest": -1,
+        "northBorder": "DOOR",
+        "southBorder": "WALL",
+        "eastBorder": "CORRIDOR",
+        "westBorder": "WALL"
       }
     },
     {
@@ -551,7 +583,11 @@
         "idNorth": 0,
         "idSouth": 8,
         "idEast": 5,
-        "idWest": -1
+        "idWest": -1,
+        "northBorder": "CORRIDOR",
+        "southBorder": "DOOR",
+        "eastBorder": "WALL",
+        "westBorder": "WALL"
       }
     },
     {
@@ -585,9 +621,13 @@
         "squareColor": "BLUE",
         "ID": 2,
         "idNorth": -1,
-        "idSouth": 7,
+        "idSouth": 6,
         "idEast": 3,
-        "idWest": 2
+        "idWest": 1,
+        "northBorder": "WALL",
+        "southBorder": "DOOR",
+        "eastBorder": "DOOR",
+        "westBorder": "CORRIDOR"
       }
     },
     {
@@ -663,7 +703,11 @@
         "idNorth": 7,
         "idSouth": -1,
         "idEast": -1,
-        "idWest": 10
+        "idWest": 10,
+        "northBorder": "CORRIDOR",
+        "southBorder": "WALL",
+        "eastBorder": "WALL",
+        "westBorder": "CORRIDOR"
       }
     },
     {

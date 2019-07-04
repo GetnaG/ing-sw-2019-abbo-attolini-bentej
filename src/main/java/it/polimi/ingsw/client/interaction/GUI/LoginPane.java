@@ -120,6 +120,7 @@ public class LoginPane extends StackPane {
     }
 
     public String getInputUsername() {
+
         return inputUsername.getText();
     }
 

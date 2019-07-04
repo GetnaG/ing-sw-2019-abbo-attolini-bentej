@@ -253,7 +253,7 @@ public class GUI extends Application {
     public static String askName() {
         String input = loginPane.getInputUsername();
 
-        if (input.length() > 1 && input.length() < 18) {
+        if (input.length() < 18) {
             return input;
         } else {
             loginPane.setLogText("Insert valid username");
@@ -330,6 +330,11 @@ public class GUI extends Application {
         stage.setMinHeight(1022);
         stage.show();
 
+    }
+
+    @Override
+    public void stop() {
+        System.exit(0);
     }
 
     public static void updateTimer(int seconds) {
