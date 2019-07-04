@@ -31,8 +31,6 @@ public class Room {
     public Room( List<Square> squares, SpawnSquare spawnSquare ) {
 
         this.squares = squares;
-        /*for(Square i: squares)
-            i.setRoom(this);*/
 
         this.spawnSquare = spawnSquare;
 
@@ -46,14 +44,10 @@ public class Room {
 
     public Room( List<Square> squares ) {
         this.squares = squares;
-        /*for(Square i: squares)
-            i.setRoom(this);*/
     }
 
     public void setSquares(List<Square> squares) {
         this.squares = squares;
-        /*for(Square i: squares)
-            i.setRoom(this);*/
     }
 
     public List<Square> getAllSquares(){
@@ -73,8 +67,8 @@ public class Room {
 
 
     /**
-     * @param obj is a room
-     * @return true if two rooms have the same list of squares and the same spawnSquare
+     * @param obj is a Room.
+     * @return true if two rooms have the same list of squares and the same spawnSquare.
      */
     @Override
     public boolean equals(Object obj) {

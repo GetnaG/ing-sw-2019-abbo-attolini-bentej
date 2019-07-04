@@ -766,12 +766,13 @@ public class CLI implements InteractionInterface {
             ammoWeaponPlayersLayer.append(" - square ").append(line).append(": ");
             if (model.getAmmoCardsID() != null) {
                 if(line == RED_SPAWN_POINT || line == BLUE_SPAWN_POINT || line == YELLOW_SPAWN_POINT )
-                    ammoWeaponPlayersLayer.append(R.string("market"));
+                    drawMarket(line, ammoWeaponPlayersLayer);
+                    /*ammoWeaponPlayersLayer.append(R.string("market"));*/
                 else if (model.getAmmoCardsID().get(line) != null && !model.getAmmoCardsID().get(line).isEmpty())
                     drawAmmo(ammoWeaponPlayersLayer, line);
-                else {
+                /*else {
                     drawMarket(line, ammoWeaponPlayersLayer);
-                }
+                }*/
             }
 
             drawPlayersInTheSquare(ammoWeaponPlayersLayer, line);
@@ -810,7 +811,7 @@ public class CLI implements InteractionInterface {
             case RED_SPAWN_POINT: {
                 for (int j = 0; j < MARKET_SIZE; j++) {
                     if (model.getWeaponsCardsID().get(j + MARKET_SIZE) != null)
-                        marketLine.append(model.getWeaponsCardsID().get(j + MARKET_SIZE)).append(" , ");
+                        marketLine.append(model.getWeaponsCardsID().get(j + MARKET_SIZE));
                     else
                         marketLine.append(EMPTY);
                     if (j < 2)
@@ -821,7 +822,7 @@ public class CLI implements InteractionInterface {
             case YELLOW_SPAWN_POINT: {
                 for (int j = 0; j < MARKET_SIZE; j++) {
                     if (model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE) != null)
-                        marketLine.append(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE)).append(" , ");
+                        marketLine.append(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE));
                     else
                         marketLine.append(EMPTY);
                     if (j < 2)
@@ -840,7 +841,7 @@ public class CLI implements InteractionInterface {
      * @param l indicates the current position (map seen as a linear vector)
      */
     private void drawPlayersInTheSquare(StringBuilder sPlayers, int l) {
-        int pos, numPlayersHere = 0;
+        int pos, numPlayersHere = 0, x=1;
         if (model.getPlayersState() != null && !model.getPlayersState().isEmpty()) {
             for (PlayerState ps : model.getPlayersState()) {
                 pos = ps.getSquarePosition();
@@ -853,9 +854,10 @@ public class CLI implements InteractionInterface {
                     pos = ps.getSquarePosition();
                     if (pos == l) {
                         sPlayers.append(ps.getNickname());
-                        if (model.getPlayersState().indexOf(ps) < numPlayersHere)
-                            sPlayers.append(" ");
+                        if (x < numPlayersHere)
+                            sPlayers.append(", ");
                     }
+                    x++;
                 }
             }
             sPlayers.append(" }");
@@ -989,7 +991,6 @@ public class CLI implements InteractionInterface {
         else
             temp.append("none");
 
-        //temp.append(lineSeparator);
         temp.append(" -|- ");
 
     }
@@ -1009,8 +1010,6 @@ public class CLI implements InteractionInterface {
 
         temp.append(" -|- ");;
 
-        //temp.append(lineSeparator);
-
         //unloaded weapons
         temp.append("unloaded weapons: ");
         for (int i = 0; i < p.getUnloadedWeapons().size(); i++)
@@ -1019,8 +1018,6 @@ public class CLI implements InteractionInterface {
             temp.append("none");
 
         temp.append(" -|- ");
-
-        //temp.append(lineSeparator);
 
     }
 
@@ -1070,7 +1067,7 @@ public class CLI implements InteractionInterface {
      * @param kst is the current Killshot Track
      */
     private void drawCurrentKillshotTrack(StringBuilder temp, List<List<String>> kst) {
-        temp./*append(" -- -- -- -- -- -- -- -- --").*/append(lineSeparator);
+        temp.append(lineSeparator);
         temp.append("current Killshot track: ");
         for (int i = 0; i < kst.size(); i++)
             for (String q : kst.get(i)) {
@@ -1152,7 +1149,7 @@ public class CLI implements InteractionInterface {
     }
 
     /**
-     * @param seconds updates the timer by the time given
+     * @param seconds updates the timer
      */
     public void updateTimer(int seconds) {
         // does nothing

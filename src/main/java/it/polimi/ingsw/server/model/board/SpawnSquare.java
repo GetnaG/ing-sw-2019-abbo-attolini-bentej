@@ -9,11 +9,23 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * 
+ * This class defines a Spawn Square, where it is possible to spawn
+ * at the beginning of the game and after every death.
+ *
+ * Unlike normal Squares, this Square contains a Market where it
+ * is possible to buy weapons, instead of grabbing ammo cards.
  */
 public class SpawnSquare extends Square {
 
+    /**
+     * Represents the market of the Spawn Square
+     * Its size limit is 3, and it is updated each time
+     * a weapon is picked up by a Player
+     */
     private WeaponMarket market;
+    /**
+     * Used in Domination mode
+     */
     private Spawn spawn;
 
 

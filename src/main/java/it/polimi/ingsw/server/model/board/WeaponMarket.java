@@ -5,11 +5,20 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
 import java.util.List;
 
 /**
- *
+ * This class manages the WeaponMarket found in spawn squares,
+ * it always contains three weapon cards
+ * if the card is not set a null value is assigned
  */
 public class WeaponMarket {
 
 
+    /**
+     * Represents the weapon cards that characterise the market
+     *
+     * It is filled at the beginning of the game
+     * It is Updated each time a player picks a weapon
+     * It is Refilled during the end of the turn
+     */
     private List<WeaponCard> weaponCards;
 
     /**

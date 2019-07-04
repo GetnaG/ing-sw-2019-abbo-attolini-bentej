@@ -12,21 +12,77 @@ import java.util.Objects;
 public class Square {
 
 
+    /**
+     * The replace will take care of replacing the ammo card grabbed
+     * or the weapon picked from the market
+     */
     ReplaceListener replacer;
+    /**
+     * This parameter is set only if the implementation will
+     * build as a normal square, otherwise will be left to null
+     */
     private AmmoCard ammoCard;
+    /**
+     * Represents the color of the Square,
+     * Chosen from @SquareColor
+     */
     private SquareColor squareColor;
+    /**
+     * It's an assigned number,
+     * based on the implementation of the board
+     */
     private int ID;
+    /**
+     * Represents the northern neighbour
+     * It is connected with it via northBoarder
+     */
     private Square north;
+    /**
+     * Represents the ID of the northern neighbour
+     */
     private int idNorth;
+    /**
+     * Represents the southern neighbour
+     * It is connected with it via southBoarder
+     */
     private Square south;
+    /**
+     * Represents the ID of the southern neighbour
+     */
     private int idSouth;
+    /**
+     * Represents the eastern neighbour
+     * It is connected with it via eastBoarder
+     */
     private Square east;
+    /**
+     * Represents the ID of the eastern neighbour
+     */
     private int idEast;
+    /**
+     * Represents the western neighbour
+     * It is connected with it via westBoarder
+     */
     private Square west;
+    /**
+     * Represents the ID of the western neighbour
+     */
     private int idWest;
+    /**
+     * Represents the type of connection this Square has with its neighbour
+     */
     private Border northBorder;
+    /**
+     * Represents the type of connection this Square has with its neighbour
+     */
     private Border southBorder;
+    /**
+     * Represents the type of connection this Square has with its neighbour
+     */
     private Border eastBorder;
+    /**
+     * Represents the type of connection this Square has with its neighbour
+     */
     private Border westBorder;
 
 
@@ -276,9 +332,7 @@ public class Square {
 
     /**
      * @return returns a list of all the visible squares
-     * 1) the calling square is always visible
-     * 2) for the first square in every room, check if it is visible from this square
-     * 3) if it is, add the entire room to the list of visible squares
+     * the calling square is always visible
      */
     public List<Square> listOfVisibles(GameBoard gb) {
         List<Square> visibleSquares = new ArrayList<>();
@@ -366,13 +420,13 @@ public class Square {
         return false;
 
     }
-
+/*
     public void squareBuilder(Square n, Square e, Border nb, Border eb){
         if(n != null) this.setNorth(n);
         if(e != null) this.setEast(e);
         if(nb != null) this.setNorthBorder(nb);
         if(eb != null) this.setEastBorder(eb);
-    }
+    }*/
 
     public void refresh(List<Room> rooms) {//TODO
         if (rooms == null || rooms.isEmpty()) return;
