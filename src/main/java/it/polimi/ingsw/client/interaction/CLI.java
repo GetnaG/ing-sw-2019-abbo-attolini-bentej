@@ -467,11 +467,13 @@ public class CLI implements InteractionInterface {
 
             //drawConnectedAndDisconnectedPlayers(stringBuilder);
             //TODO
-
-            drawConfigurationAndSquares(stringBuilder);
-
-            if (model.getPlayersState() != null) {
-                drawBoards(stringBuilder);
+            if (model.getPlayersState() != null ) {
+                if(!model.getPlayersState().isEmpty() )
+                    if(model.getPlayersState().get(0) != null ){
+                            if(model.getPlayersState().get(0).getSkullNumber() >= 0)
+                                drawConfigurationAndSquares(stringBuilder);
+                            drawBoards(stringBuilder);
+                    }
             }
         }
         return stringBuilder;
@@ -510,11 +512,11 @@ public class CLI implements InteractionInterface {
                 break;
             }
             case 1: {
-                s.append(R.string("config_line_112"));
+                s.append("      ").append(R.string("config_line_112"));
                 break;
             }
             case 2: {
-                s.append(R.string("config_line_212"));
+                s.append("      ").append(R.string("config_line_212"));
                 break;
             }
             case 3: {
@@ -621,15 +623,15 @@ public class CLI implements InteractionInterface {
                         break;
                     }
                     case 9: {
-                        layer.append(R.string("config_line_19"));
+                        layer.append("      ").append(R.string("config_line_19"));
                         break;
                     }
                     case 10: {
-                        layer.append(R.string("config_line_110"));
+                        layer.append("      ").append(R.string("config_line_110"));
                         break;
                     }
                     case 11: {
-                        layer.append(R.string("config_line_111"));
+                        layer.append("      ").append(R.string("config_line_111"));
                         break;
                     }
                     default:
@@ -674,15 +676,15 @@ public class CLI implements InteractionInterface {
                         break;
                     }
                     case 9: {
-                        layer.append(R.string("config_line_29"));
+                        layer.append("      ").append(R.string("config_line_29"));
                         break;
                     }
                     case 10: {
-                        layer.append(R.string("config_line_210"));
+                        layer.append("      ").append(R.string("config_line_210"));
                         break;
                     }
                     case 11: {
-                        layer.append(R.string("config_line_211"));
+                        layer.append("      ").append(R.string("config_line_211"));
                         break;
                     }
                     default:
@@ -749,7 +751,7 @@ public class CLI implements InteractionInterface {
         if (line != f[0] && line != f[1]) {
             ammoWeaponPlayersLayer.append(" - square ").append(line).append(": ");
             if (model.getAmmoCardsID() != null) {
-                if (model.getAmmoCardsID().get(line) != null)
+                if (model.getAmmoCardsID().get(line) != null && !model.getAmmoCardsID().get(line).isEmpty())
                     drawAmmo(ammoWeaponPlayersLayer, line);
                 else {
                     drawMarket(line, ammoWeaponPlayersLayer);
@@ -757,8 +759,8 @@ public class CLI implements InteractionInterface {
             }
 
             drawPlayersInTheSquare(ammoWeaponPlayersLayer, line);
-
-        } else
+        }
+        else
             ammoWeaponPlayersLayer.append(lineSeparator);
 
     }
@@ -809,56 +811,48 @@ public class CLI implements InteractionInterface {
         marketLine.append(" >");
     }
 
-    private void drawPlayersInTheSquare(StringBuilder splayers, int l) {
-        int pos, x = 0;
+    private void drawPlayersInTheSquare(StringBuilder sPlayers, int l) {
+        int pos, numPlayersHere = 0;
         if (model.getPlayersState() != null && !model.getPlayersState().isEmpty()) {
             for (PlayerState ps : model.getPlayersState()) {
                 pos = ps.getSquarePosition();
                 if (pos == l)
-                    x++;
+                    numPlayersHere++;
             }
-            if (x > 0) {
-                splayers.append(" players: { ");
+            sPlayers.append(" players: { ");
+            if (numPlayersHere > 0) {
+
                 for (PlayerState ps : model.getPlayersState()) {
                     pos = ps.getSquarePosition();
-                    if (pos == l)
-                        splayers.append(ps.getNickname()).append(" , ");
+                    if (pos == l) {
+                        sPlayers.append(ps.getNickname());
+                        if (model.getPlayersState().indexOf(ps) < numPlayersHere)
+                            sPlayers.append(" , ");
+                    }
                 }
-                splayers.append(" }");
             }
+            sPlayers.append(" }");
 
         }
 
-        splayers.append(lineSeparator);
+        sPlayers.append(lineSeparator);
     }
-
-/*    private void drawConnectedAndDisconnectedPlayers(StringBuilder str) {
-
-        if (model.getDisconnectedPlayers() != null) {
-            for (String s : model.getDisconnectedPlayers())
-                str.append(lineSeparator).append(s).append(" is disconnected");
-        }
-        str.append(lineSeparator);
-
-        if (model.getJustConnectedPlayers() != null) {
-            for (String s : model.getJustConnectedPlayers())
-                str.append(lineSeparator).append(s).append("has just connected");
-        }
-        str.append(lineSeparator);
-
-    }*/
-
+    
     private void drawBoards(StringBuilder str) {
 
         for (PlayerState ps : model.getPlayersState()) {
+            str.append("/---------------------------").append(lineSeparator).append("| ");
             drawPlayersStatus(str, ps);
+            str.append("| ");
             drawDamageKillshotOverkill(str, ps);
             drawMarksAndSkulls(str, ps);
             drawBoardValue(str, ps);
+            str.append("| ");
             drawCubes(str, ps);
             drawWeapons(str, ps);
             drawPowerups(str, ps);
-            }
+            str.append("\\---------------------------").append(lineSeparator);
+        }
 
         if (model.getKillshotTrack() != null)
             drawCurrentKillshotTrack(str, model.getKillshotTrack());
@@ -870,45 +864,54 @@ public class CLI implements InteractionInterface {
     }
 
     private void drawPlayersStatus(StringBuilder temp, PlayerState p) {
-        temp.append(" -- -- -- -- -- -- -- -- --").append(lineSeparator);
+        //temp.append(" -- -- -- -- -- -- -- -- --").append(lineSeparator);
         if (p.isConnected())
             temp.append("< ").append(p.getNickname()).append(": online >").append(lineSeparator);
         else
             temp.append("< ").append(p.getNickname()).append(": offline >").append(lineSeparator);
 
     }
-
-
+    
     private void drawDamageKillshotOverkill(StringBuilder temp, PlayerState p) {
         temp.append("damage: ").append(p.getDamage());
         for (String s : p.getDamage()) {
             if (p.getDamage().indexOf(s) == p.getDamage().size()-2){
+                temp.append(" -|- ");
                temp.append("killshot: ");
             }
             if (p.getDamage().indexOf(s) == p.getDamage().size()-1){
+                temp.append(" -|- ");
                 temp.append("overkill: ");
             }
             temp.append(s);
             if (p.getDamage().indexOf(s) < p.getDamage().size())
                 temp.append(" ");
         }
-        temp.append(lineSeparator);
+        //temp.append(lineSeparator);
+        temp.append(" -|- ");
     }
 
     private void drawMarksAndSkulls(StringBuilder temp, PlayerState p) {
         temp.append("passive marks: ");
+        if(p.getMarks().isEmpty())
+            temp.append("none");
+
         for (String s : p.getMarks()) {
-            temp.append(s);
+                temp.append(s);
+
             if (p.getMarks().indexOf(s) < p.getMarks().size())
                 temp.append(" ,");
         }
-        temp.append(lineSeparator);
+        //temp.append(lineSeparator);
 
+        temp.append(" -|- ");
 
         if (p.getSkullNumber() >= 0)
-            temp.append("skulls: ").append(p.getSkullNumber()).append(lineSeparator);
+            temp.append("skulls: ").append(p.getSkullNumber());//.append(lineSeparator);
         else
-            temp.append("skulls: 0").append(lineSeparator);
+            temp.append("skulls: 0");//.append(lineSeparator);
+
+        temp.append(" -|- ");
 
     }
 
@@ -935,8 +938,11 @@ public class CLI implements InteractionInterface {
             if (p.getAmmoCubes().get(2) != null && p.getAmmoCubes().size() > 2 && p.getAmmoCubes().get(2) > 0)
                 temp.append("[").append(p.getAmmoCubes().get(2)).append(" YELLOW]");
         }
+        else
+            temp.append("none");
 
-        temp.append(lineSeparator);
+        //temp.append(lineSeparator);
+        temp.append(" -|- ");
 
     }
 
@@ -944,23 +950,35 @@ public class CLI implements InteractionInterface {
         //loaded weapons
         temp.append("loaded weapons: ");
         for (int i = 0; i < p.getLoadedWeapons().size(); i++)
-            temp.append(p.getLoadedWeapons().get(i)).append(" , ");
+            temp.append("[ ").append(R.string(p.getLoadedWeapons().get(i))).append(" ] ");
 
-        temp.append(lineSeparator);
+        if(p.getUnloadedWeapons().isEmpty())
+            temp.append("none");
+
+        temp.append(" -|- ");;
+
+        //temp.append(lineSeparator);
 
         //unloaded weapons
         temp.append("unloaded weapons: ");
         for (int i = 0; i < p.getUnloadedWeapons().size(); i++)
-            temp.append(p.getUnloadedWeapons().get(i)).append(" , ");
+            temp.append(R.string(p.getUnloadedWeapons().get(i))).append(" , ");
+        if(p.getUnloadedWeapons().isEmpty())
+            temp.append("none");
 
-        temp.append(lineSeparator);
+        temp.append(" -|- ");
+
+        //temp.append(lineSeparator);
 
     }
 
     private void drawPowerups(StringBuilder temp, PlayerState p) {
         temp.append("powerups: ");
         for (int i = 0; i < p.getPowerups().size(); i++)
-            temp.append(p.getPowerups().get(i)).append(" ");
+            temp.append(R.string(p.getPowerups().get(i))).append(" ");
+
+        if(p.getPowerups().isEmpty())
+            temp.append("none");
 
         temp.append(lineSeparator);
 
@@ -983,13 +1001,13 @@ public class CLI implements InteractionInterface {
 
         for (PlayerState x : model.getPlayersState())
             if (x.isCurrent())
-                temp.append("-> it's your turn, ").append(x.getNickname()).append("!").append(lineSeparator);
+                temp.append("-> it's ").append(x.getNickname()).append("'s turn!").append(lineSeparator);
 
 
     }
 
     private void drawCurrentKillshotTrack(StringBuilder temp, List<List<String>> kst) {
-        temp.append(" -- -- -- -- -- -- -- -- --").append(lineSeparator);
+        temp./*append(" -- -- -- -- -- -- -- -- --").*/append(lineSeparator);
         temp.append("current Killshot track: ");
         for (int i = 0; i < kst.size(); i++)
             for (String q : kst.get(i)) {
@@ -1071,5 +1089,22 @@ public class CLI implements InteractionInterface {
     public void updateTimer(int seconds) {
         // does nothing
     }
+
+    /*    private void drawConnectedAndDisconnectedPlayers(StringBuilder str) {
+
+        if (model.getDisconnectedPlayers() != null) {
+            for (String s : model.getDisconnectedPlayers())
+                str.append(lineSeparator).append(s).append(" is disconnected");
+        }
+        str.append(lineSeparator);
+
+        if (model.getJustConnectedPlayers() != null) {
+            for (String s : model.getJustConnectedPlayers())
+                str.append(lineSeparator).append(s).append("has just connected");
+        }
+        str.append(lineSeparator);
+
+    }*/
+
 
 }
