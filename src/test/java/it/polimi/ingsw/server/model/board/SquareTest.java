@@ -211,8 +211,8 @@ class SquareTest {
         testS.setWest(d);
         testDestinationS.setWest(d);
 
-        assertTrue(testS.straight(testDestinationS));
-        assertTrue(testDestinationS.straight(testS));
+        assertTrue(testS.straight(testDestinationS, false));
+        assertTrue(testDestinationS.straight(testS, false));
 
 
         //2//
@@ -224,8 +224,8 @@ class SquareTest {
         testS.setWestBorder(Border.CORRIDOR);
         testDestinationS.setEastBorder(Border.CORRIDOR);
 
-        assertTrue(testS.straight(testDestinationS));
-        assertTrue(testDestinationS.straight(testS));
+        assertTrue(testS.straight(testDestinationS, false));
+        assertTrue(testDestinationS.straight(testS, false));
 
         //3//
         testS = new Square();
@@ -236,8 +236,8 @@ class SquareTest {
         a.setEastBorder(Border.DOOR);
         a.setEast(testDestinationS);
 
-        assertTrue(!testS.straight(testDestinationS));
-        assertTrue(!testDestinationS.straight(testS));
+        assertTrue(!testS.straight(testDestinationS, false));
+        assertTrue(!testDestinationS.straight(testS, false));
 
     }
 

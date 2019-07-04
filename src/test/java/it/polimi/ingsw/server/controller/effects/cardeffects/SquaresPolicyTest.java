@@ -256,7 +256,7 @@ class SquaresPolicyTest {
         Player target = new Player("target");
 
         for (SquaresPolicy policy : values()) {
-            if (policy != TO_SUBJECT) {
+            if (policy != TO_SUBJECT && policy != SUBJECT_CARDINALS_STAY) {
                 /*No destinations*/
                 target.setPosition(initial);
                 policy.apply(null, target, null);

@@ -37,9 +37,14 @@ enum SquaresPolicy {
     VISIBLE_NOT_SELF,
     /**
      * All the squares in the cardinal directions from the player's
-     * square are allowed, including his own.
+     * square are allowed, including his own. The targets are moved.
      */
     SUBJECT_CARDINALS,
+    /**
+     * All the squares in the cardinal directions from the player's
+     * square are allowed, including his own. The targets are not moved.
+     */
+    SUBJECT_CARDINALS_STAY,
     /**
      * The squares are not relevant in this effect.
      */
@@ -72,6 +77,7 @@ enum SquaresPolicy {
                     throw new AgainstRulesException("No previous players");
                 }
             case SUBJECT_CARDINALS:
+            case SUBJECT_CARDINALS_STAY:
                 return new HashSet<>(subject.getPosition().getCardinals());
             case ALL:
                 return new HashSet<>(board.getAllSquares());
@@ -103,6 +109,7 @@ enum SquaresPolicy {
                 if (destination != null && !destination.isEmpty())
                     target.setPosition(destination.iterator().next());
                 return;
+            case SUBJECT_CARDINALS_STAY:
             default:
         }
     }

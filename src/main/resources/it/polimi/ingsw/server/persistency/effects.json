@@ -60,11 +60,11 @@
     "id": "powerGlove_rocketFist",
     "cost": ["BLUE"],
     "damageAmount": 2,
-    "targetsNumber": {"min": 0, "max": 2},
+    "targetsNumber": {"min": 1, "max": 2},
     "targetsDistance": {"min": 1, "max": 2},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SUBJECT_CARDINALS",
+    "squaresPolicy": "SUBJECT_CARDINALS_STAY",
     "squaresDistance": 0,
     "quirks": ["DIFFERENT_SQUARES", "MOVE_TO_TARGET", "SINGLE_DIRECTION"]
   },
@@ -144,7 +144,7 @@
     "targetsDistance": {"min": 0, "max": -1},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SUBJECT_CARDINALS",
+    "squaresPolicy": "SUBJECT_CARDINALS_STAY",
     "squaresDistance": 0,
     "quirks": ["IGNORE_WALLS", "SINGLE_DIRECTION"]
   },
@@ -156,7 +156,7 @@
     "targetsDistance": {"min": 0, "max": -1},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SUBJECT_CARDINALS",
+    "squaresPolicy": "SUBJECT_CARDINALS_STAY",
     "squaresDistance": 0,
     "quirks": ["IGNORE_WALLS", "SINGLE_DIRECTION"]
   },
@@ -183,7 +183,7 @@
     "targetsPolicy": "VISIBLE",
     "squaresPolicy": "ALL",
     "squaresDistance": 1,
-    "quirks": []
+    "quirks": ["ORIGINAL_POSITION"]
   },
   {
     "id": "grenadeLauncher",
@@ -213,11 +213,11 @@
     "id": "flamethrower",
     "cost": [],
     "damageAmount": 1,
-    "targetsNumber": {"min": 0, "max": 2},
+    "targetsNumber": {"min": 1, "max": 2},
     "targetsDistance": {"min": 1, "max": 2},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SUBJECT_CARDINALS",
+    "squaresPolicy": "SUBJECT_CARDINALS_STAY",
     "squaresDistance": 0,
     "quirks": ["DIFFERENT_SQUARES", "SINGLE_DIRECTION"]
   },
@@ -226,11 +226,11 @@
     "cost": ["YELLOW", "YELLOW"],
     "damageAmount": 1,
     "secondaryDamage": 1,
-    "targetsNumber": {"min": 0, "max": 2},
+    "targetsNumber": {"min": 1, "max": 2},
     "targetsDistance": {"min": 1, "max": 2},
     "historyPolicy": "ALL",
     "targetsPolicy": "ALL",
-    "squaresPolicy": "SUBJECT_CARDINALS",
+    "squaresPolicy": "SUBJECT_CARDINALS_STAY",
     "squaresDistance": 0,
     "quirks": ["DIFFERENT_SQUARES", "SINGLE_DIRECTION"]
   },

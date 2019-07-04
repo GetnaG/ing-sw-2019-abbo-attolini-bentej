@@ -30,7 +30,11 @@ enum QuirkPolicy {
      * Restricts movement to a single cardinal direction.
      * This can be used with zero to two targets.
      */
-    SINGLE_DIRECTION;
+    SINGLE_DIRECTION,
+    /**
+     * The original position of the target is kept, to affect secondary targets.
+     */
+    ORIGINAL_POSITION;
 
     /**
      * Checks whether this is in the provided array.

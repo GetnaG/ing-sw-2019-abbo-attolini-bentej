@@ -205,7 +205,7 @@
           "idWest": 4,
           "northBorder": "WALL",
           "southBorder": "DOOR",
-          "eastBorder": "WALL",
+          "eastBorder": "CORRIDOR",
           "westBorder": "CORRIDOR"
         },
         {

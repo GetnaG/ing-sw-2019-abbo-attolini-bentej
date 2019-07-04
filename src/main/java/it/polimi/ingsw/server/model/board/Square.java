@@ -378,13 +378,13 @@ public class Square {
      * @param dest is a square.
      * @return true if this and dest lie on the same line (aka there is a straight line with no walls between them)
      */
-    public boolean straight(Square dest) {
+    public boolean straight(Square dest, boolean ignoreWall) {
 
         if (this.equals(dest)) return true;
 
         Square temp = this;
 
-        while (temp.north != null && temp.northBorder != Border.WALL) {
+        while (temp.north != null && (ignoreWall || temp.northBorder != Border.WALL)) {
             if (temp.north.equals(dest))
                 return true;
 
@@ -393,7 +393,7 @@ public class Square {
 
         temp = this;
 
-        while (temp.south != null && temp.southBorder != Border.WALL) {
+        while (temp.south != null && (ignoreWall || temp.southBorder != Border.WALL)) {
             if (temp.south.equals(dest))
                 return true;
 
@@ -402,7 +402,7 @@ public class Square {
 
         temp = this;
 
-        while (temp.east != null && temp.eastBorder != Border.WALL) {
+        while (temp.east != null && (ignoreWall || temp.eastBorder != Border.WALL)) {
             if (temp.east.equals(dest))
                 return true;
 
@@ -411,7 +411,7 @@ public class Square {
 
         temp = this;
 
-        while (temp.west != null && temp.westBorder != Border.WALL) {
+        while (temp.west != null && (ignoreWall || temp.westBorder != Border.WALL)) {
             if (temp.west.equals(dest))
                 return true;
 
