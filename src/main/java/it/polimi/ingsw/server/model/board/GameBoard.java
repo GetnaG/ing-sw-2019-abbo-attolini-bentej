@@ -439,11 +439,11 @@ public class GameBoard implements ReplaceListener {
         Map<Square, Integer> dist = new HashMap<>();
 
         Q.forEach(x -> {
-            dist.put(x, 999);
+            dist.put(x, 6);
         });
         dist.put(start, 0);
         Square u = start;
-        while (!dist.containsKey(end)) {
+        while (Q.contains(end)) {
             u = min(Q, dist);
             Q.remove(u);
             List<Square> neighbours = getNeighbours(u, wallSensitive);
