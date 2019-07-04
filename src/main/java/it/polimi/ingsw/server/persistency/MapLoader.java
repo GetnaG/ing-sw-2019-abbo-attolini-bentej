@@ -45,7 +45,8 @@ public class MapLoader implements BasicLoader<List<Room>> {
      */
     @Override
     public List<Room> get(String id) {
-        List<Room> rooms = new ArrayList<>(Arrays.asList(maps[Integer.parseInt(id)]));
+        List<Room> rooms = Arrays.stream(maps[Integer.parseInt(id)])
+                .map(Room::new).collect(Collectors.toList());
         Room.refresh(rooms);
         return rooms;
     }
@@ -58,7 +59,7 @@ public class MapLoader implements BasicLoader<List<Room>> {
     @Override
     public List<List<Room>> getAll() {
         List<List<Room>> mapsList = Arrays.stream(maps)
-                .map(Arrays::asList)
+                .map(a -> Arrays.stream(a).map(Room::new).collect(Collectors.toList()))
                 .collect(Collectors.toList());
         for (List<Room> rooms : mapsList) {
             Room.refresh(rooms);

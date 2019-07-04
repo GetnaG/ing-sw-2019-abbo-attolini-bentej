@@ -16,6 +16,14 @@ public class Room {
     private List<Square> squares;
     private SpawnSquare spawnSquare;
 
+    public Room(Room copyOf) {
+        squares = copyOf.squares.stream().map(Square::new).collect(Collectors.toList());
+        if (copyOf.spawnSquare != null)
+            spawnSquare = new SpawnSquare(copyOf.spawnSquare);
+        else
+            spawnSquare = null;
+    }
+
     /**
      * @param squares is the list of the normal (ammo) squares
      * @param spawnSquare is considered a single element

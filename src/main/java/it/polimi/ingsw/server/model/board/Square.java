@@ -52,10 +52,33 @@ public class Square {
     }
 
     /**
+     * Creates a square that is a copy of the provided one.
+     * The provided square needs to be refreshed.
+     *
+     * @param copyOf the square to copy
+     */
+    public Square(Square copyOf) {
+        squareColor = copyOf.squareColor;
+        ID = copyOf.ID;
+        idNorth = copyOf.idNorth;
+        idSouth = copyOf.idSouth;
+        idWest = copyOf.idWest;
+        idEast = copyOf.idEast;
+        northBorder = copyOf.northBorder;
+        southBorder = copyOf.southBorder;
+        eastBorder = copyOf.eastBorder;
+        westBorder = copyOf.westBorder;
+        ammoCard = null;
+        north = null;
+        south = null;
+        west = null;
+        east = null;
+    }
+
+    /**
      * Default constructor of an abstract square
      */
     public Square() {
-        this(null);
     }
 
     public Square getNorth() {
@@ -166,16 +189,6 @@ public class Square {
     public void setSquareColor(SquareColor squareColor) {
         this.squareColor = squareColor;
     }
-
-    public Room getRoom() {
-        return GameBoard.getRoom(this);
-    }
-
-    /*public void setRoom(Room room) {
-
-        //this.room = room;
-    }*/
-
 
     public String getID() {
         return Integer.toString(ID);

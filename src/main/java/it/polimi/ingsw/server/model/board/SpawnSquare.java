@@ -22,6 +22,12 @@ public class SpawnSquare extends Square {
         market = w;
         spawn = null;
     }
+
+    public SpawnSquare(SpawnSquare copyOf) {
+        super(copyOf);
+        market = null;
+        spawn = null;
+    }
     private static SquareColor constructorHelper(AmmoCube c){
         switch (c) {
             case BLUE:

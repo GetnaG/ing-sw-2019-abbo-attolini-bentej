@@ -20,15 +20,15 @@ public class GameBoard implements ReplaceListener {
     /**
      * The configuration of the rooms. Note that there exists only 4 possible configurations.
      */
-    private static List<Room> configuration;
+    private List<Room> configuration;
     /**
      * Contains all the squares where a new Ammo Card is needed.
      */
-    List<Square> squareNewAmmoCard;
+    private List<Square> squareNewAmmoCard;
     /**
      * Contains all the squares where a new Weapon Card is needed.
      */
-    List<SpawnSquare> squareNewWeaponCard;
+    private List<SpawnSquare> squareNewWeaponCard;
     /**
      * Powerup Deck used during the game.
      */
@@ -82,8 +82,8 @@ public class GameBoard implements ReplaceListener {
         /*Adding all the missing ammo cards and weapons*/
         for (Room room : configuration) {
             for (Square square : room.getAllSquares()) {
-                if (square.equals(square.getRoom().getSpawnSquare()))
-                    addSpawnSquare(square.getRoom().getSpawnSquare());
+                if (square.equals(getRoom(square).getSpawnSquare()))
+                    addSpawnSquare(getRoom(square).getSpawnSquare());
                 else addSquare(square);
             }
         }
@@ -91,11 +91,11 @@ public class GameBoard implements ReplaceListener {
     }
 
 
-    public static List<Room> getConfiguration() {
+    public List<Room> getConfiguration() {
         return configuration;
     }
 
-    public static Room getRoom(Square square) {
+    public Room getRoom(Square square) {
         for (Room room : configuration) {
             for (Square s : room.getAllSquares()) {
                 if (s.getID().equals(square.getID()))
@@ -110,7 +110,7 @@ public class GameBoard implements ReplaceListener {
      * @return 1 if the destination square is visible from the calling square, 0 otherwise
      */
 
-    public static boolean checkVisible(Square departure, Square destination) {
+    public boolean checkVisible(Square departure, Square destination) {
 
         if (getRoom(departure) == getRoom(destination))
             return true;
@@ -124,17 +124,17 @@ public class GameBoard implements ReplaceListener {
 
 
             if (departure.getSouthBorder() != Border.WALL && departure.getSouthBorder() != null) {
-                if (departure.getSouth().getRoom() == destination.getRoom() || departure.getSouthBorder() == Border.CORRIDOR)
+                if (getRoom(departure.getSouth()) == getRoom(destination) || departure.getSouthBorder() == Border.CORRIDOR)
                     return true;
             }
 
             if (departure.getEastBorder() != Border.WALL && departure.getEastBorder() != null) {
-                if (departure.getEast().getRoom() == destination.getRoom() || departure.getEastBorder() == Border.CORRIDOR)
+                if (getRoom(departure.getEast()) == getRoom(destination) || departure.getEastBorder() == Border.CORRIDOR)
                     return true;
             }
 
             if (departure.getWestBorder() != Border.WALL && departure.getWestBorder() != null) {
-                if (departure.getWest().getRoom() == destination.getRoom() || departure.getWestBorder() == Border.CORRIDOR)
+                if (getRoom(departure.getWest()) == getRoom(destination) || departure.getWestBorder() == Border.CORRIDOR)
                     return true;
             }
         }
@@ -142,7 +142,7 @@ public class GameBoard implements ReplaceListener {
         return false;
     }
 
-    public static Square getSquare(int idSquare) {
+    public Square getSquare(int idSquare) {
         for (Room room : configuration)
             for (Square s : room.getAllSquares())
                 if (Integer.parseInt(s.getID()) == idSquare)

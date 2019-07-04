@@ -474,7 +474,7 @@ public class CardEffect implements EffectInterface {
 
             /*Filtering out the squares in the subject's room*/
             valid = valid.stream().distinct()
-                    .filter(s -> !(s.getRoom().equals(subject.getPosition().getRoom())))
+                    .filter(s -> !(board.getRoom(s).equals(board.getRoom(subject.getPosition()))))
                     .collect(Collectors.toSet());
         }
         return valid;
@@ -488,7 +488,7 @@ public class CardEffect implements EffectInterface {
      */
     private List<Square> getSquaresSameRoom(Square s) {
         return board.getAllSquares().stream()
-                .filter(x -> x.getRoom().equals(s.getRoom()))
+                .filter(x -> board.getRoom(x).equals(board.getRoom(s)))
                 .collect(Collectors.toList());
     }
 
