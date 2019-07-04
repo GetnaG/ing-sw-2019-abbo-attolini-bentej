@@ -15,32 +15,99 @@ import java.util.function.IntBinaryOperator;
 import java.util.stream.Collectors;
 
 /**
- * Descrizione.
+ * Descrizione.//TODO
  * <p>
  * Dettagli.
  *
  * @author Abbo Giulio A.
  */
 public class UpdateBuilder {
+    /**
+     * Represents the chosen configuration
+     * Update is based on the number of players
+     */
     private Integer configurationId;
+    /**
+     * Lists the ammo cards on the board
+     * It's updated when an actions modifies it, e.g. A player grabs an ammo card
+     * A null elements states either that the ammo card has picked up
+     * or it is located on a SpawnSquare, witch contains a Weapon Market
+     */
     private List<AmmoCard> ammoCards;
+    /**
+     * Lists the weapon cards on the board
+     * It's updated when an actions modifies it, e.g. A player grabs a weapon card from the market
+     * A null elements states either that the weapon card has picked up
+     * or it is not yet been set
+     */
     private List<WeaponCard> weaponsOnBoard;
+    /**
+     * //TODO
+     */
     private Boolean weaponDrawable;
+    /**
+     * //TODO
+     */
     private List<? extends List<Player>> killshotTrack;
+    /**
+     * It's set to true upon the last kill, when the match enters the frenzy mode
+     */
     private Boolean isMatchFrenzy;
+    /**
+     * Lists the players the are playing in the game
+     */
     private List<String> players;
+    /**
+     * Associates a square to its player, determining his position on the board
+     */
     private Map<Player, Square> playerPosition;
+    /**
+     * Associates the list of usable ammo cubes to its player
+     */
     private Map<Player, List<AmmoCube>> activeCubes;
+    /**
+     * Contains the list of players that are currently in frenzy mode
+     */
     private Map<Player, Boolean> isPlayerFrenzy;
+    /**
+     * Associates the number of skulls on a player's board with the player that holds them
+     */
     private Map<Player, Integer> skullsOnBoard;
+    /**
+     * Associates the list of players that damaged the player with player himself
+     */
     private Map<Player, List<Player>> playerDamage;
+    /**
+     * Associates the list of players that gave marks to the player with player himself
+     */
     private Map<Player, List<Player>> playerMarks;
+    /**
+     * Contains the list of players that are currently connected
+     */
     private Map<Player, Boolean> isConnected;
+    /**
+     * Associates the list of loaded weapons held by a player with player himself
+     */
     private Map<Player, List<WeaponCard>> loadedWeapons;
+    /**
+     * Associates the list of unloaded weapons held by a player with player himself
+     */
     private Map<Player, List<WeaponCard>> unloadedWeapon;
+    /**
+     * Associates the list of powerups held by a player with player himself
+     */
     private Map<Player, List<PowerupCard>> powerupsInHand;
+    /**
+     * Represents the current timer as a countdown
+     */
     private Integer timer;
+    /**
+     * Represents the winners of the game, order by highest score
+     */
     private List<? extends Player> winners;
+    /**
+     * Represents the current player
+     */
     private Player current;
 
     public UpdateBuilder setConfigurationId(Integer configurationId) {
@@ -177,6 +244,9 @@ public class UpdateBuilder {
         return this;
     }
 
+    /**
+     * @return //TODO
+     */
     public Update[] build() {
         List<Update> updates = new ArrayList<>();
         singleAdd(updates, configurationId, Update.UpdateType.CONFIGURATION_ID,
@@ -184,8 +254,7 @@ public class UpdateBuilder {
         listAdd(updates, ammoCards, Update.UpdateType.AMMO_CARD_ARRAY,
                 o -> {
                     try {return o.getId();}
-                    catch (NullPointerException e) {return /*"notSet"*/
-                            "market";}//FIXME what if the card was taken?
+                    catch (NullPointerException e) {return "notSet";}
                 });
         listAdd(updates, weaponsOnBoard, Update.UpdateType.WEAPON_CARD_ARRAY,
                 o -> {
@@ -234,6 +303,13 @@ public class UpdateBuilder {
         return updates.toArray(new Update[]{});
     }
 
+    /**
+     * @param updates //TODO
+     * @param field
+     * @param type
+     * @param nameMapper
+     * @param <T>
+     */
     private <T> void listAdd(List<? super Update> updates, List<T> field,
                              Update.UpdateType type,
                              Function<? super T, String> nameMapper) {
@@ -242,6 +318,13 @@ public class UpdateBuilder {
         updates.add(new Update(type, field.stream().map(nameMapper).collect(Collectors.toList())));
     }
 
+    /**
+     * @param updates //TODO
+     * @param field
+     * @param type
+     * @param nameMapper
+     * @param <T>
+     */
     private <T> void mapAdd(List<? super Update> updates, Map<? extends Player, T> field,
                             Update.UpdateType type,
                             Function<? super T, ? extends List<String>> nameMapper) {
@@ -250,6 +333,13 @@ public class UpdateBuilder {
         field.forEach((player, t) -> updates.add(new Update(type, nameMapper.apply(t), player.getName())));
     }
 
+    /**
+     * @param updates //TODO
+     * @param field
+     * @param type
+     * @param nameMapper
+     * @param <T>
+     */
     private <T> void singleAdd(List<Update> updates, T field,
                                Update.UpdateType type,
                                Function<T, String> nameMapper) {

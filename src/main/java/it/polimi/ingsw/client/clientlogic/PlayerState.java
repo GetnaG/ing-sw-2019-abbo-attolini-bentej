@@ -7,18 +7,58 @@ import java.util.List;
  * Represents the state of a player.
  */
 public class PlayerState {
+    /**
+     * represents the player's position. It's bounded between 1 and the total number of players
+     */
     private int turnPosition;
+    /**
+     * represents the players's position on the board aka on witch square is located
+     */
     private int squarePosition;
+    /**
+     * represents the name choosen by the user to give to his character
+     */
     private String nickname;
+    /**
+     * represents the ammo cubes held by the player, ordered in alphabetical order
+     */
     private List<Integer> ammoCubes;
+    /**
+     * is set to true when a player enters the frenzy mode as a result of the damage suffered
+     */
     private boolean isPlayerBoardFrenzy;
+    /**
+     * represents the number of times the player has been killed
+     */
     private int skullNumber;
+    /**
+     * lists the players that inflicted damage to the player
+     */
     private List<String> damage;
+    /**
+     * lists the players that gave a mark to the player
+     */
     private List<String> marks;
+    /**
+     * is set to true when the players connects to the server
+     */
     private boolean isConnected;
+    /**
+     * lists the loaded weapons held by the the player
+     */
     private List<String> loadedWeapons;
+    /**
+     * lists the unloaded weapons held by the the player
+     * it will be asked to reload them during the end of the turn
+     */
     private List<String> unloadedWeapons;
+    /**
+     * lists the powerup cards in the player's hand
+     */
     private List<String> powerups;
+    /**
+     * it's true when it becomes the player's turn
+     */
     private boolean isCurrent;
 
     public PlayerState(int turnPosition, String nickname) {

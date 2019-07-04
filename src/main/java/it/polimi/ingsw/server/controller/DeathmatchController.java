@@ -401,6 +401,9 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             return next != null && !gameOver;
         }
 
+        /**
+         * @return the player that will play on the next turn
+         */
         @Override
         public Player next() {
             if (!hasNext())
@@ -411,6 +414,12 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
             return toReturn;
         }
 
+        /**
+         * @param from the previous player
+         * @return the next valid player
+         * if a player is disconnected (and therefore is not valid),
+         * all the players will receive a notification
+         */
         private Player validNext(Player from) {
             Player toReturn = from;
             while (toReturn != null && suspendedPlayers.contains(toReturn)) {

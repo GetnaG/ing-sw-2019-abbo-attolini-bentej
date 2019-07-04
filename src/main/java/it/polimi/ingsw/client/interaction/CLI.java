@@ -32,6 +32,10 @@ public class CLI implements InteractionInterface {
      * multiple choices are available.
      */
     private static final String CHOICE_INDEX = ") ";
+
+    /**
+     * follows a series of constants used in this class
+     */
     private static final int BOARD_LENGTH = 12;
     private static final int MARKET_SIZE = 3;
     private static final int BLUE_SPAWN_POINT = 2;
@@ -464,9 +468,6 @@ public class CLI implements InteractionInterface {
         StringBuilder stringBuilder = new StringBuilder();
 
         if (this.model != null) {
-
-            //drawConnectedAndDisconnectedPlayers(stringBuilder);
-            //TODO
             if (model.getPlayersState() != null ) {
                 if(!model.getPlayersState().isEmpty() )
                     if(model.getPlayersState().get(0) != null ){
@@ -479,6 +480,9 @@ public class CLI implements InteractionInterface {
         return stringBuilder;
     }
 
+    /**
+     * @param s is the printed CLI updated with the chosen configuration and the consequent squares
+     */
     private void drawConfigurationAndSquares(StringBuilder s) {
         Integer[] forbiddenSquares = {100, 100};
         switch (model.getConfigurationID()) {
@@ -529,6 +533,11 @@ public class CLI implements InteractionInterface {
         s.append(lineSeparator);
     }
 
+    /**
+     * @param layer is the printed CLI updated
+     * @param config is the chosen configuration
+     * @param line indicates the current position (map seen as a linear vector)
+     */
     private void drawLayer(StringBuilder layer, int config, int line) {
         switch (config) {
             case 0:
@@ -747,11 +756,18 @@ public class CLI implements InteractionInterface {
         }
     }
 
+    /**
+     * @param ammoWeaponPlayersLayer is the printed CLI updated
+     * @param f represents the squares excluded from the map by the configuration
+     * @param line indicates the current position (map seen as a linear vector)
+     */
     private void drawAmmosOrWeaponsAndPlayers(StringBuilder ammoWeaponPlayersLayer, Integer[] f, int line) {
         if (line != f[0] && line != f[1]) {
             ammoWeaponPlayersLayer.append(" - square ").append(line).append(": ");
             if (model.getAmmoCardsID() != null) {
-                if (model.getAmmoCardsID().get(line) != null && !model.getAmmoCardsID().get(line).isEmpty())
+                if(line == RED_SPAWN_POINT || line == BLUE_SPAWN_POINT || line == YELLOW_SPAWN_POINT )
+                    ammoWeaponPlayersLayer.append(R.string("market"));
+                else if (model.getAmmoCardsID().get(line) != null && !model.getAmmoCardsID().get(line).isEmpty())
                     drawAmmo(ammoWeaponPlayersLayer, line);
                 else {
                     drawMarket(line, ammoWeaponPlayersLayer);
@@ -765,10 +781,18 @@ public class CLI implements InteractionInterface {
 
     }
 
+    /**
+     * @param ammoLine is the printed CLI updated
+     * @param l indicates the current position (map seen as a linear vector)
+     */
     private void drawAmmo(StringBuilder ammoLine, int l) {
         ammoLine.append("ammo: [ ").append(R.string(model.getAmmoCardsID().get(l))).append(" ]");
     }
 
+    /**
+     * @param spawnP indicates the current position (map seen as a linear vector)
+     * @param marketLine is the printed CLI updated
+     */
     private void drawMarket(int spawnP, StringBuilder marketLine) {
         marketLine.append("market: < ");
         switch (spawnP) {
@@ -811,6 +835,10 @@ public class CLI implements InteractionInterface {
         marketLine.append(" >");
     }
 
+    /**
+     * @param sPlayers is the printed CLI updated
+     * @param l indicates the current position (map seen as a linear vector)
+     */
     private void drawPlayersInTheSquare(StringBuilder sPlayers, int l) {
         int pos, numPlayersHere = 0;
         if (model.getPlayersState() != null && !model.getPlayersState().isEmpty()) {
@@ -821,13 +849,12 @@ public class CLI implements InteractionInterface {
             }
             sPlayers.append(" players: { ");
             if (numPlayersHere > 0) {
-
                 for (PlayerState ps : model.getPlayersState()) {
                     pos = ps.getSquarePosition();
                     if (pos == l) {
                         sPlayers.append(ps.getNickname());
                         if (model.getPlayersState().indexOf(ps) < numPlayersHere)
-                            sPlayers.append(" , ");
+                            sPlayers.append(" ");
                     }
                 }
             }
@@ -837,7 +864,10 @@ public class CLI implements InteractionInterface {
 
         sPlayers.append(lineSeparator);
     }
-    
+
+    /**
+     * @param str is the printed CLI updated
+     */
     private void drawBoards(StringBuilder str) {
 
         for (PlayerState ps : model.getPlayersState()) {
@@ -863,36 +893,47 @@ public class CLI implements InteractionInterface {
 
     }
 
+    /**
+     * @param temp is the printed CLI updated
+     * @param p represents the single player's current state
+     */
     private void drawPlayersStatus(StringBuilder temp, PlayerState p) {
-        //temp.append(" -- -- -- -- -- -- -- -- --").append(lineSeparator);
         if (p.isConnected())
             temp.append("< ").append(p.getNickname()).append(": online >").append(lineSeparator);
         else
             temp.append("< ").append(p.getNickname()).append(": offline >").append(lineSeparator);
 
     }
-    
+
+    /**
+     * @param temp is the printed CLI updated
+     * @param p represents the single player's current state
+     */
     private void drawDamageKillshotOverkill(StringBuilder temp, PlayerState p) {
-        temp.append("damage: ").append(p.getDamage());
+        temp.append("damage dealt by: ").append(p.getDamage());
         for (String s : p.getDamage()) {
             if (p.getDamage().indexOf(s) == p.getDamage().size()-2){
                 temp.append(" -|- ");
-               temp.append("killshot: ");
+               temp.append("killshot by: ");
             }
             if (p.getDamage().indexOf(s) == p.getDamage().size()-1){
                 temp.append(" -|- ");
-                temp.append("overkill: ");
+                temp.append("overkill by: ");
             }
             temp.append(s);
             if (p.getDamage().indexOf(s) < p.getDamage().size())
                 temp.append(" ");
         }
-        //temp.append(lineSeparator);
+
         temp.append(" -|- ");
     }
 
+    /**
+     * @param temp is the printed CLI updated
+     * @param p represents the single player's current state
+     */
     private void drawMarksAndSkulls(StringBuilder temp, PlayerState p) {
-        temp.append("passive marks: ");
+        temp.append("passive marks by: ");
         if(p.getMarks().isEmpty())
             temp.append("none");
 
@@ -902,19 +943,22 @@ public class CLI implements InteractionInterface {
             if (p.getMarks().indexOf(s) < p.getMarks().size())
                 temp.append(" ,");
         }
-        //temp.append(lineSeparator);
 
         temp.append(" -|- ");
 
         if (p.getSkullNumber() >= 0)
-            temp.append("skulls: ").append(p.getSkullNumber());//.append(lineSeparator);
+            temp.append("skulls: ").append(p.getSkullNumber());
         else
-            temp.append("skulls: 0");//.append(lineSeparator);
+            temp.append("skulls: 0");
 
         temp.append(" -|- ");
 
     }
 
+    /**
+     * @param temp is the printed CLI updated
+     * @param p represents the single player's current state
+     */
     private void drawBoardValue(StringBuilder temp, PlayerState p) {
         Integer[] vectorValue = {8, 6, 4, 2, 1, 1, 1, 1, 1};
         temp.append("board value: { ");
@@ -928,6 +972,10 @@ public class CLI implements InteractionInterface {
 
     }
 
+    /**
+     * @param temp is the printed CLI updated
+     * @param p represents the single player's current state
+     */
     private void drawCubes(StringBuilder temp, PlayerState p) {
         temp.append("ammo cubes: ");
         if (p.getAmmoCubes() != null && !p.getAmmoCubes().isEmpty()) {
@@ -946,6 +994,10 @@ public class CLI implements InteractionInterface {
 
     }
 
+    /**
+     * @param temp is the printed CLI updated
+     * @param p represents the single player's current state
+     */
     private void drawWeapons(StringBuilder temp, PlayerState p) {
         //loaded weapons
         temp.append("loaded weapons: ");
@@ -972,6 +1024,10 @@ public class CLI implements InteractionInterface {
 
     }
 
+    /**
+     * @param temp is the printed CLI updated
+     * @param p represents the single player's current state
+     */
     private void drawPowerups(StringBuilder temp, PlayerState p) {
         temp.append("powerups: ");
         for (int i = 0; i < p.getPowerups().size(); i++)
@@ -984,6 +1040,9 @@ public class CLI implements InteractionInterface {
 
     }
 
+    /**
+     * @param temp is the printed CLI updated
+     */
     private void drawTurnPlayerFrenzyPlayersFrenzyTurn(StringBuilder temp) {
         int skullsRemoved = 0;
 
@@ -1006,6 +1065,10 @@ public class CLI implements InteractionInterface {
 
     }
 
+    /**
+     * @param temp is the printed CLI updated
+     * @param kst is the current Killshot Track
+     */
     private void drawCurrentKillshotTrack(StringBuilder temp, List<List<String>> kst) {
         temp./*append(" -- -- -- -- -- -- -- -- --").*/append(lineSeparator);
         temp.append("current Killshot track: ");
@@ -1017,7 +1080,6 @@ public class CLI implements InteractionInterface {
             }
         temp.append(lineSeparator);
     }
-
 
      /**
      * Returns a string containing the localized text for the notification.
@@ -1081,30 +1143,19 @@ public class CLI implements InteractionInterface {
                 .append(lineSeparator);
     }
 
+    /**
+     * @param controller the controller to set
+     */
     public void setController(ClientController controller) {
         this.controller = controller;
         askConnection();
     }
 
+    /**
+     * @param seconds updates the timer by the time given
+     */
     public void updateTimer(int seconds) {
         // does nothing
     }
-
-    /*    private void drawConnectedAndDisconnectedPlayers(StringBuilder str) {
-
-        if (model.getDisconnectedPlayers() != null) {
-            for (String s : model.getDisconnectedPlayers())
-                str.append(lineSeparator).append(s).append(" is disconnected");
-        }
-        str.append(lineSeparator);
-
-        if (model.getJustConnectedPlayers() != null) {
-            for (String s : model.getJustConnectedPlayers())
-                str.append(lineSeparator).append(s).append("has just connected");
-        }
-        str.append(lineSeparator);
-
-    }*/
-
 
 }
