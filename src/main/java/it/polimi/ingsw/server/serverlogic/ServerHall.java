@@ -99,9 +99,9 @@ public class ServerHall implements Runnable {
      */
     public synchronized void addUser(User user) {
         connectedUsers.add(user);
-        updateAll();
         if (connectedUsers.size() >= MAXIMUM_PLAYERS)
             startMatch();
+        updateAll();
         notifyAll();
     }
 
