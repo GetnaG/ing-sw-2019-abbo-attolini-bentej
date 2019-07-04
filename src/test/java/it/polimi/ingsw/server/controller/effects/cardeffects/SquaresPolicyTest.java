@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  * Author: Abbo Giulio A.
  * Testing: this is a fundamental class, extensive testing is done to ensure its behaviour.
  */
-@Disabled
 class SquaresPolicyTest {
     private List<List<Room>> configurationList;
     private Answers a;

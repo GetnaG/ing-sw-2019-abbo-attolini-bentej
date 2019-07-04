@@ -589,8 +589,8 @@
           "idWest": 8,
           "northBorder": "DOOR",
           "southBorder": "WALL",
-          "eastBorder": "CORRIDOR",
-          "westBorder": "DOOR"
+          "eastBorder": "DOOR",
+          "westBorder": "CORRIDOR"
         }
       ]
     },

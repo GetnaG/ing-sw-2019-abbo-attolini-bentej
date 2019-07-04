@@ -252,7 +252,7 @@ public class Square {
 
         while (temp.west != null) {
             cardinals.add(temp.west);
-            temp = temp.south;
+            temp = temp.west;
         }
 
         return cardinals;
@@ -269,18 +269,19 @@ public class Square {
      */
     public List<Square> listOfVisibles(GameBoard gb) {
         List<Square> visibleSquares = new ArrayList<>();
-        int i = 0;
-        int j = 0;
-        List<Room> config = gb.getConfiguration();
-        Square temp;
 
-        for (Room r : config) {
-            temp = r.getAllSquares().get(i);
-            if (gb.checkVisible(this, temp)) {
-                visibleSquares.addAll(j, r.getAllSquares());
-                j = j + r.getAllSquares().size();
-            }
-        }
+        /*All the square in the same room are visible*/
+        visibleSquares.addAll(gb.getRoom(this).getAllSquares());
+
+        if (northBorder == Border.DOOR)
+            visibleSquares.addAll(gb.getRoom(north).getAllSquares());
+        if (eastBorder == Border.DOOR)
+            visibleSquares.addAll(gb.getRoom(east).getAllSquares());
+        if (southBorder == Border.DOOR)
+            visibleSquares.addAll(gb.getRoom(south).getAllSquares());
+        if (westBorder == Border.DOOR)
+            visibleSquares.addAll(gb.getRoom(west).getAllSquares());
+
         return visibleSquares;
     }
 
