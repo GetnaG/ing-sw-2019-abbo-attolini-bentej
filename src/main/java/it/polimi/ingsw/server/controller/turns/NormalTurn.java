@@ -11,6 +11,7 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -88,7 +89,7 @@ public class NormalTurn implements TurnInterface {
         tripleMove.add(new Move());
 
         actions.add(new Action("TripleMove", tripleMove));
-        actions.add(new Action("Move&Grab", List.of(new Move(), new Grab())));
+        actions.add(new Action("Move&Grab", Arrays.asList(new Move(), new Grab())));
         actions.add(new Action("Shoot", new Shoot()));
         actions.addAll(player.getAdrenalineActions());
 

@@ -53,6 +53,7 @@ enum SquaresPolicy {
      * @param alreadyTargeted the target that have already been affected in
      *                        this chain of effects
      * @return all the valid squares, null if squares are not relevant
+     * @throws AgainstRulesException if the destinations can not be calculated
      */
     Set<Square> getValidDestinations(Player subject, GameBoard board,
                                      List<? extends Damageable> alreadyTargeted) throws AgainstRulesException {
