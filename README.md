@@ -7,13 +7,14 @@
 
 | Functionality | State |
 |:-----------------------|:------------------------------------:|
-| Basic rules | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-| Complete rules | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-| Socket | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-| RMI | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-| GUI | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-| CLI | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
-| Multiple games | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
+| Basic rules | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
+| Complete rules | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
+| Socket |[![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
+| RMI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
+| GUI | [![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
+| CLI |[![GREEN](https://placehold.it/15/44bb44/44bb44)](#) |
+| Multiple games | [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#)
+ |
 | Persistence | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 | Domination or Towers modes | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
 | Terminator | [![RED](https://placehold.it/15/f03c15/f03c15)](#) |
@@ -23,3 +24,17 @@
 [![YELLOW](https://placehold.it/15/ffdd00/ffdd00)](#)
 [![GREEN](https://placehold.it/15/44bb44/44bb44)](#)
 -->
+
+## Use Guide
+###Set network settings
+Go to `./src/main/resources/properties` and open the `network.properties` file.  <br>
+Here you can set your preferred network settings. <br>
+###Build 
+Run the following line usign maven to build the server and client jar: <br>
+`mvn -Dmaven.test.skip=true package  -quiet` <br>
+###Run
+To run the client: <br>
+GUI : `java -jar ./target/client-jar-with-dependencies.jar gui` <br>
+CLI : `java -jar ./target/client-jar-with-dependencies.jar cli`  
+`  
+
