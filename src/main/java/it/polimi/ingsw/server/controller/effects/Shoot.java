@@ -53,14 +53,16 @@ public class Shoot implements EffectInterface {
                 .filter(PowerupCard::isUsableOnDealingDamage)
                 .filter((powerupCard -> subjectPlayer.canAfford(powerupCard.getEffect().getCost(), false)))
                 .collect(Collectors.toList());
-        try {
-            PowerupCard chosen = subjectPlayer.getToClient().choosePowerup(targetingScopes);
-            //TODO pay price
-            subjectPlayer.removePowerup(chosen);
-            board.putPowerupCard(chosen);
-            chosen.getEffect().runEffect(subjectPlayer, allTargets, board, alreadyTargeted, damageTargeted);
-        } catch (ChoiceRefusedException e) {
-            /*The player does not want to use the powerups: continuing.*/
+        if (!targetingScopes.isEmpty()) {
+            try {
+                PowerupCard chosen = subjectPlayer.getToClient().choosePowerup(targetingScopes);
+                //TODO pay price
+                subjectPlayer.removePowerup(chosen);
+                board.putPowerupCard(chosen);
+                chosen.getEffect().runEffect(subjectPlayer, allTargets, board, alreadyTargeted, damageTargeted);
+            } catch (ChoiceRefusedException e) {
+                /*The player does not want to use the powerups: continuing.*/
+            }
         }
 
         /*Checking if someone can use tagback*/

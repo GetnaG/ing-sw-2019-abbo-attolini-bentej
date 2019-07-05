@@ -49,7 +49,8 @@ public class TagbackEffect implements EffectInterface {
                           List<Damageable> allTargeted, List<Damageable> damageTargeted)
             throws ToClientException {
         for (Damageable d : damageTargeted) {
-            if (!board.checkVisible(d.getPosition(), subjectPlayer.getPosition()))
+            if (d.getPosition() == null || subjectPlayer.getPosition() == null ||
+                    !board.checkVisible(d.getPosition(), subjectPlayer.getPosition()))
                 /*The damageable does not see the subject: skipping*/
                 continue;
 

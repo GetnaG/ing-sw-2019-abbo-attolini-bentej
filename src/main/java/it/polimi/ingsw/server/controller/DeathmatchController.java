@@ -158,6 +158,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
         updateAllPlayers(new UpdateBuilder().setWinners(players.stream()
                 .sorted(Comparator.comparingInt(Player::getScore)).collect(Collectors.toList())));
         ServerMain.getDeathMatchHall().removeMatch(this);
+        notifyAllPlayers(Notification.NotificationType.QUIT);
     }
 
     /**

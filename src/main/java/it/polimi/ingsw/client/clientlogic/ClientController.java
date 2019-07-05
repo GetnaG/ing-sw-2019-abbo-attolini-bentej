@@ -54,8 +54,11 @@ public class ClientController extends UnicastRemoteObject implements RmiFromClie
      */
     @Override
     public void handleNotifications(Notification[] notifications) {
-        for (Notification n : notifications)
+        for (Notification n : notifications) {
             view.sendNotification(n.getType().name());
+            if (n.getType() == Notification.NotificationType.QUIT)
+                System.exit(-1);
+        }
     }
 
     /**
