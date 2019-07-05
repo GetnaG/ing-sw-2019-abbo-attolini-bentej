@@ -1,11 +1,14 @@
 package it.polimi.ingsw.server.controller.effects;
 
+import it.polimi.ingsw.communication.ChoiceRefusedException;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
+import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
 import it.polimi.ingsw.server.model.player.Player;
+import it.polimi.ingsw.server.persistency.FromFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,22 +22,17 @@ import java.util.stream.Collectors;
  * @see Action
  */
 public class Shoot implements EffectInterface {
-
-    /**
-     * The subject of the turn
-     */
-    private Player player;
     /**
      * If the player has loaded weapons, asks him to choose a weapon to use.
      * Then asks which effect of that weapon he wants to use and runs it.
-     * @param subjectPlayer     the subject of the turn
-     * @param allTargets
-     * @param board             the board used in the game
-     * @param alredyTargeted    the targets already hitted in the player's turn.
-     * @param damageTargeted
+     *
+     * @param subjectPlayer   the subject of the turn
+     * @param allTargets      all the targets on the board
+     * @param board           the board used in the game
+     * @param alreadyTargeted the targets already hit in the player's turn
+     * @param damageTargeted  the targets that received damage
      */
-    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) throws ToClientException {
-        this.player = subjectPlayer;
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alreadyTargeted, List<Damageable> damageTargeted) throws ToClientException {
         if (subjectPlayer.getLoadedWeapons().isEmpty())
             return;
 
@@ -47,15 +45,33 @@ public class Shoot implements EffectInterface {
         Action effectChosen = subjectPlayer.getToClient().chooseEffectsSequence(effectsPlayerCanAfford);
 
         subjectPlayer.pay(effectChosen.getTotalCost());
-        effectChosen.runAll(subjectPlayer, allTargets, board, alredyTargeted, damageTargeted);
+        effectChosen.runAll(subjectPlayer, allTargets, board, alreadyTargeted, damageTargeted);
         subjectPlayer.unload(weaponChosen);
 
-        //TODO tagback and targeting scope
+        /*Checking if the subject has and wants to use a targeting scope*/
+        List<PowerupCard> targetingScopes = subjectPlayer.getAllPowerup().stream()
+                .filter(PowerupCard::isUsableOnDealingDamage)
+                .filter((powerupCard -> subjectPlayer.canAfford(powerupCard.getEffect().getCost(), false)))
+                .collect(Collectors.toList());
+        try {
+            PowerupCard chosen = subjectPlayer.getToClient().choosePowerup(targetingScopes);
+            //TODO pay price
+            subjectPlayer.removePowerup(chosen);
+            board.putPowerupCard(chosen);
+            chosen.getEffect().runEffect(subjectPlayer, allTargets, board, alreadyTargeted, damageTargeted);
+        } catch (ChoiceRefusedException e) {
+            /*The player does not want to use the powerups: continuing.*/
+        }
+
+        /*Checking if someone can use tagback*/
+        FromFile.effects().get("tagbackGrenade").runEffect(subjectPlayer,
+                allTargets, board, alreadyTargeted, damageTargeted);
     }
 
     /**
      * Returns the name of the effect : "Shoot"
-     * @return
+     *
+     * @return "shoot"
      */
     public String getName() {
         return "Shoot";

@@ -1,6 +1,5 @@
 package it.polimi.ingsw.client.clientlogic;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,56 +44,56 @@ public class BoardState {
     private List<String> oldConnectedPlayer;
 
 
-    public BoardState() {
-        this.connectedPlayers = new ArrayList<>();
-        this.oldConnectedPlayer = new ArrayList<>();
+    BoardState() {
+        connectedPlayers = new ArrayList<>();
+        oldConnectedPlayer = new ArrayList<>();
     }
 
-    public int getConfigurationID() {
+    int getConfigurationID() {
         return configurationID;
     }
 
-    public void setConfigurationID(int configurationID) {
+    void setConfigurationID(int configurationID) {
         this.configurationID = configurationID;
     }
 
-    public List<String> getAmmoCardsID() {
+    List<String> getAmmoCardsID() {
         return ammoCardsID;
     }
 
-    public void setAmmoCardsID(List<String> ammoCardsID) {
+    void setAmmoCardsID(List<String> ammoCardsID) {
         this.ammoCardsID = ammoCardsID;
     }
 
-    public List<String> getWeaponCardID() {
+    List<String> getWeaponCardID() {
         return weaponCardsID;
     }
 
-    public void setWeaponCardID(List<String> weaponCardID) {
+    void setWeaponCardID(List<String> weaponCardID) {
         weaponCardsID = weaponCardID;
     }
 
-    public boolean isIsWeaponDeckDrawable() {
+    boolean isIsWeaponDeckDrawable() {
         return isWeaponDeckDrawable;
     }
 
-    public void setIsWeaponDeckDrawable(boolean isWeaponDeckDrawable) {
+    void setIsWeaponDeckDrawable(boolean isWeaponDeckDrawable) {
         this.isWeaponDeckDrawable = isWeaponDeckDrawable;
     }
 
-    public List<List<String>> getKillshotTrack() {
+    List<List<String>> getKillshotTrack() {
         return killshotTrack;
     }
 
-    public void setKillshotTrack(List<List<String>> killshotTrack) {
+    void setKillshotTrack(List<List<String>> killshotTrack) {
         this.killshotTrack = killshotTrack;
     }
 
-    public boolean isIsActionTileFrenzy() {
+    boolean isIsActionTileFrenzy() {
         return isActionTileFrenzy;
     }
 
-    public void setIsActionTileFrenzy(boolean isActionTileFrenzy) {
+    void setIsActionTileFrenzy(boolean isActionTileFrenzy) {
         this.isActionTileFrenzy = isActionTileFrenzy;
     }
 
@@ -103,9 +102,9 @@ public class BoardState {
     }
 
     public void setConnectedPlayers(List<String> newStateConnectedPlayers) {
-        this.oldConnectedPlayer = new ArrayList<>();
-        oldConnectedPlayer.addAll(this.connectedPlayers);
-        this.connectedPlayers = newStateConnectedPlayers;
+        oldConnectedPlayer = new ArrayList<>();
+        oldConnectedPlayer.addAll(connectedPlayers);
+        connectedPlayers = newStateConnectedPlayers;
     }
 
     public List<String> getDisconnectedPlayers() {

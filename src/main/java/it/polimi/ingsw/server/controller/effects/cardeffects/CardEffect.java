@@ -203,7 +203,8 @@ public class CardEffect implements EffectInterface {
             /*The player chose an effect that can not be applied*/
             return;
         }
-        apply();
+        if (!availableTargets.isEmpty())
+            apply();
     }
 
     /**
@@ -566,7 +567,7 @@ public class CardEffect implements EffectInterface {
         /*Adding this element only if it has the right length and is not
         already present*/
         if (elements.size() >= min && elements.size() <= max && !collector.contains(elements)) {
-            collector.add(elements);//TODO check if duplicates are added
+            collector.add(elements);
         }
 
         /*Removing and calling combination for each element*/

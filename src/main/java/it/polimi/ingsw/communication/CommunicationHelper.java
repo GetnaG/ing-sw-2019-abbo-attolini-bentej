@@ -74,7 +74,7 @@ public class CommunicationHelper {
      * Handles the interaction using {@linkplain WeaponCard}.
      *
      * @param options  the options to choose from
-     * @param optional
+     * @param optional whether the user will be able to refuse this options
      * @return the options as lists of sequences of keys
      */
     public List<List<String>> askWeapon(List<? extends WeaponCard> options, boolean optional) {

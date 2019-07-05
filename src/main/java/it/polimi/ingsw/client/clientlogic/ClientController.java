@@ -63,8 +63,7 @@ public class ClientController extends UnicastRemoteObject implements RmiFromClie
      */
     @Override
     public void handleUpdates(Update[] updates) {
-        Arrays.asList(updates).forEach(model::handleUpdate);
-        view.notifyUpdatedState();//FIXME this is not MVC: the view subscribes to the model, which calls this method when necessary
+        model.handleUpdate(updates);
     }
 
     /**

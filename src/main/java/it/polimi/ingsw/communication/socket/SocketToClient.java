@@ -320,8 +320,8 @@ public class SocketToClient implements ToClientInterface {
      * {@inheritDoc}
      * This stops the execution until the clients sends an ack.
      *
-     * @throws ToClientException if there are problems with the socket
      * @param update
+     * @throws ToClientException if there are problems with the socket
      */
     @Override
     public void sendUpdate(UpdateBuilder update) throws ToClientException {

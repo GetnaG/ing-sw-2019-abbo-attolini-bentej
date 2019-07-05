@@ -13,6 +13,7 @@ import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -64,7 +65,7 @@ public class Grab implements EffectInterface {
 
             /*Getting the weapons in market*/
             List<WeaponCard> weaponAvailable = spawnSquare.getMarket().getCards();
-            weaponAvailable = weaponAvailable.stream().filter(w -> w != null).collect(Collectors.toList());
+            weaponAvailable = weaponAvailable.stream().filter(Objects::nonNull).collect(Collectors.toList());
 
             /*Adding the weapons that the player can buy to weaponsAffordable*/
             List<WeaponCard> weaponsAffordable = weaponAvailable.stream()

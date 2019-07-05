@@ -14,5 +14,6 @@ package it.polimi.ingsw.communication;
  * @author Abbo Giulio A.
  * @see ToClientInterface
  */
-public class ChoiceRefusedException extends Exception {//TODO
+public class ChoiceRefusedException extends Exception {
+    /*Simple exception with no details*/
 }

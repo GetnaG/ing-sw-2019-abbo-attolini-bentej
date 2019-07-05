@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.clientlogic.ClientController;
 import it.polimi.ingsw.client.clientlogic.MatchState;
 import it.polimi.ingsw.client.interaction.GUI.GUI;
 
-import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -148,6 +147,4 @@ public interface InteractionInterface {
      * @param model the model to set
      */
     void setModel(MatchState model);
-
-    void updateTimer(int seconds);
 }

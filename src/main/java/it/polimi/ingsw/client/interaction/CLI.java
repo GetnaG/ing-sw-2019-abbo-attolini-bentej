@@ -1163,11 +1163,4 @@ public class CLI implements InteractionInterface {
         askConnection();
     }
 
-    /**
-     * @param seconds updates the timer
-     */
-    public void updateTimer(int seconds) {
-        // does nothing
-    }
-
 }

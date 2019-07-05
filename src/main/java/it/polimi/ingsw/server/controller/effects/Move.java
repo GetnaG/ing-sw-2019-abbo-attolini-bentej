@@ -18,15 +18,16 @@ import java.util.List;
  */
 public class Move implements EffectInterface {
     /**
-     * Moves a player by one cell
-     * @param subjectPlayer     the player who is moving
-     * @param allTargets
-     * @param board             board of the game
-     * @param alredyTargeted    not used
-     * @param damageTargeted
+     * Moves a player by one cell.
+     *
+     * @param subjectPlayer   the subject of the turn
+     * @param allTargets      all the targets on the board
+     * @param board           the board used in the game
+     * @param alreadyTargeted the targets already hit in the player's turn
+     * @param damageTargeted  the targets that received damage
      */
     @Override
-    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alredyTargeted, List<Damageable> damageTargeted) throws ToClientException {
+    public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> alreadyTargeted, List<Damageable> damageTargeted) throws ToClientException {
         List<Square> neighboursBy1 = neighbours(subjectPlayer.getPosition());
 
         Square destination = subjectPlayer.getToClient().chooseDestination(neighboursBy1);
@@ -35,7 +36,7 @@ public class Move implements EffectInterface {
     }
 
     /**
-     * @return
+     * {@inheritDoc}
      */
     @Override
     public String getName() {
@@ -54,20 +55,21 @@ public class Move implements EffectInterface {
 
     /**
      * Gets walkable (i.e. there isn't a wall) neighbours of a square
+     *
      * @param square starting square
      * @return a list of walkable surrounding square
      */
-    private List<Square> neighbours(Square square){
-        if (square == null) return null;
+    private List<Square> neighbours(Square square) {
+        if (square == null) return new ArrayList<>();
         List<Square> neighbours = new ArrayList<>();
 
-        if(square.getNorth() != null && square.getNorthBorder() != Border.WALL)
+        if (square.getNorth() != null && square.getNorthBorder() != Border.WALL)
             neighbours.add(square.getNorth());
-        if(square.getEast() != null && square.getEastBorder() != Border.WALL)
+        if (square.getEast() != null && square.getEastBorder() != Border.WALL)
             neighbours.add(square.getEast());
-        if(square.getSouth() != null && square.getSouthBorder() != Border.WALL)
+        if (square.getSouth() != null && square.getSouthBorder() != Border.WALL)
             neighbours.add(square.getSouth());
-        if(square.getWest() != null && square.getWestBorder() != Border.WALL)
+        if (square.getWest() != null && square.getWestBorder() != Border.WALL)
             neighbours.add(square.getWest());
         neighbours.add(square);
 

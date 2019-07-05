@@ -78,6 +78,9 @@ public class MoveSelfEffect implements EffectInterface {
         return id;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<AmmoCube> getCost() {
         return new ArrayList<>(cost);

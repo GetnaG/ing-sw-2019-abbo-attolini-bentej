@@ -3,7 +3,6 @@ package it.polimi.ingsw.communication.protocol;
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * This represents an update element.
@@ -63,7 +62,7 @@ public class Update implements Serializable {
      * @param newValue the new value for the field
      */
     public Update(UpdateType type, String newValue) {
-        this (type, Collections.singletonList(newValue));
+        this(type, Collections.singletonList(newValue));
     }
 
     /**

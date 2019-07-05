@@ -4,7 +4,6 @@ import it.polimi.ingsw.client.interaction.InteractionFactory;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 
 import java.io.IOException;
-import java.rmi.RemoteException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -20,7 +19,7 @@ public class ClientMain {
     /**
      * The logger for the client.
      */
-    public static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
+    static final Logger LOG = Logger.getLogger(ClientMain.class.getName());
 
     /**
      * Starts the client with the specified interface.

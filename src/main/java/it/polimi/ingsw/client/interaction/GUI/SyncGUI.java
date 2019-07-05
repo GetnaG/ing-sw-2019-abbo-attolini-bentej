@@ -256,9 +256,4 @@ public class SyncGUI implements InteractionInterface {
     public void sendNotification(String notificationKey) {
         Platform.runLater(() -> GUI.sendNotification(notificationKey));
     }
-
-    public void updateTimer(int seconds) {
-        GUI.updateTimer(seconds);
-    }
-
 }

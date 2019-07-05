@@ -146,15 +146,11 @@ public class R {
      * @throws MissingResourceException if the font is not found
      */
     public static synchronized Font font(String key, double fontSize) {
-        /*
-        Put here code to add localization for images.
-        The code should parse the key, replacing the language token.
-         */
         try {
             return Font.loadFont(R.class.getResourceAsStream(FONTS_PATH + key), fontSize);
         } catch (NullPointerException e) {
-            throw new MissingResourceException("Could not find font " +
-                    "resource: " + key, R.class.getName(), key);
+            throw new MissingResourceException("Could not find font resource: " + key,
+                    R.class.getName(), key);
         }
     }
 }

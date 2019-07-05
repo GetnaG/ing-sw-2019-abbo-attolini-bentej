@@ -11,15 +11,13 @@ import it.polimi.ingsw.server.model.player.Player;
 
 import java.util.*;
 import java.util.function.Function;
-import java.util.function.IntBinaryOperator;
 import java.util.stream.Collectors;
 
 /**
- * Descrizione.//TODO
- * <p>
- * Dettagli.
+ * This class creates an {@link Update} with the info provided.
  *
  * @author Abbo Giulio A.
+ * @see Update
  */
 public class UpdateBuilder {
     /**
@@ -42,11 +40,11 @@ public class UpdateBuilder {
      */
     private List<WeaponCard> weaponsOnBoard;
     /**
-     * //TODO
+     * Whether the weapons can be drawn.
      */
     private Boolean weaponDrawable;
     /**
-     * //TODO
+     * The killshot thack on the board.
      */
     private List<? extends List<Player>> killshotTrack;
     /**
@@ -245,7 +243,9 @@ public class UpdateBuilder {
     }
 
     /**
-     * @return //TODO
+     * Builds the updates with the info provided.
+     *
+     * @return an array with the updates created
      */
     public Update[] build() {
         List<Update> updates = new ArrayList<>();
@@ -253,13 +253,19 @@ public class UpdateBuilder {
                 o -> Integer.toString(o));
         listAdd(updates, ammoCards, Update.UpdateType.AMMO_CARD_ARRAY,
                 o -> {
-                    try {return o.getId();}
-                    catch (NullPointerException e) {return "notSet";}
+                    try {
+                        return o.getId();
+                    } catch (NullPointerException e) {
+                        return "notSet";
+                    }
                 });
         listAdd(updates, weaponsOnBoard, Update.UpdateType.WEAPON_CARD_ARRAY,
                 o -> {
-                    try {return o.getId();}
-                    catch (NullPointerException e) {return "notSet";}
+                    try {
+                        return o.getId();
+                    } catch (NullPointerException e) {
+                        return "notSet";
+                    }
                 });
         singleAdd(updates, weaponDrawable, Update.UpdateType.IS_WEAPON_DECK_DRAWABLE,
                 o -> Boolean.toString(o));
@@ -271,8 +277,11 @@ public class UpdateBuilder {
                 o -> o);
         mapAdd(updates, playerPosition, Update.UpdateType.SQUARE_POSITION,
                 o -> {
-                    try {return Collections.singletonList(o.getID());}
-                    catch (NullPointerException e) {return Collections.singletonList("-1");}
+                    try {
+                        return Collections.singletonList(o.getID());
+                    } catch (NullPointerException e) {
+                        return Collections.singletonList("-1");
+                    }
                 });
         mapAdd(updates, activeCubes, Update.UpdateType.AMMO_CUBE_ARRAY,
                 o -> Arrays.asList(Integer.toString(AmmoCube.countBlue(o)),
@@ -303,13 +312,6 @@ public class UpdateBuilder {
         return updates.toArray(new Update[]{});
     }
 
-    /**
-     * @param updates //TODO
-     * @param field
-     * @param type
-     * @param nameMapper
-     * @param <T>
-     */
     private <T> void listAdd(List<? super Update> updates, List<T> field,
                              Update.UpdateType type,
                              Function<? super T, String> nameMapper) {
@@ -318,13 +320,6 @@ public class UpdateBuilder {
         updates.add(new Update(type, field.stream().map(nameMapper).collect(Collectors.toList())));
     }
 
-    /**
-     * @param updates //TODO
-     * @param field
-     * @param type
-     * @param nameMapper
-     * @param <T>
-     */
     private <T> void mapAdd(List<? super Update> updates, Map<? extends Player, T> field,
                             Update.UpdateType type,
                             Function<? super T, ? extends List<String>> nameMapper) {
@@ -333,14 +328,7 @@ public class UpdateBuilder {
         field.forEach((player, t) -> updates.add(new Update(type, nameMapper.apply(t), player.getName())));
     }
 
-    /**
-     * @param updates //TODO
-     * @param field
-     * @param type
-     * @param nameMapper
-     * @param <T>
-     */
-    private <T> void singleAdd(List<Update> updates, T field,
+    private <T> void singleAdd(List<? super Update> updates, T field,
                                Update.UpdateType type,
                                Function<T, String> nameMapper) {
         if (field == null)

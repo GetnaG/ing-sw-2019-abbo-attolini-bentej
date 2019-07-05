@@ -8,10 +8,6 @@ import java.util.List;
  */
 public class PlayerState {
     /**
-     * represents the player's position. It's bounded between 1 and the total number of players
-     */
-    private int turnPosition;
-    /**
      * represents the players's position on the board aka on witch square is located
      */
     private int squarePosition;
@@ -61,8 +57,7 @@ public class PlayerState {
      */
     private boolean isCurrent;
 
-    public PlayerState(int turnPosition, String nickname) {
-        this.turnPosition = turnPosition;
+    PlayerState(int turnPosition, String nickname) {
         squarePosition = -1;
         this.nickname = nickname;
         ammoCubes = new ArrayList<>();
@@ -81,23 +76,15 @@ public class PlayerState {
         return isCurrent;
     }
 
-    public void setCurrent(boolean current) {
+    void setCurrent(boolean current) {
         isCurrent = current;
-    }
-
-    public int getTurnPosition() {
-        return turnPosition;
-    }
-
-    public void setTurnPosition(int turnPosition) {
-        this.turnPosition = turnPosition;
     }
 
     public int getSquarePosition() {
         return squarePosition;
     }
 
-    public void setSquarePosition(int squarePosition) {
+    void setSquarePosition(int squarePosition) {
         this.squarePosition = squarePosition;
     }
 
@@ -113,7 +100,7 @@ public class PlayerState {
         return ammoCubes;
     }
 
-    public void setAmmoCubes(List<Integer> ammoCubes) {
+    void setAmmoCubes(List<Integer> ammoCubes) {
         this.ammoCubes = ammoCubes;
     }
 
@@ -121,7 +108,7 @@ public class PlayerState {
         return isPlayerBoardFrenzy;
     }
 
-    public void setPlayerBoardFrenzy(boolean playerBoardFrenzy) {
+    void setPlayerBoardFrenzy(boolean playerBoardFrenzy) {
         isPlayerBoardFrenzy = playerBoardFrenzy;
     }
 
@@ -129,7 +116,7 @@ public class PlayerState {
         return skullNumber;
     }
 
-    public void setSkullNumber(int skullNumber) {
+    void setSkullNumber(int skullNumber) {
         this.skullNumber = skullNumber;
     }
 
@@ -141,12 +128,12 @@ public class PlayerState {
         this.damage = damage;
     }
 
-    public void setMarks(List<String> damage) {
-        this.marks = damage;
-    }
-
     public List<String> getMarks() {
         return marks;
+    }
+
+    public void setMarks(List<String> damage) {
+        marks = damage;
     }
 
     public boolean isConnected() {
@@ -161,7 +148,7 @@ public class PlayerState {
         return loadedWeapons;
     }
 
-    public void setLoadedWeapons(List<String> loadedWeapons) {
+    void setLoadedWeapons(List<String> loadedWeapons) {
         this.loadedWeapons = loadedWeapons;
     }
 
@@ -177,7 +164,7 @@ public class PlayerState {
         return unloadedWeapons;
     }
 
-    public void setUnloadedWeapons(List<String> unloadedWeapons) {
+    void setUnloadedWeapons(List<String> unloadedWeapons) {
         this.unloadedWeapons = unloadedWeapons;
     }
 }

@@ -7,7 +7,6 @@ import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.player.Player;
-import it.polimi.ingsw.server.persistency.FromFile;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -63,7 +62,7 @@ public class TagbackEffect implements EffectInterface {
             if (d instanceof Player) {
                 Player player = (Player) d;
                 List<PowerupCard> tagbacks = player.getAllPowerup().stream()
-                        .filter(e -> e.isUsableOnReceivingDamage())
+                        .filter(PowerupCard::isUsableOnReceivingDamage)
                         .collect(Collectors.toList());
                 if (!tagbacks.isEmpty()) {
                     try {

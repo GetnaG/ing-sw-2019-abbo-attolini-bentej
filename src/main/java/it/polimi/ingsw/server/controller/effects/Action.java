@@ -72,7 +72,7 @@ public class Action implements Iterable<EffectInterface> {
      *                           player is suspended
      * @see EffectInterface#runEffect(Player, List, GameBoard, List, List)
      */
-    public void runAll(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> allTargeted, List<Damageable> damageTargeted) throws ToClientException {
+    void runAll(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> allTargeted, List<Damageable> damageTargeted) throws ToClientException {
         for (EffectInterface x : effects) {
             x.runEffect(subjectPlayer, allTargets, board, allTargeted, damageTargeted);
         }
@@ -94,7 +94,7 @@ public class Action implements Iterable<EffectInterface> {
      *
      * @return the cost of this action
      */
-    public List<AmmoCube> getTotalCost() {
+    List<AmmoCube> getTotalCost() {
         return totalCost;
     }
 

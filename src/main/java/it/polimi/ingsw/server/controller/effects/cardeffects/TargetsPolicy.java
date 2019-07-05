@@ -44,12 +44,12 @@ enum TargetsPolicy {
      * @throws AgainstRulesException if the valid targets can not be calculated
      */
     Set<Damageable> getValidTargets(Player subject,
-                                    Set<Damageable> allTargets,
+                                    Set<? extends Damageable> allTargets,
                                     List<? extends Damageable> alreadyTargeted,
                                     GameBoard board) throws AgainstRulesException {
 
         Set<Damageable> valid = getAllValidTargets(subject, new HashSet<>(allTargets),
-                    alreadyTargeted, board);
+                alreadyTargeted, board);
         valid.remove(subject);
         return valid;
     }

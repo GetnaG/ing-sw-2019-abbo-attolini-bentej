@@ -410,6 +410,7 @@ public class User implements ToClientInterface {
      * {@inheritDoc}
      * <p>
      * The client will have {@linkplain #waitingTime} seconds to send an ack.
+     *
      * @param update
      */
     @Override

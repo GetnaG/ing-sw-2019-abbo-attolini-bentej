@@ -1,7 +1,5 @@
 package it.polimi.ingsw.client.clientlogic;
 
-import it.polimi.ingsw.client.interaction.GUI.GUI;
-import it.polimi.ingsw.client.interaction.GUI.MapPane;
 import it.polimi.ingsw.client.interaction.InteractionInterface;
 import it.polimi.ingsw.communication.protocol.Update;
 
@@ -28,8 +26,8 @@ public class MatchState {
     private int timerDuration;
 
     public MatchState() {
-        this.playersState = new ArrayList<>();
-        this.boardState = new BoardState();
+        playersState = new ArrayList<>();
+        boardState = new BoardState();
         subscribedInteractionInterfaces = new ArrayList<>();
         timerDuration = -1;
     }
@@ -38,7 +36,14 @@ public class MatchState {
         subscribedInteractionInterfaces.add(interactionInterface);
     }
 
-    public void handleUpdate(Update update) {
+    public void handleUpdate(Update[] updates) {
+        for (Update update : updates) {
+            handleUpdate(update);
+        }
+        subscribedInteractionInterfaces.forEach(InteractionInterface::notifyUpdatedState);
+    }
+
+    private void handleUpdate(Update update) {
         switch (update.getType()) {
             case CONFIGURATION_ID:
                 boardState.setConfigurationID(Integer.parseInt(update.getNewValue().get(0)));
@@ -57,7 +62,7 @@ public class MatchState {
                 boardState.setKillshotTrack(
                         update.getNewValue().stream()
                                 .map(s -> s.split(Update.SEPARATOR))
-                                .map(array -> Arrays.asList(array))
+                                .map(Arrays::asList)
                                 .collect(Collectors.toList()));
                 break;
             case IS_ACTION_TILE_FRENZY:
@@ -69,7 +74,6 @@ public class MatchState {
                     if (playersState.stream().noneMatch(state -> state.getNickname().equals(s)))
                         playersState.add(new PlayerState(update.getNewValue().indexOf(s), s));
                 });
-                playersState.forEach(p -> p.setTurnPosition(update.getNewValue().indexOf(p.getNickname())));
                 break;
             case SQUARE_POSITION:
                 getReceiverState(update).setSquarePosition(Integer.parseInt(update.getNewValue().get(0)));
@@ -116,8 +120,6 @@ public class MatchState {
             default:
                 // nothing
         }
-
-        subscribedInteractionInterfaces.forEach(InteractionInterface::notifyUpdatedState);
     }
 
     private PlayerState getReceiverState(Update update) {
