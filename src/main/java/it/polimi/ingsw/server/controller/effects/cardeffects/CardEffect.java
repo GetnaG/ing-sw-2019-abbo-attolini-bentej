@@ -351,7 +351,6 @@ public class CardEffect implements EffectInterface {
     private void applySecondarySingle(Square originalPosition) {
         Square position = QuirkPolicy.ORIGINAL_POSITION.isIn(quirks) ?
                 originalPosition : availableTargets.iterator().next().getPosition();
-
         if (QuirkPolicy.ROOM.isIn(quirks))
 
             /*Targeting those in the same room of the target*/
@@ -525,7 +524,10 @@ public class CardEffect implements EffectInterface {
                 return false;
             return !QuirkPolicy.SINGLE_DIRECTION.isIn(quirks) ||
                     c.size() != 2 ||
-                    c.get(0).getPosition().straight(c.get(1).getPosition(), QuirkPolicy.IGNORE_WALLS.isIn(quirks));
+                    subject.getPosition().straight(
+                            c.get(0).getPosition(),
+                            c.get(1).getPosition(),
+                            QuirkPolicy.IGNORE_WALLS.isIn(quirks));
         }).collect(Collectors.toList());
 
         /*Throwing an exception if there are not enough targets*/
@@ -591,8 +593,7 @@ public class CardEffect implements EffectInterface {
         damaged.giveDamage(damage);
         if (!alreadyDamaged.contains(damaged))
             alreadyDamaged.add(damaged);
-        if (!alreadyTargeted.contains(damaged))
-            alreadyTargeted.add(damaged);
+        alreadyTargeted.add(damaged);
     }
 
     /**
@@ -608,8 +609,7 @@ public class CardEffect implements EffectInterface {
             marks.add(subject);
         }
         damaged.giveMark(marks);
-        if (!alreadyTargeted.contains(damaged))
-            alreadyTargeted.add(damaged);
+        alreadyTargeted.add(damaged);
     }
 
     /**

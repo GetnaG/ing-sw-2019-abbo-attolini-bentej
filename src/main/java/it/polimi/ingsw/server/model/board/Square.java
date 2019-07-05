@@ -5,6 +5,8 @@ import it.polimi.ingsw.server.model.cards.AmmoCard;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * Defines the structure of a square.
@@ -95,8 +97,9 @@ public class Square {
 
     /**
      * Constructor of a physical square. By default all, a square is isolated. This means that its borders are all walls.
-     * @param squareColor  color of square
-     * @param card AmmoCard associated with this square (in case of a deathmatch mode).
+     *
+     * @param squareColor color of square
+     * @param card        AmmoCard associated with this square (in case of a deathmatch mode).
      */
     public Square(SquareColor squareColor, AmmoCard card) {
         this.squareColor = squareColor;
@@ -135,6 +138,14 @@ public class Square {
      * Default constructor of an abstract square
      */
     public Square() {
+    }
+
+    public static Square getSquare(List<Room> rooms, int idSquare) {
+        for (Room room : rooms)
+            for (Square s : room.getAllSquares())
+                if (Integer.parseInt(s.getID()) == idSquare)
+                    return s;
+        return null;
     }
 
     public Square getNorth() {
@@ -254,7 +265,6 @@ public class Square {
         this.ID = ID;
     }
 
-
     /**
      * Gets the Turret in this Square or null if the game mode is not Turret Mode.
      *
@@ -327,9 +337,6 @@ public class Square {
         return cardinals;
     }
 
-
-
-
     /**
      * @return returns a list of all the visible squares
      * the calling square is always visible
@@ -372,6 +379,56 @@ public class Square {
     @Override
     public int hashCode() {
         return Objects.hash(ID, idNorth, idSouth, idEast, idWest, squareColor, northBorder, southBorder, eastBorder, westBorder);
+    }
+
+    /**
+     * Returns true if the squares are in the same verse and direction of this.
+     * The starting point is this: the squares provided can not be,
+     * for example, one left and one right of this.
+     *
+     * @param a          the first square to evaluate
+     * @param b          the second square to evaluate
+     * @param ignoreWall whether the walls must be ignored
+     * @return true if the three squares are in the same verse and direction
+     */
+    public boolean straight(Square a, Square b, boolean ignoreWall) {
+        Square from = this;
+        if (find(a, from, ignoreWall, Square::getNorth, Square::getNorthBorder) &&
+                find(b, from, ignoreWall, Square::getNorth, Square::getNorthBorder))
+            return true;
+        if (find(a, from, ignoreWall, Square::getSouth, Square::getSouthBorder) &&
+                find(b, from, ignoreWall, Square::getSouth, Square::getSouthBorder))
+            return true;
+        if (find(a, from, ignoreWall, Square::getEast, Square::getEastBorder) &&
+                find(b, from, ignoreWall, Square::getEast, Square::getEastBorder))
+            return true;
+        return find(a, from, ignoreWall, Square::getWest, Square::getWestBorder) &&
+                find(b, from, ignoreWall, Square::getWest, Square::getWestBorder);
+    }
+
+    /**
+     * Returns true if the {@code search} square can be found from {@code from} square.
+     * The searching happens through the provided functions.
+     *
+     * @param search       the square to find
+     * @param from         the starting point
+     * @param ignoreWall   whether the walls must be ignored
+     * @param squareGetter a function that returns the next square
+     * @param borderGetter a function that returns the border between from
+     *                     and the next element
+     * @return true if the square is found
+     */
+    private boolean find(Square search, Square from, boolean ignoreWall,
+                         UnaryOperator<Square> squareGetter,
+                         Function<? super Square, Border> borderGetter) {
+        if (search.equals(from))
+            return true;
+        while (squareGetter.apply(from) != null && (ignoreWall || borderGetter.apply(from) != Border.WALL)) {
+            if (squareGetter.apply(from).equals(search))
+                return true;
+            from = squareGetter.apply(from);
+        }
+        return false;
     }
 
     /**
@@ -420,13 +477,6 @@ public class Square {
         return false;
 
     }
-/*
-    public void squareBuilder(Square n, Square e, Border nb, Border eb){
-        if(n != null) this.setNorth(n);
-        if(e != null) this.setEast(e);
-        if(nb != null) this.setNorthBorder(nb);
-        if(eb != null) this.setEastBorder(eb);
-    }*/
 
     public void refresh(List<Room> rooms) {//TODO
         if (rooms == null || rooms.isEmpty()) return;
@@ -435,14 +485,6 @@ public class Square {
         this.east = getSquare(rooms, idEast);
         this.south = getSquare(rooms, idSouth);
         this.west = getSquare(rooms, idWest);
-    }
-
-    public static Square getSquare(List<Room> rooms, int idSquare) {
-        for (Room room : rooms)
-            for (Square s : room.getAllSquares())
-                if (Integer.parseInt(s.getID()) == idSquare)
-                    return s;
-        return null;
     }
 
     public int getIdNorth() {
