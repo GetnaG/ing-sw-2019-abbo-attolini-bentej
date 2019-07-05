@@ -115,7 +115,6 @@ public class MatchState {
                 break;
             case GAME_OVER:
                 winners = update.getNewValue();
-                //TODO the provided list contains the winners in the right order
                 break;
             case CURRENT_PLAYER:
                 playersState.forEach(playerState -> playerState.setCurrent(playerState.getNickname().equals(update.getNewValue().get(0))));

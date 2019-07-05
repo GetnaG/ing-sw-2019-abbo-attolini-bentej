@@ -197,6 +197,5 @@ class CLITest {
     }
 
     private class MockModel extends MatchState {
-        //TODO
     }
 }
