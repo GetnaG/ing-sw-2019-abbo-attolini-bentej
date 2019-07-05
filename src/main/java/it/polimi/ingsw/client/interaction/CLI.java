@@ -443,9 +443,9 @@ public class CLI implements InteractionInterface {
             handlingQuestion = false;
             inputMon.notifyAll();
 
-            Properties properties = R.properties("network");
+            Properties properties = R.properties("settings");
             String defaultHost = properties.getProperty("host");
-            String defaultPort = properties.getProperty("port");
+            String defaultPort = properties.getProperty("clientSocketPort");
 
             if (requestKey.equals("chooseIP") && input.length() == 0)
                 return defaultHost;

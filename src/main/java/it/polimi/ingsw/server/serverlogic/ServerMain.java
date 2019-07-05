@@ -1,6 +1,7 @@
 package it.polimi.ingsw.server.serverlogic;
 
 import it.polimi.ingsw.client.clientlogic.ClientMain;
+import it.polimi.ingsw.client.resources.R;
 import it.polimi.ingsw.communication.User;
 import it.polimi.ingsw.communication.rmi.RmiInversion;
 import it.polimi.ingsw.communication.socket.SocketDispatcher;
@@ -76,14 +77,10 @@ public class ServerMain {
      *             waiting room> <seconds for user choice>
      */
     public static void main(String[] args) {
-        if (args.length != 4) {
-            LOG.severe("Usage: java ServerMain <socketPort> <rmiPort> <seconds for waiting room> <seconds for user choice>");
-            System.exit(1);
-        }
 
-        secondsWaitingRoom = Integer.parseInt(args[2]);
-        User.setWaitingTime(Integer.parseInt(args[3]));
-        new ServerMain(Integer.parseInt(args[0]), Integer.parseInt(args[1]));
+        secondsWaitingRoom = Integer.parseInt(R.properties("settings").getProperty("secondsForWaitingRoom"));
+        User.setWaitingTime(Integer.parseInt(R.properties("settings").getProperty("secondsForUserChoice")));
+        new ServerMain(Integer.parseInt(R.properties("settings").getProperty("serverSocketPort")), Integer.parseInt(R.properties("settings").getProperty("rmiPort")));
     }
 
     /**

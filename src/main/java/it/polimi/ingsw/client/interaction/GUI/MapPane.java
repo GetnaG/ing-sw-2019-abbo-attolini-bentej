@@ -165,6 +165,7 @@ public class MapPane extends GridPane {
                     List<String> weaponCardsMarketKeys = GUI.getModel().getWeaponsCardsID().stream().filter(s -> !s.equals("notSet")).collect(Collectors.toList());
                     indexStart = indexStart % weaponCardsMarketKeys.size();
                     int indexEnd = (indexStart + 3) % weaponCardsMarketKeys.size();
+                    if (indexEnd == 0) indexEnd = 9;
                     if (indexEnd > indexStart)
                         GamePane.updateRightGeneralTag(weaponCardsMarketKeys.subList(indexStart, indexEnd), "The square contains:");
                 }

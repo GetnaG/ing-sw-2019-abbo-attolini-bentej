@@ -99,11 +99,11 @@ public class LoginPane extends StackPane {
         loginButton.setOnAction(e -> {
             GUI.setNickname(inputUsername.getText());
             // telling the controller the connection type
-            Properties properties = R.properties("network");
+            Properties properties = R.properties("settings");
             String host = properties.getProperty("host");
             if (socketRadio.isSelected()) {
                 try {
-                    int port = Integer.parseInt(properties.getProperty("port"));
+                    int port = Integer.parseInt(properties.getProperty("serverSocketPort"));
                     controllerGUI.setSocket(host, port);
                 } catch (IOException ex) {
                     ex.printStackTrace();

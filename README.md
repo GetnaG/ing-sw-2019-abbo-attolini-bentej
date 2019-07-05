@@ -25,9 +25,9 @@
 -->
 
 ## Use Guide
-###Set network settings
-Go to `./src/main/resources/properties` and open the `network.properties` file.  <br>
-Here you can set your preferred network settings. <br>
+###Settingss
+Go to `./src/main/resources/properties` and open the `settings.properties` file.  <br>
+Here you can set your preferred network and game settings. <br>
 ###Build 
 Run the following line usign maven to build the server and client jar: <br>
 `mvn -Dmaven.test.skip=true package  -quiet` <br>
@@ -35,5 +35,7 @@ Run the following line usign maven to build the server and client jar: <br>
 To run the client: <br>
 GUI : `java -jar ./target/client-jar-with-dependencies.jar gui` <br>
 CLI : `java -jar ./target/client-jar-with-dependencies.jar cli`  
-`  
+`  <br>
+To run the server: <br>
+`java -jar ./target/server-jar-with-dependencies.jar`
 
