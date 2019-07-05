@@ -242,7 +242,7 @@ public class GameBoard implements ReplaceListener {
      */
     private void radiusValidDestinations(Square start, int maxDistance, List<? super Square> alreadyVisitedSquares) {
 
-        if (maxDistance == 0) return;
+        if (maxDistance == 0 || start == null) return;
 
         if (start.getNorthBorder() != Border.WALL && maxDistance > 0) {
             if (!alreadyVisitedSquares.contains(start.getNorth())) {

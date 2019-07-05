@@ -45,6 +45,7 @@ public class PowerupDeck implements AbstractDeck {
         if (deck.isEmpty()) {
             deck = board.getDiscardedPowerups();
             Collections.shuffle(deck);
+            if (deck.isEmpty()) deck = FromFile.powerups().getAll();
         }
 
         PowerupCard drawnCard = deck.get(deck.size() - 1);

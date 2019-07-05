@@ -99,11 +99,10 @@ public class LoginPane extends StackPane {
         loginButton.setOnAction(e -> {
             GUI.setNickname(inputUsername.getText());
             // telling the controller the connection type
+            Properties properties = R.properties("network");
+            String host = properties.getProperty("host");
             if (socketRadio.isSelected()) {
-
                 try {
-                    Properties properties = R.properties("network");
-                    String host = properties.getProperty("host");
                     int port = Integer.parseInt(properties.getProperty("port"));
                     controllerGUI.setSocket(host, port);
                 } catch (IOException ex) {
@@ -113,7 +112,7 @@ public class LoginPane extends StackPane {
 
             } else {
                 try {
-                    controllerGUI.setRmi("localhost");//FIXME
+                    controllerGUI.setRmi(host);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

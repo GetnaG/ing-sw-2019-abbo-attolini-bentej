@@ -37,6 +37,7 @@ public class GamePane extends StackPane {
     private static StackPane playerBoard;
     private static StackPane killshotTrack;
     private static Node actionTile;
+    private static GridPane playerBoardGrid;
     /**
      * VBox used to store the WeaponCards
      */
@@ -224,19 +225,21 @@ public class GamePane extends StackPane {
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
-        GridPane gp = new GridPane();
+        playerBoardGrid = new GridPane();
         stack.getChildren().add(0, iv);
-        stack.getChildren().add(1, gp);
-        updatePlayerBoard(gp, playerState.getDamage(), playerState.getSkullNumber());
+        stack.getChildren().add(1, playerBoardGrid);
+
+        playerBoardGrid.getColumnConstraints().removeAll(playerBoardGrid.getColumnConstraints());
+        playerBoardGrid.getRowConstraints().removeAll(playerBoardGrid.getRowConstraints());
         for (int i = 0; i < 13; i++) {
             if (i == 0)
-                gp.getColumnConstraints().add(new ColumnConstraints(48)); // column i is 49 wide
-            else gp.getColumnConstraints().add(new ColumnConstraints(35));
+                playerBoardGrid.getColumnConstraints().add(new ColumnConstraints(48)); // column i is 49 wide
+            else playerBoardGrid.getColumnConstraints().add(new ColumnConstraints(35));
         }
         for (int i = 0; i < 3; i++) {
-            gp.getRowConstraints().add(new RowConstraints(70));
+            playerBoardGrid.getRowConstraints().add(new RowConstraints(70));
         }
-
+        updatePlayerBoard(playerBoardGrid, playerState.getDamage(), playerState.getSkullNumber());
         return stack;
     }
 
@@ -283,9 +286,19 @@ public class GamePane extends StackPane {
 
     private static void updatePlayerBoard(GridPane grid, List<String> playersDamage, int timesKilled) {
         grid.getChildren().removeAll(grid.getChildren());
-        grid.getColumnConstraints().removeAll(grid.getColumnConstraints());
+        playerBoardGrid.getColumnConstraints().removeAll(playerBoardGrid.getColumnConstraints());
+        playerBoardGrid.getRowConstraints().removeAll(playerBoardGrid.getRowConstraints());
+        for (int i = 0; i < 13; i++) {
+            if (i == 0)
+                playerBoardGrid.getColumnConstraints().add(new ColumnConstraints(48)); // column i is 49 wide
+            else playerBoardGrid.getColumnConstraints().add(new ColumnConstraints(35));
+        }
+        for (int i = 0; i < 3; i++) {
+            playerBoardGrid.getRowConstraints().add(new RowConstraints(70));
+        }
+
         for (int i = 0; i < playersDamage.size(); i++) {
-            Text text = new Text(playersDamage.get(i) + "    ");
+            Text text = new Text(playersDamage.get(i) + "   ");
             text.setFill(Color.WHITE);
             text.setFont(new Font("Arial", 20));
             grid.add(text, i, 1);
@@ -560,8 +573,7 @@ public class GamePane extends StackPane {
                     .filter(s -> s.getNickname().equals(text.getText()))
                     .collect(Collectors.toList()).get(0);
             updateWeaponCards(hooveredPlayerState.getLoadedWeapons(), hooveredPlayerState.getUnloadedWeapons());
-            updatePowerupCards(hooveredPlayerState.getPowerups(), R.string("powerup"), true);
-            updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
+            updatePlayerBoard(playerBoardGrid,
                     hooveredPlayerState.getDamage(),
                     hooveredPlayerState.getSkullNumber());
         });
@@ -571,7 +583,7 @@ public class GamePane extends StackPane {
                     .collect(Collectors.toList()).get(0);
             updateWeaponCards(clientPlayerState.getLoadedWeapons(), clientPlayerState.getUnloadedWeapons());
             updatePowerupCards(clientPlayerState.getPowerups(), R.string("powerup"), true);
-            updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
+            updatePlayerBoard(playerBoardGrid,
                     clientPlayerState.getDamage(),
                     clientPlayerState.getSkullNumber());
         });
@@ -593,6 +605,10 @@ public class GamePane extends StackPane {
         if (killshotTrack != null)
             updateKillshotTrack((GridPane) killshotTrack.getChildren().get(1), GUI.getModel().getKillshotTrack());
         map.update();
+        if (!GUI.getModel().getWinners().isEmpty()) {
+            questionText.setText("The winner is " + GUI.getModel().getWinners().get(0));
+            questionText.setFont(R.font("AllertaStencil-Regular.ttf", 40));
+        }
     }
 
     /**

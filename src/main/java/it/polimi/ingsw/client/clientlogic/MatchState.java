@@ -24,12 +24,14 @@ public class MatchState {
     private BoardState boardState;
     private List<InteractionInterface> subscribedInteractionInterfaces;
     private int timerDuration;
+    private List<String> winners;
 
     public MatchState() {
         playersState = new ArrayList<>();
         boardState = new BoardState();
         subscribedInteractionInterfaces = new ArrayList<>();
         timerDuration = -1;
+        winners = new ArrayList<>();
     }
 
     public void subscribe(InteractionInterface interactionInterface) {
@@ -112,6 +114,7 @@ public class MatchState {
                 timerDuration = Integer.parseInt(update.getNewValue().get(0));
                 break;
             case GAME_OVER:
+                winners = update.getNewValue();
                 //TODO the provided list contains the winners in the right order
                 break;
             case CURRENT_PLAYER:
@@ -158,5 +161,9 @@ public class MatchState {
 
     public int getTimerDuration() {
         return timerDuration;
+    }
+
+    public List<String> getWinners() {
+        return winners;
     }
 }
