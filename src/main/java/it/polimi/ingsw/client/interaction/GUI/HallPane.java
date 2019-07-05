@@ -93,7 +93,7 @@ public class HallPane extends StackPane {
         // Setting text proprieties
         topText.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         topText.setFill(Color.WHITE);
-        logText.setFont(R.font("AllertaStencil-Regular.ttf", 20));
+        logText.setFont(R.font("AllertaStencil-Regular.ttf", 15));
         logText.setFill(Color.WHITE);
         textUserBox.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         textUserBox.setFill(Color.WHITE);
