@@ -115,31 +115,16 @@ public class GameBoard implements ReplaceListener {
         if (getRoom(departure) == getRoom(destination))
             return true;
 
-        else {
-            if (departure.getNorthBorder() != Border.WALL && departure.getNorthBorder() != null) {
-                if (getRoom(departure.getNorth()) == getRoom(destination) || departure.getNorthBorder() == Border.CORRIDOR)
-                    return true;
+        if (departure.getNorthBorder() == Border.DOOR && getRoom(departure.getNorth()) == getRoom(destination))
+            return true;
 
-            }
+        if (departure.getSouthBorder() == Border.DOOR && getRoom(departure.getSouth()) == getRoom(destination))
+            return true;
 
+        if (departure.getEastBorder() == Border.DOOR && getRoom(departure.getEast()) == getRoom(destination))
+            return true;
 
-            if (departure.getSouthBorder() != Border.WALL && departure.getSouthBorder() != null) {
-                if (getRoom(departure.getSouth()) == getRoom(destination) || departure.getSouthBorder() == Border.CORRIDOR)
-                    return true;
-            }
-
-            if (departure.getEastBorder() != Border.WALL && departure.getEastBorder() != null) {
-                if (getRoom(departure.getEast()) == getRoom(destination) || departure.getEastBorder() == Border.CORRIDOR)
-                    return true;
-            }
-
-            if (departure.getWestBorder() != Border.WALL && departure.getWestBorder() != null) {
-                if (getRoom(departure.getWest()) == getRoom(destination) || departure.getWestBorder() == Border.CORRIDOR)
-                    return true;
-            }
-        }
-
-        return false;
+        return departure.getWestBorder() == Border.DOOR && getRoom(departure.getWest()) == getRoom(destination);
     }
 
     public Square getSquare(int idSquare) {
@@ -499,7 +484,7 @@ public class GameBoard implements ReplaceListener {
      * @return a set presenting the players in the given square
      */
     public Collection<Damageable> getPlayerInSquare(Square square, Collection<? extends Damageable> players) {
-        return players.stream().filter(p -> p.getPosition()!= null && p.getPosition().equals(square)).collect(Collectors.toSet());
+        return players.stream().filter(p -> p.getPosition() != null && p.getPosition().equals(square)).collect(Collectors.toSet());
     }
 
     /**

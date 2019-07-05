@@ -50,6 +50,9 @@ public class TagbackEffect implements EffectInterface {
                           List<Damageable> allTargeted, List<Damageable> damageTargeted)
             throws ToClientException {
         for (Damageable d : damageTargeted) {
+            if (!board.checkVisible(d.getPosition(), subjectPlayer.getPosition()))
+                /*The damageable does not see the subject: skipping*/
+                continue;
 
             /* Only Players can use a tagback.
              * This could have been solved by adding yet another parameter to
@@ -60,7 +63,7 @@ public class TagbackEffect implements EffectInterface {
             if (d instanceof Player) {
                 Player player = (Player) d;
                 List<PowerupCard> tagbacks = player.getAllPowerup().stream()
-                        .filter(e -> e.equals(FromFile.powerups().get("tagbackGrenade")))
+                        .filter(e -> e.isUsableOnReceivingDamage())
                         .collect(Collectors.toList());
                 if (!tagbacks.isEmpty()) {
                     try {

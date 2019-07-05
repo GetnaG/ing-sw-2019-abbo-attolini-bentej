@@ -1128,10 +1128,15 @@ public class CLI implements InteractionInterface {
                 builder.append(next);
             }
 
-            while (iterator.hasNext())
-                builder.append(R.string("choiceSeparator"))
-                        .append(SPACE)
-                        .append(R.string(iterator.next()));
+            while (iterator.hasNext()) {
+                builder.append(R.string("choiceSeparator")).append(SPACE);
+                try {
+                    builder.append(R.string(iterator.next()));
+                } catch (MissingResourceException e) {
+                    /*No resource found: printing the key*/
+                    builder.append(next);
+                }
+            }
             builder.append(lineSeparator);
         }
         return builder;
