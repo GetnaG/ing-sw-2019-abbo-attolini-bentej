@@ -253,9 +253,10 @@ public class GameBoard implements ReplaceListener {
             return validDestinations;
         } else {
             // Get all squares in the radius defined by maxDistance
+            validDestinations.add(start);
             radiusValidDestinations(start, maxDistance, validDestinations);
             validDestinations.remove(start);
-
+            validDestinations.removeIf(Objects::isNull);
             return validDestinations;
 
         }
@@ -272,30 +273,29 @@ public class GameBoard implements ReplaceListener {
         if (maxDistance == 0) return;
 
         if (start.getNorthBorder() != Border.WALL && maxDistance > 0) {
-            if (alreadyVisitedSquares.contains(start.getNorth()))
-                return;
-            alreadyVisitedSquares.add(start.getNorth());
-            radiusValidDestinations(start.getNorth(), maxDistance - 1, alreadyVisitedSquares);
+            if (!alreadyVisitedSquares.contains(start.getNorth())) {
+                alreadyVisitedSquares.add(start.getNorth());
+                radiusValidDestinations(start.getNorth(), maxDistance - 1, alreadyVisitedSquares);
+            }
         }
         if (start.getEastBorder() != Border.WALL && maxDistance > 0) {
-            if (alreadyVisitedSquares.contains(start.getEast()))
-                return;
-            alreadyVisitedSquares.add(start.getEast());
-            radiusValidDestinations(start.getEast(), maxDistance - 1, alreadyVisitedSquares);
+            if (!alreadyVisitedSquares.contains(start.getEast())) {
+                alreadyVisitedSquares.add(start.getEast());
+                radiusValidDestinations(start.getEast(), maxDistance - 1, alreadyVisitedSquares);
+            }
         }
         if (start.getSouthBorder() != Border.WALL && maxDistance > 0) {
-            if (alreadyVisitedSquares.contains(start.getSouth()))
-                return;
-            alreadyVisitedSquares.add(start.getSouth());
-            radiusValidDestinations(start.getSouth(), maxDistance - 1, alreadyVisitedSquares);
+            if (!alreadyVisitedSquares.contains(start.getSouth())) {
+                alreadyVisitedSquares.add(start.getSouth());
+                radiusValidDestinations(start.getSouth(), maxDistance - 1, alreadyVisitedSquares);
+            }
         }
         if (start.getWestBorder() != Border.WALL && maxDistance > 0) {
-            if (alreadyVisitedSquares.contains(start.getWest()))
-                return;
-            alreadyVisitedSquares.add(start.getWest());
-            radiusValidDestinations(start.getWest(), maxDistance - 1, alreadyVisitedSquares);
+            if (!alreadyVisitedSquares.contains(start.getWest())) {
+                alreadyVisitedSquares.add(start.getWest());
+                radiusValidDestinations(start.getWest(), maxDistance - 1, alreadyVisitedSquares);
+            }
         }
-
     }
 
     /**
@@ -426,12 +426,12 @@ public class GameBoard implements ReplaceListener {
     }
 
     /**
-     * Gets the minimum distance between two squares, ignoring the wall according to the {@code wallSensitive} parameter.
+     * Gets the minimum distance between two squares, ignoring the wall according to the {@code ignoreWalls} parameter.
      *
-     * @param wallSensitive boolean indicating if the path should ignore walls or not
+     * @param ignoreWalls boolean indicating if the path should ignore walls or not
      * @return an int representing the minimum distance between two squares.
      */
-    public int minimumDistance(Square start, Square end, Boolean wallSensitive) {  //TODO risolvere il loop
+    public int minimumDistance(Square start, Square end, Boolean ignoreWalls) {  //TODO risolvere il loop
         if (start.equals(end) || start == null || end == null)
             return 0;
 
@@ -443,7 +443,7 @@ public class GameBoard implements ReplaceListener {
         while (!objects.contains(end)) {
             dist++;
             for (Square s : objects) {
-                neighbours.addAll(getNeighbours(s, wallSensitive));
+                neighbours.addAll(getNeighbours(s, ignoreWalls));
             }
             objects.addAll(neighbours);
             neighbours.clear();
@@ -475,18 +475,18 @@ public class GameBoard implements ReplaceListener {
      * @param s square
      * @return
      */
-    private List<Square> getNeighbours(Square s, Boolean wallSensitive) {
+    private List<Square> getNeighbours(Square s, Boolean ignoreWalls) {
         if (s == null) return new ArrayList<>();
 
         List<Square> squares = new ArrayList<>();
 
-        if (s.getNorthBorder() != Border.WALL || !wallSensitive)
+        if (ignoreWalls || s.getNorthBorder() != Border.WALL)
             squares.add(s.getNorth());
-        if (s.getEastBorder() != Border.WALL || !wallSensitive)
+        if (ignoreWalls || s.getEastBorder() != Border.WALL)
             squares.add(s.getEast());
-        if (s.getSouthBorder() != Border.WALL || !wallSensitive)
+        if (ignoreWalls || s.getSouthBorder() != Border.WALL)
             squares.add(s.getSouth());
-        if (s.getWestBorder() != Border.WALL || !wallSensitive)
+        if (ignoreWalls || s.getWestBorder() != Border.WALL)
             squares.add(s.getWest());
 
         return squares.stream().filter(e -> e != null).collect(Collectors.toList());

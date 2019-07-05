@@ -510,6 +510,6 @@
     "targetsPolicy": "ALL",
     "squaresPolicy": "ALL",
     "squaresDistance": 2,
-    "quirks": ["SINGLE_DIRECTION"]
+    "quirks": ["SINGLE_DIRECTION_NO_TARGETS"]
   }
 ]

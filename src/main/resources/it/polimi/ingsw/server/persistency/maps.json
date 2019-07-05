@@ -231,7 +231,7 @@
         "northBorder": "DOOR",
         "southBorder": "WALL",
         "eastBorder": "CORRIDOR",
-        "westBorder": "CORRIDOR"
+        "westBorder": "WALL"
       }
     },
     {

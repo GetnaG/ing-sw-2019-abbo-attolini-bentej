@@ -420,7 +420,7 @@ public class CardEffect implements EffectInterface {
 
         /*Taking into consideration whether the squares must be in a single
         direction*/
-        return QuirkPolicy.SINGLE_DIRECTION.isIn(quirks) ?
+        return (QuirkPolicy.SINGLE_DIRECTION.isIn(quirks) || QuirkPolicy.SINGLE_DIRECTION_NO_TARGETS.isIn(quirks)) ?
                 acceptableDistance && a.straight(b, QuirkPolicy.IGNORE_WALLS.isIn(quirks)) : acceptableDistance;
     }
 
@@ -522,7 +522,7 @@ public class CardEffect implements EffectInterface {
                     c.stream().map(Damageable::getPosition)
                             .distinct().count() != c.size())
                 return false;
-            return !QuirkPolicy.SINGLE_DIRECTION.isIn(quirks) ||
+            return (!QuirkPolicy.SINGLE_DIRECTION.isIn(quirks) && !QuirkPolicy.SINGLE_DIRECTION_NO_TARGETS.isIn(quirks)) ||
                     c.size() != 2 ||
                     subject.getPosition().straight(
                             c.get(0).getPosition(),
@@ -634,7 +634,7 @@ public class CardEffect implements EffectInterface {
                 squaresPolicy != null &&
                 squaresDistance >= 0 &&
                 quirks != null &&
-                (!QuirkPolicy.SINGLE_DIRECTION.isIn(quirks)
+                ((!QuirkPolicy.SINGLE_DIRECTION.isIn(quirks) && !QuirkPolicy.SINGLE_DIRECTION_NO_TARGETS.isIn(quirks))
                         || targetsNumber.getMax() <= 2) &&
                 (!QuirkPolicy.ORIGINAL_POSITION.isIn(quirks)
                         || targetsNumber.isSingleValue());

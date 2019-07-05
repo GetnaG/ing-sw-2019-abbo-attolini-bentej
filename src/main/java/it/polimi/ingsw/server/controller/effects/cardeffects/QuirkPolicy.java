@@ -32,6 +32,10 @@ enum QuirkPolicy {
      */
     SINGLE_DIRECTION,
     /**
+     * Similar to {@linkplain #SINGLE_DIRECTION} but does not filter targets.
+     */
+    SINGLE_DIRECTION_NO_TARGETS,
+    /**
      * The original position of the target is kept, to affect secondary targets.
      */
     ORIGINAL_POSITION;
