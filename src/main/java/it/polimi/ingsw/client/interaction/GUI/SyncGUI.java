@@ -79,6 +79,7 @@ public class SyncGUI implements InteractionInterface {
         }
         int indexButtonPressed = GUI.getAnswer();
         GUI.setAnswerGiven(false);
+        GUI.setWaitForTurn();
         return indexButtonPressed;
     }
 
