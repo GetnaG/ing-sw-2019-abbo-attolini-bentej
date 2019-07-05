@@ -141,7 +141,10 @@ public class GamePane extends StackPane {
     private static void updateWeaponCards(List<String> loadedWeaponCardsIDs, List<String> unloadedWeaponCards) {
         if (vboxLeftCards == null) return;
         vboxLeftCards.getChildren().removeAll(vboxLeftCards.getChildren());
-        Label topLabel = new Label(R.string("weapon"));
+        PlayerState currentPlayerState = GUI.getModel().getPlayersState().stream()
+                .filter(p -> p.getNickname().equals(GUI.getNickname()))
+                .collect(Collectors.toList()).get(0);
+        Label topLabel = new Label(currentPlayerState.getNickname() + "'s " + R.string("weapon"));
         topLabel.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         topLabel.setTextFill(Color.WHITE);
         vboxLeftCards.getChildren().add(topLabel);
@@ -149,6 +152,16 @@ public class GamePane extends StackPane {
         unloadedWeaponCards.forEach(ammoCardID -> vboxLeftCards.getChildren().add(getCard(ammoCardID, true)));
         for (int i = loadedWeaponCardsIDs.size() + unloadedWeaponCards.size(); i < 3; i++) {
             vboxLeftCards.getChildren().add(getCard("refuse", false));
+        }
+        if (currentPlayerState.getAmmoCubes().size() >= 3) {
+            int blueCubes = currentPlayerState.getAmmoCubes().get(0);
+            int redCubes = currentPlayerState.getAmmoCubes().get(1);
+            int yellowCubes = currentPlayerState.getAmmoCubes().get(2);
+            Label cubesLabel = new Label(R.string("redCubes") + " " + redCubes + "\n" +
+                    R.string("blueCubes") + " " + blueCubes + "\n" +
+                    R.string("yellowCubes") + " " + yellowCubes + "\n");
+            cubesLabel.setFont(R.font("AllertaStencil-Regular.ttf", 15));
+            vboxLeftCards.getChildren().add(cubesLabel);
         }
     }
 
@@ -272,7 +285,7 @@ public class GamePane extends StackPane {
         grid.getChildren().removeAll(grid.getChildren());
         grid.getColumnConstraints().removeAll(grid.getColumnConstraints());
         for (int i = 0; i < playersDamage.size(); i++) {
-            Text text = new Text(playersDamage.get(i));
+            Text text = new Text(playersDamage.get(i) + "    ");
             text.setFill(Color.WHITE);
             text.setFont(new Font("Arial", 20));
             grid.add(text, i, 1);
@@ -572,7 +585,7 @@ public class GamePane extends StackPane {
     public static void update() {
         if (!ready) return;
         PlayerState playerState = GUI.getPlayerState(GUI.getNickname());
-        updatePowerupCards(playerState.getPowerups(), R.string("powerup"), true);
+        updatePowerupCards(playerState.getPowerups(), playerState.getNickname() + "'s " + R.string("powerup"), true);
         updateWeaponCards(playerState.getLoadedWeapons(), playerState.getUnloadedWeapons());
         updatePlayerBoard((GridPane) playerBoard.getChildren().get(1),
                 playerState.getDamage(),
