@@ -51,7 +51,7 @@ public class HallPane extends StackPane {
 
         BorderPane border = new BorderPane();
         VBox vertical = new VBox();
-        Text topText = new Text("Hall");
+        Text topText = new Text("HALL");
         StackPane logWindow = new StackPane();
         this.logText = new Text("");
         Rectangle logRectangle = new Rectangle(400, 40);
@@ -91,7 +91,7 @@ public class HallPane extends StackPane {
         usersBox.setAlignment(Pos.CENTER);
 
         // Setting text proprieties
-        topText.setFont(R.font("AllertaStencil-Regular.ttf", 20));
+        topText.setFont(R.font("AllertaStencil-Regular.ttf", 50));
         topText.setFill(Color.WHITE);
         logText.setFont(R.font("AllertaStencil-Regular.ttf", 15));
         logText.setFill(Color.WHITE);
@@ -131,7 +131,7 @@ public class HallPane extends StackPane {
         rectangle.setArcWidth(5);
         rectangle.setArcHeight(5);
         text.setFill(Color.WHITE);
-        text.setFont(new Font("Cambria", 15));
+        text.setFont(R.font("AllertaStencil-Regular.ttf", 30));
         playerLogo.setPadding(new Insets(10, 10, 10, 10));
 
         return playerLogo;

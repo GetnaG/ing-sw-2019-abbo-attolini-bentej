@@ -25,7 +25,7 @@
 -->
 
 ## Use Guide
-###Settingss
+###Settings
 Go to `./src/main/resources/properties` and open the `settings.properties` file.  <br>
 Here you can set your preferred network and game settings. <br>
 ###Build 

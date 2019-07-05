@@ -38,6 +38,7 @@ public class GamePane extends StackPane {
     private static StackPane killshotTrack;
     private static Node actionTile;
     private static GridPane playerBoardGrid;
+    private static GridPane killshotTrackGrid;
     /**
      * VBox used to store the WeaponCards
      */
@@ -254,20 +255,20 @@ public class GamePane extends StackPane {
         iv.setPreserveRatio(true);
         iv.setSmooth(true);
         iv.setCache(true);
-        GridPane gp = new GridPane();
-        gp.setMaxWidth(500);
-        gp.setMinWidth(500);
-        gp.setMaxHeight(iv.getFitHeight());
-        gp.setMinHeight(iv.getFitHeight());
+        killshotTrackGrid = new GridPane();
+        killshotTrackGrid.setMaxWidth(500);
+        killshotTrackGrid.setMinWidth(500);
+        killshotTrackGrid.setMaxHeight(iv.getFitHeight());
+        killshotTrackGrid.setMinHeight(iv.getFitHeight());
         stack.getChildren().add(0, iv);
-        stack.getChildren().add(1, gp);
+        stack.getChildren().add(1, killshotTrackGrid);
         for (int i = 0; i < 9; i++) {
             if (i == 8)
-                gp.getColumnConstraints().add(new ColumnConstraints(50)); // column i is 49 wide
-            else gp.getColumnConstraints().add(new ColumnConstraints(50));
+                killshotTrackGrid.getColumnConstraints().add(new ColumnConstraints(50)); // column i is 49 wide
+            else killshotTrackGrid.getColumnConstraints().add(new ColumnConstraints(50));
         }
-        gp.getRowConstraints().add(new RowConstraints(iv.getFitHeight()));
-        updateKillshotTrack(gp, GUI.getModel().getKillshotTrack());
+        killshotTrackGrid.getRowConstraints().add(new RowConstraints(iv.getFitHeight()));
+        updateKillshotTrack(killshotTrackGrid, GUI.getModel().getKillshotTrack());
         return stack;
     }
 
@@ -275,12 +276,21 @@ public class GamePane extends StackPane {
         if (killshotTrack == null || playersKillshot == null) return;
         // Flushing previous state
         grid.getChildren().removeAll(grid.getChildren());
+        grid.getColumnConstraints().removeAll(grid.getColumnConstraints());
+        grid.getRowConstraints().removeAll(grid.getRowConstraints());
+        for (int i = 0; i < 9; i++) {
+            if (i == 8)
+                killshotTrackGrid.getColumnConstraints().add(new ColumnConstraints(50)); // column i is 49 wide
+            else killshotTrackGrid.getColumnConstraints().add(new ColumnConstraints(50));
+        }
         // Inserting new state
-        for (List<String> nicknameList : playersKillshot) {
+        for (int i = 0; i < playersKillshot.size(); i++) {
+            List<String> nicknameList = playersKillshot.get(i);
             Text text = new Text("");
             text.setFill(Color.WHITE);
             nicknameList.forEach(name -> text.setText(text.getText() + "\n" + name));
-            grid.add(text, playersKillshot.indexOf(nicknameList), 0);
+            text.setFont(R.font("AllertaStencil-Regular.ttf", 10));
+            grid.add(text, i, 0);
         }
     }
 
@@ -296,18 +306,17 @@ public class GamePane extends StackPane {
         for (int i = 0; i < 3; i++) {
             playerBoardGrid.getRowConstraints().add(new RowConstraints(70));
         }
-
         for (int i = 0; i < playersDamage.size(); i++) {
-            Text text = new Text(playersDamage.get(i) + "   ");
+            Text text = new Text(playersDamage.get(i));
             text.setFill(Color.WHITE);
-            text.setFont(new Font("Arial", 20));
+            text.setFont(R.font("AllertaStencil-Regular.ttf", 10));
             grid.add(text, i, 1);
         }
 
         for (int i = 0; i < timesKilled; i++) {
             Text text = new Text("  X");
             text.setFill(Color.WHITE);
-            text.setFont(new Font("Arial", 20));
+            text.setFont(R.font("AllertaStencil-Regular.ttf", 10));
             grid.add(text, 2 + i, 2);
         }
         grid.setGridLinesVisible(true);
@@ -519,7 +528,7 @@ public class GamePane extends StackPane {
             groupNameButton.setOnMouseExited(e -> imgBox.setVisible(false));
 
             label.setTextFill(Color.WHITE);
-            label.setFont(new Font("Arial", 15));
+            label.setFont(R.font("AllertaStencil-Regular.ttf", 15));
             label.setLineSpacing(5);
             label.setPadding(new Insets(5, 5, 5, 5));
         });
@@ -559,6 +568,7 @@ public class GamePane extends StackPane {
     private static Node getCirclePlayer(String nickname) {
         StackPane stackPane = new StackPane();
         Text text = new Text(nickname);
+        text.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         Circle circle = new Circle(50, Color.TRANSPARENT);
 
         stackPane.getChildren().addAll(text, circle);
@@ -603,7 +613,7 @@ public class GamePane extends StackPane {
                 playerState.getDamage(),
                 playerState.getSkullNumber());
         if (killshotTrack != null)
-            updateKillshotTrack((GridPane) killshotTrack.getChildren().get(1), GUI.getModel().getKillshotTrack());
+            updateKillshotTrack(killshotTrackGrid, GUI.getModel().getKillshotTrack());
         map.update();
         if (!GUI.getModel().getWinners().isEmpty()) {
             questionText.setText("The winner is " + GUI.getModel().getWinners().get(0));

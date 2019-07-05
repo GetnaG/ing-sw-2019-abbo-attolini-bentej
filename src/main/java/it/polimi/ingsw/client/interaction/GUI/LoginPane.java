@@ -8,6 +8,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -32,7 +33,7 @@ public class LoginPane extends StackPane {
         this.inputUsername = textField;
         BorderPane border = new BorderPane();
         VBox vertical = new VBox();
-        Text topText = new Text(R.string("GUIWelcomeText"));
+        Text topText = new Text();
         HBox usernameHBox = new HBox();
         HBox loginAndRadioBox = new HBox();
         StackPane logWindow = new StackPane();
@@ -84,7 +85,7 @@ public class LoginPane extends StackPane {
         usernameHBox.setAlignment(Pos.CENTER);
         loginAndRadioBox.setAlignment(Pos.CENTER);
         // Setting text proprieties
-        topText.setFont(R.font("AllertaStencil-Regular.ttf", 40));
+        topText.setFont(R.font("AllertaStencil-Regular.ttf", 60));
         topText.setFill(Color.WHITE);
         usernameLabel.setFont(R.font("AllertaStencil-Regular.ttf", 30));
         usernameLabel.setTextFill(Color.WHITE);
@@ -96,6 +97,7 @@ public class LoginPane extends StackPane {
         rmiRadio.setTextFill(Color.WHITE);
         socketRadio.setSelected(true);
         //  Setting Button Event
+
         loginButton.setOnAction(e -> {
             GUI.setNickname(inputUsername.getText());
             // telling the controller the connection type
@@ -119,9 +121,36 @@ public class LoginPane extends StackPane {
             }
         });
 
+        inputUsername.setOnKeyPressed(e -> {
+            if (e.getCode() == KeyCode.ENTER) {
+                GUI.setNickname(inputUsername.getText());
+                // telling the controller the connection type
+                Properties properties = R.properties("settings");
+                String host = properties.getProperty("host");
+                if (socketRadio.isSelected()) {
+                    try {
+                        int port = Integer.parseInt(properties.getProperty("serverSocketPort"));
+                        controllerGUI.setSocket(host, port);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
 
+
+                } else {
+                    try {
+                        controllerGUI.setRmi(host);
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+            }
+        });
     }
 
+    private void loginEvent() {
+
+    }
     public String getInputUsername() {
 
         return inputUsername.getText();
