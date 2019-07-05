@@ -39,6 +39,7 @@
       <groupId>org.openjfx</groupId>
       <artifactId>javafx-controls</artifactId>
       <version>11.0.2</version>
+<!--      <scope>provided</scope>-->
     </dependency>
   </dependencies>
 
@@ -65,6 +66,9 @@
                 <manifest>
                   <mainClass>it.polimi.ingsw.client.clientlogic.ClientMain</mainClass>
                 </manifest>
+<!--                <manifestEntries>
+                  <Class-Path>lib</Class-Path>
+                </manifestEntries>-->
               </archive>
               <finalName>client</finalName>
             </configuration>
