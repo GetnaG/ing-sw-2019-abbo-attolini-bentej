@@ -199,12 +199,14 @@ public class CardEffect implements EffectInterface {
         try {
             filterTargets();
             selectTargets();
-        } catch (AgainstRulesException e) {
+            if (!availableTargets.isEmpty())
+                apply();
+        } catch (ToClientException e) {
+            /*Forwarding*/
+            throw new ToClientException(e.getMessage());
+        } catch (Exception e) {
             /*The player chose an effect that can not be applied*/
-            return;
         }
-        if (!availableTargets.isEmpty())
-            apply();
     }
 
     /**
