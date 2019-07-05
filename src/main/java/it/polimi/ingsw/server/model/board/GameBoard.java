@@ -435,25 +435,20 @@ public class GameBoard implements ReplaceListener {
         if (start.equals(end) || start == null || end == null)
             return 0;
 
-        Set<Square> Q = getAllSquares();
-        Map<Square, Integer> dist = new HashMap<>();
+        int dist = 0;
+        List<Square> objects = new ArrayList<>();
+        List<Square> neighbours = new ArrayList<>();
 
-        Q.forEach(x -> {
-            dist.put(x, 6);
-        });
-        dist.put(start, 0);
-        Square u = start;
-        while (Q.contains(end)) {
-            u = min(Q, dist);
-            Q.remove(u);
-            List<Square> neighbours = getNeighbours(u, wallSensitive);
-            for (Square v : neighbours) {
-                int distance = dist.get(u) + 1;
-                if (distance < dist.get(v))
-                    dist.replace(v, distance);
+        objects.add(start);
+        while (!objects.contains(end)) {
+            dist++;
+            for (Square s : objects) {
+                neighbours.addAll(getNeighbours(s, wallSensitive));
             }
+            objects.addAll(neighbours);
+            neighbours.clear();
         }
-        return dist.get(end);
+        return dist;
     }
 
     /**
