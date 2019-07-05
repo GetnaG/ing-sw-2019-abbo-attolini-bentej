@@ -810,7 +810,7 @@ public class CLI implements InteractionInterface {
             case BLUE_SPAWN_POINT: {
                 for (int j = 0; j < MARKET_SIZE; j++) {
                     if (model.getWeaponsCardsID().get(j) != null)
-                        marketLine.append(model.getWeaponsCardsID().get(j));
+                        marketLine.append(R.string(model.getWeaponsCardsID().get(j)));
                     else
                         marketLine.append(EMPTY);
                     if (j < 2)
@@ -821,7 +821,7 @@ public class CLI implements InteractionInterface {
             case RED_SPAWN_POINT: {
                 for (int j = 0; j < MARKET_SIZE; j++) {
                     if (model.getWeaponsCardsID().get(j + MARKET_SIZE) != null)
-                        marketLine.append(model.getWeaponsCardsID().get(j + MARKET_SIZE));
+                        marketLine.append(R.string(model.getWeaponsCardsID().get(j + MARKET_SIZE)));
                     else
                         marketLine.append(EMPTY);
                     if (j < 2)
@@ -832,7 +832,7 @@ public class CLI implements InteractionInterface {
             case YELLOW_SPAWN_POINT: {
                 for (int j = 0; j < MARKET_SIZE; j++) {
                     if (model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE) != null)
-                        marketLine.append(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE));
+                        marketLine.append(R.string(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE)));
                     else
                         marketLine.append(EMPTY);
                     if (j < 2)

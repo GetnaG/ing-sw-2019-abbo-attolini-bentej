@@ -123,9 +123,9 @@ public class UpdateBuilder {
     public UpdateBuilder setWeaponsOnBoard(GameBoard board) {
         weaponsOnBoard = new ArrayList<>(Collections.nCopies(9, null));
 
-        weaponsOnBoard.addAll(board.findSpawn(AmmoCube.BLUE).getMarket().getCards());
-        weaponsOnBoard.addAll(board.findSpawn(AmmoCube.RED).getMarket().getCards());
-        weaponsOnBoard.addAll(board.findSpawn(AmmoCube.YELLOW).getMarket().getCards());
+        weaponsOnBoard.addAll(0, board.findSpawn(AmmoCube.BLUE).getMarket().getCards());
+        weaponsOnBoard.addAll(3, board.findSpawn(AmmoCube.RED).getMarket().getCards());
+        weaponsOnBoard.addAll(6, board.findSpawn(AmmoCube.YELLOW).getMarket().getCards());
         return this;
     }
 
