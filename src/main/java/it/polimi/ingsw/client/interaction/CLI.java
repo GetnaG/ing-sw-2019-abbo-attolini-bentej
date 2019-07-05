@@ -9,6 +9,7 @@ import java.io.*;
 import java.util.Iterator;
 import java.util.List;
 import java.util.MissingResourceException;
+import java.util.Properties;
 
 /**
  * Command line interface, handles the communication with the user via text.
@@ -441,6 +442,15 @@ public class CLI implements InteractionInterface {
             /*Returning the input*/
             handlingQuestion = false;
             inputMon.notifyAll();
+
+            Properties properties = R.properties("network");
+            String defaultHost = properties.getProperty("host");
+            String defaultPort = properties.getProperty("port");
+
+            if (requestKey.equals("chooseIP") && input.length() == 0)
+                return defaultHost;
+            if (requestKey.equals("choosePort") && input.length() == 0)
+                return defaultPort;
             return input;
         }
     }

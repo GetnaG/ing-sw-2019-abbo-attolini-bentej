@@ -18,6 +18,7 @@ import javafx.scene.text.Text;
 
 
 import java.io.IOException;
+import java.util.Properties;
 
 public class LoginPane extends StackPane {
     private String username;
@@ -87,7 +88,7 @@ public class LoginPane extends StackPane {
         topText.setFill(Color.WHITE);
         usernameLabel.setFont(R.font("AllertaStencil-Regular.ttf", 30));
         usernameLabel.setTextFill(Color.WHITE);
-        logText.setFont(R.font("AllertaStencil-Regular.ttf", 30));
+        logText.setFont(R.font("AllertaStencil-Regular.ttf", 15));
         socketRadio.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         rmiRadio.setFont(R.font("AllertaStencil-Regular.ttf", 20));
         logText.setFill(Color.WHITE);
@@ -101,7 +102,10 @@ public class LoginPane extends StackPane {
             if (socketRadio.isSelected()) {
 
                 try {
-                    controllerGUI.setSocket("localhost", 9002);
+                    Properties properties = R.properties("network");
+                    String host = properties.getProperty("host");
+                    int port = Integer.parseInt(properties.getProperty("port"));
+                    controllerGUI.setSocket(host, port);
                 } catch (IOException ex) {
                     ex.printStackTrace();
                 }

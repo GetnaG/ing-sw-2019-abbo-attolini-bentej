@@ -246,7 +246,7 @@ public class GUI extends Application {
                 buildHallPane(stage);
                 break;
             case "USERNAME_TAKEN_AND_ONLINE":
-                logText.setText("Username taken and offline");
+                logText.setText(R.string("USERNAME_TAKEN_AND_ONLINE"));
                 break;
             case "GAME_STARTING":
                 gameStarted = true;

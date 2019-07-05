@@ -163,7 +163,7 @@ public class MapPane extends GridPane {
                             break;
                     }
                     List<String> weaponCardsMarketKeys = GUI.getModel().getWeaponsCardsID().stream().filter(s -> !s.equals("notSet")).collect(Collectors.toList());
-                    GamePane.updateRightGeneralTag(weaponCardsMarketKeys.subList(indexStart, indexStart + 3), "The square contains:");
+                    GamePane.updateRightGeneralTag(weaponCardsMarketKeys.subList(indexStart % weaponCardsMarketKeys.size(), (indexStart + 3) % weaponCardsMarketKeys.size()), "The square contains:");
                 }
             });
 

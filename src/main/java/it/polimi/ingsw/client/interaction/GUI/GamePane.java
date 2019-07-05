@@ -80,7 +80,7 @@ public class GamePane extends StackPane {
         killshotTrack = getKillshotTrack(GUI.getModel());
         actionTile = getPlayerActionTile();
         actionTile.maxHeight(276);
-        HBox hbox = new HBox(killshotTrack, actionTile, playerBoard);
+        HBox hbox = new HBox(killshotTrack, playerBoard);
         borderPane.setTop(hbox);
         borderPane.setAlignment(hbox, Pos.CENTER);
         hbox.setAlignment(Pos.CENTER);
