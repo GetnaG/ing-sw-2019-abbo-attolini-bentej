@@ -34,8 +34,7 @@ Run the following line usign maven to build the server and client jar: <br>
 ###Run
 To run the client: <br>
 GUI : `java -jar ./target/client-jar-with-dependencies.jar gui` <br>
-CLI : `java -jar ./target/client-jar-with-dependencies.jar cli`  
-`  <br>
+CLI : `java -jar ./target/client-jar-with-dependencies.jar cli` <br>
 To run the server: <br>
-`java -jar ./target/server-jar-with-dependencies.jar`
+`java -jar ./target/server-jar-with-dependencies.jar` <br>
 
