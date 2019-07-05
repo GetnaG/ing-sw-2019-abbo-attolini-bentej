@@ -61,7 +61,7 @@ public class Grab implements EffectInterface {
 
         /*We can grab a Weapon if there's a Market in our position*/
         SpawnSquare spawnSquare = board.getRoom(position).getSpawnSquare();
-        if (spawnSquare.equals(position)) {
+        if (spawnSquare != null && spawnSquare.equals(position)) {
 
             /*Getting the weapons in market*/
             List<WeaponCard> weaponAvailable = spawnSquare.getMarket().getCards();

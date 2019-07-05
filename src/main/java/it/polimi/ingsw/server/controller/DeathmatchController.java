@@ -237,6 +237,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
                 new RespawnTurn(this::updateAllPlayers).startTurn(p, new ArrayList<>(players), board);
         }
         emptyKilledList();
+        updateAllPlayers(fullUpdate());
     }
 
     /**
