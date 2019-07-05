@@ -3,6 +3,7 @@ package it.polimi.ingsw.server.controller.turns;
 import it.polimi.ingsw.communication.ToClientException;
 import it.polimi.ingsw.communication.UpdateBuilder;
 import it.polimi.ingsw.server.controller.effects.*;
+import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.player.Player;
@@ -15,11 +16,10 @@ import java.util.function.Consumer;
  * Once Final Frenzy is triggered, every player has one extra turn.
  * If a Player turn comes before a the First Player, then he has access to certain actions.
  * If his turn comes after, then he has access to other different actions.
- * //TODO FinalFrenzySetUp or TurnSetup(TurnType)
- * @see FrenzyTurnBefore
- * @see FrenzyTurnAfter
  *
  * @author Fahed Ben Tej
+ * @see FrenzyTurnBefore
+ * @see FrenzyTurnAfter
  */
 public class FrenzyTurnAfter implements TurnInterface {
     private Consumer<UpdateBuilder> updater;
@@ -55,13 +55,14 @@ public class FrenzyTurnAfter implements TurnInterface {
 
     /**
      * Gets the first possible action.
+     *
      * @return the first possible action.
      */
-    private Action getFirstFrenzyActionAfter(){
+    private Action getFirstFrenzyActionAfter() {
         List<EffectInterface> steps = new ArrayList<>();
         steps.add(new Move());
         steps.add(new Move());
-        //TODO Insert Reload option
+        steps.add(getReloadAction());
         steps.add(new Shoot());
 
         return new Action("FirstFrenzyActionAfter", steps);
@@ -69,9 +70,10 @@ public class FrenzyTurnAfter implements TurnInterface {
 
     /**
      * Gets the second possible action.
+     *
      * @return the second possible action.
      */
-    private Action getSecondFrenzyActionAfter(){
+    private Action getSecondFrenzyActionAfter() {
         List<EffectInterface> steps = new ArrayList<>();
         steps.add(new Move());
         steps.add(new Move());
@@ -81,4 +83,27 @@ public class FrenzyTurnAfter implements TurnInterface {
         return new Action("SecondFrenzyActionAfter", steps);
     }
 
+    /**
+     * Creates an action that prompts the player to reload.
+     *
+     * @return an action that prompts the player to reload
+     */
+    private EffectInterface getReloadAction() {
+        return new EffectInterface() {
+            @Override
+            public void runEffect(Player subjectPlayer, List<Damageable> allTargets, GameBoard board, List<Damageable> allTargeted, List<Damageable> damageTargeted) throws ToClientException {
+                NormalTurn.askAndReload(subjectPlayer, updater);
+            }
+
+            @Override
+            public String getName() {
+                return "Reload";
+            }
+
+            @Override
+            public List<AmmoCube> getCost() {
+                return new ArrayList<>();
+            }
+        };
+    }
 }

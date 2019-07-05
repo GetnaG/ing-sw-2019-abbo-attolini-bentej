@@ -16,8 +16,8 @@ public interface TurnInterface {
      * Starts the player's turn.
      *
      * @param subjectPlayer the player who's turn is starting
-     * @param allTargets all the targets on the board
-     * @param board GameBoard of the game
+     * @param allTargets    all the targets on the board
+     * @param board         GameBoard of the game
      */
     void startTurn(Player subjectPlayer, List<Damageable> allTargets, GameBoard board);
 

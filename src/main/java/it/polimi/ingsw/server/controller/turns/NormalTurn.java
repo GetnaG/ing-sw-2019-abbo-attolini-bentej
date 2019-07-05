@@ -42,7 +42,7 @@ public class NormalTurn implements TurnInterface {
             askAndRunPowerup(subjectPlayer, allTargets, board);
             askAndRunAction(subjectPlayer, allTargets, board);
             askAndRunPowerup(subjectPlayer, allTargets, board);
-            askAndReload(subjectPlayer);
+            askAndReload(subjectPlayer, updater);
         } catch (ToClientException e) {
             /*The execution stopped with an exception: interrupting the turn*/
             updater.accept(null);
@@ -72,6 +72,7 @@ public class NormalTurn implements TurnInterface {
         if (card != null) {
             player.pay(card.getEffect().getCost());
             player.removePowerup(card);
+            board.putPowerupCard(card);
             card.getEffect().runEffect(player, allTargets, board, new ArrayList<>(), new ArrayList<>());
             updater.accept(null);
         }
@@ -102,7 +103,7 @@ public class NormalTurn implements TurnInterface {
     /**
      * Asks the player to choose whether to reload. Then it takes care of reloading.
      */
-    private void askAndReload(Player player) throws ToClientException {
+    static void askAndReload(Player player, Consumer<UpdateBuilder> updater) throws ToClientException {
 
         /*Taking the reloadable weapons that the player can afford*/
         List<WeaponCard> weaponCards = player.getReloadableWeapons().stream()

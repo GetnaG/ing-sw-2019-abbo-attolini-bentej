@@ -9,7 +9,7 @@ public enum Configurations {
 
     private final int id;
 
-    private Configurations(int id) {
+    Configurations(int id) {
         this.id = id;
     }
 

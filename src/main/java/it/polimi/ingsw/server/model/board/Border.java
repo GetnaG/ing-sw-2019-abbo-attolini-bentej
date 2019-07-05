@@ -6,5 +6,5 @@ package it.polimi.ingsw.server.model.board;
  * CORRIDOR Represents a corridor among the Squares of a Room. Can be crossed. Graphical element: *     *.
  */
 public enum Border {
-   WALL, DOOR, CORRIDOR
+    WALL, DOOR, CORRIDOR
 }

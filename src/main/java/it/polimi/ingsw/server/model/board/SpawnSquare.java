@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * This class defines a Spawn Square, where it is possible to spawn
  * at the beginning of the game and after every death.
- *
+ * <p>
  * Unlike normal Squares, this Square contains a Market where it
  * is possible to buy weapons, instead of grabbing ammo cards.
  */
@@ -35,12 +35,19 @@ public class SpawnSquare extends Square {
         spawn = null;
     }
 
+    /**
+     * Creates a spawn square that is a copy of the provided one.
+     * The provided square needs to be refreshed.
+     *
+     * @param copyOf the square to copy
+     */
     public SpawnSquare(SpawnSquare copyOf) {
         super(copyOf);
         market = null;
         spawn = null;
     }
-    private static SquareColor constructorHelper(AmmoCube c){
+
+    private static SquareColor constructorHelper(AmmoCube c) {
         switch (c) {
             case BLUE:
                 return SquareColor.BLUE;
@@ -59,10 +66,6 @@ public class SpawnSquare extends Square {
         return market;
     }
 
-    public void setMarket(WeaponMarket market) {
-        this.market = market;
-    }
-
     public Spawn getSpawn() {
         return spawn;
     }
@@ -75,19 +78,18 @@ public class SpawnSquare extends Square {
     /**
      * @param weapon is  the weapon chosen by the player
      */
-    public void pickWeapon(WeaponCard weapon){
-        if(market.isValidWeapon(weapon)) {
+    public void pickWeapon(WeaponCard weapon) {
+        if (market.isValidWeapon(weapon)) {
             market.pickWeaponFromList(weapon);
             replacer.addSpawnSquare(this);
-        }
-        else
-            System.out.println("Warning: You are trying to remove a non-existing weapon!");
+        } else
+            throw new IllegalArgumentException("You are trying to remove a non-existing weapon!");
     }
 
     /**
      * @return return the color of the room selected to spawn
      */
-    public AmmoCube getSpawnColor() {
+    AmmoCube getSpawnColor() {
         SquareColor c = getSquareColor();
         if (c == SquareColor.BLUE)
             return AmmoCube.BLUE;
@@ -101,13 +103,13 @@ public class SpawnSquare extends Square {
     /**
      * After maps are loaded from json, a refresh is needed.
      */
-    public void refresh(List<Room> rooms) {
+    void refresh(List<? extends Room> rooms) {
         if (market == null)
             market = new WeaponMarket(new ArrayList<>(Arrays.asList(null, null, null)));
-        this.setNorth(Square.getSquare(rooms, this.getIdNorth()));
-        this.setEast(Square.getSquare(rooms, this.getIdEast()));
-        this.setSouth(Square.getSquare(rooms, this.getIdSouth()));
-        this.setWest(Square.getSquare(rooms, this.getIdWest()));
+        setNorth(Square.getSquare(rooms, getIdNorth()));
+        setEast(Square.getSquare(rooms, getIdEast()));
+        setSouth(Square.getSquare(rooms, getIdSouth()));
+        setWest(Square.getSquare(rooms, getIdWest()));
     }
 
     @Override

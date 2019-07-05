@@ -14,7 +14,7 @@ public class WeaponMarket {
 
     /**
      * Represents the weapon cards that characterise the market
-     *
+     * <p>
      * It is filled at the beginning of the game
      * It is Updated each time a player picks a weapon
      * It is Refilled during the end of the turn
@@ -28,7 +28,11 @@ public class WeaponMarket {
         this.weaponCards = weaponCards;
     }
 
-
+    /**
+     * Returns the cards in the market.
+     *
+     * @return the cards in the market
+     */
     public List<WeaponCard> getCards() {
         return weaponCards;
     }
@@ -36,13 +40,13 @@ public class WeaponMarket {
     /**
      * Adds card to market. If market is full, no card is added.
      *
-     * @param weaponcard is the card added to the market
+     * @param weaponCard is the card added to the market
      */
-    public void addCard(WeaponCard weaponcard) {
+    public void addCard(WeaponCard weaponCard) {
         int pos = 0;
         for (WeaponCard i : weaponCards) {
             if (i == null) {
-                weaponCards.set(pos, weaponcard);
+                weaponCards.set(pos, weaponCard);
                 break;
             }
             pos++;
@@ -52,7 +56,7 @@ public class WeaponMarket {
     /**
      * @param weapon is the weapon chosen by the player to pick
      */
-    public void pickWeaponFromList(WeaponCard weapon) {
+    void pickWeaponFromList(WeaponCard weapon) {
         int pos = 0;
         for (WeaponCard i : weaponCards) {
             if (i != null && i.equals(weapon)) {
@@ -63,12 +67,17 @@ public class WeaponMarket {
         }
     }
 
-    public boolean isValidWeapon(WeaponCard w) {
+    /**
+     * Returns true if the provided weapon is valid and in this market.
+     *
+     * @param w the card to check
+     * @returntrue if the provided weapon is valid and in this market
+     */
+    boolean isValidWeapon(WeaponCard w) {
         for (WeaponCard i : weaponCards) {
             if (i != null && i.getId().equals(w.getId()))
                 return true;
         }
         return false;
     }
-
 }

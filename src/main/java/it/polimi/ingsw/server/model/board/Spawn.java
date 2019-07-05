@@ -4,92 +4,69 @@ import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
 import it.polimi.ingsw.server.model.player.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * This class is used in Domination Mode. It represents a spawn/flag which a player can control.
  */
 public class Spawn implements Damageable {
-
     /**
      * Tokens of Players that hit the spawn in Domination mode.
      */
     private List<Player> tokens;
-    /**
-     *
-     */
     private AmmoCube color;
 
     /**
      * Default constructor
      */
-    public Spawn() {
+    Spawn() {
         tokens = new ArrayList<>();
     }
 
-
-
-
     /**
      * This function
+     *
      * @param shooters represents a player token(s)
      */
     public void giveDamage(List<Player> shooters) {
         tokens.addAll(new ArrayList<>(shooters));
     }
 
-    /**
-     * @param shooters
-     */
     public void giveMark(List<Player> shooters) {
-        // TODO implement here
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * @return
-     */
     public Square getPosition() {
-        // TODO implement here
-        return null;
+        throw new UnsupportedOperationException();
+
     }
 
-    /**
-     * @param newPosition
-     */
+
     public void setPosition(Square newPosition) {
-        // TODO implement here
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * 
-     */
     public void scoreAndResetDamage() {
-        // TODO implement here
+        throw new UnsupportedOperationException();
     }
 
-    /**
-     * @return
-     */
     public Player getKillshotPlayer() {
-        // TODO implement here
-        return null;
+        throw new UnsupportedOperationException();
+
     }
 
-    /**
-     * @return
-     */
     public Player getOverkillPlayer() {
-        // TODO implement here
-        return null;
+        throw new UnsupportedOperationException();
+
     }
 
     @Override
     public String getName() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
-    public List<Player> getTokens() {
+    List<Player> getTokens() {
         return tokens;
     }
-
 }

@@ -12,10 +12,10 @@ import java.util.stream.Collectors;
  *
  * @author Fahed Ben Tej
  */
-public class KillshotTrack extends AbstractTrack {
+public class KillshotTrack implements AbstractTrack {
 
     /**
-     *  skullsLeft represents the skulls left.
+     * skullsLeft represents the skulls left.
      */
     private int skullsLeft;
     /**
@@ -29,7 +29,6 @@ public class KillshotTrack extends AbstractTrack {
     public KillshotTrack() {
         skullsLeft = 8;
         tokenTrack = new ArrayList<>();
-
     }
 
     /**
@@ -39,6 +38,36 @@ public class KillshotTrack extends AbstractTrack {
         this.skullsLeft = skullsLeft;
         tokenTrack = new ArrayList<>();
 
+    }
+
+    private static void scoreChart(List<? extends Player> chart) {
+        int points = -1;
+        for (Player p : chart) {
+            switch (points) {
+                case -1:
+                    points = 8;
+                    p.addScore(points);
+                    break;
+                case 8:
+                    points = 6;
+                    p.addScore(points);
+                    break;
+                case 6:
+                    points = 4;
+                    p.addScore(points);
+                    break;
+                case 4:
+                    points = 2;
+                    p.addScore(points);
+                    break;
+                case 2:
+                    p.addScore(points);
+                    points = 1;
+                    break;
+                default:
+            }
+
+        }
     }
 
     /**
@@ -52,89 +81,53 @@ public class KillshotTrack extends AbstractTrack {
     /**
      * This method is used to score the Killshot Track.
      * Must be called from outside when {@code skullsLeft} is 0.
-     * @return void
      */
     @Override
     public void score() {
 
 
-        Map<Player,Integer> kills = new HashMap<>();
+        Map<Player, Integer> kills = new HashMap<>();
         List<Player> orderedKills = new ArrayList<>();
 
         // getting the kills for every player and storing the order ( which will be useful in case of a tie)
-        for(List<Player> l : tokenTrack){
-            for(Player p : l) {
-                if(!kills.containsKey(p))
-                    kills.put(p,0);
-                if(!orderedKills.contains(p))
+        for (List<Player> l : tokenTrack) {
+            for (Player p : l) {
+                if (!kills.containsKey(p))
+                    kills.put(p, 0);
+                if (!orderedKills.contains(p))
                     orderedKills.add(p);
 
                 int currentKills = kills.get(p);
-                kills.put(p, currentKills+1);
+                kills.put(p, currentKills + 1);
             }
         }
 
         //Comparing two players according in decreasing order according to number of kills. In case of a tie, the player who did a kill first wins.
 
-        Comparator<Player> chartComparator = new Comparator<Player>() {
-            @Override
-            public int compare(Player p1, Player p2) {
-                Integer p1Kills = kills.get(p1);
-                Integer p2Kills = kills.get(p2);
+        Comparator<Player> chartComparator = (p1, p2) -> {
+            Integer p1Kills = kills.get(p1);
+            Integer p2Kills = kills.get(p2);
 
-                if(p1Kills.compareTo(p2Kills) != 0)
-                    return p2Kills.compareTo(p1Kills);
-                else {
-                    // the player who did a kills first wins
-                    return orderedKills.indexOf(p1) - orderedKills.indexOf(p2);
-                }
+            if (p1Kills.compareTo(p2Kills) != 0)
+                return p2Kills.compareTo(p1Kills);
+            else {
+                // the player who did a kills first wins
+                return orderedKills.indexOf(p1) - orderedKills.indexOf(p2);
             }
         };
 
         List<Player> chart = orderedKills.stream()
-                                                    .sorted(chartComparator::compare)
-                                                    .collect(Collectors.toList());
+                .sorted(chartComparator)
+                .collect(Collectors.toList());
 
         // chart is ordered so we just have set score according to the rules
         scoreChart(chart);
-    }
-
-    static void scoreChart(List<Player> chart) {
-        int points = -1;
-        for( Player p : chart){
-            switch(points){
-                case -1 :
-                    points = 8;
-                    p.addScore(points);
-                    break;
-                case 8 :
-                    points = 6;
-                    p.addScore(points);
-                    break;
-                case 6 :
-                    points = 4;
-                    p.addScore(points);
-                    break;
-                case 4 :
-                    points = 2;
-                    p.addScore(points);
-                    break;
-                case 2 :
-                    p.addScore(points);
-                    points = 1;
-                    break;
-                default:     
-            }
-
-        }
     }
 
     /**
      * Adding Token to the Track. Must be called after removeSkull() .
      *
      * @param tokens Player who did the kill. If overkilled, the list must contain the same player two times.
-     *
-     * @return
      */
     @Override
     public void addTokens(List<Player> tokens) {
@@ -155,7 +148,7 @@ public class KillshotTrack extends AbstractTrack {
      * Gets game mode.
      */
     @Override
-    public String getGameMode(){
+    public String getGameMode() {
         return "Deathmatch";
     }
 

@@ -12,8 +12,6 @@ import java.util.function.UnaryOperator;
  * Defines the structure of a square.
  */
 public class Square {
-
-
     /**
      * The replace will take care of replacing the ammo card grabbed
      * or the weapon picked from the market
@@ -87,7 +85,6 @@ public class Square {
      */
     private Border westBorder;
 
-
     /**
      * Default constructor of a physical square
      */
@@ -103,7 +100,7 @@ public class Square {
      */
     public Square(SquareColor squareColor, AmmoCard card) {
         this.squareColor = squareColor;
-        this.ammoCard = card;
+        ammoCard = card;
         northBorder = Border.WALL;
         eastBorder = Border.WALL;
         southBorder = Border.WALL;
@@ -140,7 +137,7 @@ public class Square {
     public Square() {
     }
 
-    public static Square getSquare(List<Room> rooms, int idSquare) {
+    public static Square getSquare(List<? extends Room> rooms, int idSquare) {
         for (Room room : rooms)
             for (Square s : room.getAllSquares())
                 if (Integer.parseInt(s.getID()) == idSquare)
@@ -210,8 +207,8 @@ public class Square {
 
     public void setNorthBorder(Border northBorder) {
         this.northBorder = northBorder;
-        if (this.north != null && this.north.getSouthBorder() == null)  // there is a valid square with a non initialized border
-            this.north.setSouthBorder(northBorder);
+        if (north != null && north.getSouthBorder() == null)  // there is a valid square with a non initialized border
+            north.setSouthBorder(northBorder);
 
     }
 
@@ -221,8 +218,8 @@ public class Square {
 
     public void setSouthBorder(Border southBorder) {
         this.southBorder = southBorder;
-        if (this.south != null && this.south.getNorthBorder() == null)  // there is a valid square with a non initialized border
-            this.south.setNorthBorder(southBorder);
+        if (south != null && south.getNorthBorder() == null)  // there is a valid square with a non initialized border
+            south.setNorthBorder(southBorder);
     }
 
     public Border getEastBorder() {
@@ -231,8 +228,8 @@ public class Square {
 
     public void setEastBorder(Border eastBorder) {
         this.eastBorder = eastBorder;
-        if (this.east != null && this.east.getWestBorder() == null)  // there is a valid square with a non initialized border
-            this.east.setWestBorder(eastBorder);
+        if (east != null && east.getWestBorder() == null)  // there is a valid square with a non initialized border
+            east.setWestBorder(eastBorder);
     }
 
     public Border getWestBorder() {
@@ -241,11 +238,11 @@ public class Square {
 
     public void setWestBorder(Border westBorder) {
         this.westBorder = westBorder;
-        if (this.west != null && this.west.getEastBorder() == null)  // there is a valid square with a non initialized border
-            this.west.setEastBorder(westBorder);
+        if (west != null && west.getEastBorder() == null)  // there is a valid square with a non initialized border
+            west.setEastBorder(westBorder);
     }
 
-    public void setReplacer(ReplaceListener replacer) {
+    void setReplacer(ReplaceListener replacer) {
         this.replacer = replacer;
     }
 
@@ -253,25 +250,12 @@ public class Square {
         return squareColor;
     }
 
-    public void setSquareColor(SquareColor squareColor) {
+    void setSquareColor(SquareColor squareColor) {
         this.squareColor = squareColor;
     }
 
     public String getID() {
         return Integer.toString(ID);
-    }
-
-    public void setID(int ID) {
-        this.ID = ID;
-    }
-
-    /**
-     * Gets the Turret in this Square or null if the game mode is not Turret Mode.
-     *
-     * @return Turret in this Square
-     */
-    public Turret getTurret() {
-        return null;
     }
 
     public AmmoCard peekAmmoCard() {
@@ -288,7 +272,7 @@ public class Square {
 
     }
 
-    public void setAmmoCard(AmmoCard ammoCard) {
+    void setAmmoCard(AmmoCard ammoCard) {
         this.ammoCard = ammoCard;
     }
 
@@ -342,10 +326,9 @@ public class Square {
      * the calling square is always visible
      */
     public List<Square> listOfVisibles(GameBoard gb) {
-        List<Square> visibleSquares = new ArrayList<>();
 
         /*All the square in the same room are visible*/
-        visibleSquares.addAll(gb.getRoom(this).getAllSquares());
+        List<Square> visibleSquares = new ArrayList<>(gb.getRoom(this).getAllSquares());
 
         if (northBorder == Border.DOOR)
             visibleSquares.addAll(gb.getRoom(north).getAllSquares());
@@ -437,7 +420,7 @@ public class Square {
      */
     public boolean straight(Square dest, boolean ignoreWall) {
 
-        if (this.equals(dest)) return true;
+        if (equals(dest)) return true;
 
         Square temp = this;
 
@@ -478,44 +461,20 @@ public class Square {
 
     }
 
-    public void refresh(List<Room> rooms) {//TODO
-        if (rooms == null || rooms.isEmpty()) return;
-
-        this.north = getSquare(rooms, idNorth);
-        this.east = getSquare(rooms, idEast);
-        this.south = getSquare(rooms, idSouth);
-        this.west = getSquare(rooms, idWest);
-    }
-
-    public int getIdNorth() {
+    int getIdNorth() {
         return idNorth;
     }
 
-    public void setIdNorth(int idNorth) {
-        this.idNorth = idNorth;
-    }
-
-    public int getIdSouth() {
+    int getIdSouth() {
         return idSouth;
     }
 
-    public void setIdSouth(int idSouth) {
-        this.idSouth = idSouth;
-    }
-
-    public int getIdEast() {
+    int getIdEast() {
         return idEast;
     }
 
-    public void setIdEast(int idEast) {
-        this.idEast = idEast;
-    }
-
-    public int getIdWest() {
+    int getIdWest() {
         return idWest;
     }
 
-    public void setIdWest(int idWest) {
-        this.idWest = idWest;
-    }
 }

@@ -7,40 +7,36 @@ import java.util.List;
 /**
  * This class represents a common template for any Track.
  */
-public abstract class AbstractTrack {
+public interface AbstractTrack {
 
 
     /**
-     * @param
      * @return an int representing the skulls left
      */
-    public abstract int getSkullsLeft() ;
+    int getSkullsLeft();
 
     /**
      * This method is used to score the Track.
      * Must be called from outside when {@code}skullsLeft is 0.
-     * @param
-     *
-     * @return void
      */
-    public abstract void score() ;
+    void score();
 
     /**
      * Adding Token to the Track.
+     *
      * @param tokens Player who did the kill. If overkilled, the list must contain the same player two times.
-     * @return
      */
-    public abstract void addTokens(List<Player> tokens);
+    void addTokens(List<Player> tokens);
 
     /**
      * Removing the leftmost skull.
      */
-    public abstract void removeSkull() ;
+    void removeSkull();
 
     /**
      * Gets game mode.
      */
-    public abstract String getGameMode();
+    String getGameMode();
 
-    public abstract List<List<Player>> getTokens();
+    List<List<Player>> getTokens();
 }

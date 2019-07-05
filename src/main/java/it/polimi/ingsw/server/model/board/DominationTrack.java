@@ -2,13 +2,16 @@ package it.polimi.ingsw.server.model.board;
 
 import it.polimi.ingsw.server.model.player.Player;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
  *
  */
-public class DominationTrack extends AbstractTrack {
+public class DominationTrack implements AbstractTrack {
     /**
      * First Spawn
      */
@@ -54,6 +57,7 @@ public class DominationTrack extends AbstractTrack {
     /**
      * This method is used to score the Killshot Track.
      * Must be called from outside when {@code}skullsLeft is 0.
+     *
      * @return void
      */
     @Override
@@ -65,49 +69,47 @@ public class DominationTrack extends AbstractTrack {
         tokens.addAll(secondSpawn.getTokens());
         tokens.addAll(thirdSpawn.getTokens());
 
-        Map<Player,Integer> spawnHits =  new HashMap<>();
+        Map<Player, Integer> spawnHits = new HashMap<>();
 
 
         for (Player p : firstSpawn.getTokens())
-            spawnHits.merge(p,1,Integer::sum);
-
+            spawnHits.merge(p, 1, Integer::sum);
 
 
         for (Player p : secondSpawn.getTokens())
-            spawnHits.merge(p,1,Integer::sum);
+            spawnHits.merge(p, 1, Integer::sum);
         for (Player p : thirdSpawn.getTokens())
-            spawnHits.merge(p,1,Integer::sum);
+            spawnHits.merge(p, 1, Integer::sum);
 
         List<Player> chart = spawnHits.entrySet().stream()
-                .sorted((e1,e2) -> e2.getValue().compareTo(e1.getValue()))
-                .map( Map.Entry::getKey)
+                .sorted((e1, e2) -> e2.getValue().compareTo(e1.getValue()))
+                .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
         // chart is ordered so we just have set score according to the rules
 
         List<Player> playersSamePosition = new ArrayList<>();
         playersSamePosition.add(chart.get(0));
-        for (int i = 0; i < chart.size() -1 ; i++) {
-            int nextPlayerPoints = spawnHits.get(chart.get(i+1));
+        for (int i = 0; i < chart.size() - 1; i++) {
+            int nextPlayerPoints = spawnHits.get(chart.get(i + 1));
             int curPlayerPoints = spawnHits.get(chart.get(i));
 
             if (curPlayerPoints != nextPlayerPoints) {
 
                 addPoints(playersSamePosition);
                 playersSamePosition = new ArrayList<>();
-                playersSamePosition.add(chart.get(i+1));
+                playersSamePosition.add(chart.get(i + 1));
 
                 // if the the next player is the last and the currents player has different points, the next player is alone for sure
-                if( i == chart.size() -2) {
+                if (i == chart.size() - 2) {
                     ArrayList<Player> alonePlayer = new ArrayList<>();
-                    alonePlayer.add(chart.get(i+1));
+                    alonePlayer.add(chart.get(i + 1));
                     addPoints(alonePlayer);
                 }
-            }
-            else  {
-                playersSamePosition.add(chart.get(i+1));
+            } else {
+                playersSamePosition.add(chart.get(i + 1));
                 // if the next player is the last and the curPlayerPoints = nextPlayerPoints, we have to score them together
-                if ( i == chart.size()-2)
+                if (i == chart.size() - 2)
                     addPoints(playersSamePosition);
             }
 
@@ -117,43 +119,42 @@ public class DominationTrack extends AbstractTrack {
     /**
      * This methods is used to add points to the players. Players in the same position will get an equal amount of points,
      * but the next position will be empty.
+     *
      * @param playersSamePosition a list of player in the same position. The next position will be empty.
      */
-    private  void addPoints(List<Player> playersSamePosition) {
+    private void addPoints(List<Player> playersSamePosition) {
         for (Player p : playersSamePosition)
             p.addScore(points);
         // 8 -> 6 -> 4 -> 2 -> 1 There is an unconventional use of the break statement.
         switch (points) {
-            case 8 :
+            case 8:
                 points = 6;
                 if (playersSamePosition.size() == 1)
                     break;
-                else playersSamePosition.remove(playersSamePosition.size()-1);
-            case 6 :
+                else playersSamePosition.remove(playersSamePosition.size() - 1);
+            case 6:
                 points = 4;
                 if (playersSamePosition.size() == 1)
                     break;
-                else playersSamePosition.remove(playersSamePosition.size()-1);
-            case 4 :
+                else playersSamePosition.remove(playersSamePosition.size() - 1);
+            case 4:
                 points = 2;
                 if (playersSamePosition.size() == 1)
                     break;
-                else playersSamePosition.remove(playersSamePosition.size()-1);
-            case 2 :
+                else playersSamePosition.remove(playersSamePosition.size() - 1);
+            case 2:
                 if (playersSamePosition.size() == 1)
                     break;
-                else playersSamePosition.remove(playersSamePosition.size()-1);
+                else playersSamePosition.remove(playersSamePosition.size() - 1);
                 break;
         }
     }
-
 
 
     /**
      * Does nothing. Not used in Domination Mode.
      *
      * @param tokens Player who did the kill. If overkilled, the list must contain the same player two times.
-     *
      * @return
      */
     @Override
@@ -166,7 +167,7 @@ public class DominationTrack extends AbstractTrack {
      */
     @Override
     public void removeSkull() {
-        skullsLeft = skullsLeft-1;
+        skullsLeft = skullsLeft - 1;
 
     }
 
@@ -174,7 +175,7 @@ public class DominationTrack extends AbstractTrack {
      * Gets game mode.
      */
     @Override
-    public String getGameMode(){
+    public String getGameMode() {
         return "Domination";
     }
 

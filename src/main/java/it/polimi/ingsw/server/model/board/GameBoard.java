@@ -15,8 +15,6 @@ import java.util.stream.Collectors;
  * @author Fahed Ben Tej
  */
 public class GameBoard implements ReplaceListener {
-
-
     /**
      * The configuration of the rooms. Note that there exists only 4 possible configurations.
      */
@@ -45,12 +43,10 @@ public class GameBoard implements ReplaceListener {
      * Weapon Deck used during the game.
      */
     private WeaponDeck weaponDeck;
-
     /**
      * Ammo Deck used during the game.
      */
     private AmmoDeck ammoDeck;
-
     /**
      * Track used during the game. It defines the mode in which the game is played.
      */
@@ -109,7 +105,6 @@ public class GameBoard implements ReplaceListener {
      * @param destination is the square that will be checked
      * @return 1 if the destination square is visible from the calling square, 0 otherwise
      */
-
     public boolean checkVisible(Square departure, Square destination) {
 
         if (getRoom(departure) == getRoom(destination))
@@ -125,14 +120,6 @@ public class GameBoard implements ReplaceListener {
             return true;
 
         return departure.getWestBorder() == Border.DOOR && getRoom(departure.getWest()) == getRoom(destination);
-    }
-
-    public Square getSquare(int idSquare) {
-        for (Room room : configuration)
-            for (Square s : room.getAllSquares())
-                if (Integer.parseInt(s.getID()) == idSquare)
-                    return s;
-        return null;
     }
 
     /**
@@ -180,7 +167,7 @@ public class GameBoard implements ReplaceListener {
      */
     public SpawnSquare findSpawn(AmmoCube color) {
         List<SpawnSquare> spawns = configuration.stream()
-                .filter(Room::hasSpawnSquare).map(x -> x.getSpawnSquare()).filter(x -> x.getSpawnColor() == color).collect(Collectors.toList());
+                .filter(Room::hasSpawnSquare).map(Room::getSpawnSquare).filter(x -> x.getSpawnColor() == color).collect(Collectors.toList());
 
         return spawns.get(0);
     }
@@ -253,7 +240,7 @@ public class GameBoard implements ReplaceListener {
      * Helper method for {@link GameBoard#getValidDestinations(Square, int, boolean)}.
      * This method uses recursion to find the valid destinations.
      */
-    private void radiusValidDestinations(Square start, int maxDistance, List<Square> alreadyVisitedSquares) {
+    private void radiusValidDestinations(Square start, int maxDistance, List<? super Square> alreadyVisitedSquares) {
 
         if (maxDistance == 0) return;
 
@@ -361,14 +348,6 @@ public class GameBoard implements ReplaceListener {
     }
 
     /**
-     * @param location
-     * @param weapons
-     */
-    public void replaceDiscardedWeapons(Square location, List<WeaponCard> weapons) {
-        // TODO implement here
-    }
-
-    /**
      * Replaces all the Ammo Cards and Weapon Cards grabbed during the game with new Cards.
      */
     public void replaceAll() {
@@ -385,6 +364,7 @@ public class GameBoard implements ReplaceListener {
                         if (i == null)
                             s.getMarket().addCard(weaponDeck.drawCard());
                     } catch (AgainstRulesException e) {
+                        //No more weapons: not added
                     }
                 }
             }
@@ -420,7 +400,7 @@ public class GameBoard implements ReplaceListener {
      * @param ignoreWalls boolean indicating if the path should ignore walls or not
      * @return an int representing the minimum distance between two squares.
      */
-    public int minimumDistance(Square start, Square end, Boolean ignoreWalls) {  //TODO risolvere il loop
+    public int minimumDistance(Square start, Square end, Boolean ignoreWalls) {
         if (start.equals(end) || start == null || end == null)
             return 0;
 
@@ -438,24 +418,6 @@ public class GameBoard implements ReplaceListener {
             neighbours.clear();
         }
         return dist;
-    }
-
-    /**
-     * Gets the square  with the minimum distance in the given set of squares.
-     *
-     * @param squares set of squares
-     * @param map     distance for every square
-     * @return
-     */
-    private Square min(Set<Square> squares, Map<Square, Integer> map) {
-        int min = 999;
-        Square minSquare = null;
-        for (Square s : squares)
-            if (map.get(s) <= min) {
-                min = map.get(s);
-                minSquare = s;
-            }
-        return minSquare;
     }
 
     /**
@@ -478,7 +440,7 @@ public class GameBoard implements ReplaceListener {
         if (ignoreWalls || s.getWestBorder() != Border.WALL)
             squares.add(s.getWest());
 
-        return squares.stream().filter(e -> e != null).collect(Collectors.toList());
+        return squares.stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 
     /**
@@ -498,8 +460,8 @@ public class GameBoard implements ReplaceListener {
      */
     public Set<Square> getAllSquares() {
         return configuration.stream()
-                .map(room -> room.getAllSquares()).
-                        flatMap(List::stream)
+                .map(Room::getAllSquares)
+                .flatMap(List::stream)
                 .collect(Collectors.toSet());
     }
 

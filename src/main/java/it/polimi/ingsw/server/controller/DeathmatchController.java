@@ -47,11 +47,6 @@ import java.util.stream.Collectors;
  */
 public class DeathmatchController implements SuspensionListener, ScoreListener {
     /**
-     * The prefix used for retrieving the player's resource.
-     * To this is appended a number from 0 to the max number of players.
-     */
-    private static final String PLAYER_RESOURCE_PREFIX = "figureRes";
-    /**
      * The players in the Game.
      */
     private List<Player> players;
@@ -170,7 +165,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      *
      * @param notificationType the notification to send
      */
-    public void notifyAllPlayers(Notification.NotificationType notificationType) {
+    private void notifyAllPlayers(Notification.NotificationType notificationType) {
         for (Player p : players) {
             if (!suspendedPlayers.contains(p)) {
                 try {
@@ -187,7 +182,7 @@ public class DeathmatchController implements SuspensionListener, ScoreListener {
      *
      * @param update the update to send
      */
-    public void updateAllPlayers(UpdateBuilder update) {
+    private void updateAllPlayers(UpdateBuilder update) {
         if (update == null) update = fullUpdate();
         for (Player p : players) {
             if (!suspendedPlayers.contains(p)) {
