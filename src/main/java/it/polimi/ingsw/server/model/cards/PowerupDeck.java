@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * Represents the Powerup Deck. It takes care of creating the cards and shuffles them.
  */
-public class PowerupDeck extends AbstractDeck {
+public class PowerupDeck implements AbstractDeck {
     /**
      * Represents the deck.
      */
@@ -17,7 +17,7 @@ public class PowerupDeck extends AbstractDeck {
     /**
      * Game Board used/
      */
-    GameBoard board;
+    private GameBoard board;
 
     /**
      * Constructs a Powerup Deck. It takes care of creating the cards and shuffling them.
@@ -28,7 +28,7 @@ public class PowerupDeck extends AbstractDeck {
     public PowerupDeck(GameBoard board) {
         this.board = board;
 
-        deck  = FromFile.powerups().getAll();
+        deck = FromFile.powerups().getAll();
         Collections.shuffle(deck);
     }
 
@@ -37,16 +37,17 @@ public class PowerupDeck extends AbstractDeck {
      * Draws a Powerup Card.
      * If the powerup deck is empty, the deck is rebuilt using discarded cards.
      * This permits to always draw a card.
+     *
      * @return a Powerup Card
      */
     @Override
     public PowerupCard drawCard() {
-        if (deck.isEmpty()){
+        if (deck.isEmpty()) {
             deck = board.getDiscardedPowerups();
             Collections.shuffle(deck);
         }
 
-        PowerupCard  drawnCard = deck.get(deck.size() -1 ) ;
+        PowerupCard drawnCard = deck.get(deck.size() - 1);
         deck.remove(drawnCard);
 
         return drawnCard;

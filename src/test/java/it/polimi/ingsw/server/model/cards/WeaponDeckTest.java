@@ -4,7 +4,6 @@ import it.polimi.ingsw.server.model.AgainstRulesException;
 import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.KillshotTrack;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -23,8 +22,8 @@ class WeaponDeckTest {
     void setUp() {
         gm1 = new GameBoard(new KillshotTrack(), new ArrayList<>());
         gm2 = new GameBoard(new KillshotTrack(), new ArrayList<>());
-        deck1 = new WeaponDeck(gm1);
-        deck2 = new WeaponDeck(gm2);
+        deck1 = new WeaponDeck();
+        deck2 = new WeaponDeck();
     }
 
     @Test
@@ -47,7 +46,7 @@ class WeaponDeckTest {
 
         //Testing that is not always possible to draw a card from a weapon deck (using deck1).
        //
-        deck1 = new WeaponDeck(gm1);
+        deck1 = new WeaponDeck();
         //Should be no problem drawing all 24 cards.
         for (int i = 0; i < NOCARDS ; i++) {
             try{

@@ -33,7 +33,7 @@ class MoveTest {
         ScoreListener scoreListener = getDumbScoreListener();
 
         players = new ArrayList<>();
-        players.add(new Player("A", "A",client, scoreListener));
+        players.add(new Player("A", client, scoreListener));
         players.get(0).setPosition(board.findSpawn(AmmoCube.BLUE));
 
     }

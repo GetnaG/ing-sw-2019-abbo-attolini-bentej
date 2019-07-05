@@ -8,7 +8,6 @@ import it.polimi.ingsw.server.controller.effects.Move;
 import it.polimi.ingsw.server.controller.effects.Shoot;
 import it.polimi.ingsw.server.model.AmmoCube;
 import it.polimi.ingsw.server.model.Damageable;
-import it.polimi.ingsw.server.model.board.GameBoard;
 import it.polimi.ingsw.server.model.board.Square;
 import it.polimi.ingsw.server.model.cards.PowerupCard;
 import it.polimi.ingsw.server.model.cards.WeaponCard;
@@ -52,10 +51,6 @@ public class Player implements Damageable {
      * The total score of this player.
      */
     private int score;
-    /**
-     * Info on the resources associated with this player.
-     */
-    private String figureRes;
     /**
      * Handles the communication with this player.
      */
@@ -113,16 +108,14 @@ public class Player implements Damageable {
      * Instantiates a player with the given parameters.
      *
      * @param nickname    the name of this player
-     * @param figureRes   info on the resources associated with this
      * @param toClient    communication interface with the player
      * @param playerBoard the board that will handle the damage
      * @param scorer      the interface that handles the scoring
      */
-    public Player(String nickname, String figureRes,
+    public Player(String nickname,
                   ToClientInterface toClient,
                   PlayerBoardInterface playerBoard, ScoreListener scorer) {
         this.nickname = nickname;
-        this.figureRes = figureRes;
         this.toClient = toClient;
         this.playerBoard = playerBoard;
         this.scorer = scorer;
@@ -141,14 +134,12 @@ public class Player implements Damageable {
      * Instantiates a player with the given parameters and a
      * {@linkplain NormalPlayerBoard}.
      *
-     * @param nickname  the name of this player
-     * @param figureRes info on the resources associated with this
-     * @param toClient  communication interface with the player
-     * @param scorer    the interface that handles the scoring
+     * @param nickname the name of this player
+     * @param toClient communication interface with the player
+     * @param scorer   the interface that handles the scoring
      */
-    public Player(String nickname, String figureRes,
-                  ToClientInterface toClient, ScoreListener scorer) {
-        this(nickname, figureRes, toClient, new NormalPlayerBoard(), scorer);
+    public Player(String nickname, ToClientInterface toClient, ScoreListener scorer) {
+        this(nickname, toClient, new NormalPlayerBoard(), scorer);
     }
 
     /**
@@ -157,7 +148,7 @@ public class Player implements Damageable {
      * @param nickname the name of this player
      */
     public Player(String nickname) {
-        this(nickname, null, null, null);
+        this(nickname, null, new NormalPlayerBoard(), null);
     }
 
     /**
@@ -211,6 +202,11 @@ public class Player implements Damageable {
         position = newPosition;
     }
 
+    /**
+     * Returns the player board of this.
+     *
+     * @return the player board of this
+     */
     public PlayerBoardInterface getPlayerBoard() {
         return playerBoard;
     }
@@ -335,7 +331,7 @@ public class Player implements Damageable {
      *
      * @return the number of {@linkplain PowerupCard}s this player has
      */
-    public int getNumOfPowerups() {
+    int getNumOfPowerups() {
         return hand.getPowerups().size();
     }
 
@@ -536,15 +532,6 @@ public class Player implements Damageable {
     }
 
     /**
-     * Returns a reference to the resources associated with this player.
-     *
-     * @return a reference to the resources associated with this player
-     */
-    public String getFigureRes() {
-        return figureRes;
-    }
-
-    /**
      * Returns the {@linkplain ToClientInterface} used to communicate with
      * this player.
      *
@@ -575,10 +562,18 @@ public class Player implements Damageable {
         ammoBox.pay(price);
     }
 
+    /**
+     * Returns the number of skulls on the board.
+     *
+     * @return the number of skulls on the board
+     */
     public int getSkulls() {
         return playerBoard.getSkulls();
     }
 
+    /**
+     * Ensures that final frenzy will be applied when possible.
+     */
     public void setupFinalFrenzy() {
         if (playerBoard.getDamage().isEmpty()) {
 
@@ -591,10 +586,21 @@ public class Player implements Damageable {
         }
     }
 
+    /**
+     * Returns whether this is in frenzy mode.
+     *
+     * @return whether this is in frenzy mode
+     */
     public boolean isFrenzy() {
         return frenzyState == 1;
     }
 
+    /**
+     * Two players are the same if they have the same name.
+     *
+     * @param o another player
+     * @return true if the players are the same
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

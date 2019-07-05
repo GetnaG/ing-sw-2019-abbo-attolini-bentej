@@ -68,7 +68,7 @@ public class GameBoard implements ReplaceListener {
         configuration.stream().flatMap(room -> room.getAllSquares().stream()).forEach(square -> square.setReplacer(this));
         // Decks are shuffled when created
         powerupDeck = new PowerupDeck(this);
-        weaponDeck = new WeaponDeck(this);
+        weaponDeck = new WeaponDeck();
         ammoDeck = new AmmoDeck(this);
 
         //Discarded cards
@@ -398,7 +398,9 @@ public class GameBoard implements ReplaceListener {
      * @return discarded powerups
      */
     public List<PowerupCard> getDiscardedPowerups() {
-        return discardedPowerups;
+        List<PowerupCard> toReturn = new ArrayList<>(discardedPowerups);
+        discardedPowerups.clear();
+        return toReturn;
     }
 
     /**
@@ -407,7 +409,9 @@ public class GameBoard implements ReplaceListener {
      * @return discarded ammos
      */
     public List<AmmoCard> getDiscardedAmmos() {
-        return discardedAmmos;
+        List<AmmoCard> toReturn = new ArrayList<>(discardedAmmos);
+        discardedAmmos.clear();
+        return toReturn;
     }
 
     /**

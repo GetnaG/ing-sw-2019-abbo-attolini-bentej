@@ -34,7 +34,7 @@ class ShootTest {
         ScoreListener scoreListener = getDumbScoreListener();
 
         players = new ArrayList<>();
-        players.add(new Player("A", "A",client, scoreListener));
+        players.add(new Player("A",client, scoreListener));
 
         List<AmmoCube> redCubes = new ArrayList<>();
         redCubes.add(AmmoCube.RED);

@@ -264,6 +264,11 @@ public class NormalPlayerBoard implements PlayerBoardInterface {
         return damage;
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     * @return {@inheritDoc}
+     */
     @Override
     public int getSkulls() {
         return skulls;
