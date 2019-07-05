@@ -6,10 +6,7 @@ import it.polimi.ingsw.client.clientlogic.PlayerState;
 import it.polimi.ingsw.client.resources.R;
 
 import java.io.*;
-import java.util.Iterator;
-import java.util.List;
-import java.util.MissingResourceException;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Command line interface, handles the communication with the user via text.
@@ -42,7 +39,10 @@ public class CLI implements InteractionInterface {
     private static final int BLUE_SPAWN_POINT = 2;
     private static final int RED_SPAWN_POINT = 4;
     private static final int YELLOW_SPAWN_POINT = 11;
-    private static final String EMPTY = "empty";
+    private static final int DAMAGE_TILE = 10;
+    private static final int KILLSHOT_TILE = 10; //the 11th
+    private static final int OVERKILL_TILE = 11; //the 12th
+
     /**
      * The line separator for this OS.
      */
@@ -811,10 +811,8 @@ public class CLI implements InteractionInterface {
                 for (int j = 0; j < MARKET_SIZE; j++) {
                     if (model.getWeaponsCardsID().get(j) != null)
                         marketLine.append(R.string(model.getWeaponsCardsID().get(j)));
-                    else
-                        marketLine.append(EMPTY);
                     if (j < 2)
-                        marketLine.append(" , ");
+                        marketLine.append(", ");
                 }
                 break;
             }
@@ -822,10 +820,8 @@ public class CLI implements InteractionInterface {
                 for (int j = 0; j < MARKET_SIZE; j++) {
                     if (model.getWeaponsCardsID().get(j + MARKET_SIZE) != null)
                         marketLine.append(R.string(model.getWeaponsCardsID().get(j + MARKET_SIZE)));
-                    else
-                        marketLine.append(EMPTY);
                     if (j < 2)
-                        marketLine.append(" , ");
+                        marketLine.append(", ");
                 }
                 break;
             }
@@ -833,10 +829,8 @@ public class CLI implements InteractionInterface {
                 for (int j = 0; j < MARKET_SIZE; j++) {
                     if (model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE) != null)
                         marketLine.append(R.string(model.getWeaponsCardsID().get(j + 2 * MARKET_SIZE)));
-                    else
-                        marketLine.append(EMPTY);
                     if (j < 2)
-                        marketLine.append(" , ");
+                        marketLine.append(", ");
                 }
                 break;
             }
@@ -851,23 +845,20 @@ public class CLI implements InteractionInterface {
      * @param l indicates the current position (map seen as a linear vector)
      */
     private void drawPlayersInTheSquare(StringBuilder sPlayers, int l) {
-        int pos, numPlayersHere = 0, x=1;
+        int pos;
+        List<PlayerState> playersHere = new ArrayList<>();
         if (model.getPlayersState() != null && !model.getPlayersState().isEmpty()) {
             for (PlayerState ps : model.getPlayersState()) {
                 pos = ps.getSquarePosition();
                 if (pos == l)
-                    numPlayersHere++;
+                    playersHere.add(ps);
             }
             sPlayers.append(" players: { ");
-            if (numPlayersHere > 0) {
-                for (PlayerState ps : model.getPlayersState()) {
-                    pos = ps.getSquarePosition();
-                    if (pos == l) {
+            if (!playersHere.isEmpty()) {
+                for (PlayerState ps : playersHere) {
                         sPlayers.append(ps.getNickname());
-                        if (x < numPlayersHere)
+                        if (playersHere.indexOf(ps) < playersHere.size()-1)
                             sPlayers.append(", ");
-                    }
-                    x++;
                 }
             }
             sPlayers.append(" }");
@@ -903,6 +894,14 @@ public class CLI implements InteractionInterface {
 
         str.append(lineSeparator);
 
+        if(model.getWinners() != null && !model.getWinners().isEmpty()) {
+            str.append("winners: ");
+            for (String s : model.getWinners()) {
+                str.append(model.getWinners().indexOf(s) + 1).append(") ")
+                        .append(s).append(lineSeparator).append("         ");
+            }
+        }
+
     }
 
     /**
@@ -924,17 +923,14 @@ public class CLI implements InteractionInterface {
     private void drawDamageKillshotOverkill(StringBuilder temp, PlayerState p) {
         temp.append("damage dealt by: ").append(p.getDamage());
         for (String s : p.getDamage()) {
-            if (p.getDamage().indexOf(s) == p.getDamage().size()-2){
+            if (p.getDamage().size() >= DAMAGE_TILE && p.getDamage().indexOf(s) == KILLSHOT_TILE){
                 temp.append(" -|- ");
-               temp.append("killshot by: ");
+               temp.append("killshot by: ").append(s);
             }
-            if (p.getDamage().indexOf(s) == p.getDamage().size()-1){
+            if (p.getDamage().size() >= DAMAGE_TILE && p.getDamage().indexOf(s) == OVERKILL_TILE){
                 temp.append(" -|- ");
-                temp.append("overkill by: ");
+                temp.append("overkill by: ").append(s);
             }
-            temp.append(s);
-            if (p.getDamage().indexOf(s) < p.getDamage().size())
-                temp.append(" ");
         }
 
         temp.append(" -|- ");
@@ -948,12 +944,14 @@ public class CLI implements InteractionInterface {
         temp.append("passive marks by: ");
         if(p.getMarks().isEmpty())
             temp.append("none");
-
-        for (String s : p.getMarks()) {
+        else {
+            temp.append("[ ");
+            for (String s : p.getMarks()) {
                 temp.append(s);
-
-            if (p.getMarks().indexOf(s) < p.getMarks().size())
-                temp.append(" ,");
+                if (p.getMarks().indexOf(s) < p.getMarks().size() - 1)
+                    temp.append(", ");
+            }
+            temp.append(" ]");
         }
 
         temp.append(" -|- ");
@@ -1012,22 +1010,29 @@ public class CLI implements InteractionInterface {
     private void drawWeapons(StringBuilder temp, PlayerState p) {
         //loaded weapons
         temp.append("loaded weapons: ");
-        for (int i = 0; i < p.getLoadedWeapons().size(); i++)
-            temp.append("[ ").append(R.string(p.getLoadedWeapons().get(i))).append(" ] ");
-
-        if(p.getUnloadedWeapons().isEmpty())
+        if(p.getLoadedWeapons().isEmpty())
             temp.append("none");
+        else
+            for (String s:  p.getLoadedWeapons())
+                temp.append("[ ").append(R.string(s)).append(" ]");
 
-        temp.append(" -|- ");;
+        if(p.getLoadedWeapons().size() > 2)
+            temp.append(lineSeparator).append("| ");
+        else
+            temp.append(" -|- ");
 
         //unloaded weapons
         temp.append("unloaded weapons: ");
-        for (int i = 0; i < p.getUnloadedWeapons().size(); i++)
-            temp.append(R.string(p.getUnloadedWeapons().get(i))).append(" , ");
         if(p.getUnloadedWeapons().isEmpty())
             temp.append("none");
+        else
+            for (String s: p.getUnloadedWeapons())
+                temp.append("[ ").append(R.string(s)).append(" ]");
 
-        temp.append(" -|- ");
+        if(p.getUnloadedWeapons().size() > 2 && p.getPowerups().size() > 1)
+            temp.append(lineSeparator).append("| ");
+        else
+            temp.append(" -|- ");
 
     }
 
@@ -1036,12 +1041,15 @@ public class CLI implements InteractionInterface {
      * @param p represents the single player's current state
      */
     private void drawPowerups(StringBuilder temp, PlayerState p) {
+        if (p.getPowerups().size() > 2)
+            temp.append(lineSeparator).append("| ");
         temp.append("powerups: ");
-        for (int i = 0; i < p.getPowerups().size(); i++)
-            temp.append(R.string(p.getPowerups().get(i))).append(" ");
-
         if(p.getPowerups().isEmpty())
             temp.append("none");
+        else {
+            for (String s : p.getPowerups())
+                temp.append("[ ").append(R.string(s)).append(" ]");
+        }
 
         temp.append(lineSeparator);
 
@@ -1078,14 +1086,16 @@ public class CLI implements InteractionInterface {
      */
     private void drawCurrentKillshotTrack(StringBuilder temp, List<List<String>> kst) {
         temp.append(lineSeparator);
-        temp.append("current Killshot track: ");
-        for (int i = 0; i < kst.size(); i++)
-            for (String q : kst.get(i)) {
-                temp.append(i).append(") ").append(q).append(lineSeparator);
-                if (i < kst.size() - 1)
-                    temp.append("                        ");
-            }
-        temp.append(lineSeparator);
+        if(!kst.isEmpty()) {
+            temp.append("current Killshot track: ");
+            for (int i = 0; i < kst.size(); i++)
+                for (String q : kst.get(i)) {
+                    temp.append(i).append(") ").append(q).append(lineSeparator);
+                    if (i < kst.size() - 1)
+                        temp.append("                        ");
+                }
+            temp.append(lineSeparator);
+        }
     }
 
      /**
