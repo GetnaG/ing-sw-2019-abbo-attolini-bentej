@@ -25,16 +25,17 @@
 -->
 
 ## Use Guide
-###Settings
+### Setting
 Go to `./src/main/resources/properties` and open the `settings.properties` file.  <br>
 Here you can set your preferred network and game settings. <br>
-###Build 
+### Build 
 Run the following line usign maven to build the server and client jar: <br>
 `mvn -Dmaven.test.skip=true package  -quiet` <br>
-###Run
+### Run
+Extract the zip. <br>
 To run the client: <br>
-GUI : `java -jar ./target/client-jar-with-dependencies.jar gui` <br>
-CLI : `java -jar ./target/client-jar-with-dependencies.jar cli` <br>
+GUI : `java --module-path ./javafx-sdk-12/lib --add-modules javafx.controls,javafx.fxml -jar ./deliverables/JARs/client.jar gui` <br>
+CLI : `java -jar ./deliverables/JARs/client.jar cli` <br>
 To run the server: <br>
-`java -jar ./target/server-jar-with-dependencies.jar` <br>
+`java -jar ./deliverables/JARs/server.jar` <br>
 
