@@ -8,7 +8,7 @@ import java.rmi.RemoteException;
  * Classes implementing this will allow the client to invert the
  * communication with the server.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public interface RmiInversionInterface extends Remote {
     /**

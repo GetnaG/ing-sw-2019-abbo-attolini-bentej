@@ -17,7 +17,7 @@ import java.util.List;
  * available options</li>
  * </ul>
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see MessageType
  * @see Notification
  * @see Update

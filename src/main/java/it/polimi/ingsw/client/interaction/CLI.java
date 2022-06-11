@@ -16,7 +16,7 @@ import java.util.*;
  * The match status is read from the model; this is also subscribed to the
  * model, so that it can be notified when changes occur.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see PrintStream
  * @see InputStream
  */

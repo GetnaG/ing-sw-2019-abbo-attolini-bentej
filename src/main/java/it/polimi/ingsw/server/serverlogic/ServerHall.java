@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * {@linkplain #MAXIMUM_PLAYERS} are connected.
  *
  * @author Fahed B. Tej
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class ServerHall implements Runnable {
     /**

@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: implemented methods
  */
 class AbstractCardTest {

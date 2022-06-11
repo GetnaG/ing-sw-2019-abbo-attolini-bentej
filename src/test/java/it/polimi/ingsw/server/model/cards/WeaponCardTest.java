@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing correct behaviour with normal usage
  */
 class WeaponCardTest {

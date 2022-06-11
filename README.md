@@ -1,7 +1,7 @@
 # Prova Finale Ingegneria del Software 2019
 ## Gruppo AM45
 
-- ###   10538950    Giulio Antonio Abbo ([@poligiulio](https://github.com/poligiulio))<br>giulioantonio.abbo@mail.polimi.it
+- ###   Giulio ([@giubots](https://github.com/giubots))
 - ###   10539533    Silvio Attolini ([@SilvioAttolini](https://github.com/SilvioAttolini))<br>silvio.attolini@mail.polimi.it
 - ###   10549663    Fahed Ben Tej ([@GetnaG](https://github.com/GetnaG))<br>fahed.ben@mail.polimi.it
 

@@ -11,7 +11,7 @@ import java.util.List;
  * Methods must block the execution until the return value - the user's
  * choice - becomes available.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @author Fahed B. Tej
  * @see GUI
  * @see CLI

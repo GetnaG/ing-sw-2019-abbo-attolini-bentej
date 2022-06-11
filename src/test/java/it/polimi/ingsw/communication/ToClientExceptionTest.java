@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: correct behaviour of the constructors.
  */
 class ToClientExceptionTest {

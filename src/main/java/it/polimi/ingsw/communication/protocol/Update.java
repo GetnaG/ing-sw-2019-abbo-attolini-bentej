@@ -8,7 +8,7 @@ import java.util.List;
  * This represents an update element.
  * Updates are messages that do not expect an answer but modify the game status.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ProtocolMessage
  */
 public class Update implements Serializable {

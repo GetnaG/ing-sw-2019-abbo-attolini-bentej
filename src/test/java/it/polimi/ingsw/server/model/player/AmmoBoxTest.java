@@ -11,7 +11,7 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: empty, normal, maximum cubes, ANY
  */
 class AmmoBoxTest {

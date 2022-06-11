@@ -5,7 +5,7 @@ package it.polimi.ingsw.communication.protocol;
  * The type can be {@linkplain #NOTIFICATION} or {@linkplain #UPDATE}, or
  * other commands.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ProtocolMessage
  */
 public enum MessageType {

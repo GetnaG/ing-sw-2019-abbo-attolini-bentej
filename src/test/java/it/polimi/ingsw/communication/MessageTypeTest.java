@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: just the getter for hasOptions.
  */
 class MessageTypeTest {

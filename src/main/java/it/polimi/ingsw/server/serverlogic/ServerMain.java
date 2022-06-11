@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  * {@link ServerHall} for each type.
  *
  * @author Fahed B. Tej
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ServerHall
  */
 public class ServerMain {

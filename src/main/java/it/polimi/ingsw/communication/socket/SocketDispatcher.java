@@ -12,7 +12,7 @@ import java.net.Socket;
 /**
  * This thread listens for socket connections and accepts them.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class SocketDispatcher extends Thread {
     /**

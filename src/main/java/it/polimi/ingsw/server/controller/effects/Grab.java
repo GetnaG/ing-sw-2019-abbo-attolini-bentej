@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * the cost.
  *
  * @author Fahed Ben Tej
- * @author Abbo Giulio A.
+ * @author giubots
  * @see AmmoCard
  * @see WeaponCard
  */

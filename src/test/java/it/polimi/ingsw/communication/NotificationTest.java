@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: the getter for the type.
  */
 class NotificationTest {

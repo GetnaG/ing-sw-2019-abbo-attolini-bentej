@@ -22,7 +22,7 @@ import java.util.List;
  * the client does not answer in a certain amount of time; in this case the
  * client must be suspended.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ToClientException
  */
 public interface ToClientInterface {

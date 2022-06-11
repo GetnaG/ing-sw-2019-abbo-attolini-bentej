@@ -5,7 +5,7 @@ package it.polimi.ingsw.communication;
  * This can be due to an issue with the communication medium or if the client
  * does not answer after some time.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class ToClientException extends Exception {
     /**

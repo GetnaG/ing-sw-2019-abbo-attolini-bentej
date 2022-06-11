@@ -19,7 +19,7 @@ import java.util.concurrent.*;
  * This also asks to choose the username.
  *
  * @author Fahed B. Tej
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class User implements ToClientInterface {
     /**

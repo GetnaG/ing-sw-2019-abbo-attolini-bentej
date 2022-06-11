@@ -7,7 +7,7 @@ import java.util.List;
  * This keeps track of the damage, marks, skulls, and scores the players
  * accordingly.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see Player
  */
 public interface PlayerBoardInterface {

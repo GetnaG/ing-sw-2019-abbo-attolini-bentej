@@ -9,7 +9,7 @@ import it.polimi.ingsw.server.persistency.FromFile;
  * Objects of this class are instantiated by a
  * {@link it.polimi.ingsw.server.persistency.PowerupLoader}.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see it.polimi.ingsw.server.persistency.PowerupLoader
  * @see AmmoCube
  * @see EffectInterface

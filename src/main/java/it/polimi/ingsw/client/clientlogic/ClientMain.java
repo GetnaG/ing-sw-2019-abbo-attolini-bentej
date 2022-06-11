@@ -10,7 +10,7 @@ import java.util.logging.Logger;
 /**
  * Sets up the client with model, view and controller.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see InteractionInterface
  * @see MatchState
  * @see ClientController

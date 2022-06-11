@@ -17,7 +17,7 @@ import java.util.List;
  * GameBoard} and giving points to the players, this second part is left to the
  * {@code Damageable} object because its implementation varies during the game.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see Damageable
  * @see GameBoard
  */

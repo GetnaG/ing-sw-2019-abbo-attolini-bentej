@@ -13,7 +13,7 @@ import java.util.Properties;
  * Chooses between GUI and CLI, based on a parameter if present, or a
  * property file.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see GUI
  * @see CLI
  */

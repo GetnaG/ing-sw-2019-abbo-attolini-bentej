@@ -36,7 +36,7 @@ import java.util.*;
  * expose attributes like its {@link AmmoBox}, {@link HandManager} and
  * {@link PlayerBoardInterface} to the outside user</i>
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ScoreListener
  * @see ToClientInterface
  * @see PlayerBoardInterface

@@ -11,7 +11,7 @@ import java.util.List;
  * Objects of this class are instantiated by an
  * {@link it.polimi.ingsw.server.persistency.AmmoCardLoader}.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see it.polimi.ingsw.server.persistency.AmmoCardLoader
  * @see AmmoCube
  * @see PowerupCard

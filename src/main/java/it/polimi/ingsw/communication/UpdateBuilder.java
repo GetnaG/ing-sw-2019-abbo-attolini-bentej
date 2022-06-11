@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * This class creates an {@link Update} with the info provided.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see Update
  */
 public class UpdateBuilder {

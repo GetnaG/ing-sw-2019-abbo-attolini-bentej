@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Assuming that class constants are set correctly
  * Testing: the differences from a NormalPlayerBoard
  */

@@ -13,7 +13,7 @@ import java.util.Scanner;
 /**
  * This class handles the communication through socket, client side.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class SocketFromServer {
     /**

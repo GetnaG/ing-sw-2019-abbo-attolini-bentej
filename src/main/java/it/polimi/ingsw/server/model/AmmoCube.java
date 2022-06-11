@@ -12,7 +12,7 @@ import java.util.List;
  * cubes of each color.
  * The {@code ANY} value is used when the price is "a cube of any color".
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public enum AmmoCube {
     /**

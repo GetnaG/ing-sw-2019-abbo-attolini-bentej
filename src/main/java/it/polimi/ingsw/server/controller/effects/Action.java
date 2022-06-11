@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * steps.
  *
  * @author Fahed Ben Tej
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class Action implements Iterable<EffectInterface> {
     /**

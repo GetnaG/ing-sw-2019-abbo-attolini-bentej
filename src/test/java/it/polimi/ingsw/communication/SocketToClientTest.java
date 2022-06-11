@@ -33,7 +33,7 @@ import static org.junit.jupiter.api.Assertions.fail;
 
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: Correct returned value, correct protocol
  */
 @Disabled

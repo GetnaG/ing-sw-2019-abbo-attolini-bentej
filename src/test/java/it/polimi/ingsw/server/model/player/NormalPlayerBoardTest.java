@@ -9,7 +9,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Assuming that class constants are set correctly
  * Testing: normal behaviour
  */

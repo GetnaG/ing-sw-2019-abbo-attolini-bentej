@@ -7,7 +7,7 @@ import java.util.MissingResourceException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: testing is not done on test resources, but on the actual ones.
  */
 class RTest {

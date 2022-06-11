@@ -11,7 +11,7 @@ import java.util.Map;
  * There can be at most {@link #MAX_CUBES} cubes of each color and there
  * can not be cubes of type {@link AmmoCube#ANY}.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see AmmoCube
  */
 class AmmoBox {

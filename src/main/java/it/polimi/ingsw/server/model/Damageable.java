@@ -15,7 +15,7 @@ import java.util.List;
  * <i>marks</i>, to be moved and scored.
  * The methods for scoring can be used by a {@link ScoreListener}.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ScoreListener
  */
 public interface Damageable {

@@ -17,7 +17,7 @@ import java.util.List;
  * this was done to allow, if necessary, to reuse a loader class for multiple
  * files.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see BasicLoader
  */
 public class FromFile {

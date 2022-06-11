@@ -24,7 +24,7 @@ import java.util.ResourceBundle;
  * This allows classes to load {@link Properties}, the files must be located
  * in a folder at {@linkplain #PROPERTIES_PATH}.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see Image
  * @see ResourceBundle
  */

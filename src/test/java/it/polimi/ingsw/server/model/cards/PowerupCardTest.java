@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing correct behaviour with normal usage
  */
 class PowerupCardTest {

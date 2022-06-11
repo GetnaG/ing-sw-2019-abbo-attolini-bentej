@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: correct behaviour for each value.
  */
 class HistoryPolicyTest {

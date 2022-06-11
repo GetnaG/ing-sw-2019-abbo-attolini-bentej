@@ -14,7 +14,7 @@ import java.util.List;
  * An effect has a name and a cost that must be payed to run the effect.
  * The effect can be run with the provided method.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public interface EffectInterface {
 

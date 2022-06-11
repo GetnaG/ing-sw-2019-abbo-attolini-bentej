@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
  * This class adapts the remote object provided by the client to the
  * mechanics of the server.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class RmiToClient implements ToClientInterface {
     /**

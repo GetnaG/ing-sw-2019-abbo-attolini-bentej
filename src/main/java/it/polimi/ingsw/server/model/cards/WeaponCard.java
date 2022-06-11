@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  * <li>B, BASE</li>
  * <li>and then all the permutation of BASE, A, B</li></ul>
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see it.polimi.ingsw.server.persistency.WeaponLoader
  * @see AmmoCube
  * @see it.polimi.ingsw.server.controller.effects.EffectInterface

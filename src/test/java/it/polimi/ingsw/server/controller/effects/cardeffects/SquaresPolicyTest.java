@@ -14,7 +14,7 @@ import static it.polimi.ingsw.server.controller.effects.cardeffects.SquaresPolic
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: this is a fundamental class, extensive testing is done to ensure its behaviour.
  */
 class SquaresPolicyTest {

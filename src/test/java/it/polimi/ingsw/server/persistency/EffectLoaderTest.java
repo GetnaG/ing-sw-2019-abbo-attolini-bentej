@@ -10,7 +10,7 @@ import java.util.NoSuchElementException;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: with resources file
  */
 class EffectLoaderTest {

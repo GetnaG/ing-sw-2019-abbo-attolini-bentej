@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: null, empty, no desired elements, normal.
  */
 class AmmoCubeTest {

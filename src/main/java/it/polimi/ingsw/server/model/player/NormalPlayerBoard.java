@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
  * This keeps track of the damage, marks, skulls, and scores the players
  * accordingly.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class NormalPlayerBoard implements PlayerBoardInterface {
 

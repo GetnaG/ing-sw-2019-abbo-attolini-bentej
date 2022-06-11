@@ -13,7 +13,7 @@ import it.polimi.ingsw.server.model.cards.WeaponCard;
  * {@code addSpawnSquare}.
  * The replacing is triggered with {@code replaceAll}.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see Square
  * @see WeaponCard
  * @see AmmoCard

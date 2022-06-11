@@ -11,7 +11,7 @@ package it.polimi.ingsw.communication;
  * caller to handle this eventuality; and is nicer than checking if the
  * returned value is null or creating some mock object.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ToClientInterface
  */
 public class ChoiceRefusedException extends Exception {

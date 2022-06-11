@@ -23,7 +23,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: generic testing with only a couple of effects.
  */
 class CardEffectTest {

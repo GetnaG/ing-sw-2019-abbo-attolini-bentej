@@ -22,7 +22,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Using following classes and relying on their behaviour: AmmoBox,
  * HandManager, NormalPlayerBoard.
  * Testing: normal behaviour

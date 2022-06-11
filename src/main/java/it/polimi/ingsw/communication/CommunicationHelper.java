@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * Helper class for translating objects into list of choices (strings).
  * The strings are the resource keys that will be used by the client.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class CommunicationHelper {
     public static final String CHOICE_REFUSED = "refuse";

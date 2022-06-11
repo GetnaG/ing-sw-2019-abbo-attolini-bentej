@@ -24,7 +24,7 @@ import java.util.List;
  * This also ensures that only one communication with the client happens at one
  * time.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ProtocolMessage
  */
 public class SocketToClient implements ToClientInterface {

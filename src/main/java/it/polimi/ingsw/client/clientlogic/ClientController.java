@@ -26,7 +26,7 @@ import java.util.logging.Level;
  * local model and to the user through the view.
  *
  * @author Fahed B. Tej
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class ClientController extends UnicastRemoteObject implements RmiFromClientInterface {
     /**

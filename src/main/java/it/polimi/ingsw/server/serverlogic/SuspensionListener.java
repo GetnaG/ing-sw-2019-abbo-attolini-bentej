@@ -5,7 +5,7 @@ import it.polimi.ingsw.communication.ToClientInterface;
 /**
  * Classes implementing this will handle the suspension of a player.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see Nicknames
  * @see it.polimi.ingsw.server.controller.DeathmatchController
  */

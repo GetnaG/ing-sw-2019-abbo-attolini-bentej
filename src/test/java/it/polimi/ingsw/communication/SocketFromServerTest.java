@@ -21,7 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: that the controller is notified correctly and the server receives
  *  the intended answer.
  */

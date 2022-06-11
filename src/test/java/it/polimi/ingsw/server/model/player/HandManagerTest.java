@@ -11,7 +11,7 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: normal use, not valid arguments, null
  */
 class HandManagerTest {

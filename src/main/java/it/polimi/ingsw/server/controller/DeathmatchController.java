@@ -40,7 +40,7 @@ import java.util.stream.Collectors;
  * suspended, and will ensure that will skip his turns.
  *
  * @author Fahed B. Tej
- * @author Abbo Giulio A.
+ * @author giubots
  * @see Player
  * @see GameBoard
  * @see TurnInterface

@@ -15,7 +15,7 @@ import java.util.Map;
  * be at most {@link #MAX_CARDS} of each type. Weapons can be loaded or
  * unloaded.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see AbstractCard
  * @see WeaponCard
  * @see PowerupCard

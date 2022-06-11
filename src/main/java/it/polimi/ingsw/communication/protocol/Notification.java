@@ -7,7 +7,7 @@ import java.io.Serializable;
  * Notifications are messages that do not expect an answer and do not modify
  * the game status.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see ProtocolMessage
  */
 public class Notification implements Serializable {

@@ -15,7 +15,7 @@ import java.util.List;
  * A maximum distance can be set, in this case only <i>valid</i> moved are
  * allowed.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see Square
  * @see GameBoard
  */

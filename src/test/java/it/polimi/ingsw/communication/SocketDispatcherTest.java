@@ -14,7 +14,7 @@ import java.net.Socket;
 import static org.junit.jupiter.api.Assertions.*;
 
 /*
- * Author: Abbo Giulio A.
+ * Author: giubots
  * Testing: if the sockets are handled correctly.
  */
 class SocketDispatcherTest {

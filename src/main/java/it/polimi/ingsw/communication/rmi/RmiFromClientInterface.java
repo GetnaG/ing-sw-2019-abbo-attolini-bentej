@@ -10,7 +10,7 @@ import java.rmi.RemoteException;
 /**
  * Classes implementing this can be published and used with RMI.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public interface RmiFromClientInterface extends Remote {
     /**

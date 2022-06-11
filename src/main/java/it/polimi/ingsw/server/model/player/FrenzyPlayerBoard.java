@@ -9,7 +9,7 @@ import java.util.Deque;
  * This keeps track of the damage, marks, skulls, and scores the players
  * accordingly.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class FrenzyPlayerBoard extends NormalPlayerBoard {
     /**

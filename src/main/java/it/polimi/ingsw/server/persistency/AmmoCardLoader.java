@@ -27,7 +27,7 @@ import java.util.stream.Collectors;
  * The {@code resourceId} is as requested by
  * {@link it.polimi.ingsw.server.model.cards.AbstractCard}.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see AmmoCard
  */
 public class AmmoCardLoader implements BasicLoader<AmmoCard> {

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  * A tagback effect can be used when a damageable receives a point of damage;
  * this damageable gives a mark back to the player who hit him.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public class TagbackEffect implements EffectInterface {
     /**

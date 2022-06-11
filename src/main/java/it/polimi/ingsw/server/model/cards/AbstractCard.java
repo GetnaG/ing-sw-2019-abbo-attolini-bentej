@@ -5,7 +5,7 @@ package it.polimi.ingsw.server.model.cards;
  * The id is used to locate the resources associated with the specific card,
  * for example images and strings.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 public abstract class AbstractCard {
     /**

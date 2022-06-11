@@ -39,7 +39,7 @@ import java.util.stream.Stream;
  * For info on the meaning and the values allowed, refer to
  * the fields of {@link CardEffect}.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see CardEffect
  */
 public class EffectLoader implements BasicLoader<EffectInterface> {

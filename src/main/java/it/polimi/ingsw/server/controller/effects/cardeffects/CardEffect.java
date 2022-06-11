@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  * With the word <i>target</i> it is meant every {@link Damageable} on which
  * the effect can be applied.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  * @see it.polimi.ingsw.server.persistency.EffectLoader
  * @see Player
  * @see Square

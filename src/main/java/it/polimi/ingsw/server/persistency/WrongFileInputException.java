@@ -6,7 +6,7 @@ package it.polimi.ingsw.server.persistency;
  * This is an unchecked exception because it is dictated by an error in the
  * configuration files from which recovery can not be performed automatically.
  *
- * @author Abbo Giulio A.
+ * @author giubots
  */
 class WrongFileInputException extends RuntimeException {
 
